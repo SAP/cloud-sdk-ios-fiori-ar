@@ -13,18 +13,22 @@ This project currently contains support for `AR Cards` corresponding to annotati
 
 ###Background
 
-#####ARKit
+##### ARKit
+
 A framework provided by Apple which processes and provides sensor data from the IMU for an Augmented Reality experience to work. Such as motion tracking, localizing device, camera capture, and image analysis/processing.
 
-#####RealityKit
+##### RealityKit
+
 While ARKit handles the above it does not render any content into the scene. RealityKit is a framework that follows the Entity-Component Architectural pattern. This handles establishing a scene that 3D content and audio can be anchored to.
 
-#####Reality Composer
+##### Reality Composer
+
 Creation of Augmented Reality experiences without a visual understanding of the scene can be difficult. Reality Composer is an app for iOS and Mac with functionalities to compose AR scenes around a chosen anchor type. 3D content can be placed and given conditional actions and audio. A benefit of using this app is that the scene can be previewed in AR and edited in real time using an iOS device.
 
 > **Note**: Reality Composer is required to scan an object when choosing an Object Anchor.
 
-#####SwiftUI
+##### SwiftUI
+
 3D content design has many challenges. It can be time consuming, expensive, require additional skills, and generates large files. 3D Content is also difficult to make dynamic changes such as animations through interaction and conditions. As a solution, instead of placing 3D content into the scene. Invisible anchors are placed as children relative to the chosen achor. Their locations are projected from the world scene onto the screen and SwiftUI Views are rendered at those locations.
 
 ## AR Cards
@@ -51,18 +55,17 @@ struct FioriARKitCardsExample: View {
     var body: some View {
         
         ARAnnotationContentView(arModel: arModel, image: Image("qrImage"), cardAction: { id in
-                                    // action to pass
+            // action to pass to corresponding card from the CardItemModel ID
 		})
 		.onAppear(perform: loadData)
     }
 
     func loadData() {
         let cardItems = NetworkMockup.fetchData()
-        let loadingStrategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "DeveloperRC", rcScene: "qrScene")
+        let loadingStrategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "RealityComposerFileName", rcScene: "SceneName")
         arModel.load(loadingStrategy: loadingStrategy)
     }
 }
-
 ```
 ## Requirements
 
