@@ -1,0 +1,10 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: cloud-sdk-ios-fioriarkit
+Upstream-Contact: cloud-sdk-ios-fioriarkit@sap.com
+Source: https://github.com/SAP/cloud-sdk-ios-fioriarkit
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: 2021 SAP SE or an SAP affiliate company and cloud-sdk-ios-fioriarkit contributors
+# License: Apache-2.0
