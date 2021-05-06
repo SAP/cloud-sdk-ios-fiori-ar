@@ -39,15 +39,18 @@ The AR Cards use case is essentially annotations represented by a marker in the 
 
 ### Usage
 
-#####Composing the scene
+##### Composing the scene
+
 1. Open the Reality Composer app and create a scene with the desired anchor
 2. Place spheres in the desired position and preview in AR to fine tune
 3. Name the spheres starting from 0
 
-#####Data Consumption
+##### Data Consumption
+
 Models Conform to CardItemComponent. The name of the entity from Reality Composer corresponds to the id of the Model
 
-#####Creating the ContentView and loading the data
+##### Creating the ContentView and loading the data
+
 ```swift
 struct FioriARKitCardsExample: View {
     @StateObject var arModel = ARAnnotationViewModel<DeveloperCardModel>()
