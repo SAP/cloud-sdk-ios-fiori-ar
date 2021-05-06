@@ -11,7 +11,7 @@ This project is a SwiftUI implementation of the SAP Fiori for iOS ARKit, and is 
 
 This project currently contains support for `AR Cards` corresponding to annotations relative to an image or object in the real world. Future use cases include Indoor Navigation.
 
-###Background
+### Background
 
 ##### ARKit
 
