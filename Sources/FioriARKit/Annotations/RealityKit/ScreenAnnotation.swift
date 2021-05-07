@@ -9,6 +9,8 @@ import CoreGraphics
 import SwiftUI
 import RealityKit
 
+/// Wrapper struct for the **CardItem : CardItemModel**  and the real world anchoring position. Used to set the internal entity.
+
 public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable {
 
     public var id: CardItem.ID {

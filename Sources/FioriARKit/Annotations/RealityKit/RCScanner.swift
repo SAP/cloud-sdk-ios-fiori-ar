@@ -9,6 +9,8 @@ import RealityKit
 import simd
 import Combine
 
+/// Creates a programmatic representation of the Reality Composer Scene  from an Image or Object Anchor from a .rcproject File.
+
 @available(iOS 13.0, macOS 10.15, *)
 internal enum RCScanner {
 

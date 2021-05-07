@@ -7,13 +7,42 @@
 
 import SwiftUI
 
+/**
+ ContentView which displays the card and marker views in the scene after the discoveryFlowHasFinished has been set to True. Only displays the views which are set to isVisible.
+ 
+ ## Usage
+ ```
+ ARAnnotationContentView(arModel: arModel,
+                         image: Image("qrImage"),
+                         cardAction: { id in
+                            set the card action for id corresponding to the CardItemModel
+                         })
+        .onAppear(perform: loadData)
+ 
+ func loadData() {
+     let cardItems = Tests.cardItems
+     let strategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "ExampleRC", rcScene: "ExampleScene")
+     arModel.load(loadingStrategy: strategy)
+ }
+
+ ```
+ */
+
 public struct ARAnnotationContentView<Scan: View, Card: View, Marker: View, CardItem>: View where CardItem : CardItemModel {
     
+    /// arModel
     @ObservedObject public var arModel: ARAnnotationViewModel<CardItem>
     
+    /// The image to be discovered that is displayed in the provided ScanView
     public let image: Image
+    
+    /// View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
     public let scanLabel: (Image, Binding<CGPoint?>) -> Scan
+    
+    /// View Builder for a custom CardView
     public let cardLabel: (CardItem, Bool) -> Card
+    
+    //// ViewBuilder for  custom MarkerView
     public let markerLabel: (MarkerControl.State, Image?) -> Marker
     
     @State private var currentIndex: Int = 0

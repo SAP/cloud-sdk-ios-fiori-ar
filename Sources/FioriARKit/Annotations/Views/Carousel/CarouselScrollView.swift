@@ -73,6 +73,10 @@ internal struct CarouselScrollView<Data: RandomAccessCollection, Content: View>:
         .onAppear {
             scrollTo(index: 0)
         }
+        .onPreferenceChange(SizePreferenceKey.self, perform: { newContainerSize in
+            containerSize = newContainerSize
+            scrollTo(index: currentIndex)
+        })
     }
     
     func scrollTo(index: Int) {
