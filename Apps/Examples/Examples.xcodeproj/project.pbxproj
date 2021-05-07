@@ -67,13 +67,13 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
-		2C2744932644DE040088E5DC /* Cards */ = {
+		2C2744932644DE040088E5DC /* CardContentViews */ = {
 			isa = PBXGroup;
 			children = (
 				2C4C71B426436ADC00B462A9 /* ARCardsViewBuilderContentView.swift */,
 				2C4C71B026436A5C00B462A9 /* ARCardsContentView.swift */,
 			);
-			path = Cards;
+			path = CardContentViews;
 			sourceTree = "<group>";
 		};
 		2C2744942644DE210088E5DC /* Models */ = {
@@ -85,12 +85,20 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		2C2D2BCA2645BF5000A1E1B1 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2C9371272644D3C3001932D1 /* DownloadsView.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		2C4C71932643697F00B462A9 = {
 			isa = PBXGroup;
 			children = (
 				2C4C719E2643697F00B462A9 /* Examples */,
-				2C4C719D2643697F00B462A9 /* Products */,
 				2C4C71BF26436E2400B462A9 /* Frameworks */,
+				2C4C719D2643697F00B462A9 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,10 +134,10 @@
 		2C4C71AF26436A4500B462A9 /* ARCards */ = {
 			isa = PBXGroup;
 			children = (
+				2C2D2BCA2645BF5000A1E1B1 /* Utils */,
 				2C2744942644DE210088E5DC /* Models */,
-				2C2744932644DE040088E5DC /* Cards */,
+				2C2744932644DE040088E5DC /* CardContentViews */,
 				2C27448D2644DB890088E5DC /* Media */,
-				2C9371272644D3C3001932D1 /* DownloadsView.swift */,
 			);
 			path = ARCards;
 			sourceTree = "<group>";

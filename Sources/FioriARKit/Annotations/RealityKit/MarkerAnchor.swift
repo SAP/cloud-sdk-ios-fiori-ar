@@ -9,6 +9,13 @@ import Foundation
 import RealityKit
 import UIKit
 
+/// Wrapper class which can be used as a Entity  in the scene although the internal entity is preferred
+/// It contains an internal Entity that defines the position of the annotation in 3D space and is used to work with Reality Composer
+
+// Potential Uses:
+//  - Debuggin Mode
+//  - Editing Mode for adjusting position in app
+
 internal class MarkerAnchor: Entity, HasAnchoring {
     
     public var internalEnitity: Entity! {

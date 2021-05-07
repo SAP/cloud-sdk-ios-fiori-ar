@@ -15,16 +15,31 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, HasARModel,
     
     internal var arView: ARView?
     
+    /**
+     An array of **ScreenAnnotations** which are displayed in the scene  contain the marker position and their card contents
+    
+     - The annotations internal entities within this list should be in the ARView scene.
+     - Set by the annotation loading strategy
+     */
     @Published public internal(set) var annotations: [ScreenAnnotation<CardItem>] = [ScreenAnnotation<CardItem>]()
     
+    /// The ScreenAnnotation that is focused on in the scene. The CardView and MarkerView will be in their selected states
     @Published public internal(set) var currentAnnotation: ScreenAnnotation<CardItem>?
     
+    /// The position of the ARAnchor thats discovered
     @Published internal var anchorPosition: CGPoint?
     
+    /**
+     When false it indicates that the Image or Object has not been discovered and the subsequent animations have finished
+    
+     - When the Image/Object Anchor is discovered there is a 3 second delay for animations to complete until the ContentView with Cards and Markers are displayed
+     */
     @Published internal var discoveryFlowHasFinished = false
 
+    /// The ARAnchor that represents the position
     private var arkitAnchor: ARAnchor?
     
+    /// :nodoc:
     private var subscription: Cancellable!
     
     public override init() {
@@ -34,8 +49,11 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, HasARModel,
         arView?.session.delegate = self
     }
     
-    // MARK: Session / Scene Lifecycle
+    // MARK: ViewModel Lifecycle
     
+    /// Updates scene on frame change
+    /// Used to project the location of the Entities from the world space onto the screen space
+    // Potential to add a closure here for developer to add logic on frame change
     public func updateScene(on event: SceneEvents.Update) {
         for (index, entity) in annotations.enumerated() {
             guard let projectedPoint = arView?.project(entity.marker.internalEnitity.position(relativeTo: nil)) else { return }
@@ -52,6 +70,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, HasARModel,
     
     // MARK: Annotation Management
     
+    /// Loads a strategy into the arModel and sets **annotations** member from the returned [ScreenAnnotation]
     public func load<Strategy: AnnotationLoadingStrategy>(loadingStrategy: Strategy) where CardItem == Strategy.CardItem {
         guard let arview = arView else { return }
         self.annotations = loadingStrategy.load(arView: arview)
@@ -67,7 +86,6 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, HasARModel,
             if annotation.id == id { annotations[index].setMarkerVisibility(to: isVisible) }
         }
     }
-    
     
     // TODO: The carousel must recalculate and refresh the size of its container on card removal/insertion to center cards
 //    public func setCardVisibility(for id: CardItem.ID, to isVisible: Bool) {
@@ -94,6 +112,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, HasARModel,
     }
 
     // MARK: ARSession Delegate
+    
     public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
         
         if let imageAnchor = anchors.compactMap({ $0 as? ARImageAnchor }).first {
@@ -103,7 +122,6 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, HasARModel,
             arkitAnchor = objectAnchor
             showAnnotationsAfterDiscoveryFlow()
         }
-        
     }
     
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {

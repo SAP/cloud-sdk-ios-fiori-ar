@@ -22,7 +22,7 @@ struct ARCardsDefaultContentView: View {
     
     func loadData() {
         let cardItems = Tests.cardItems
-        let strategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "ExampleRC", rcScene: "exampleScene")
+        let strategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "ExampleRC", rcScene: "ExampleScene")
         arModel.load(loadingStrategy: strategy)
     }
 }
