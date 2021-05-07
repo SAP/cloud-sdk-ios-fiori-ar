@@ -26,10 +26,13 @@ struct ContentView: View {
                 ) {
                     Text("ARCards - ViewBuilder")
                 }
-            }
-            .navigationBarTitle("Examples")
-            .navigationViewStyle(StackNavigationViewStyle())
-        }
+                
+                NavigationLink(destination: DownloadsView()) {
+                    Text("Download Image Anchors")
+                }
+                
+            }.navigationBarTitle("Examples")
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
