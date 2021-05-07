@@ -1,9 +1,3 @@
-<!--
-SPDX-FileCopyrightText: 2021 2020 SAP SE or an SAP affiliate company and cloud-sdk-ios-fioriarkit contributors
-
-SPDX-License-Identifier: Apache-2.0
--->
-
 ## Overview
 
 Thank you for your interest in contributing to our project! It's people like you that make the open source community such a great community! 😊
