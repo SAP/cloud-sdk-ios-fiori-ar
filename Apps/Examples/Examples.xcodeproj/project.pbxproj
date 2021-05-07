@@ -7,19 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C27448F2644DBAB0088E5DC /* qrImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C27448E2644DBAB0088E5DC /* qrImage.png */; };
 		2C4C71A02643697F00B462A9 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C719F2643697F00B462A9 /* ExamplesApp.swift */; };
 		2C4C71A22643697F00B462A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C71A12643697F00B462A9 /* ContentView.swift */; };
 		2C4C71A42643698000B462A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C4C71A32643698000B462A9 /* Assets.xcassets */; };
 		2C4C71A72643698000B462A9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C4C71A62643698000B462A9 /* Preview Assets.xcassets */; };
 		2C4C71B126436A5C00B462A9 /* ARCardsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C71B026436A5C00B462A9 /* ARCardsContentView.swift */; };
 		2C4C71B526436ADC00B462A9 /* ARCardsViewBuilderContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C71B426436ADC00B462A9 /* ARCardsViewBuilderContentView.swift */; };
-		2CDD909526437C270076150D /* FioriARKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2CDD909426437C270076150D /* FioriARKit */; };
+		2C6DDE5E2644CCD60093AA6B /* FioriARKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2C6DDE5D2644CCD60093AA6B /* FioriARKit */; };
+		2C9371282644D3C3001932D1 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9371272644D3C3001932D1 /* DownloadsView.swift */; };
 		2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909726437D630076150D /* ExampleCardItem.swift */; };
 		2CDD909B26437E7A0076150D /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909A26437E7A0076150D /* Tests.swift */; };
 		2CDD90A2264383540076150D /* ExampleRC.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD90A1264383540076150D /* ExampleRC.rcproject */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C27448E2644DBAB0088E5DC /* qrImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qrImage.png; sourceTree = "<group>"; };
 		2C4C719C2643697F00B462A9 /* Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Examples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C4C719F2643697F00B462A9 /* ExamplesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplesApp.swift; sourceTree = "<group>"; };
 		2C4C71A12643697F00B462A9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -29,6 +32,7 @@
 		2C4C71B026436A5C00B462A9 /* ARCardsContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsContentView.swift; sourceTree = "<group>"; };
 		2C4C71B426436ADC00B462A9 /* ARCardsViewBuilderContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsViewBuilderContentView.swift; sourceTree = "<group>"; };
 		2C4C71C026436E2400B462A9 /* cloud-sdk-ios-fioriarkit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "cloud-sdk-ios-fioriarkit"; path = ../..; sourceTree = "<group>"; };
+		2C9371272644D3C3001932D1 /* DownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
 		2CDD909726437D630076150D /* ExampleCardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCardItem.swift; sourceTree = "<group>"; };
 		2CDD909A26437E7A0076150D /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		2CDD90A1264383540076150D /* ExampleRC.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = ExampleRC.rcproject; sourceTree = "<group>"; };
@@ -39,13 +43,48 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CDD909526437C270076150D /* FioriARKit in Frameworks */,
+				2C6DDE5E2644CCD60093AA6B /* FioriARKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C27448D2644DB890088E5DC /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				2C2744912644DDE10088E5DC /* Images */,
+				2CDD909F264382D40076150D /* RealityComposer */,
+			);
+			path = Media;
+			sourceTree = "<group>";
+		};
+		2C2744912644DDE10088E5DC /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				2C27448E2644DBAB0088E5DC /* qrImage.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		2C2744932644DE040088E5DC /* Cards */ = {
+			isa = PBXGroup;
+			children = (
+				2C4C71B426436ADC00B462A9 /* ARCardsViewBuilderContentView.swift */,
+				2C4C71B026436A5C00B462A9 /* ARCardsContentView.swift */,
+			);
+			path = Cards;
+			sourceTree = "<group>";
+		};
+		2C2744942644DE210088E5DC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2CDD909A26437E7A0076150D /* Tests.swift */,
+				2CDD909726437D630076150D /* ExampleCardItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		2C4C71932643697F00B462A9 = {
 			isa = PBXGroup;
 			children = (
@@ -87,11 +126,10 @@
 		2C4C71AF26436A4500B462A9 /* ARCards */ = {
 			isa = PBXGroup;
 			children = (
-				2CDD909F264382D40076150D /* RealityComposer */,
-				2C4C71B026436A5C00B462A9 /* ARCardsContentView.swift */,
-				2C4C71B426436ADC00B462A9 /* ARCardsViewBuilderContentView.swift */,
-				2CDD909726437D630076150D /* ExampleCardItem.swift */,
-				2CDD909A26437E7A0076150D /* Tests.swift */,
+				2C2744942644DE210088E5DC /* Models */,
+				2C2744932644DE040088E5DC /* Cards */,
+				2C27448D2644DB890088E5DC /* Media */,
+				2C9371272644D3C3001932D1 /* DownloadsView.swift */,
 			);
 			path = ARCards;
 			sourceTree = "<group>";
@@ -129,7 +167,7 @@
 			);
 			name = Examples;
 			packageProductDependencies = (
-				2CDD909426437C270076150D /* FioriARKit */,
+				2C6DDE5D2644CCD60093AA6B /* FioriARKit */,
 			);
 			productName = Examples;
 			productReference = 2C4C719C2643697F00B462A9 /* Examples.app */;
@@ -174,6 +212,7 @@
 			files = (
 				2C4C71A72643698000B462A9 /* Preview Assets.xcassets in Resources */,
 				2C4C71A42643698000B462A9 /* Assets.xcassets in Resources */,
+				2C27448F2644DBAB0088E5DC /* qrImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +228,7 @@
 				2C4C71B526436ADC00B462A9 /* ARCardsViewBuilderContentView.swift in Sources */,
 				2C4C71A02643697F00B462A9 /* ExamplesApp.swift in Sources */,
 				2CDD90A2264383540076150D /* ExampleRC.rcproject in Sources */,
+				2C9371282644D3C3001932D1 /* DownloadsView.swift in Sources */,
 				2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */,
 				2CDD909B26437E7A0076150D /* Tests.swift in Sources */,
 			);
@@ -321,6 +361,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Examples/Preview Content\"";
 				DEVELOPMENT_TEAM = ZK2MG3TWVQ;
+				DYLIB_INSTALL_NAME_BASE = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Examples/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -343,6 +384,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Examples/Preview Content\"";
 				DEVELOPMENT_TEAM = ZK2MG3TWVQ;
+				DYLIB_INSTALL_NAME_BASE = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Examples/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -381,7 +423,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2CDD909426437C270076150D /* FioriARKit */ = {
+		2C6DDE5D2644CCD60093AA6B /* FioriARKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FioriARKit;
 		};

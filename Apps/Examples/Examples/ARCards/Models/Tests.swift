@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 // TODO: Improve Test Examples
 public enum Tests {
     

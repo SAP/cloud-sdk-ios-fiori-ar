@@ -10,6 +10,7 @@
 //
 
 import SwiftUI
+//import FioriSwiftUICore
 
 extension Fiori {
     
@@ -168,7 +169,7 @@ extension CardView {
                 detailImage
             }
             .frame(width: 214, height: 93)
-            .background(Color(red: 240/255, green: 241/255, blue: 242/255))
+            .background(Color(red: 240/255, green: 241/255, blue: 242/255)) //Color.preferredColor(.tertiaryFill)
             .cornerRadius(10)
             .opacity(isSelected ? 1: 0.8)
             .padding(.top, 8)
@@ -251,7 +252,7 @@ public struct DefaultIcon: View {
     public var body: some View {
         icon
             .font(.system(size: 37))
-            .foregroundColor(.gray)
+            .foregroundColor(.gray) // Color.preferredColor(.quarternaryLabel)
     }
 }
 
