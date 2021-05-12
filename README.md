@@ -15,7 +15,7 @@ A framework provided by Apple which processes and provides sensor data from the 
 
 ##### RealityKit
 
-While ARKit handles the above it does not render any content into the scene. RealityKit is a framework and API above ARKit that follows the Entity-Component Architectural pattern. Entities are 3D models that can have Components or behaviors applied to them. This handles establishing a scene that 3D content and audio can be anchored to from the ARKit anchors. RealityKit has it's own notion of AnchorEntities that have overlapping functionality with ARKit Anchors yet with the purpose of anchoring 3D content.
+While ARKit handles the above it does not render any content into the scene. RealityKit is a framework and API above ARKit that follows the Entity-Component Architectural pattern. Entities are 3D models that can have Components or behaviors applied to them. This handles establishing a scene that 3D content and audio can be anchored to from the ARKit anchors. RealityKit has it's own notion of AnchorEntities that have overlapping functionality with ARKit Anchors yet with the purpose of anchoring 3D content. For more in-depth information refer to the [RealityKit Documentation.](https://developer.apple.com/documentation/realitykit/ "RealityKit Documentation.")
 
 ##### Reality Composer
 
