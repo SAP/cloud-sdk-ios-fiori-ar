@@ -158,16 +158,16 @@ private struct ImageMatchedView: View {
     
     var body: some View {
         Image(systemName: "checkmark.circle.fill")
-            .font(.system(size: 18))
+            .font(.system(size: 38))
             .foregroundColor(.white)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(red: 25/255, green: 169/255, blue: 121/255, opacity: 0.6))
-                    .frame(width: 280, height: 64)
+                    .fill(Color(red: 0/255, green: 90/255, blue: 38/255, opacity: 0.6))
+                    .frame(width: 120, height: 120)
                     .padding(.all, 3)
                     .background(
                         ScanGuideCorners()
-                            .stroke(Color(red: 25/255, green: 169/255, blue: 121/255, opacity: 0.6), lineWidth: 2)
+                            .stroke(Color.white, lineWidth: 2)
                     )
             )
             .position(anchorPosition!)
