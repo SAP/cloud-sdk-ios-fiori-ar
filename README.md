@@ -1,57 +1,68 @@
-## **SAP Fiori for iOS ARKit**
+# **SAP Fiori for iOS ARKit**
 
 ***
+### Summary
+
 This project is a SwiftUI implementation of the SAP Fiori for iOS ARKit, and is meant to leverage the Augmented Reality capabilities from the frameworks provided by Apple for various Enterprise use cases.
 
-This project currently contains support for `AR Cards` corresponding to annotations relative to an image or object in the real world. Future use cases include Indoor Navigation.
+There is currently support for `AR Cards`. This refers to Cards that match with a corresponding Marker that represent annotations relative to an image or object in the real world.
 
 ### Background
 
 ##### ARKit
 
-A framework provided by Apple which processes and provides sensor data from the IMU for an Augmented Reality experience to work. Such as motion tracking, localizing device, camera capture, and image analysis/processing.
+A framework provided by Apple which processes and provides sensor data from the IMU for an Augmented Reality experience to work. Such as motion tracking, localizing device, session capture, and image analysis/processing. ARKit uses ARAnchor and it's limited subtypes (ARPlaneAnchor, ARImageAnchor, ARObjectAnchor) to keep track of their points of interest in the ARSession. For more in-depth information refer to the [ARKit Documentation.](https://developer.apple.com/documentation/arkit "ARKit Documentation.")
 
 ##### RealityKit
 
-While ARKit handles the above it does not render any content into the scene. RealityKit is a framework that follows the Entity-Component Architectural pattern. This handles establishing a scene that 3D content and audio can be anchored to.
+While ARKit handles the above it does not render any content into the scene. RealityKit is a framework and API above ARKit that follows the Entity-Component Architectural pattern. Entities are 3D models that can have Components or behaviors applied to them. This handles establishing a scene that 3D content and audio can be anchored to from the ARKit anchors. RealityKit has it's own notion of AnchorEntities that have overlapping functionality with ARKit Anchors yet with the purpose of anchoring 3D content. For more in-depth information refer to the [RealityKit Documentation.](https://developer.apple.com/documentation/realitykit/ "RealityKit Documentation.")
 
 ##### Reality Composer
 
-Creation of Augmented Reality experiences without a visual understanding of the scene can be difficult. Reality Composer is an app for iOS and Mac with functionalities to compose AR scenes around a chosen anchor type. 3D content can be placed and given conditional actions and audio. A benefit of using this app is that the scene can be previewed in AR and edited in real time using an iOS device.
+Creation of Augmented Reality experiences without a visual understanding of the scene can be difficult. Hardcoding and measuring the xyz locations of content can be tedious. Reality Composer is an app for iOS and Mac with functionalities to compose AR scenes around a chosen anchor type. 3D content can be placed and given conditional actions and audio. A benefit of using this app is that the scene can be previewed in AR and edited in real time using an iOS device.
 
 > **Note**: Reality Composer is required to scan an object when choosing an Object Anchor.
 
 ##### SwiftUI
 
-3D content design has many challenges. It can be time consuming, expensive, require additional skills, and generates large files. 3D Content is also difficult to make dynamic changes such as animations through interaction and conditions. As a solution, instead of placing 3D content into the scene. Invisible anchors are placed as children relative to the chosen achor. Their locations are projected from the world scene onto the screen and SwiftUI Views are rendered at those locations.
+3D content design has many challenges. It can be time consuming, expensive, require additional skills, and generates large files. 3D Content is also difficult to make dynamic changes such as animations through interaction and conditions. As a solution, instead of placing 3D content into the scene. Invisible Entities are placed as children relative to the chosen Anchor. Their locations are projected from the world scene onto the screen and SwiftUI Views are rendered at those locations.
 
 ## AR Cards
 
-> **WARNING**: Concepts and implementation for components is `in-development` and can change at any time!!! 
+> **WARNING**: Concepts and implementation for components are `in-development` and can change at any time!!! 
 
-The AR Cards use case is essentially annotations represented by a marker in the real world that correspond to data displayed in a card. There is a one to one mapping of markers to cards. After creation of an scene in reality composer and the data thats associated with those positions they can be loaded into the content view. Supports `Image` and `Object` anchors.
+The AR Cards use case is essentially annotations represented by a marker in the real world that correspond to data displayed in a card. There is a one to one mapping of markers to cards. After creation of a scene in reality composer and the data that's associated with those positions, they can be loaded into the content view. Supports `Image` and `Object` anchors.
+
+|  Annotation Authoring | Definition |  Supported |
+| :---------------- | :--------------- | :------------: |
+| Initially Loaded         |  Strategy which loads annotations with pre-defined locations and data before the Image/Object Anchor is discovered. Upon discovery the annotations are loaded into the scene. Supports a Reality Composer Strategy.                              | :white_check_mark:  |
+| User Edited in App   |  After the Image/Object is discovered, an editing mode to edit the current marker's locations and respective card's content. Adding and Removing new anchors with defined content.      | In Development |
+| Automated               |   An Point of Interest is automatically discovered and added to the scene. A hypothetical example, Vision Framework Model can detect a compliant Image in the capture session and then add it to the AR Scene as an Image Anchor with a respective Card/Marker. | In Development |
 
 ### Usage
 
-##### Composing the scene
+##### With Reality Composer Strategy: Composing the scene
 
 1. Open the Reality Composer app and create a scene with the desired anchor
 2. Place spheres in the desired position and preview in AR to fine tune
-3. Name the spheres starting from 0
+3. Name the spheres with a type that conforms to LosslessStringConvertable
+4. Save the rcproject file in your xcode project
+
+> **Note**: The spheres will be invisible in the scene
 
 ##### Data Consumption
 
-Models Conform to CardItemComponent. The name of the entity from Reality Composer corresponds to the id of the Model
+CardItem Models Conform to CardItemComponent. The *name* of the Entity (Sphere) from Reality Composer corresponds to the *id* property of the Model. The list of initial CardItems are passed into the RealityComposerStrategy with Reality Composer File Name and the name of the scene.
 
 ##### Creating the ContentView and loading the data
 
 ```swift
 struct FioriARKitCardsExample: View {
-    @StateObject var arModel = ARAnnotationViewModel<DeveloperCardModel>()
+    @StateObject var arModel = ARAnnotationViewModel<ExampleCardModel>()
     
     var body: some View {
         
-        ARAnnotationContentView(arModel: arModel, image: Image("qrImage"), cardAction: { id in
+        SingleImageARCardView(arModel: arModel, image: Image("qrImage"), cardAction: { id in
             // action to pass to corresponding card from the CardItemModel ID
 		})
 		.onAppear(perform: loadData)
@@ -99,7 +110,7 @@ See **Limitations**.
 
 ## How to obtain support
 
-Support for the modules is provided thorough this open-source repository.  Please file Github Issues for any issues experienced, or questions.  
+Support for the modules is provided thorough this open-source repository. Please file Github Issues for any issues experienced, or questions.  
 
 ## Contributing
 
@@ -111,5 +122,5 @@ See **Limitations**.
 
 ## Examples
 
-Functionality can be further explored with a demo app  which is already part of this package (`Apps/Examples/Examples.xcodeproj`).
+Functionality can be further explored with a demo app which is already part of this package (`Apps/Examples/Examples.xcodeproj`).
 
