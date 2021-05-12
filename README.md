@@ -11,7 +11,7 @@ There is currently support for `AR Cards`. This refers to Cards that match with 
 
 ##### ARKit
 
-A framework provided by Apple which processes and provides sensor data from the IMU for an Augmented Reality experience to work. Such as motion tracking, localizing device, session capture, and image analysis/processing. ARKit uses ARAnchor and it's limited subtypes (APPlaneAnchor, ARImageAnchor, ARObjectAnchor) to keep track of their points of interest in the ARSession. For more in-depth information refer to the [ARKit Documentation.](https://developer.apple.com/documentation/arkit "ARKit Documentation.")
+A framework provided by Apple which processes and provides sensor data from the IMU for an Augmented Reality experience to work. Such as motion tracking, localizing device, session capture, and image analysis/processing. ARKit uses ARAnchor and it's limited subtypes (ARPlaneAnchor, ARImageAnchor, ARObjectAnchor) to keep track of their points of interest in the ARSession. For more in-depth information refer to the [ARKit Documentation.](https://developer.apple.com/documentation/arkit "ARKit Documentation.")
 
 ##### RealityKit
 
