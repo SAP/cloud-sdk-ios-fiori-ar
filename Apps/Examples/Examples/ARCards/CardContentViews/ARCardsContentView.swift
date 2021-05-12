@@ -12,10 +12,11 @@ struct ARCardsDefaultContentView: View {
     @StateObject var arModel = ARAnnotationViewModel<ExampleCardItem>()
     
     var body: some View {
-        ARAnnotationContentView(arModel: arModel,
+        SingleImageARCardView(arModel: arModel,
                                 image: Image("qrImage"),
                                 cardAction: { id in
                                     // set the card action for id corresponding to the CardItemModel
+                                    print(id)
                                 })
                 .onAppear(perform: loadData)
     }

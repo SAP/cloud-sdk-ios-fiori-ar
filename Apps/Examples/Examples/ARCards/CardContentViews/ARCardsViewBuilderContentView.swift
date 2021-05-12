@@ -12,10 +12,9 @@ struct ARCardsViewBuilderContentView: View {
     @StateObject var arModel = ARAnnotationViewModel<ExampleCardItem>()
     
     var body: some View {
-        ARAnnotationContentView(arModel: arModel,
-                                image: Image("qrImage"),
-                                scanLabel: { image, anchorPosition in
-                                    CustomScanView(image: image, position: anchorPosition)
+        SingleImageARCardView(arModel: arModel,
+                                scanLabel: { anchorPosition in
+                                    CustomScanView(image: Image("qrImage"), position: anchorPosition)
                                 },
                                 cardLabel: { cardmodel, isSelected in
                                     CustomCardView(model: cardmodel, isSelected: isSelected)
