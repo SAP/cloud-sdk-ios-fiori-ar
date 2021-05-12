@@ -75,7 +75,7 @@
                           "entityName",
                           {
                             "typeName" : "String",
-                            "value" : "0"
+                            "value" : "BrakeFluid"
                           }
                         ]
                       ]
@@ -154,7 +154,7 @@
                           "entityName",
                           {
                             "typeName" : "String",
-                            "value" : "1"
+                            "value" : "Fusebox"
                           }
                         ]
                       ]
@@ -233,7 +233,7 @@
                           "entityName",
                           {
                             "typeName" : "String",
-                            "value" : "3"
+                            "value" : "Coolant"
                           }
                         ]
                       ]
@@ -294,7 +294,7 @@
                           "entityName",
                           {
                             "typeName" : "String",
-                            "value" : "4"
+                            "value" : "OilStick"
                           }
                         ]
                       ]
@@ -379,7 +379,7 @@
                           "entityName",
                           {
                             "typeName" : "String",
-                            "value" : "2"
+                            "value" : "Battery"
                           }
                         ]
                       ]
@@ -406,6 +406,66 @@
                     }
                   },
                   "B592FE66-6A80-41B8-8F3C-F0D224552C25" : null,
+                  "BA5020AF-EE32-4F4D-A8E0-305CE353950F" : {
+                    "overrides" : {
+                      "arguments" : [
+                        [
+                          "material",
+                          {
+                            "typeName" : "String",
+                            "value" : "standard"
+                          }
+                        ],
+                        [
+                          "type",
+                          {
+                            "typeName" : "String",
+                            "value" : "sphere"
+                          }
+                        ]
+                      ],
+                      "factory" : {
+                        "identifier" : "com.apple.rc.af.CoreAssetFactories.PrimitiveShapeAssetFactory",
+                        "version" : "1.0"
+                      },
+                      "runtimeAttributes" : [
+                        [
+                          "RuntimeIdentifier",
+                          {
+                            "typeName" : "UUID",
+                            "value" : "030FB58B-FE76-4197-8623-F2436BC10E84"
+                          }
+                        ],
+                        [
+                          "entityName",
+                          {
+                            "typeName" : "String",
+                            "value" : "WasherFluid"
+                          }
+                        ]
+                      ]
+                    },
+                    "transform" : {
+                      "matrix" : [
+                        0.27197343111038208,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0.27197343111038208,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0.27197343111038208,
+                        0,
+                        -0.023984590545296669,
+                        0.049999531358480453,
+                        0.067529208958148956,
+                        1
+                      ]
+                    }
+                  },
                   "BF1C1713-D0A8-4C80-92D3-567780B4869F" : null,
                   "C33C1782-EE42-4F91-9BCA-E764D1820BA1" : null,
                   "D8A585D4-2971-438C-84E3-356B213E7D9D" : null,
@@ -432,7 +492,7 @@
                   0,
                   0.07173871248960495,
                   0.5448678731918335,
-                  -0.83544749021530151,
+                  -0.83544754981994629,
                   0,
                   -0.046615678817033768,
                   0.83852189779281616,

@@ -45,6 +45,11 @@ internal extension View {
 }
 
 public extension View {
+    
+    /// Passes the Carousel Options down from the environment
+    ///
+    /// - Parameters:
+    ///     - options: CarouselOptions which modifies the behavior of the Carousel
     func carouselOptions(_ options: CarouselOptions) -> some View {
         environment(\.carouselOptions, options)
     }
