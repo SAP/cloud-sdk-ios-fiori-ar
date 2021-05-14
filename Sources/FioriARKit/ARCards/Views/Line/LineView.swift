@@ -8,6 +8,8 @@
 import SwiftUI
 
 internal struct LineView: View {
+    @State private var opacity: Double = 0
+    
     @Binding var displayLine: Bool
     var startPoint: CGPoint
     var endPoint: CGPoint
@@ -31,9 +33,16 @@ internal struct LineView: View {
                 path.addLine(to: startPoint)
             }
             .stroke(gradient, lineWidth: 3)
-            .animateOnAppear(animation: Animation.easeInOut(duration: 0.4)) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                    withAnimation(Animation.easeInOut(duration: 0.1)) {
+            .opacity(opacity)
+            .animateOnAppear(animation: Animation.easeIn(duration: 0.3)) {
+                opacity = 1
+                // Delay Fade Out
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                    withAnimation(Animation.easeOut(duration: 0.3)) {
+                        opacity = 0
+                    }
+                    // Delay reseting Displaying line or else the animation stops recieving updated positions appearing to be frozen
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         displayLine = false
                     }
                 }
