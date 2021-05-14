@@ -30,7 +30,7 @@ Creation of Augmented Reality experiences without a visual understanding of the 
 ## AR Cards
 
 <p align="center">
-<img src="media/CarEngineGif.gif" alt="alt text" width="296" height="640" align="center">
+<img src="media/carEngineGif.gif" alt="alt text" width="296" height="640" align="center">
 </p>
 
 > **WARNING**: Concepts and implementation for components are `in-development` and can change at any time!!! 
