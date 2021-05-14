@@ -45,7 +45,7 @@ struct ImageCard: View {
             .frame(width: UIScreen.main.bounds.width, height: 225, alignment: .center)
             .padding()
             .onTapGesture {
-                // Simple Checkto prevent potential crash
+                // Simple Check to prevent potential crash
                 if let _ = FileManager.default.getImagePath(for: imageName, ext: imageExtension) {
                     presentSheet = true
                 }

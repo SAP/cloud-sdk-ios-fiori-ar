@@ -10,7 +10,7 @@ import RealityKit
 import ARKit
 import Combine
 
-struct ARContainer<ARModel: HasARModel>: UIViewRepresentable {
+internal struct ARContainer<ARModel: HasARModel>: UIViewRepresentable {
     @ObservedObject var arState: ARModel
     
     func makeUIView(context: Context) -> ARView {

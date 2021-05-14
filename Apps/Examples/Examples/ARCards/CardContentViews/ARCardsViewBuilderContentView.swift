@@ -9,7 +9,7 @@ import SwiftUI
 import FioriARKit
 
 struct ARCardsViewBuilderContentView: View {
-    @StateObject var arModel = ARAnnotationViewModel<ExampleCardItem>()
+    @StateObject var arModel = ARAnnotationViewModel<StringIdentifyingCardItem>()
     
     var body: some View {
         SingleImageARCardView(arModel: arModel,
@@ -23,11 +23,11 @@ struct ARCardsViewBuilderContentView: View {
                                     CustomMarkerView(state: state)
                                 })
             .carouselOptions(CarouselOptions(itemSpacing: 5, carouselHeight: 200, alignment: .center))
-            .onAppear(perform: loadData)
+            .onAppear(perform: loadInitialData)
     }
     
-    func loadData() {
-        let cardItems = Tests.cardItems
+    func loadInitialData() {
+        let cardItems = Tests.carEngineCardItems
         let strategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "ExampleRC", rcScene: "ExampleScene")
         arModel.load(loadingStrategy: strategy)
     }

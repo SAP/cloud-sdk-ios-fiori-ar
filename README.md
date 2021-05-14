@@ -30,6 +30,11 @@ Creation of Augmented Reality experiences without a visual understanding of the 
 ## AR Cards
 
 > **WARNING**: Concepts and implementation for components are `in-development` and can change at any time!!! 
+<!--
+    <p align="center">
+    <img src="media/CarEngineDemo.gif" alt="alt text" width="300" height="500" align="center">
+    </p>
+-->
 
 The AR Cards use case is essentially annotations represented by a marker in the real world that correspond to data displayed in a card. There is a one to one mapping of markers to cards. After creation of a scene in reality composer and the data that's associated with those positions, they can be loaded into the content view. Supports `Image` and `Object` anchors.
 
@@ -65,10 +70,10 @@ struct FioriARKitCardsExample: View {
         SingleImageARCardView(arModel: arModel, image: Image("qrImage"), cardAction: { id in
             // action to pass to corresponding card from the CardItemModel ID
 		})
-		.onAppear(perform: loadData)
+		.onAppear(perform: loadInitialData)
     }
 
-    func loadData() {
+    func loadInitialData() {
         let cardItems = NetworkMockup.fetchData()
         let loadingStrategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "RealityComposerFileName", rcScene: "SceneName")
         arModel.load(loadingStrategy: loadingStrategy)

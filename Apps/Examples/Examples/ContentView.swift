@@ -27,6 +27,14 @@ struct ContentView: View {
                     Text("ARCards - ViewBuilder")
                 }
                 
+                NavigationLink(destination:
+                                CarEngineExampleContentView()
+                                .navigationBarTitle("")
+                                .navigationBarHidden(true)
+                ) {
+                    Text("2016 Honda Engine Example")
+                }
+                
                 NavigationLink(destination: DownloadsView()) {
                     Text("Download Image Anchors")
                 }
