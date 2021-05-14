@@ -380,7 +380,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Examples/Preview Content\"";
-				DEVELOPMENT_TEAM = ZK2MG3TWVQ;
+				DEVELOPMENT_TEAM = J26P8U5TZ4;
 				DYLIB_INSTALL_NAME_BASE = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Examples/Info.plist;
@@ -389,7 +389,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.cloud-sdk-ios-fioriarkit.Examples.Examples";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.cloud-sdk-ios-fioriarkit.Examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -403,7 +403,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Examples/Preview Content\"";
-				DEVELOPMENT_TEAM = ZK2MG3TWVQ;
+				DEVELOPMENT_TEAM = J26P8U5TZ4;
 				DYLIB_INSTALL_NAME_BASE = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Examples/Info.plist;
@@ -412,7 +412,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.cloud-sdk-ios-fioriarkit.Examples.Examples";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.cloud-sdk-ios-fioriarkit.Examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
