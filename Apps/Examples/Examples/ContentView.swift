@@ -11,27 +11,15 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink(destination:
-                                ARCardsDefaultContentView()
-                                .navigationBarTitle("")
-                                .navigationBarHidden(true)
-                ) {
+                NavigationLink(destination: ARCardsDefaultContentView()) {
                     Text("ARCards - Default")
                 }
                 
-                NavigationLink(destination:
-                                ARCardsViewBuilderContentView()
-                                .navigationBarTitle("")
-                                .navigationBarHidden(true)
-                ) {
+                NavigationLink(destination: ARCardsViewBuilderContentView()) {
                     Text("ARCards - ViewBuilder")
                 }
                 
-                NavigationLink(destination:
-                                CarEngineExampleContentView()
-                                .navigationBarTitle("")
-                                .navigationBarHidden(true)
-                ) {
+                NavigationLink(destination: CarEngineExampleContentView()) {
                     Text("2016 Honda Engine Example")
                 }
                 

@@ -87,6 +87,8 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
             }
         }
         .edgesIgnoringSafeArea(.all)
+        .navigationBarTitle("")
+        .navigationBarHidden(true)
         .overlay(DismissButton(onDismiss: onDismiss).opacity(Double(0.8)), alignment: .topLeading)
     }
     
