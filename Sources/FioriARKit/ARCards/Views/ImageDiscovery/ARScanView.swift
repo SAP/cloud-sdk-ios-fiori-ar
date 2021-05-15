@@ -11,15 +11,13 @@ public struct ARScanView: View {
     var image: Image
     @Binding var anchorPosition: CGPoint?
     
-    @State private var isScanning: Bool = false
-    
     public var body: some View {
         ZStack {
             
             if anchorPosition != nil {
                 ImageMatchedView(anchorPosition: $anchorPosition)
             } else {
-                CollapsingView(image: image, isScanning: $isScanning)
+                CollapsingView(image: image)
             }
             
         }
@@ -29,8 +27,7 @@ public struct ARScanView: View {
 
 private struct CollapsingView: View {
     var image: Image
-    @Binding var isScanning: Bool
-    
+    @State private var isScanning: Bool = false
     @Namespace var nameSpace
     
     var body: some View {
@@ -71,6 +68,7 @@ private struct CollapsingBodyView: View {
                 .matchedGeometryEffect(id: isScanning ? "image": "body", in: nameSpace,  isSource: false)
                 .padding(.horizontal, 56)
                 .padding(.top, 216)
+                .allowsHitTesting(isScanning)
                 .onTapGesture(perform: buttonAction)
             
             if !isScanning {
