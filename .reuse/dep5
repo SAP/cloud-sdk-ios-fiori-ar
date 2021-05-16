@@ -35,15 +35,19 @@ Files:
   .czrc
   .github/**
   .gitignore
-  .mailmap
   .gitattributes
   jazzy/**
   media/**
+  .mailmap
   Package.resolved
+  sonar-project.properties
   scripts/**
+  translation_v2.json
   *.yaml
   *.yml
-  *.json
+  *.js
+  Brewfile
+  Mintfile
   .swift-version
   .swiftformat
 Copyright:  2020 SAP SE or an SAP affiliate company and cloud-sdk-ios-fioriarkit contributors
