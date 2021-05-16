@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: Improve Test Examples
 public enum Tests {
     
     public static let carEngineCardItems = [StringIdentifyingCardItem(id: "WasherFluid",
@@ -51,5 +50,4 @@ public enum Tests {
                                                                       detailImage_: nil,
                                                                       actionText_: "Open App",
                                                                       icon_: Image(systemName: "link"))]
-    
 }

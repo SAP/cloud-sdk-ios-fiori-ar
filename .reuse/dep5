@@ -35,11 +35,15 @@ Files:
   .czrc
   .github/**
   .gitignore
+  .mailmap
+  .gitattributes
   jazzy/**
+  media/**
   Package.resolved
   scripts/**
   *.yaml
   *.yml
+  *.json
   .swift-version
   .swiftformat
 Copyright:  2020 SAP SE or an SAP affiliate company and cloud-sdk-ios-fioriarkit contributors

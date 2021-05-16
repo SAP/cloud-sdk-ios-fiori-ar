@@ -57,7 +57,7 @@ struct CustomScanView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 150)
-                    
+                
                 Text("Discover this Image!")
                     .font(.system(size: 19))
                     .foregroundColor(.white)
@@ -68,7 +68,6 @@ struct CustomScanView: View {
                     .padding(.bottom, 50)
             }
         }
-        
     }
 }
 
@@ -80,16 +79,14 @@ struct CustomCardView<CardItem: CardItemModel>: View {
     var body: some View {
         VStack(spacing: 10) {
             Button("Change Color") {
-                let bg: [Color] = [.red, .yellow, .blue]
-                color = bg.randomElement()!
+                let background: [Color] = [.red, .yellow, .blue]
+                color = background.randomElement()!
             }
             .foregroundColor(.white)
             .font(.system(size: 24))
             
             Text(model.title_)
-            Button(model.actionText_ ?? "") {
-                
-            }
+            Button(model.actionText_ ?? "") { }
         }
         .foregroundColor(isSelected ? Color.white: Color.black)
         .frame(width: 250, height: isSelected ? 200 : 150)
