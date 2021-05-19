@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by O'Brien, Patrick on 4/17/21.
 //
@@ -22,10 +22,9 @@ public struct MarkerView: View {
     }
     
     var unselected: some View {
-        
         icon
             .font(.system(size: 16))
-            .foregroundColor(Color(red: 10/255, green: 110/255, blue: 209/255))
+            .foregroundColor(Color(red: 10 / 255, green: 110 / 255, blue: 209 / 255))
             .background(
                 Circle()
                     .fill(Color.white)
@@ -50,7 +49,6 @@ public struct MarkerView: View {
     }
     
     var selected: some View {
-        
         icon
             .font(.system(size: 28))
             .foregroundColor(.white)
@@ -59,7 +57,7 @@ public struct MarkerView: View {
                     .strokeBorder(Color.white, lineWidth: 1)
                     .background(
                         Circle()
-                            .foregroundColor(Color(red: 10/255, green: 110/255, blue: 209/255))
+                            .foregroundColor(Color(red: 10 / 255, green: 110 / 255, blue: 209 / 255))
                     )
                     .frame(width: 60, height: 60)
                     .background(

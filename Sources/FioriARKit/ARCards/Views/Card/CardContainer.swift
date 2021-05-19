@@ -8,7 +8,6 @@
 import SwiftUI
 
 internal struct CardContainer<Label: View, CardItem: CardItemModel>: View {
-    
     var _isSelected: Bool
     var _cardItemModel: CardItem
     var _isCardVisible: Bool
@@ -28,7 +27,7 @@ internal struct CardContainer<Label: View, CardItem: CardItemModel>: View {
 }
 
 extension CardContainer {
-    internal var body: some View {
+    var body: some View {
         Group {
             if _isCardVisible {
                 label_

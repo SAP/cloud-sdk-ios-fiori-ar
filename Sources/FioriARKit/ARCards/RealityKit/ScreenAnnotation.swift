@@ -1,24 +1,23 @@
 //
-//  File.swift
+//  ScreenAnnotation.swift
 //
 //
 //  Created by O'Brien, Patrick on 3/16/21.
 //
 
 import CoreGraphics
-import SwiftUI
 import RealityKit
+import SwiftUI
 
 /// Wrapper struct for the **CardItem : CardItemModel**  and the real world anchoring position. Used to set the internal entity.
 
 public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable {
-
     public var id: CardItem.ID {
-        card.id
+        self.card.id
     }
     
     public var icon: Image? {
-        card.icon_
+        self.card.icon_
     }
     
     public var card: CardItem

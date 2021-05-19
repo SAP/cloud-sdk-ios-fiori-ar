@@ -23,7 +23,6 @@
 --funcattributes preserve
 --groupedextension "MARK: %c"
 --guardelse auto
---header strip
 --hexgrouping none
 --hexliteralcase lowercase
 --ifdef indent

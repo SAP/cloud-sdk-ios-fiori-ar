@@ -1,6 +1,6 @@
 //
 //  SingleImageARCardView.swift
-//  
+//
 //
 //  Created by O'Brien, Patrick on 5/11/21.
 //
@@ -21,7 +21,6 @@ import SwiftUI
                        })
          .onAppear(perform: loadData)
  
- 
  // Constructors with viewbuilders for each combination of Views
  // Use the CarouselOptions View Modifier to adjust the behavior of the Carousel
  SingleImageARCardView(arModel: arModel,
@@ -37,7 +36,6 @@ import SwiftUI
          .carouselOptions(CarouselOptions(itemSpacing: 5, carouselHeight: 200, alignment: .center))
          .onAppear(perform: loadData)
  
- 
  func loadData() {
      let cardItems = Tests.cardItems
      let strategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "ExampleRC", rcScene: "ExampleScene")
@@ -46,8 +44,7 @@ import SwiftUI
  ```
  */
 
-public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardItem>: View where CardItem : CardItemModel {
-    
+public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardItem>: View where CardItem: CardItemModel {
     /// arModel
     @ObservedObject public var arModel: ARAnnotationViewModel<CardItem>
     
@@ -63,8 +60,8 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
     public init(arModel: ARAnnotationViewModel<CardItem>,
                 @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
                 @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
-                @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker) {
-        
+                @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
+    {
         self.arModel = arModel
         self.scanLabel = scanLabel
         self.cardLabel = cardLabel
@@ -76,7 +73,6 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
             ARContainer(arState: arModel)
             
             if arModel.discoveryFlowHasFinished {
-                
                 ARAnnotationContentView($arModel.annotations,
                                         currentAnnotation: $arModel.currentAnnotation,
                                         cardLabel: cardLabel,
@@ -93,7 +89,7 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
     }
     
     private func onDismiss() {
-        arModel.cleanUpSession()
+        self.arModel.cleanUpSession()
     }
     
     private struct DismissButton: View {
@@ -108,27 +104,27 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
                 Image(systemName: "arrow.backward")
                     .frame(width: 44, height: 44)
                     .font(.system(size: 19))
-                    .foregroundColor(Color(red: 250/255, green: 250/255, blue: 250/255))
+                    .foregroundColor(Color(red: 250 / 255, green: 250 / 255, blue: 250 / 255))
                     .background(
                         RoundedRectangle(cornerRadius: 13)
                             .fill(Color.black.opacity(0.6))
                     )
             })
-            .padding(.leading, 16)
+                .padding(.leading, 16)
         }
     }
 }
 
-extension SingleImageARCardView where Scan == ARScanView,
-                                      Card == CardView<Text,
-                                                       _ConditionalContent<Text, EmptyView>,
-                                                       _ConditionalContent<ImagePreview, DefaultIcon>,
-                                                       _ConditionalContent<Text, EmptyView>, CardItem>,
-                                      Marker == MarkerView {
-    
-    public init(arModel: ARAnnotationViewModel<CardItem>,
-                image: Image,
-                cardAction: ((CardItem.ID) -> Void)?)
+public extension SingleImageARCardView where Scan == ARScanView,
+    Card == CardView<Text,
+        _ConditionalContent<Text, EmptyView>,
+        _ConditionalContent<ImagePreview, DefaultIcon>,
+        _ConditionalContent<Text, EmptyView>, CardItem>,
+    Marker == MarkerView
+{
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         image: Image,
+         cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
                   scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
@@ -137,16 +133,16 @@ extension SingleImageARCardView where Scan == ARScanView,
     }
 }
 
-extension SingleImageARCardView where Scan == ARScanView,
-                                      Card == CardView<Text,
-                                                       _ConditionalContent<Text, EmptyView>,
-                                                       _ConditionalContent<ImagePreview, DefaultIcon>,
-                                                       _ConditionalContent<Text, EmptyView>, CardItem> {
-    
-    public init(arModel: ARAnnotationViewModel<CardItem>,
-                image: Image,
-                @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
-                cardAction: ((CardItem.ID) -> Void)?)
+public extension SingleImageARCardView where Scan == ARScanView,
+    Card == CardView<Text,
+        _ConditionalContent<Text, EmptyView>,
+        _ConditionalContent<ImagePreview, DefaultIcon>,
+        _ConditionalContent<Text, EmptyView>, CardItem>
+{
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         image: Image,
+         @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
+         cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
                   scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
@@ -155,12 +151,12 @@ extension SingleImageARCardView where Scan == ARScanView,
     }
 }
 
-extension SingleImageARCardView where Scan == ARScanView,
-                                      Marker == MarkerView {
-    
-    public init(arModel: ARAnnotationViewModel<CardItem>,
-                image: Image,
-                @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
+public extension SingleImageARCardView where Scan == ARScanView,
+    Marker == MarkerView
+{
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         image: Image,
+         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
     {
         self.init(arModel: arModel,
                   scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
@@ -169,16 +165,16 @@ extension SingleImageARCardView where Scan == ARScanView,
     }
 }
 
-extension SingleImageARCardView where Card == CardView<Text,
-                                                       _ConditionalContent<Text, EmptyView>,
-                                                       _ConditionalContent<ImagePreview, DefaultIcon>,
-                                                       _ConditionalContent<Text, EmptyView>,
-                                                       CardItem>,
-                                      Marker == MarkerView {
-    
-    public init(arModel: ARAnnotationViewModel<CardItem>,
-                @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
-                cardAction: ((CardItem.ID) -> Void)?)
+public extension SingleImageARCardView where Card == CardView<Text,
+    _ConditionalContent<Text, EmptyView>,
+    _ConditionalContent<ImagePreview, DefaultIcon>,
+    _ConditionalContent<Text, EmptyView>,
+    CardItem>,
+    Marker == MarkerView
+{
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
+         cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
                   scanLabel: scanLabel,
@@ -187,12 +183,11 @@ extension SingleImageARCardView where Card == CardView<Text,
     }
 }
 
-extension SingleImageARCardView where Scan == ARScanView {
-    
-    public init(arModel: ARAnnotationViewModel<CardItem>,
-                image: Image,
-                @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
-                @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
+public extension SingleImageARCardView where Scan == ARScanView {
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         image: Image,
+         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
+         @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
     {
         self.init(arModel: arModel,
                   scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
@@ -201,11 +196,10 @@ extension SingleImageARCardView where Scan == ARScanView {
     }
 }
 
-extension SingleImageARCardView where Marker == MarkerView {
-    
-    public init(arModel: ARAnnotationViewModel<CardItem>,
-                @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
-                @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
+public extension SingleImageARCardView where Marker == MarkerView {
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
+         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
     {
         self.init(arModel: arModel,
                   scanLabel: scanLabel,
@@ -214,16 +208,16 @@ extension SingleImageARCardView where Marker == MarkerView {
     }
 }
 
-extension SingleImageARCardView where Card == CardView<Text,
-                                                       _ConditionalContent<Text, EmptyView>,
-                                                       _ConditionalContent<ImagePreview, DefaultIcon>,
-                                                       _ConditionalContent<Text, EmptyView>,
-                                                       CardItem> {
-    
-    public init(arModel: ARAnnotationViewModel<CardItem>,
-                @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
-                @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
-                cardAction: ((CardItem.ID) -> Void)?)
+public extension SingleImageARCardView where Card == CardView<Text,
+    _ConditionalContent<Text, EmptyView>,
+    _ConditionalContent<ImagePreview, DefaultIcon>,
+    _ConditionalContent<Text, EmptyView>,
+    CardItem>
+{
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
+         @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
+         cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
                   scanLabel: scanLabel,

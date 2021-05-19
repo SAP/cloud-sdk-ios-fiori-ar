@@ -5,8 +5,8 @@
 //  Created by O'Brien, Patrick on 5/13/21.
 //
 
-import SwiftUI
 import FioriARKit
+import SwiftUI
 
 public struct StringIdentifyingCardItem: CardItemModel {
     public var id: String

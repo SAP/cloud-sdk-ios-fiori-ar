@@ -1,13 +1,13 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by O'Brien, Patrick on 2/15/21.
 //
 
 import SwiftUI
 
-public protocol CardItemModel: Identifiable, TitleComponent, DescriptionTextComponent, DetailImageComponent, ActionTextComponent, IconComponent { }
+public protocol CardItemModel: Identifiable, TitleComponent, DescriptionTextComponent, DetailImageComponent, ActionTextComponent, IconComponent {}
 
 public protocol TitleComponent {
     var title_: String { get }

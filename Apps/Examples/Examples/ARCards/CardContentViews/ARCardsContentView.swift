@@ -5,20 +5,20 @@
 //  Created by O'Brien, Patrick on 5/5/21.
 //
 
-import SwiftUI
 import FioriARKit
+import SwiftUI
 
 struct ARCardsDefaultContentView: View {
     @StateObject var arModel = ARAnnotationViewModel<StringIdentifyingCardItem>()
     
     var body: some View {
         SingleImageARCardView(arModel: arModel,
-                                image: Image("qrImage"),
-                                cardAction: { id in
-                                    // set the card action for id corresponding to the CardItemModel
-                                    print(id)
-                                })
-                .onAppear(perform: loadInitialData)
+                              image: Image("qrImage"),
+                              cardAction: { id in
+                                  // set the card action for id corresponding to the CardItemModel
+                                  print(id)
+                              })
+            .onAppear(perform: loadInitialData)
     }
     
     func loadInitialData() {

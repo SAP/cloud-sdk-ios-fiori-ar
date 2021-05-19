@@ -1,6 +1,6 @@
 //
 //  LineView.swift
-//  
+//
 //
 //  Created by O'Brien, Patrick on 4/22/21.
 //
@@ -15,9 +15,9 @@ internal struct LineView: View {
     var endPoint: CGPoint
     var screen = UIScreen.main.bounds
     var gradient: LinearGradient {
-        LinearGradient(gradient: Gradient(colors: [.white, Color(red: 10/255, green: 110/255, blue: 209/255)]),
-                       startPoint: UnitPoint(x: startPoint.x / screen.width, y: startPoint.y / screen.height),
-                       endPoint: UnitPoint(x: endPoint.x / screen.width, y: endPoint.y / screen.height))
+        LinearGradient(gradient: Gradient(colors: [.white, Color(red: 10 / 255, green: 110 / 255, blue: 209 / 255)]),
+                       startPoint: UnitPoint(x: self.startPoint.x / self.screen.width, y: self.startPoint.y / self.screen.height),
+                       endPoint: UnitPoint(x: self.endPoint.x / self.screen.width, y: self.endPoint.y / self.screen.height))
     }
     
     internal init(displayLine: Binding<Bool>, startPoint: CGPoint, endPoint: CGPoint) {

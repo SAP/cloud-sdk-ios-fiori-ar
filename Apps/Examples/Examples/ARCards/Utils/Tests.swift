@@ -8,7 +8,6 @@
 import SwiftUI
 
 public enum Tests {
-    
     public static let carEngineCardItems = [StringIdentifyingCardItem(id: "WasherFluid",
                                                                       title_: "Recommended Washer Fluid",
                                                                       descriptionText_: "Rain X",

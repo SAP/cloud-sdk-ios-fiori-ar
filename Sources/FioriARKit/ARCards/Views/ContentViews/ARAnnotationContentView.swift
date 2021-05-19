@@ -7,10 +7,7 @@
 
 import SwiftUI
 
-internal struct ARAnnotationContentView<Card: View,
-                                        Marker: View,
-                                        CardItem>: View where CardItem : CardItemModel {
-    
+internal struct ARAnnotationContentView<Card: View, Marker: View, CardItem>: View where CardItem: CardItemModel {
     /// Screen Annotations
     @Binding internal var annotations: [ScreenAnnotation<CardItem>]
     
@@ -29,8 +26,8 @@ internal struct ARAnnotationContentView<Card: View,
     internal init(_ annotations: Binding<[ScreenAnnotation<CardItem>]>,
                   currentAnnotation: Binding<ScreenAnnotation<CardItem>?>,
                   @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
-                  @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker) {
-        
+                  @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
+    {
         self._annotations = annotations
         self._currentAnnotation = currentAnnotation
         self.cardLabel = cardLabel
@@ -40,18 +37,16 @@ internal struct ARAnnotationContentView<Card: View,
     
     internal var body: some View {
         ZStack(alignment: .bottom) {
-            
             ForEach(annotations) { annotation in
         
                 if let focusedAnnotation = currentAnnotation {
-                    
-                    if focusedAnnotation.id == annotation.id && displayLine && focusedAnnotation.isMarkerVisible {
+                    if focusedAnnotation.id == annotation.id, displayLine, focusedAnnotation.isMarkerVisible {
                         LineView(displayLine: $displayLine,
                                  startPoint: CGPoint(x: UIScreen.main.bounds.midX, y: UIScreen.main.bounds.maxY - 150),
                                  endPoint: annotation.screenPosition)
                     }
                     
-                    MarkerContainer(state: focusedAnnotation.id == annotation.id ? .selected: .normal,
+                    MarkerContainer(state: focusedAnnotation.id == annotation.id ? .selected : .normal,
                                     icon: annotation.icon,
                                     screenPosition: annotation.screenPosition,
                                     isMarkerVisible: annotation.isMarkerVisible,
@@ -65,7 +60,6 @@ internal struct ARAnnotationContentView<Card: View,
             CarouselScrollView(annotations, currentIndex: $currentIndex) { annotation in
                 
                 if let focusedAnnotation = currentAnnotation {
-                    
                     CardContainer(cardItemModel: annotation.card,
                                   isSelected: focusedAnnotation.id == annotation.id,
                                   isCardVisible: annotation.isCardVisible,
@@ -74,7 +68,6 @@ internal struct ARAnnotationContentView<Card: View,
                             currentIndex = annotations.firstIndex(of: annotation) ?? 0
                         }
                 }
-                
             }
             .padding(.bottom, 50)
             .onChange(of: currentIndex, perform: { index in

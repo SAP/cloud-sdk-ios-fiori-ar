@@ -5,23 +5,23 @@
 //  Created by O'Brien, Patrick on 5/5/21.
 //
 
-import SwiftUI
 import FioriARKit
+import SwiftUI
 
 struct ARCardsViewBuilderContentView: View {
     @StateObject var arModel = ARAnnotationViewModel<StringIdentifyingCardItem>()
     
     var body: some View {
         SingleImageARCardView(arModel: arModel,
-                                scanLabel: { anchorPosition in
-                                    CustomScanView(image: Image("qrImage"), position: anchorPosition)
-                                },
-                                cardLabel: { cardmodel, isSelected in
-                                    CustomCardView(model: cardmodel, isSelected: isSelected)
-                                },
-                                markerLabel: { state, _  in
-                                    CustomMarkerView(state: state)
-                                })
+                              scanLabel: { anchorPosition in
+                                  CustomScanView(image: Image("qrImage"), position: anchorPosition)
+                              },
+                              cardLabel: { cardmodel, isSelected in
+                                  CustomCardView(model: cardmodel, isSelected: isSelected)
+                              },
+                              markerLabel: { state, _ in
+                                  CustomMarkerView(state: state)
+                              })
             .carouselOptions(CarouselOptions(itemSpacing: 5, carouselHeight: 200, alignment: .center))
             .onAppear(perform: loadInitialData)
     }
@@ -86,9 +86,9 @@ struct CustomCardView<CardItem: CardItemModel>: View {
             .font(.system(size: 24))
             
             Text(model.title_)
-            Button(model.actionText_ ?? "") { }
+            Button(model.actionText_ ?? "") {}
         }
-        .foregroundColor(isSelected ? Color.white: Color.black)
+        .foregroundColor(isSelected ? Color.white : Color.black)
         .frame(width: 250, height: isSelected ? 200 : 150)
         .background(color)
         .cornerRadius(10)
@@ -100,19 +100,18 @@ struct CustomMarkerView: View {
     @State var rotation: Double = 0
     
     var body: some View {
-        
         Text("Tap Me")
             .font(.system(size: 12))
-            .foregroundColor(state == .selected  ? Color.white: Color.black)
+            .foregroundColor(state == .selected ? Color.white : Color.black)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(state == .selected ? Color.blue: Color.white)
+                    .fill(state == .selected ? Color.blue : Color.white)
                     .frame(width: 100, height: 100)
             )
             .rotationEffect(.degrees(rotation))
             .onChange(of: state == .selected, perform: { value in
                 withAnimation {
-                    rotation = value ? 180: 0
+                    rotation = value ? 180 : 0
                 }
             })
     }

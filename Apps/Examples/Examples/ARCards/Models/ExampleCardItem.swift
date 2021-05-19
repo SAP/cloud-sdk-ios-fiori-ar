@@ -5,8 +5,8 @@
 //  Created by O'Brien, Patrick on 5/5/21.
 //
 
-import SwiftUI
 import FioriARKit
+import SwiftUI
 
 public struct ExampleCardItem: CardItemModel {
     public var id: Int

@@ -8,7 +8,6 @@
 import SwiftUI
 
 internal struct MarkerContainer<Label: View>: View {
-
     var _state: MarkerControl.State
     var _icon: Image?
     var _screenPosition: CGPoint
@@ -30,7 +29,7 @@ internal struct MarkerContainer<Label: View>: View {
 }
 
 extension MarkerContainer {
-    internal var body: some View {
+    var body: some View {
         Group {
             if _isMarkerVisible {
                 label_

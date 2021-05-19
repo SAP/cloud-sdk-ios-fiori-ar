@@ -19,7 +19,7 @@ internal struct CarouselScrollView<Data: RandomAccessCollection, Content: View>:
     @State private var startPosition: CGPoint = .zero
     
     private var itemWidth: CGFloat {
-        (containerSize.width - ((options.itemSpacing) * (CGFloat(data.count) - 1))) / CGFloat(data.count)
+        (self.containerSize.width - (self.options.itemSpacing * (CGFloat(self.data.count) - 1))) / CGFloat(self.data.count)
     }
     
     @Binding var currentIndex: Int
@@ -46,26 +46,26 @@ internal struct CarouselScrollView<Data: RandomAccessCollection, Content: View>:
         .offset(x: dragOffset + scrollOffset)
         .gesture(
             DragGesture()
-                .onChanged({ gesture in
+                .onChanged { gesture in
                     if !self.isDragging {
                         self.startPosition = gesture.location
                         self.isDragging.toggle()
                     }
-                })
-                .onEnded({ gesture in
-                    let xDistance =  abs(gesture.location.x - self.startPosition.x)
-                    let yDistance =  abs(gesture.location.y - self.startPosition.y)
+                }
+                .onEnded { gesture in
+                    let xDistance = abs(gesture.location.x - self.startPosition.x)
+                    let yDistance = abs(gesture.location.y - self.startPosition.y)
                     
-                    if self.startPosition.x > gesture.location.x && yDistance < xDistance {
+                    if self.startPosition.x > gesture.location.x, yDistance < xDistance {
                         guard currentIndex < data.count - 1 else { return }
                         currentIndex += 1
                         
-                    } else if self.startPosition.x < gesture.location.x && yDistance < xDistance {
+                    } else if self.startPosition.x < gesture.location.x, yDistance < xDistance {
                         guard currentIndex > 0 else { return }
                         currentIndex -= 1
                     }
                     isDragging.toggle()
-                })
+                }
         )
         .onChange(of: currentIndex, perform: { newIndex in
             scrollTo(index: newIndex)
@@ -80,12 +80,12 @@ internal struct CarouselScrollView<Data: RandomAccessCollection, Content: View>:
     }
     
     func scrollTo(index: Int) {
-        let newOffset = calculateNewOffset(index: CGFloat(index))
-        scrollOffset = newOffset
+        let newOffset = self.calculateNewOffset(index: CGFloat(index))
+        self.scrollOffset = newOffset
     }
     
     func calculateNewOffset(index: CGFloat) -> CGFloat {
-        return  (-(itemWidth + (options.itemSpacing)) * index + (containerSize.width - itemWidth) / 2)
+        -(self.itemWidth + self.options.itemSpacing) * index + (self.containerSize.width - self.itemWidth) / 2
     }
 }
 
