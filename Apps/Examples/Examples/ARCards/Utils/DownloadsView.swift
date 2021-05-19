@@ -1,5 +1,5 @@
 //
-//  Downloads.swift
+//  DownloadsView.swift
 //  Examples
 //
 //  Created by O'Brien, Patrick on 5/6/21.
@@ -58,12 +58,13 @@ struct ImageCard: View {
 
 struct ActivityViewController: UIViewControllerRepresentable {
     var activityItems: [Any]
-    var applicationActivities: [UIActivity]? = nil
+    var applicationActivities: [UIActivity]?
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<ActivityViewController>) -> UIActivityViewController {
         let controller = UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
         return controller
     }
+
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<ActivityViewController>) {}
 }
 

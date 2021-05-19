@@ -1,15 +1,14 @@
 //
-//  RealityComposerStrategy.swift
-//  
+//  AnnotationStrategies.swift
+//
 //
 //  Created by O'Brien, Patrick on 3/2/21.
 //
 
+import ARKit
 import Foundation
 import RealityKit
 import UIKit
-import ARKit
-
 
 /// A loading strategy that uses the RealityComposer app. After creating the Reality Composer scene, tthe entities in the scene correlate to a real world location relative to the image or object anchor. This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth. Loading the data into the ARAnnotationViewModel should be done in the onAppear method.
 ///
@@ -28,7 +27,7 @@ import ARKit
 ///
 /// ```
 
-public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy where CardItem.ID : LosslessStringConvertible {
+public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy where CardItem.ID: LosslessStringConvertible {
     public var cardContents: [CardItem]
     public var rcFile: String
     public var rcScene: String
@@ -49,7 +48,7 @@ public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadin
 
         arView.scene.addAnchor(scene)
 
-        for cardItem in cardContents {
+        for cardItem in self.cardContents {
             if let internalEntity = scene.findEntity(named: String(cardItem.id)) {
                 let annotation = ScreenAnnotation(card: cardItem)
                 annotation.setInternalEntity(with: internalEntity)

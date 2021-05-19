@@ -6,12 +6,10 @@
 //
 
 import SwiftUI
-//import FioriSwiftUICore
+// import FioriSwiftUICore
 
 extension Fiori {
-    
     enum CardItem {
-        
         struct DetailImage: ViewModifier {
             func body(content: Content) -> some View {
                 content
@@ -47,7 +45,7 @@ extension Fiori {
                 content
                     .font(.system(size: 18))
                     .lineLimit(1)
-                    .foregroundColor(isSelected ? .blue: .clear)
+                    .foregroundColor(self.isSelected ? .blue : .clear)
             }
         }
         
@@ -66,7 +64,7 @@ extension Fiori {
     }
 }
 
-public struct CardView<Title: View, DescriptionText: View, DetailImage: View, ActionText: View, CardItem>: View where CardItem : CardItemModel {
+public struct CardView<Title: View, DescriptionText: View, DetailImage: View, ActionText: View, CardItem>: View where CardItem: CardItemModel {
     @Environment(\.titleModifier) private var titleModifier
     @Environment(\.descriptionTextModifier) private var descriptionTextModifier
     @Environment(\.detailImageModifier) private var detailImageModifer
@@ -85,18 +83,17 @@ public struct CardView<Title: View, DescriptionText: View, DetailImage: View, Ac
     
     private var id: CardItem.ID
     private var isSelected: Bool = false
-    private var action: ((CardItem.ID) -> Void)? = nil
+    private var action: ((CardItem.ID) -> Void)?
     
     public init(
         @ViewBuilder title: @escaping () -> Title,
         @ViewBuilder descriptionText: @escaping () -> DescriptionText,
         @ViewBuilder detailImage: @escaping () -> DetailImage,
         @ViewBuilder actionText: @escaping () -> ActionText,
-                     isSelected: Bool,
-                     id: CardItem.ID,
-                     action: ((CardItem.ID) -> Void)?
-        ) {
-        
+        isSelected: Bool,
+        id: CardItem.ID,
+        action: ((CardItem.ID) -> Void)?
+    ) {
         self._title = title()
         self._descriptionText = descriptionText()
         self._detailImage = detailImage()
@@ -139,35 +136,32 @@ public struct CardView<Title: View, DescriptionText: View, DetailImage: View, Ac
     }
     
     var isTitleEmptyView: Bool {
-        ((isModelInit && isTitleNil) || Title.self == EmptyView.self) ? true : false
+        ((self.isModelInit && self.isTitleNil) || Title.self == EmptyView.self) ? true : false
     }
 
     var isDescriptionTextEmptyView: Bool {
-        ((isModelInit && isDescriptionTextNil) || DescriptionText.self == EmptyView.self) ? true : false
+        ((self.isModelInit && self.isDescriptionTextNil) || DescriptionText.self == EmptyView.self) ? true : false
     }
     
     var isDetailImageEmptyView: Bool {
-        ((isModelInit && isDetailImageNil) || DetailImage.self == EmptyView.self) ? true : false
+        ((self.isModelInit && self.isDetailImageNil) || DetailImage.self == EmptyView.self) ? true : false
     }
 
     var isActionTextEmptyView: Bool {
-        ((isModelInit && isActionTextNil) || ActionText.self == EmptyView.self) ? true : false
+        ((self.isModelInit && self.isActionTextNil) || ActionText.self == EmptyView.self) ? true : false
     }
 }
 
-
-extension CardView {
-    
-    public var body: some View {
+public extension CardView {
+    var body: some View {
         VStack(spacing: 10) {
-            
             VStack {
                 detailImage
             }
             .frame(width: 214, height: 93)
-            .background(Color(red: 240/255, green: 241/255, blue: 242/255)) //Color.preferredColor(.tertiaryFill)
+            .background(Color(red: 240 / 255, green: 241 / 255, blue: 242 / 255)) // Color.preferredColor(.tertiaryFill)
             .cornerRadius(10)
-            .opacity(isSelected ? 1: 0.8)
+            .opacity(isSelected ? 1 : 0.8)
             .padding(.top, 8)
             
             VStack(spacing: 4) {
@@ -181,27 +175,24 @@ extension CardView {
             }, label: {
                 actionText
             })
-            .frame(width: 198, height: isSelected && !isActionTextNil ? 44: 0)
-            
+                .frame(width: 198, height: isSelected && !isActionTextNil ? 44 : 0)
         }
         .frame(width: 230)
         .background(Color.white)
         .cornerRadius(10)
-        .opacity(isSelected ? 1: 0.8)
+        .opacity(isSelected ? 1 : 0.8)
     }
 }
 
-
-extension CardView where
+public extension CardView where
     Title == Text,
     DescriptionText == _ConditionalContent<Text, EmptyView>,
     DetailImage == _ConditionalContent<ImagePreview, DefaultIcon>,
     ActionText == _ConditionalContent<Text, EmptyView>
-    {
-    
-    public init(model: CardItem,
-                isSelected: Bool,
-                action: ((CardItem.ID) -> Void)? = nil)
+{
+    init(model: CardItem,
+         isSelected: Bool,
+         action: ((CardItem.ID) -> Void)? = nil)
     {
         self.init(id: model.id,
                   title: model.title_,
@@ -213,14 +204,14 @@ extension CardView where
                   isSelected: isSelected)
     }
     
-    public init(id: CardItem.ID,
-                title: String,
-                descriptionText: String? = nil,
-                detailImage: Image? = nil,
-                actionText: String? = nil,
-                icon: Image?,
-                action: ((CardItem.ID) -> Void)? = nil,
-                isSelected: Bool)
+    init(id: CardItem.ID,
+         title: String,
+         descriptionText: String? = nil,
+         detailImage: Image? = nil,
+         actionText: String? = nil,
+         icon: Image?,
+         action: ((CardItem.ID) -> Void)? = nil,
+         isSelected: Bool)
     {
         self.id = id
         self._title = Text(title)
@@ -230,11 +221,11 @@ extension CardView where
         self.action = action
         self.isSelected = isSelected
 
-        isModelInit = true
-        isTitleNil = false
-        isDescriptionTextNil = descriptionText == nil ? true : false
-        isDetailImageNil = detailImage == nil ? true : false
-        isActionTextNil = actionText == nil ? true : false
+        self.isModelInit = true
+        self.isTitleNil = false
+        self.isDescriptionTextNil = descriptionText == nil ? true : false
+        self.isDetailImageNil = detailImage == nil ? true : false
+        self.isActionTextNil = actionText == nil ? true : false
     }
 }
 
@@ -273,7 +264,7 @@ public struct ImagePreview: View {
                     .blur(radius: 10)
                     .frame(width: geo.size.width, height: geo.size.height)
                     
-                if size.width < geo.size.width && size.height < geo.size.height {
+                if size.width < geo.size.width, size.height < geo.size.height {
                     image
                 } else {
                     image

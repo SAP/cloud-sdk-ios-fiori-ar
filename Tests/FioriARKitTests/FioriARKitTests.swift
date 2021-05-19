@@ -1,5 +1,5 @@
-import XCTest
 @testable import FioriARKit
+import XCTest
 
 final class FioriARKitTests: XCTestCase {
     func testExample() {
@@ -10,6 +10,6 @@ final class FioriARKitTests: XCTestCase {
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testExample)
     ]
 }

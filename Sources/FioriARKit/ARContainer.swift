@@ -1,21 +1,22 @@
 //
-//  ARViewContainer.swift
+//  ARContainer.swift
 //  ARTestApp
 //
 //  Created by O'Brien, Patrick on 1/20/21.
 //
 
-import SwiftUI
-import RealityKit
 import ARKit
 import Combine
+import RealityKit
+import SwiftUI
 
 internal struct ARContainer<ARModel: HasARModel>: UIViewRepresentable {
     @ObservedObject var arState: ARModel
     
     func makeUIView(context: Context) -> ARView {
-        return arState.arView ?? ARView(frame: .zero)
+        self.arState.arView ?? ARView(frame: .zero)
     }
+
     func updateUIView(_ arView: ARView, context: Context) {}
 }
 

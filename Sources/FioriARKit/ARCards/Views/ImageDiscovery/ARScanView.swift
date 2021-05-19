@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by O'Brien, Patrick on 4/8/21.
 //
@@ -13,13 +13,11 @@ public struct ARScanView: View {
     
     public var body: some View {
         ZStack {
-            
             if anchorPosition != nil {
                 ImageMatchedView(anchorPosition: $anchorPosition)
             } else {
                 CollapsingView(image: image)
             }
-            
         }
         .animation(.easeInOut(duration: 1.2), value: anchorPosition)
     }
@@ -33,8 +31,8 @@ private struct CollapsingView: View {
     var body: some View {
         ZStack {
             Color.black.opacity(0.6)
-                .cornerRadius(isScanning ? 8: 0)
-                .matchedGeometryEffect(id: isScanning ? "image": "background", in: nameSpace, isSource: false)
+                .cornerRadius(isScanning ? 8 : 0)
+                .matchedGeometryEffect(id: isScanning ? "image" : "background", in: nameSpace, isSource: false)
             
             if isScanning {
                 ScanGuide()
@@ -46,7 +44,6 @@ private struct CollapsingView: View {
         .transition(.opacity)
     }
 }
-
 
 private struct CollapsingBodyView: View {
     var image: Image
@@ -63,9 +60,9 @@ private struct CollapsingBodyView: View {
                 .scaledToFit()
                 .background(
                     ScanGuideCorners()
-                        .stroke(isScanning ? Color.clear: Color.white, lineWidth: 2)
+                        .stroke(isScanning ? Color.clear : Color.white, lineWidth: 2)
                 )
-                .matchedGeometryEffect(id: isScanning ? "image": "body", in: nameSpace,  isSource: false)
+                .matchedGeometryEffect(id: isScanning ? "image" : "body", in: nameSpace, isSource: false)
                 .padding(.horizontal, 56)
                 .padding(.top, 216)
                 .allowsHitTesting(isScanning)
@@ -80,7 +77,6 @@ private struct CollapsingBodyView: View {
                     .padding(.bottom, 80)
                     .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.15)))
                 
-
                 Button(action: { buttonAction() }, label: {
                     Text("Begin Scan")
                         .frame(width: 201, height: 40)
@@ -89,8 +85,8 @@ private struct CollapsingBodyView: View {
                             RoundedRectangle(cornerRadius: 5)
                         )
                 })
-                .padding(.bottom, 216)
-                .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.15)))
+                    .padding(.bottom, 216)
+                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.15)))
             }
         }
     }
@@ -160,7 +156,7 @@ private struct ImageMatchedView: View {
             .foregroundColor(.white)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(red: 0/255, green: 90/255, blue: 38/255, opacity: 0.6))
+                    .fill(Color(red: 0 / 255, green: 90 / 255, blue: 38 / 255, opacity: 0.6))
                     .frame(width: 120, height: 120)
                     .padding(.all, 3)
                     .background(
@@ -183,7 +179,6 @@ private struct ImageMatchedView: View {
 }
 
 internal struct ScanGuideCorners: Shape {
-    
     public init() {}
     
     public func path(in rect: CGRect) -> Path {

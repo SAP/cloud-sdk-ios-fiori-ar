@@ -1,6 +1,6 @@
 //
-//  DemoEntities.swift
-//  ARTestApp
+//  MarkerAnchor.swift
+//  Examples
 //
 //  Created by O'Brien, Patrick on 12/11/20.
 //
@@ -17,10 +17,9 @@ import UIKit
 //  - Editing Mode for adjusting position in app
 
 internal class MarkerAnchor: Entity, HasAnchoring {
-    
     public var internalEnitity: Entity! {
         didSet {
-            hideInternalEntity()
+            self.hideInternalEntity()
         }
     }
 

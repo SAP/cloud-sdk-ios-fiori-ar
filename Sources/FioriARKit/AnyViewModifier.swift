@@ -1,15 +1,15 @@
 //
-//  File.swift
-//  
+//  AnyViewModifier.swift
+//
 //
 //  Created by O'Brien, Patrick on 2/15/21.
 //
 
 import SwiftUI
 
-extension EnvironmentValues {
-    public var markerModifier: AnyViewModifier {
-        get { return self[MarkerModifierKey.self] }
+public extension EnvironmentValues {
+    var markerModifier: AnyViewModifier {
+        get { self[MarkerModifierKey.self] }
         set { self[MarkerModifierKey.self] = newValue }
     }
 }
@@ -25,7 +25,8 @@ public struct AnyViewModifier: ViewModifier {
     public init<V: View>(_ transform: @escaping (Content) -> V) {
         self.apply = { AnyView(transform($0)) }
     }
+
     public func body(content: Content) -> AnyView {
-        apply(content)
+        self.apply(content)
     }
 }

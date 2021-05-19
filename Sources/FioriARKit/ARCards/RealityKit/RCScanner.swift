@@ -3,17 +3,15 @@
 // GENERATED CONTENT FROM APPLE.
 //
 
-
+import Combine
 import Foundation
 import RealityKit
 import simd
-import Combine
 
 /// Creates a programmatic representation of the Reality Composer Scene  from an Image or Object Anchor from a .rcproject File.
 
 @available(iOS 13.0, macOS 10.15, *)
 internal enum RCScanner {
-
     private enum LoadRealityFileError: Error {
         case fileNotFound(String)
     }
@@ -27,7 +25,7 @@ internal enum RCScanner {
 
         let realityFileSceneURL = realityFileURL.appendingPathComponent(sceneName, isDirectory: false)
         let anchorEntity = try RCScanner.Scene.loadAnchor(contentsOf: realityFileSceneURL)
-        return createScene(from: anchorEntity)
+        return self.createScene(from: anchorEntity)
     }
 
     internal static func loadSceneAsync(rcFileName: String, completion: @escaping (Swift.Result<RCScanner.Scene, Swift.Error>) -> Void) {
@@ -40,14 +38,14 @@ internal enum RCScanner {
         let realityFileSceneURL = realityFileURL.appendingPathComponent("Scene", isDirectory: false)
         let loadRequest = RCScanner.Scene.loadAnchorAsync(contentsOf: realityFileSceneURL)
         cancellable = loadRequest.sink(receiveCompletion: { loadCompletion in
-            if case let .failure(error) = loadCompletion {
+            if case .failure(let error) = loadCompletion {
                 completion(.failure(error))
             }
             streams.removeAll { $0 === cancellable }
         }, receiveValue: { entity in
             completion(.success(RCScanner.createScene(from: entity)))
         })
-        cancellable?.store(in: &streams)
+        cancellable?.store(in: &self.streams)
     }
 
     internal static func createScene(from anchorEntity: RealityKit.AnchorEntity) -> RCScanner.Scene {
@@ -58,6 +56,5 @@ internal enum RCScanner {
         return scene
     }
 
-    internal class Scene: RealityKit.Entity, RealityKit.HasAnchoring { }
+    internal class Scene: RealityKit.Entity, RealityKit.HasAnchoring {}
 }
-

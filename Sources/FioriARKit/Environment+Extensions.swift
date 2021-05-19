@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  Environment+Extensions.swift
+//
 //
 //  Created by O'Brien, Patrick on 2/15/21.
 //
@@ -8,28 +8,28 @@
 import Foundation
 import SwiftUI
 
-extension EnvironmentValues {
-    public var titleModifier: AnyViewModifier {
-        get { return self[TitleModifierKey.self] }
+public extension EnvironmentValues {
+    var titleModifier: AnyViewModifier {
+        get { self[TitleModifierKey.self] }
         set { self[TitleModifierKey.self] = newValue }
     }
     
-    public var descriptionTextModifier: AnyViewModifier {
-        get { return self[DescriptionTextModifierKey.self] }
+    var descriptionTextModifier: AnyViewModifier {
+        get { self[DescriptionTextModifierKey.self] }
         set { self[DescriptionTextModifierKey.self] = newValue }
     }
     
-    public var detailImageModifier: AnyViewModifier {
-        get { return self[DetailImageModifierKey.self] }
+    var detailImageModifier: AnyViewModifier {
+        get { self[DetailImageModifierKey.self] }
         set { self[DetailImageModifierKey.self] = newValue }
     }
     
-    public var actionTextModifier: AnyViewModifier {
-        get { return self[ActionTextModifierKey.self] }
+    var actionTextModifier: AnyViewModifier {
+        get { self[ActionTextModifierKey.self] }
         set { self[ActionTextModifierKey.self] = newValue }
     }
     
-    public var carouselOptions: CarouselOptions {
+    var carouselOptions: CarouselOptions {
         get { self[CarouselOptionsKey.self] }
         set { self[CarouselOptionsKey.self] = newValue }
     }
@@ -52,5 +52,5 @@ struct ActionTextModifierKey: EnvironmentKey {
 }
 
 struct CarouselOptionsKey: EnvironmentKey {
-    static let defaultValue: CarouselOptions = CarouselOptions(itemSpacing: 36, alignment: .bottom)
+    static let defaultValue = CarouselOptions(itemSpacing: 36, alignment: .bottom)
 }
