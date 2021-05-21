@@ -23,7 +23,7 @@ struct CarEngineExampleContentView: View {
     
     func loadData() {
         let cardItems = Tests.carEngineCardItems
-        let strategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "CarEngineRC", rcScene: "EngineScene")
+        let strategy = RealityComposerStrategy(cardContents: cardItems, uiImage: UIImage(named: "carSticker"), physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
         arModel.load(loadingStrategy: strategy)
     }
 }

@@ -70,7 +70,7 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
     
     public var body: some View {
         ZStack {
-            ARContainer(arState: arModel)
+            ARContainer(arStorage: arModel.arManager)
             
             if arModel.discoveryFlowHasFinished {
                 ARAnnotationContentView($arModel.annotations,
