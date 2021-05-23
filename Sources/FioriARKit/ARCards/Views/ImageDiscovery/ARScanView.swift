@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  ARScanView.swift
 //
 //
 //  Created by O'Brien, Patrick on 4/8/21.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct ARScanView: View {
-    var image: Image
+    let image: Image
     @Binding var anchorPosition: CGPoint?
     
     public var body: some View {
@@ -24,8 +24,8 @@ public struct ARScanView: View {
 }
 
 private struct CollapsingView: View {
-    var image: Image
-    @State private var isScanning: Bool = false
+    let image: Image
+    @State var isScanning = false
     @Namespace var nameSpace
     
     var body: some View {
@@ -34,48 +34,29 @@ private struct CollapsingView: View {
                 .cornerRadius(isScanning ? 8 : 0)
                 .matchedGeometryEffect(id: isScanning ? "image" : "background", in: nameSpace, isSource: false)
             
-            if isScanning {
-                ScanGuide()
-            }
-
-            CollapsingBodyView(image: image, isScanning: $isScanning, nameSpace: nameSpace)
-            ImagePreviewView(image: image, isScanning: $isScanning, nameSpace: nameSpace)
-        }
-        .transition(.opacity)
-    }
-}
-
-private struct CollapsingBodyView: View {
-    var image: Image
-    @Binding var isScanning: Bool
-    
-    var nameSpace: Namespace.ID
-    
-    var body: some View {
-        VStack {
-            image
-                .resizable()
-                .cornerRadius(8)
-                .padding(.all, 8)
-                .scaledToFit()
-                .background(
-                    ScanGuideCorners()
-                        .stroke(isScanning ? Color.clear : Color.white, lineWidth: 2)
-                )
-                .matchedGeometryEffect(id: isScanning ? "image" : "body", in: nameSpace, isSource: false)
-                .padding(.horizontal, 56)
-                .padding(.top, 216)
-                .allowsHitTesting(isScanning)
-                .onTapGesture(perform: buttonAction)
-            
-            if !isScanning {
+            VStack {
+                image
+                    .resizable()
+                    .cornerRadius(8)
+                    .padding(.all, 8)
+                    .scaledToFit()
+                    .background(
+                        ScanGuideCorners()
+                            .stroke(isScanning ? Color.clear : Color.white, lineWidth: 2)
+                    )
+                    .matchedGeometryEffect(id: isScanning ? "image" : "background", in: nameSpace, isSource: false)
+                    .padding(.horizontal, 56)
+                    .padding(.top, 216)
+                    .onTapGesture(perform: buttonAction)
+                    .allowsHitTesting(isScanning)
+                
                 Text("Point your camera at this image to start augmented reality experience")
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 24)
                     .padding(.top, 24)
                     .padding(.bottom, 80)
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.15)))
+                    .opacity(isScanning ? 0 : 1)
                 
                 Button(action: { buttonAction() }, label: {
                     Text("Begin Scan")
@@ -86,7 +67,23 @@ private struct CollapsingBodyView: View {
                         )
                 })
                     .padding(.bottom, 216)
-                    .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.15)))
+                    .opacity(isScanning ? 0 : 1)
+            }
+            
+            if isScanning {
+                ScanGuide()
+            }
+            
+            VStack {
+                Spacer()
+                image
+                    .resizable()
+                    .cornerRadius(8)
+                    .scaledToFit()
+                    .matchedGeometryEffect(id: "image", in: nameSpace)
+                    .padding(.bottom, 34)
+                    .padding(.horizontal, 136)
+                    .opacity(0)
             }
         }
     }
@@ -94,30 +91,6 @@ private struct CollapsingBodyView: View {
     func buttonAction() {
         withAnimation(.interpolatingSpring(mass: 2, stiffness: 700, damping: 52)) {
             isScanning.toggle()
-        }
-    }
-}
-
-private struct ImagePreviewView: View {
-    var image: Image
-    @Binding var isScanning: Bool
-    
-    var nameSpace: Namespace.ID
-    
-    var body: some View {
-        if isScanning {
-            VStack {
-                Spacer()
-                image
-                    .resizable()
-                    .cornerRadius(8)
-                    .padding(.all, 8)
-                    .scaledToFit()
-                    .matchedGeometryEffect(id: "image", in: nameSpace, properties: .frame)
-                    .padding(.bottom, 34)
-                    .padding(.horizontal, 136)
-                    .hidden()
-            }
         }
     }
 }
