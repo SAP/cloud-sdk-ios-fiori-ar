@@ -10,6 +10,13 @@ import SwiftUI
 /**
  Content View which displays the card and marker views after a discovery flow for a single Image in the scene after the discoveryFlowHasFinished has been set to True. Only displays the views which are set to isVisible. Cards and Markers are initially set to isVisible.
  
+  - Parameters:
+    - arModel: The ViewModel which managers the AR Experience
+    - image: The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the User
+    - scanLabel: View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
+    - cardLabel: View Builder for a custom CardView
+    - markerLabel: View Builder for a custom MarkerView
+ 
  ## Usage
  ```
  // Constructor for Default ScanningView, CardView, and MarkerView
@@ -38,7 +45,8 @@ import SwiftUI
  
  func loadData() {
      let cardItems = Tests.cardItems
-     let strategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "ExampleRC", rcScene: "ExampleScene")
+     guard let anchorImage = UIImage(named: "qrImage") else { return }
+     let strategy = RealityComposerStrategy(cardContents: cardItems, anchorImage: anchorImage, rcFile: "ExampleRC", rcScene: "ExampleScene")
      arModel.load(loadingStrategy: strategy)
  }
  ```

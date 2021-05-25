@@ -38,6 +38,7 @@ public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable
         self.isSelected = isSelected
     }
     
+    /// Sets the internal within the MarkerAnchor
     public func setInternalEntity(with entity: Entity) {
         self.marker.internalEnitity = entity
     }
