@@ -8,9 +8,6 @@ set -eu
 # install various git hooks
 bash scripts/installGitHooks.sh
 
-# delete any xcode project file as it doesn't work well with Swift package localization (https://developer.apple.com/forums/thread/650278)
-rm -f -r ./FioriARKit.xcodeproj
-
 echo "--- You can already start developing while script is finishing up ---"
 
 # skip installation of tools if any argument was passed to script
