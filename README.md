@@ -1,4 +1,42 @@
-# **SAP Fiori for iOS ARKit**
+
+<p align="center">
+  </br>
+  <span><b>SAP Fiori for iOS ARKit</b></span>
+</p>
+
+***
+
+<div align="center">
+    <a href="https://github.com/SAP/cloud-sdk-ios-fioriarkit#installation">Installation
+    </a>
+    |
+    <a href="https://github.com/SAP/cloud-sdk-ios-fioriarkit#examples"> Examples
+    </a>
+    |
+    <a href="https://sap.github.io/cloud-sdk-ios-fioriarkit"> API Documentation
+    </a>
+</div>
+
+***
+
+<div align="center">
+    <a href="https://github.com/SAP/cloud-sdk-ios-arkit/actions?query=workflow%3A%22CI%22">
+        <img src="https://github.com/SAP/cloud-sdk-ios-fioriarkit/workflows/CI/badge.svg"
+             alt="Build Status">
+    </a>
+    <a href="https://conventionalcommits.org">
+        <img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg"
+             alt="Conventional Commits">
+    </a>
+    <a href="http://commitizen.github.io/cz-cli/">
+        <img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg"
+             alt="Commitizen friendly">
+    </a>
+    <a href="https://api.reuse.software/info/github.com/SAP/cloud-sdk-ios-fioriarkit">
+        <img src="https://api.reuse.software/badge/github.com/SAP/cloud-sdk-ios-fioriarkit"
+             alt="REUSE status">
+    </a>
+</div>
 
 ***
 ### Summary
@@ -86,7 +124,7 @@ struct FioriARKitCardsExample: View {
 - Reality Composer 1.1 or higher
 - Swift Package Manager
 
-## Download and Installation
+## Installation
 
 The package is intended for consumption via Swift Package Manager.  
 
