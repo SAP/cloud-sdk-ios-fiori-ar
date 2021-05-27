@@ -49,11 +49,11 @@ There is currently support for `AR Cards`. This refers to Cards that match with 
 
 ##### ARKit
 
-A framework provided by Apple which processes and provides sensor data from the IMU for an Augmented Reality experience to work. Such as motion tracking, localizing device, session capture, and image analysis/processing. ARKit uses ARAnchor and it's limited subtypes (ARPlaneAnchor, ARImageAnchor, ARObjectAnchor) to keep track of their points of interest in the ARSession. For more in-depth information refer to the [ARKit Documentation.](https://developer.apple.com/documentation/arkit "ARKit Documentation.")
+A framework provided by Apple which processes and provides sensor data from the IMU for an Augmented Reality experience to work. Such as motion tracking, localizing device, session capture, and image analysis/processing. ARKit uses `ARAnchor` and it's limited subtypes (`ARPlaneAnchor`, `ARImageAnchor`, `ARObjectAnchor`) to keep track of their points of interest in the `ARSession`. For more in-depth information refer to the [ARKit Documentation.](https://developer.apple.com/documentation/arkit "ARKit Documentation.")
 
 ##### RealityKit
 
-While ARKit handles the above it does not render any content into the scene. RealityKit is a framework and API above ARKit that follows the Entity-Component Architectural pattern. Entities are 3D models that can have Components or behaviors applied to them. This handles establishing a scene that 3D content and audio can be anchored to from the ARKit anchors. RealityKit has it's own notion of AnchorEntities that have overlapping functionality with ARKit Anchors yet with the purpose of anchoring 3D content. For more in-depth information refer to the [RealityKit Documentation.](https://developer.apple.com/documentation/realitykit/ "RealityKit Documentation.")
+While ARKit handles the above it does not render any content into the scene. RealityKit is a framework and API above ARKit that follows the Entity-Component Architectural pattern. `Entity` are 3D models that can have Components or behaviors applied to them. This handles establishing a scene that 3D content and audio can be anchored to from the ARKit anchors. RealityKit has it's own notion of `AnchorEntity` that have overlapping functionality with ARKit Anchors yet with the purpose of anchoring 3D content. For more in-depth information refer to the [RealityKit Documentation.](https://developer.apple.com/documentation/realitykit/ "RealityKit Documentation.")
 
 ##### Reality Composer
 
@@ -70,31 +70,36 @@ Creation of Augmented Reality experiences without a visual understanding of the 
 > **WARNING**: Concepts and implementation for components are `in-development` and can change at any time!!!
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/77754056/119206581-262cdb00-ba61-11eb-8a87-1e83d52d53c3.mp4" alt="alt text" width="296" height="640" align="center">
+<img src="https://user-images.githubusercontent.com/77754056/119206581-262cdb00-ba61-11eb-8a87-1e83d52d53c3.mp4" alt="alt text" height="450" align="center">
 </p>
 
-The AR Cards use case is essentially annotations represented by a marker in the real world that correspond to data displayed in a card. There is a one to one mapping of markers to cards. After creation of a scene in reality composer and the data that's associated with those positions, they can be loaded into the content view. Supports `Image` and `Object` anchors.
-
-|  Annotation Authoring | Definition |  Supported |
-| :---------------- | :--------------- | :------------: |
-| Initially Loaded         |  Strategy which loads annotations with pre-defined locations and data before the Image/Object Anchor is discovered. Upon discovery the annotations are loaded into the scene. Supports a Reality Composer Strategy.                              | :white_check_mark:  |
-| User Edited in App   |  After the Image/Object is discovered, an editing mode to edit the current marker's locations and respective card's content. Adding and Removing new anchors with defined content.      | In Development |
-| Automated               |   An Point of Interest is automatically discovered and added to the scene. A hypothetical example, Vision Framework Model can detect a compliant Image in the capture session and then add it to the AR Scene as an Image Anchor with a respective Card/Marker. | In Development |
+The AR Cards use case is essentially annotations represented by a marker in the real world that correspond to data displayed in a card with an optional action. There is a one to one mapping of markers to cards. After creation of a scene in reality composer and the data that's associated with those positions, they can be loaded into the content view. Supports `Image` and `Object` anchors.
 
 ### Usage
 
-##### With Reality Composer Strategy: Composing the scene
+#### Reality Composer Strategy
 
-1. Open the Reality Composer app and create a scene with the desired anchor
-2. Place spheres in the desired position and preview in AR to fine tune
-3. Name the spheres with a type that conforms to LosslessStringConvertable
-4. Save the rcproject file in your xcode project
+##### Composing the scene
 
-> **Note**: The spheres will be invisible in the scene
+1. Open the Reality Composer app and create a scene with the image or object anchor
+2. Choose an image or scan an object and give the scene a name e.g. ExampleScene
+3. Place spheres in the desired position
+4. Preview in AR to fine tune
+5. Name the spheres with a type that conforms to LosslessStringConvertable
+6. The name of the sphere will correspond to the `CardItemModel` ID
+7. Add the rcproject file in your xcode project
+
+> **Notes**: 
+- Scanning an object requires using an iOS device in the Reality Composer app
+- The spheres are for scene creation and will be invisible in the ARCards scene
+
+<p align="center">
+<img height="400" alt="rcDemo1" src="https://user-images.githubusercontent.com/77754056/119742939-784d7200-be4e-11eb-928d-6d83b07e49ff.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="400" alt="rcDemo2" src="https://user-images.githubusercontent.com/77754056/119743047-a6cb4d00-be4e-11eb-8543-4ed018fa25f3.jpeg">
+</p>
 
 ##### Data Consumption
 
-CardItem Models Conform to CardItemComponent. The *name* of the Entity (Sphere) from Reality Composer corresponds to the *id* property of the Model. The list of initial CardItems are passed into the RealityComposerStrategy with Reality Composer File Name and the name of the scene.
+CardItem Models Conform to `CardItemComponent`. The *name* of the Entity (Sphere) from Reality Composer corresponds to the *id* property of the Model. The list of initial CardItems are passed into the `RealityComposerStrategy` with the Reality Composer rcproject File Name and the name of the scene. For an image Anchor, the image that will be detected must be passed into the strategy to create an `ARReferenceImage`.
 
 ##### Creating the ContentView and loading the data
 
@@ -103,16 +108,24 @@ struct FioriARKitCardsExample: View {
     @StateObject var arModel = ARAnnotationViewModel<ExampleCardModel>()
     
     var body: some View {
-        
+    /**
+     Initializes an AR Experience with a Scanning View flow with Markers and Cards upon anchor discovery
+
+     - Parameters:
+        - arModel: The View Model which handles the logic for the AR Experience
+        - image: The image which will be displayed in the Scanning View
+        - cardAction: Card Action
+    */
         SingleImageARCardView(arModel: arModel, image: Image("qrImage"), cardAction: { id in
             // action to pass to corresponding card from the CardItemModel ID
-		})
-		.onAppear(perform: loadInitialData)
+        })
+        .onAppear(perform: loadInitialData)
     }
 
     func loadInitialData() {
-        let cardItems = NetworkMockup.fetchData()
-        let loadingStrategy = RealityComposerStrategy(cardContents: cardItems, rcFile: "RealityComposerFileName", rcScene: "SceneName")
+        let cardItems = [ExampleCardModel(id: "WasherFluid", title_: "Recommended Washer Fluid"), ExampleCardModel(id: "OilStick", title_: "Check Oil Stick")]
+        guard let anchorImage = UIImage(named: "qrImage") else { return }
+        let loadingStrategy = RealityComposerStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "realityComposerFileName", rcScene: "sceneName")
         arModel.load(loadingStrategy: loadingStrategy)
     }
 }
@@ -165,4 +178,5 @@ See **Limitations**.
 ## Examples
 
 Functionality can be further explored with a demo app which is already part of this package (`Apps/Examples/Examples.xcodeproj`).
+
 
