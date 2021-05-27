@@ -124,6 +124,7 @@ struct FioriARKitCardsExample: View {
 
     func loadInitialData() {
         let cardItems = [ExampleCardModel(id: "WasherFluid", title_: "Recommended Washer Fluid"), ExampleCardModel(id: "OilStick", title_: "Check Oil Stick")]
+        guard let anchorImage = UIImage(named: "qrImage") else { return }
         let loadingStrategy = RealityComposerStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "realityComposerFileName", rcScene: "sceneName")
         arModel.load(loadingStrategy: loadingStrategy)
     }
