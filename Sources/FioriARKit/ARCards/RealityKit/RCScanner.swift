@@ -56,5 +56,6 @@ internal enum RCScanner {
         return scene
     }
 
+    /// A convenience class which subclasses Entity and conforms to HasAnchoring
     internal class Scene: RealityKit.Entity, RealityKit.HasAnchoring {}
 }
