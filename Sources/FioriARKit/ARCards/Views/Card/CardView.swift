@@ -5,7 +5,6 @@
 //  Created by O'Brien, Patrick on 4/17/21.
 //
 
-import FioriSwiftUICore
 import SwiftUI
 
 extension Fiori {
@@ -20,7 +19,7 @@ extension Fiori {
             func body(content: Content) -> some View {
                 content
                     .font(.headline)
-                    .foregroundColor(Color.preferredColor(.header))
+                    .foregroundColor(Color.preferredColor(.header, background: .lightConstant))
                     .lineLimit(2)
                     .truncationMode(.tail)
                     .frame(width: 198, alignment: .leading)
@@ -31,7 +30,7 @@ extension Fiori {
             func body(content: Content) -> some View {
                 content
                     .font(.subheadline)
-                    .foregroundColor(Color.gray) // Color.preferredColor(.???))
+                    .foregroundColor(Color.preferredColor(.secondaryLabel, background: .lightConstant))
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .frame(width: 198, alignment: .leading)
@@ -45,7 +44,7 @@ extension Fiori {
                 content
                     .font(.system(size: 18))
                     .lineLimit(1)
-                    .foregroundColor(self.isSelected ? .blue : .clear)
+                    .foregroundColor(self.isSelected ? Color.preferredColor(.tintColor, background: .lightConstant) : .clear)
             }
         }
         
@@ -159,7 +158,7 @@ public extension CardView {
                 detailImage
             }
             .frame(width: 214, height: 93)
-            .background(Color.preferredColor(.tertiaryFill)) // Color(red: 240 / 255, green: 241 / 255, blue: 242 / 255)
+            .background(Color.preferredColor(.tertiaryFill))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .opacity(isSelected ? 1 : 0.8)
             .padding(.top, 8)
@@ -178,8 +177,9 @@ public extension CardView {
                 .frame(width: 198, height: isSelected && !isActionTextNil ? 44 : 0)
         }
         .frame(width: 230)
-        .background(Color.preferredColor(.primaryBackground)) // Color.preferredColor(.sapBaseColor)
+        .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
         .cornerRadius(10)
+        .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
         .opacity(isSelected ? 1 : 0.8)
     }
 }
@@ -239,7 +239,7 @@ public struct DefaultIcon: View {
     public var body: some View {
         icon
             .font(.system(size: 37))
-            .foregroundColor(Color.preferredColor(.quarternaryLabel)) // Color.gray
+            .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
     }
 }
 

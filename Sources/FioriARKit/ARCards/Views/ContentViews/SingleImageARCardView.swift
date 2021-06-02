@@ -5,7 +5,6 @@
 //  Created by O'Brien, Patrick on 5/11/21.
 //
 
-import FioriSwiftUICore
 import SwiftUI
 
 /**
@@ -115,7 +114,7 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
                     .font(.system(.title2))
                     .font(.system(size: 19))
                     .frame(width: 44, height: 44)
-                    .foregroundColor(Color.preferredColor(.primaryLabel))
+                    .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant))
                     .background(
                         RoundedRectangle(cornerRadius: 13)
                             .fill(Color.black.opacity(0.6))
