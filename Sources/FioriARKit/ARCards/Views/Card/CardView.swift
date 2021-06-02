@@ -5,8 +5,8 @@
 //  Created by O'Brien, Patrick on 4/17/21.
 //
 
+import FioriSwiftUICore
 import SwiftUI
-// import FioriSwiftUICore
 
 extension Fiori {
     enum CardItem {
@@ -20,7 +20,7 @@ extension Fiori {
             func body(content: Content) -> some View {
                 content
                     .font(.headline)
-                    .foregroundColor(Color.black)
+                    .foregroundColor(Color.preferredColor(.header))
                     .lineLimit(2)
                     .truncationMode(.tail)
                     .frame(width: 198, alignment: .leading)
@@ -31,7 +31,7 @@ extension Fiori {
             func body(content: Content) -> some View {
                 content
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color.gray) // Color.preferredColor(.???))
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .frame(width: 198, alignment: .leading)
@@ -159,8 +159,8 @@ public extension CardView {
                 detailImage
             }
             .frame(width: 214, height: 93)
-            .background(Color(red: 240 / 255, green: 241 / 255, blue: 242 / 255)) // Color.preferredColor(.tertiaryFill)
-            .cornerRadius(10)
+            .background(Color.preferredColor(.tertiaryFill)) // Color(red: 240 / 255, green: 241 / 255, blue: 242 / 255)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
             .opacity(isSelected ? 1 : 0.8)
             .padding(.top, 8)
             
@@ -178,7 +178,7 @@ public extension CardView {
                 .frame(width: 198, height: isSelected && !isActionTextNil ? 44 : 0)
         }
         .frame(width: 230)
-        .background(Color.white)
+        .background(Color.preferredColor(.primaryBackground)) // Color.preferredColor(.sapBaseColor)
         .cornerRadius(10)
         .opacity(isSelected ? 1 : 0.8)
     }
@@ -239,7 +239,7 @@ public struct DefaultIcon: View {
     public var body: some View {
         icon
             .font(.system(size: 37))
-            .foregroundColor(.gray) // Color.preferredColor(.quarternaryLabel)
+            .foregroundColor(Color.preferredColor(.quarternaryLabel)) // Color.gray
     }
 }
 

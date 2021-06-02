@@ -15,7 +15,7 @@ internal struct LineView: View {
     var endPoint: CGPoint
     var screen = UIScreen.main.bounds
     var gradient: LinearGradient {
-        LinearGradient(gradient: Gradient(colors: [.white, Color(red: 10 / 255, green: 110 / 255, blue: 209 / 255)]),
+        LinearGradient(gradient: Gradient(colors: [Color.preferredColor(.primaryBackground), Color(red: 10 / 255, green: 110 / 255, blue: 209 / 255)]),
                        startPoint: UnitPoint(x: self.startPoint.x / self.screen.width, y: self.startPoint.y / self.screen.height),
                        endPoint: UnitPoint(x: self.endPoint.x / self.screen.width, y: self.endPoint.y / self.screen.height))
     }

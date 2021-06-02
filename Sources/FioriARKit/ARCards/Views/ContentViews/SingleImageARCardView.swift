@@ -5,6 +5,7 @@
 //  Created by O'Brien, Patrick on 5/11/21.
 //
 
+import FioriSwiftUICore
 import SwiftUI
 
 /**
@@ -109,16 +110,18 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
                 onDismiss?()
                 self.presentationMode.wrappedValue.dismiss()
             }, label: {
-                Image(systemName: "arrow.backward")
-                    .frame(width: 44, height: 44)
+                Text(Image(systemName: "xmark"))
+                    .fontWeight(.light)
+                    .font(.system(.title2))
                     .font(.system(size: 19))
-                    .foregroundColor(Color(red: 250 / 255, green: 250 / 255, blue: 250 / 255))
+                    .frame(width: 44, height: 44)
+                    .foregroundColor(Color.preferredColor(.primaryLabel))
                     .background(
                         RoundedRectangle(cornerRadius: 13)
                             .fill(Color.black.opacity(0.6))
                     )
             })
-                .padding(.leading, 16)
+                .padding([.leading, .top], 16)
         }
     }
 }
