@@ -78,6 +78,7 @@ private struct CollapsingView: View {
                         .foregroundColor(.white)
                         .background(
                             RoundedRectangle(cornerRadius: 5)
+                                .fill(Color.preferredColor(.tintColor, background: .lightConstant))
                         )
                 })
                     .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
