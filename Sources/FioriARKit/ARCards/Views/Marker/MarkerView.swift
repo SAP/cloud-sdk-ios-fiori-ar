@@ -24,16 +24,17 @@ public struct MarkerView: View {
     var unselected: some View {
         icon
             .font(.system(size: 16))
-            .foregroundColor(Color(red: 10 / 255, green: 110 / 255, blue: 209 / 255))
+            .foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant))
             .background(
                 Circle()
-                    .fill(Color.white)
+                    .fill(Color.preferredColor(.primaryBackground, background: .lightConstant))
                     .frame(width: 30, height: 30)
                     .background(
                         Circle()
                             .fill(Color.black.opacity(0.15))
                             .frame(width: 40, height: 40)
                     )
+                    .shadow(color: Color.black.opacity(0.25), radius: 4, y: 2)
             )
             .frame(width: 44, height: 44)
             .contentShape(Rectangle())
@@ -51,15 +52,16 @@ public struct MarkerView: View {
     var selected: some View {
         icon
             .font(.system(size: 28))
-            .foregroundColor(.white)
+            .foregroundColor(Color.preferredColor(.primaryBackground, background: .lightConstant))
             .background(
                 Circle()
                     .strokeBorder(Color.white, lineWidth: 1)
                     .background(
                         Circle()
-                            .foregroundColor(Color(red: 10 / 255, green: 110 / 255, blue: 209 / 255))
+                            .foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant))
                     )
                     .frame(width: 60, height: 60)
+                    .shadow(color: Color.black.opacity(0.25), radius: 4, y: 2)
                     .background(
                         Circle()
                             .fill(Color.black.opacity(0.15))
