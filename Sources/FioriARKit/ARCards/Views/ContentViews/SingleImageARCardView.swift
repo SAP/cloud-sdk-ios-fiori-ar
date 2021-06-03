@@ -118,7 +118,7 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
                             .fill(Color.black.opacity(0.6))
                     )
             })
-                .padding(.leading, 16)
+                .padding([.top, .leading], 16)
         }
     }
 }
