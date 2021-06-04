@@ -179,7 +179,7 @@ public extension CardView {
         .frame(width: 230)
         .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
         .cornerRadius(10)
-        .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+        .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
         .opacity(isSelected ? 1 : 0.8)
     }
 }
