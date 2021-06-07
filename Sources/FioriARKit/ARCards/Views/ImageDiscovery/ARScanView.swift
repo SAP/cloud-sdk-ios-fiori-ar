@@ -25,8 +25,21 @@ public struct ARScanView: View {
 
 private struct CollapsingView: View {
     let image: Image
+    let screen = UIScreen.main.bounds
+    
     @State var isScanning = false
     @Namespace var nameSpace
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
+    var collapsedRatio: CGFloat {
+        self.landscapeRegular ? self.screen.width * 0.2 : self.screen.width * 0.3
+    }
+    
+    var landscapeRegular: Bool {
+        self.horizontalSizeClass == .regular && self.screen.width > self.screen.height
+    }
     
     var body: some View {
         ZStack {
@@ -46,16 +59,17 @@ private struct CollapsingView: View {
                     )
                     .matchedGeometryEffect(id: isScanning ? "image" : "background", in: nameSpace, isSource: false)
                     .padding(.horizontal, 56)
-                    .padding(.top, 216)
+                    .padding(.top, verticalSizeClass == .compact ? 80 : 216)
                     .onTapGesture(perform: buttonAction)
                     .allowsHitTesting(isScanning)
                 
                 Text("Point your camera at this image to start augmented reality experience")
+                    .font(.system(size: 17))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 24)
                     .padding(.top, 24)
-                    .padding(.bottom, 80)
+                    .padding(.bottom, verticalSizeClass == .compact ? 44 : 80)
                     .opacity(isScanning ? 0 : 1)
                 
                 Button(action: { buttonAction() }, label: {
@@ -67,7 +81,7 @@ private struct CollapsingView: View {
                                 .fill(Color.preferredColor(.tintColor, background: .lightConstant))
                         )
                 })
-                    .padding(.bottom, 216)
+                    .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
                     .opacity(isScanning ? 0 : 1)
             }
             
@@ -82,8 +96,9 @@ private struct CollapsingView: View {
                     .cornerRadius(8)
                     .scaledToFit()
                     .matchedGeometryEffect(id: "image", in: nameSpace)
+                    .frame(width: collapsedRatio)
                     .padding(.bottom, 34)
-                    .padding(.horizontal, 136)
+                    .offset(x: verticalSizeClass == .compact ? screen.width * 0.33 : 0)
                     .opacity(0)
             }
         }
