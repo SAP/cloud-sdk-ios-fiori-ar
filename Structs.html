@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Structures  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+	<meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0" />
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Section/Structures" class="dashAnchor"></a>
+    <a title="Structures  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p>
+          <a href="index.html">FioriARKit Docs</a>
+          <span class="no-mobile"></span>
+        </p>
+    
+    
+      </div>
+    </header>
+    <div id="breadcrumbs-container">
+      <div class="content-wrapper">
+        <p id="breadcrumbs">
+          <span class="no-mobile">
+            <a href="index.html">FioriARKit Reference</a>
+            <img id="carat" src="img/carat.png" />
+          </span>
+          Structures  Reference
+        </p>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div class="article-wrapper">
+        <article class="main-content">
+          <section>
+            <section class="section">
+              <h1>Structures</h1>
+              <p>The following structures are available globally.</p>
+
+            </section>
+            <section class="section task-group-section">
+              <div class="task-group">
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit13MarkerControlV"></a>
+                      <a name="//apple_ref/swift/Struct/MarkerControl" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit13MarkerControlV">MarkerControl</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Namespace for Marker Control State</p>
+
+                          <a href="Structs/MarkerControl.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">MarkerControl</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit23RealityComposerStrategyV"></a>
+                      <a name="//apple_ref/swift/Struct/RealityComposerStrategy" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit23RealityComposerStrategyV">RealityComposerStrategy</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>A loading strategy that uses the RealityComposer app. After creating the Reality Composer scene, tthe entities in the scene correlate to a real world location relative to the image or object anchor.
+This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
+Loading the data into the ARAnnotationViewModel should be done in the onAppear method.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">cardItems</span> <span class="o">=</span> <span class="p">[</span><span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">),</span> <span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"World"</span><span class="p">)]</span>
+<span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+<span class="k">let</span> <span class="nv">strategy</span> <span class="o">=</span> <span class="kt">RealityComposerStrategy</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="n">cardItems</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="n">anchorImage</span><span class="p">,</span> <span class="nv">rcFile</span><span class="p">:</span> <span class="s">"ExampleRC"</span><span class="p">,</span> <span class="nv">rcScene</span><span class="p">:</span> <span class="s">"ExampleScene"</span><span class="p">)</span>
+<span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">strategy</span><span class="p">)</span>
+</code></pre>
+
+                          <a href="Structs/RealityComposerStrategy.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RealityComposerStrategy</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a></span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span><span class="p">,</span> <span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span> <span class="p">:</span> <span class="kt">LosslessStringConvertible</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit16ScreenAnnotationV"></a>
+                      <a name="//apple_ref/swift/Struct/ScreenAnnotation" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit16ScreenAnnotationV">ScreenAnnotation</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Wrapper struct for the <strong>CardItem : CardItemModel</strong>  and the real world anchoring position. Used to set the internal entity.</p>
+
+                          <a href="Structs/ScreenAnnotation.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ScreenAnnotation</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">Identifiable</span><span class="p">,</span> <span class="kt">Equatable</span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit8CardViewV"></a>
+                      <a name="//apple_ref/swift/Struct/CardView" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit8CardViewV">CardView</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Undocumented</p>
+
+                          <a href="Structs/CardView.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CardView</span><span class="o">&lt;</span><span class="kt">Title</span><span class="p">,</span> <span class="kt">DescriptionText</span><span class="p">,</span> <span class="kt">DetailImage</span><span class="p">,</span> <span class="kt">ActionText</span><span class="p">,</span> <span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Title</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">DescriptionText</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">DetailImage</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">ActionText</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit11DefaultIconV"></a>
+                      <a name="//apple_ref/swift/Struct/DefaultIcon" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit11DefaultIconV">DefaultIcon</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Undocumented</p>
+
+                          <a href="Structs/DefaultIcon.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DefaultIcon</span> <span class="p">:</span> <span class="kt">View</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit12ImagePreviewV"></a>
+                      <a name="//apple_ref/swift/Struct/ImagePreview" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit12ImagePreviewV">ImagePreview</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Undocumented</p>
+
+                          <a href="Structs/ImagePreview.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ImagePreview</span> <span class="p">:</span> <span class="kt">View</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit15CarouselOptionsV"></a>
+                      <a name="//apple_ref/swift/Struct/CarouselOptions" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit15CarouselOptionsV">CarouselOptions</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Options to modify the behavior of the Carousel</p>
+
+                          <a href="Structs/CarouselOptions.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CarouselOptions</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>itemSpacing</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>Spacing between the Carousel child views</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>carouselHeight</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>Height of the carousel</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>alignment</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>Vertical Alignment of the Carousel child views</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit21SingleImageARCardViewV"></a>
+                      <a name="//apple_ref/swift/Struct/SingleImageARCardView" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit21SingleImageARCardViewV">SingleImageARCardView</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Content View which displays the card and marker views after a discovery flow for a single Image in the scene after the discoveryFlowHasFinished has been set to True. Only displays the views which are set to isVisible. Cards and Markers are initially set to isVisible.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="c1">// Constructor for Default ScanningView, CardView, and MarkerView</span>
+<span class="kt">SingleImageARCardView</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="n">arModel</span><span class="p">,</span>
+                      <span class="nv">image</span><span class="p">:</span> <span class="kt">Image</span><span class="p">(</span><span class="s">"qrImage"</span><span class="p">),</span>
+                      <span class="nv">cardAction</span><span class="p">:</span> <span class="p">{</span> <span class="n">id</span> <span class="k">in</span>
+                            <span class="c1">// set the card action for id corresponding to the CardItemModel</span>
+                            <span class="nf">print</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+                      <span class="p">})</span>
+        <span class="o">.</span><span class="nf">onAppear</span><span class="p">(</span><span class="nv">perform</span><span class="p">:</span> <span class="n">loadData</span><span class="p">)</span>
+
+<span class="c1">// Constructors with viewbuilders for each combination of Views</span>
+<span class="c1">// Use the CarouselOptions View Modifier to adjust the behavior of the Carousel</span>
+<span class="kt">SingleImageARCardView</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="n">arModel</span><span class="p">,</span>
+                      <span class="nv">scanLabel</span><span class="p">:</span> <span class="p">{</span> <span class="n">anchorPosition</span> <span class="k">in</span>
+                          <span class="kt">CustomScanView</span><span class="p">(</span><span class="nv">image</span><span class="p">:</span> <span class="kt">Image</span><span class="p">(</span><span class="s">"qrImage"</span><span class="p">),</span> <span class="nv">position</span><span class="p">:</span> <span class="n">anchorPosition</span><span class="p">)</span>
+                      <span class="p">},</span>
+                      <span class="nv">cardLabel</span><span class="p">:</span> <span class="p">{</span> <span class="n">cardmodel</span><span class="p">,</span> <span class="n">isSelected</span> <span class="k">in</span>
+                          <span class="kt">CustomCardView</span><span class="p">(</span><span class="nv">model</span><span class="p">:</span> <span class="n">cardmodel</span><span class="p">,</span> <span class="nv">isSelected</span><span class="p">:</span> <span class="n">isSelected</span><span class="p">)</span>
+                      <span class="p">},</span>
+                      <span class="nv">markerLabel</span><span class="p">:</span> <span class="p">{</span> <span class="n">state</span><span class="p">,</span> <span class="n">icon</span>  <span class="k">in</span>
+                          <span class="kt">CustomMarkerView</span><span class="p">(</span><span class="nv">state</span><span class="p">:</span> <span class="n">state</span><span class="p">)</span>
+                      <span class="p">})</span>
+        <span class="o">.</span><span class="nf">carouselOptions</span><span class="p">(</span><span class="kt">CarouselOptions</span><span class="p">(</span><span class="nv">itemSpacing</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nv">carouselHeight</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="nv">alignment</span><span class="p">:</span> <span class="o">.</span><span class="n">center</span><span class="p">))</span>
+        <span class="o">.</span><span class="nf">onAppear</span><span class="p">(</span><span class="nv">perform</span><span class="p">:</span> <span class="n">loadData</span><span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">loadData</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">cardItems</span> <span class="o">=</span> <span class="kt">Tests</span><span class="o">.</span><span class="n">cardItems</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+    <span class="k">let</span> <span class="nv">strategy</span> <span class="o">=</span> <span class="kt">RealityComposerStrategy</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="n">cardItems</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="n">anchorImage</span><span class="p">,</span> <span class="nv">rcFile</span><span class="p">:</span> <span class="s">"ExampleRC"</span><span class="p">,</span> <span class="nv">rcScene</span><span class="p">:</span> <span class="s">"ExampleScene"</span><span class="p">)</span>
+    <span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">strategy</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                          <a href="Structs/SingleImageARCardView.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SingleImageARCardView</span><span class="o">&lt;</span><span class="kt">Scan</span><span class="p">,</span> <span class="kt">Card</span><span class="p">,</span> <span class="kt">Marker</span><span class="p">,</span> <span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Scan</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">Card</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">Marker</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>arModel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The ViewModel which managers the AR Experience</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>image</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the User</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>scanLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom CardView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>markerLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom MarkerView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit10ARScanViewV"></a>
+                      <a name="//apple_ref/swift/Struct/ARScanView" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit10ARScanViewV">ARScanView</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Undocumented</p>
+
+                          <a href="Structs/ARScanView.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ARScanView</span> <span class="p">:</span> <span class="kt">View</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit10MarkerViewV"></a>
+                      <a name="//apple_ref/swift/Struct/MarkerView" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit10MarkerViewV">MarkerView</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Undocumented</p>
+
+                          <a href="Structs/MarkerView.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">MarkerView</span> <span class="p">:</span> <span class="kt">View</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit15AnyViewModifierV"></a>
+                      <a name="//apple_ref/swift/Struct/AnyViewModifier" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit15AnyViewModifierV">AnyViewModifier</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Undocumented</p>
+
+                          <a href="Structs/AnyViewModifier.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">AnyViewModifier</span> <span class="p">:</span> <span class="kt">ViewModifier</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </section>
+          </section>
+        </article>
+      </div>
+      <div class="nav-wrapper">
+        <nav class="nav-bottom">
+          <ul class="nav-groups">
+            <li class="nav-group-name">
+              <a href="Classes.html">Classes</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Classes/ARManager.html">ARManager</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="Enums.html">Enumerations</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="Enums.html#/s:10FioriARKit0A0O">Fiori</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="Extensions.html">Extensions</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="Extensions/EnvironmentValues.html">EnvironmentValues</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Extensions/View.html">View</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="Protocols.html">Protocols</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="Protocols/ARManagement.html">ARManagement</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Protocols/ActionTextComponent.html">ActionTextComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Protocols/DescriptionTextComponent.html">DescriptionTextComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Protocols/DetailImageComponent.html">DetailImageComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Protocols/IconComponent.html">IconComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Protocols/TitleComponent.html">TitleComponent</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="Structs.html">Structures</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="Structs/ARScanView.html">ARScanView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/AnyViewModifier.html">AnyViewModifier</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/CardView.html">CardView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/CarouselOptions.html">CarouselOptions</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/DefaultIcon.html">DefaultIcon</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/ImagePreview.html">ImagePreview</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/MarkerControl.html">MarkerControl</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/MarkerControl/State.html">– State</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/MarkerView.html">MarkerView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/RealityComposerStrategy.html">RealityComposerStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/ScreenAnnotation.html">ScreenAnnotation</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/SingleImageARCardView.html">SingleImageARCardView</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-wrapper">
+        <section id="footer">
+          <p>© 2020 <a class="link" href="https://github.com/SAP/cloud-sdk-ios-fioriarkit" target="_blank" rel="external">https://github.com/SAP/cloud-sdk-ios-fioriarkit</a> under Apache-2.0.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.7</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </div>
+    </div>
+  </body>
+</div>
+</html>
