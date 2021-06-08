@@ -36,7 +36,7 @@
                           "material",
                           {
                             "typeName" : "String",
-                            "value" : "clearCoatPaint"
+                            "value" : "paintEnamelMatte"
                           }
                         ],
                         [
@@ -115,7 +115,7 @@
                           "material",
                           {
                             "typeName" : "String",
-                            "value" : "clearCoatPaint"
+                            "value" : "paintEnamelMatte"
                           }
                         ],
                         [
@@ -187,7 +187,7 @@
                           "material",
                           {
                             "typeName" : "String",
-                            "value" : "clearCoatPaint"
+                            "value" : "paintEnamelMatte"
                           }
                         ],
                         [
@@ -259,7 +259,7 @@
                           "material",
                           {
                             "typeName" : "String",
-                            "value" : "clearCoatPaint"
+                            "value" : "paintEnamelMatte"
                           }
                         ],
                         [
@@ -332,7 +332,7 @@
                           "material",
                           {
                             "typeName" : "String",
-                            "value" : "clearCoatPaint"
+                            "value" : "paintEnamelMatte"
                           }
                         ],
                         [
@@ -404,7 +404,7 @@
                           "material",
                           {
                             "typeName" : "String",
-                            "value" : "clearCoatPaint"
+                            "value" : "paintEnamelMatte"
                           }
                         ],
                         [
@@ -491,9 +491,9 @@
                   1.862645326866641e-08,
                   -0.1039632111787796,
                   0,
-                  -0.048990540206432343,
-                  0.88200968503952026,
-                  -0.46867766976356506,
+                  -0.048990543931722641,
+                  0.88200974464416504,
+                  -0.46867769956588745,
                   0,
                   0.091696508228778839,
                   0.47123119235038757,
