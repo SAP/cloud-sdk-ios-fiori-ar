@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2C27448F2644DBAB0088E5DC /* qrImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C27448E2644DBAB0088E5DC /* qrImage.png */; };
-		2C482489264DBDCB00E230E6 /* CarEngineRC.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2C482488264DBDCB00E230E6 /* CarEngineRC.rcproject */; };
+		2C3C67602674006B00B2B243 /* CarEngineRC1.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */; };
 		2C48248C264DC33300E230E6 /* CarEngineExampleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C48248B264DC33300E230E6 /* CarEngineExampleContentView.swift */; };
 		2C48248F264DC40600E230E6 /* StringIdentifyingCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C48248E264DC40600E230E6 /* StringIdentifyingCardItem.swift */; };
 		2C4C71A02643697F00B462A9 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C719F2643697F00B462A9 /* ExamplesApp.swift */; };
@@ -26,7 +26,7 @@
 
 /* Begin PBXFileReference section */
 		2C27448E2644DBAB0088E5DC /* qrImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qrImage.png; sourceTree = "<group>"; };
-		2C482488264DBDCB00E230E6 /* CarEngineRC.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = CarEngineRC.rcproject; sourceTree = "<group>"; };
+		2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = CarEngineRC1.rcproject; sourceTree = "<group>"; };
 		2C48248B264DC33300E230E6 /* CarEngineExampleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarEngineExampleContentView.swift; sourceTree = "<group>"; };
 		2C48248E264DC40600E230E6 /* StringIdentifyingCardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringIdentifyingCardItem.swift; sourceTree = "<group>"; };
 		2C4C719C2643697F00B462A9 /* Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Examples.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,7 +161,7 @@
 		2CDD909F264382D40076150D /* RealityComposer */ = {
 			isa = PBXGroup;
 			children = (
-				2C482488264DBDCB00E230E6 /* CarEngineRC.rcproject */,
+				2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */,
 				2CDD90A1264383540076150D /* ExampleRC.rcproject */,
 			);
 			path = RealityComposer;
@@ -240,12 +240,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C3C67602674006B00B2B243 /* CarEngineRC1.rcproject in Sources */,
 				2C4C71A22643697F00B462A9 /* ContentView.swift in Sources */,
 				2C4C71B126436A5C00B462A9 /* ARCardsContentView.swift in Sources */,
 				2C48248C264DC33300E230E6 /* CarEngineExampleContentView.swift in Sources */,
 				2C4C71B526436ADC00B462A9 /* ARCardsViewBuilderContentView.swift in Sources */,
 				2C4C71A02643697F00B462A9 /* ExamplesApp.swift in Sources */,
-				2C482489264DBDCB00E230E6 /* CarEngineRC.rcproject in Sources */,
 				2CDD90A2264383540076150D /* ExampleRC.rcproject in Sources */,
 				2C9371282644D3C3001932D1 /* DownloadsView.swift in Sources */,
 				2C48248F264DC40600E230E6 /* StringIdentifyingCardItem.swift in Sources */,
