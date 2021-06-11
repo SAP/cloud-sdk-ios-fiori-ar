@@ -20,7 +20,7 @@ struct ContentView: View {
                 }
                 
                 NavigationLink(destination: CarEngineExampleContentView()) {
-                    Text("2016 Honda Engine Example")
+                    Text("2016 Engine Example")
                 }
                 
                 NavigationLink(destination: DownloadsView()) {

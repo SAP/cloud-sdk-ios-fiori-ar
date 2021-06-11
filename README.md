@@ -49,9 +49,7 @@ There is currently support for `AR Cards`. This refers to Cards that match with 
 
 > **WARNING**: Concepts and implementation for components are `in-development` and can change at any time!!!
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/77754056/119206581-262cdb00-ba61-11eb-8a87-1e83d52d53c3.mp4" alt="alt text" height="450" align="center">
-</p>
+https://user-images.githubusercontent.com/77754056/121744202-2ea88c80-cac8-11eb-811d-9c9edb6423fa.mp4
 
 The AR Cards use case is essentially annotating the real world represented by a marker that corresponds to data displayed in a card with an optional action. SwiftUI is used to render the content at these positions since 3D modeling is expensive, tedious, and time consuming. There is a one to one mapping of markers to cards. The current strategy supported for scene creation is by using Reality Composer. Within Reality Composer a scene of annotations can be composed relative to an image or object. Data that's associated with these real world positions can be loaded and  matched into it's respective Card. Supports `Image` and `Object` anchors.
 

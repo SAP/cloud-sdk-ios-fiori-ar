@@ -16,16 +16,16 @@ public enum Tests {
                                                                       icon_: nil),
                                             
                                             StringIdentifyingCardItem(id: "Coolant",
-                                                                      title_: "Genuine Honda Coolant",
+                                                                      title_: "Genuine Coolant",
                                                                       descriptionText_: "Price: 20.99",
-                                                                      detailImage_: Image("Coolant"),
+                                                                      detailImage_: nil,
                                                                       actionText_: "Order",
                                                                       icon_: Image(systemName: "cart.fill")),
                                             
-                                            StringIdentifyingCardItem(id: "OilStick",
+                                            StringIdentifyingCardItem(id: "Oilstick",
                                                                       title_: "Check Oil Stick",
                                                                       descriptionText_: "Suggested Date: 06/02/2021",
-                                                                      detailImage_: nil,
+                                                                      detailImage_: Image("Schedule"),
                                                                       actionText_: "Schedule",
                                                                       icon_: Image(systemName: "calendar")),
                                             
@@ -33,7 +33,7 @@ public enum Tests {
                                                                       title_: "Brake Fluid Manual",
                                                                       descriptionText_: nil,
                                                                       detailImage_: nil,
-                                                                      actionText_: "Open Manual",
+                                                                      actionText_: "Open Car Manual",
                                                                       icon_: Image(systemName: "book.fill")),
                                             
                                             StringIdentifyingCardItem(id: "Battery",
@@ -44,7 +44,7 @@ public enum Tests {
                                                                       icon_: Image(systemName: "play.fill")),
                                             
                                             StringIdentifyingCardItem(id: "Fusebox",
-                                                                      title_: "Honda Service App",
+                                                                      title_: "Service App",
                                                                       descriptionText_: "Change Fuse",
                                                                       detailImage_: nil,
                                                                       actionText_: "Open App",
