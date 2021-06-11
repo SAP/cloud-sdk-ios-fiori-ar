@@ -15,6 +15,9 @@
     |
     <a href="https://sap.github.io/cloud-sdk-ios-fioriarkit"> API Documentation
     </a>
+	|
+    <a href="https://github.com/SAP/cloud-sdk-fioriarkit/blob/main/CHANGELOG.md"> Changelog
+    </a>
 </div>
 
 ***
