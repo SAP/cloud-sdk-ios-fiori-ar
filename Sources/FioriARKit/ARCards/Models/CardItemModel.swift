@@ -28,3 +28,12 @@ public protocol ActionTextComponent {
 public protocol IconComponent {
     var icon_: Image? { get }
 }
+
+public struct DefaultCardItem: CardItemModel {
+    public var id: String
+    public var title_: String
+    public var descriptionText_: String?
+    public var detailImage_: Image?
+    public var actionText_: String?
+    public var icon_: Image?
+}

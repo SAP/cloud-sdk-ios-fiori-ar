@@ -28,6 +28,16 @@ import SwiftUI
 /// let strategy = RealityComposerStrategy(cardContents: cardItems, anchorImage: anchorImage, rcFile: "ExampleRC", rcScene: "ExampleScene")
 /// arModel.load(loadingStrategy: strategy)
 /// ```
+
+struct CodableCardItem: Codable {
+    var id: String
+    var title: String
+    var descriptionText: String?
+    var detailImage: String?
+    var actionText: String?
+    var icon: String?
+}
+
 public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy where CardItem.ID: LosslessStringConvertible {
     public var cardContents: [CardItem]
     public var anchorImage: UIImage?
@@ -47,6 +57,21 @@ public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadin
     /// Constructor for loading annotations using an Object as an anchor with a Reality Composer scene
     public init(cardContents: [CardItem], rcFile: String, rcScene: String) {
         self.cardContents = cardContents
+        self.anchorImage = nil
+        self.physicalWidth = nil
+        self.rcFile = rcFile
+        self.rcScene = rcScene
+    }
+    
+    public init(jsonData: Data, rcFile: String, rcScene: String) throws where CardItem == DefaultCardItem {
+        let codableCards = try JSONDecoder().decode([CodableCardItem].self, from: jsonData)
+        
+        self.cardContents = codableCards.map { DefaultCardItem(id: $0.id,
+                                                               title_: $0.title,
+                                                               descriptionText_: $0.descriptionText,
+                                                               detailImage_: $0.detailImage != nil ? Image($0.detailImage!) : nil,
+                                                               actionText_: $0.actionText,
+                                                               icon_: $0.icon != nil ? Image(systemName: $0.icon!) : nil) }
         self.anchorImage = nil
         self.physicalWidth = nil
         self.rcFile = rcFile
@@ -92,4 +117,5 @@ private enum LoadingStrategyError: Error {
     case anchorTypeNotSupported
     case entityNotFound(LosslessStringConvertible)
     case sceneLoadingFailed
+    case jsonDataError
 }
