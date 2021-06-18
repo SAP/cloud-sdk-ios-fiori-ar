@@ -23,6 +23,10 @@ struct ContentView: View {
                     Text("2016 Engine Example")
                 }
                 
+                NavigationLink(destination: ARCardsJSONLoadingContentView()) {
+                    Text("JSON Decoding Example")
+                }
+                
                 NavigationLink(destination: DownloadsView()) {
                     Text("Download Image Anchors")
                 }

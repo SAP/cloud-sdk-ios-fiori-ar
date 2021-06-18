@@ -14,6 +14,8 @@ import SwiftUI
 /// This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
 /// Loading the data into the ARAnnotationViewModel should be done in the onAppear method.
 ///
+/// If an Object Anchor is used the anchorImage and physicalWidth can be set to nil and are ignored
+///
 /// - Parameters:
 ///  - cardContents: An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
 ///  - anchorImage: Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
@@ -29,15 +31,6 @@ import SwiftUI
 /// arModel.load(loadingStrategy: strategy)
 /// ```
 
-struct CodableCardItem: Codable {
-    var id: String
-    var title: String
-    var descriptionText: String?
-    var detailImage: String?
-    var actionText: String?
-    var icon: String?
-}
-
 public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy where CardItem.ID: LosslessStringConvertible {
     public var cardContents: [CardItem]
     public var anchorImage: UIImage?
@@ -46,34 +39,48 @@ public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadin
     public var rcScene: String
     
     /// Constructor for loading annotations using an Image as an anchor with a Reality Composer scene
-    public init(cardContents: [CardItem], anchorImage: UIImage, physicalWidth: CGFloat, rcFile: String, rcScene: String) {
+    public init(cardContents: [CardItem], anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String) {
         self.cardContents = cardContents
         self.anchorImage = anchorImage
         self.physicalWidth = physicalWidth
         self.rcFile = rcFile
         self.rcScene = rcScene
     }
-    
-    /// Constructor for loading annotations using an Object as an anchor with a Reality Composer scene
-    public init(cardContents: [CardItem], rcFile: String, rcScene: String) {
-        self.cardContents = cardContents
-        self.anchorImage = nil
-        self.physicalWidth = nil
-        self.rcFile = rcFile
-        self.rcScene = rcScene
-    }
-    
-    public init(jsonData: Data, rcFile: String, rcScene: String) throws where CardItem == DefaultCardItem {
-        let codableCards = try JSONDecoder().decode([CodableCardItem].self, from: jsonData)
-        
-        self.cardContents = codableCards.map { DefaultCardItem(id: $0.id,
-                                                               title_: $0.title,
-                                                               descriptionText_: $0.descriptionText,
-                                                               detailImage_: $0.detailImage != nil ? Image($0.detailImage!) : nil,
-                                                               actionText_: $0.actionText,
-                                                               icon_: $0.icon != nil ? Image(systemName: $0.icon!) : nil) }
-        self.anchorImage = nil
-        self.physicalWidth = nil
+
+    /**
+     Constructor for loading annotations using Data from a JSON Array
+        JSON key/value::
+         "id": String,
+         "title": String,
+         "descriptionText": String?,
+         "detailImage": Data?, // base64 encoding of Image
+         "actionText": String?,
+         "icon": String? // systemName of SFSymbol
+     
+        Example:
+        [
+         {
+             "id": "WasherFluid",
+             "title": "Recommended Washer Fluid",
+             "descriptionText": "Rain X",
+             "detailImage": null,
+             "actionText": null,
+             "icon": null
+         },
+         {
+             "id": "Coolant",
+             "title": "Genuine Coolant",
+             "descriptionText": "Price: 20.99",
+             "detailImage": "iVBORw0KGgoAAAANSUhE...",
+             "actionText": "Order",
+             "icon": "cart.fill"
+         }
+        ]
+     */
+    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String) throws where CardItem == DefaultCardItem {
+        self.cardContents = try JSONDecoder().decode([DefaultCardItem].self, from: jsonData)
+        self.anchorImage = anchorImage
+        self.physicalWidth = physicalWidth
         self.rcFile = rcFile
         self.rcScene = rcScene
     }
@@ -83,7 +90,7 @@ public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadin
         var annotations = [ScreenAnnotation<CardItem>]()
         
         guard let scene = try? RCScanner.loadScene(rcFileName: rcFile, sceneName: rcScene) else {
-            throw LoadingStrategyError.sceneLoadingFailed
+            throw LoadingStrategyError.sceneLoadingFailedError
         }
         
         // An image should use world tracking so we set the configuration to prevent automatic switching to Image Tracking
@@ -97,12 +104,12 @@ public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadin
             manager.setAutomaticConfiguration()
             manager.addAnchor(for: scene)
         default:
-            throw LoadingStrategyError.anchorTypeNotSupported
+            throw LoadingStrategyError.anchorTypeNotSupportedError
         }
         
         for cardItem in self.cardContents {
             guard let internalEntity = scene.findEntity(named: String(cardItem.id)) else {
-                throw LoadingStrategyError.entityNotFound(cardItem.id)
+                throw LoadingStrategyError.entityNotFoundError(cardItem.id)
             }
             let annotation = ScreenAnnotation(card: cardItem)
             annotation.setInternalEntity(with: internalEntity)
@@ -113,9 +120,10 @@ public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadin
     }
 }
 
-private enum LoadingStrategyError: Error {
-    case anchorTypeNotSupported
-    case entityNotFound(LosslessStringConvertible)
-    case sceneLoadingFailed
-    case jsonDataError
+internal enum LoadingStrategyError: Error {
+    case anchorTypeNotSupportedError
+    case entityNotFoundError(LosslessStringConvertible)
+    case sceneLoadingFailedError
+    case jsonDecodingError
+    case base64DecodingError
 }
