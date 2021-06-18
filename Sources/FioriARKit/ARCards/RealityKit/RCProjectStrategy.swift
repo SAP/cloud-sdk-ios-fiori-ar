@@ -31,7 +31,7 @@ import SwiftUI
 /// arModel.load(loadingStrategy: strategy)
 /// ```
 
-public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy where CardItem.ID: LosslessStringConvertible {
+public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy where CardItem.ID: LosslessStringConvertible {
     public var cardContents: [CardItem]
     public var anchorImage: UIImage?
     public var physicalWidth: CGFloat?

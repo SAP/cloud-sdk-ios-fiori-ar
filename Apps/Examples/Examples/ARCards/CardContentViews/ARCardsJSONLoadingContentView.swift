@@ -26,7 +26,7 @@ struct ARCardsJSONLoadingContentView: View {
         
         do {
             let jsonData = try Data(contentsOf: url)
-            let strategy = try RealityComposerStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
+            let strategy = try RCProjectStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
             arModel.load(loadingStrategy: strategy)
         } catch {
             print(error)

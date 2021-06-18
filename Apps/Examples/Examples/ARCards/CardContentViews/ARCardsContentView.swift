@@ -24,7 +24,7 @@ struct ARCardsDefaultContentView: View {
     func loadInitialData() {
         let cardItems = Tests.carEngineCardItems
         guard let anchorImage = UIImage(named: "qrImage") else { return }
-        let strategy = RealityComposerStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
+        let strategy = RCProjectStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
         arModel.load(loadingStrategy: strategy)
     }
 }
