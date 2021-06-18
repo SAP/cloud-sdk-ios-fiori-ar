@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C124231267B19D800BE28C7 /* Tests.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C124230267B19D800BE28C7 /* Tests.json */; };
 		2C27448F2644DBAB0088E5DC /* qrImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C27448E2644DBAB0088E5DC /* qrImage.png */; };
 		2C3C67602674006B00B2B243 /* CarEngineRC1.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */; };
 		2C48248C264DC33300E230E6 /* CarEngineExampleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C48248B264DC33300E230E6 /* CarEngineExampleContentView.swift */; };
@@ -19,6 +18,7 @@
 		2C4C71B126436A5C00B462A9 /* ARCardsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C71B026436A5C00B462A9 /* ARCardsContentView.swift */; };
 		2C4C71B526436ADC00B462A9 /* ARCardsViewBuilderContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C71B426436ADC00B462A9 /* ARCardsViewBuilderContentView.swift */; };
 		2C5225B1267BF28A0089A062 /* ARCardsJSONLoadingContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5225B0267BF28A0089A062 /* ARCardsJSONLoadingContentView.swift */; };
+		2C5225B7267CF7980089A062 /* Tests.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C5225B6267CF7980089A062 /* Tests.json */; };
 		2C6DDE5E2644CCD60093AA6B /* FioriARKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2C6DDE5D2644CCD60093AA6B /* FioriARKit */; };
 		2C9371282644D3C3001932D1 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9371272644D3C3001932D1 /* DownloadsView.swift */; };
 		2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909726437D630076150D /* ExampleCardItem.swift */; };
@@ -27,7 +27,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2C124230267B19D800BE28C7 /* Tests.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Tests.json; path = ../../../../../../../Tests.json; sourceTree = "<group>"; };
 		2C27448E2644DBAB0088E5DC /* qrImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qrImage.png; sourceTree = "<group>"; };
 		2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = CarEngineRC1.rcproject; sourceTree = "<group>"; };
 		2C48248B264DC33300E230E6 /* CarEngineExampleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarEngineExampleContentView.swift; sourceTree = "<group>"; };
@@ -42,6 +41,7 @@
 		2C4C71B426436ADC00B462A9 /* ARCardsViewBuilderContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsViewBuilderContentView.swift; sourceTree = "<group>"; };
 		2C4C71C026436E2400B462A9 /* cloud-sdk-ios-fioriarkit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "cloud-sdk-ios-fioriarkit"; path = ../..; sourceTree = "<group>"; };
 		2C5225B0267BF28A0089A062 /* ARCardsJSONLoadingContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsJSONLoadingContentView.swift; sourceTree = "<group>"; };
+		2C5225B6267CF7980089A062 /* Tests.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Tests.json; sourceTree = "<group>"; };
 		2C9371272644D3C3001932D1 /* DownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
 		2CDD909726437D630076150D /* ExampleCardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCardItem.swift; sourceTree = "<group>"; };
 		2CDD909A26437E7A0076150D /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
@@ -100,9 +100,9 @@
 		2C2D2BCA2645BF5000A1E1B1 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2C5225B6267CF7980089A062 /* Tests.json */,
 				2CDD909A26437E7A0076150D /* Tests.swift */,
 				2C9371272644D3C3001932D1 /* DownloadsView.swift */,
-				2C124230267B19D800BE28C7 /* Tests.json */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -234,7 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C4C71A72643698000B462A9 /* Preview Assets.xcassets in Resources */,
-				2C124231267B19D800BE28C7 /* Tests.json in Resources */,
+				2C5225B7267CF7980089A062 /* Tests.json in Resources */,
 				2C4C71A42643698000B462A9 /* Assets.xcassets in Resources */,
 				2C27448F2644DBAB0088E5DC /* qrImage.png in Resources */,
 			);
