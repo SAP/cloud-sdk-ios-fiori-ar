@@ -28,3 +28,44 @@ public protocol ActionTextComponent {
 public protocol IconComponent {
     var icon_: Image? { get }
 }
+
+public struct DecodableCardItem: CardItemModel {
+    public var id: String
+    public var title_: String
+    public var descriptionText_: String?
+    public var detailImage_: Image?
+    public var actionText_: String?
+    public var icon_: Image?
+    
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case title_
+        case descriptionText_
+        case detailImage_
+        case actionText_
+        case icon_
+    }
+}
+
+extension DecodableCardItem: Decodable {
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.id = try values.decode(String.self, forKey: .id)
+        self.title_ = try values.decode(String.self, forKey: .title_)
+        self.descriptionText_ = try values.decode(String?.self, forKey: .descriptionText_)
+        let imageData: Data? = try values.decode(Data?.self, forKey: .detailImage_)
+        var image: Image?
+        if let unwrappedImageData = imageData {
+            if let uiImage = UIImage(data: unwrappedImageData) {
+                image = Image(uiImage: uiImage)
+            } else {
+                throw LoadingStrategyError.base64DecodingError
+            }
+        }
+        self.detailImage_ = image
+        self.actionText_ = try values.decode(String?.self, forKey: .actionText_)
+        let iconString: String? = try values.decode(String?.self, forKey: .icon_)
+        self.icon_ = iconString != nil ? Image(systemName: iconString!) : nil
+    }
+}
