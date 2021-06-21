@@ -1,14 +1,14 @@
 //
-//  ARCardsDefaultContentView.swift
+//  ARCardsRealityFileLoadingContentView.swift
 //  Examples
 //
-//  Created by O'Brien, Patrick on 5/5/21.
+//  Created by O'Brien, Patrick on 6/21/21.
 //
 
 import FioriARKit
 import SwiftUI
 
-struct ARCardsDefaultContentView: View {
+struct ARCardsRealityFileLoadingContentView: View {
     @StateObject var arModel = ARAnnotationViewModel<StringIdentifyingCardItem>()
     
     var body: some View {
@@ -18,13 +18,14 @@ struct ARCardsDefaultContentView: View {
                                   // set the card action for id corresponding to the CardItemModel
                                   print(id)
                               })
-            .onAppear(perform: loadInitialData)
+            .onAppear(perform: loadInitialDataFromRealityFile)
     }
-    
-    func loadInitialData() {
+
+    func loadInitialDataFromRealityFile() {
         let cardItems = Tests.carEngineCardItems
+        let realityFilePath = FileManager.default.getDocumentsDirectory().appendingPathComponent(FileManager.realityFiles).appendingPathComponent("ExampleRC.reality")
         guard let anchorImage = UIImage(named: "qrImage") else { return }
-        let strategy = RCProjectStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
+        let strategy = RealityFileStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, realityFilePath: realityFilePath, rcScene: "ExampleScene")
         arModel.load(loadingStrategy: strategy)
     }
 }

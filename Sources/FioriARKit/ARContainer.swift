@@ -57,4 +57,50 @@ public protocol AnnotationLoadingStrategy {
     func load(with manager: ARManagement) throws -> [ScreenAnnotation<CardItem>]
 }
 
+internal protocol SceneLoadable where CardItem.ID: LosslessStringConvertible {
+    associatedtype CardItem: CardItemModel
+
+    func syncCardContentsWithScene(manager: ARManagement,
+                                   anchorImage: UIImage?,
+                                   physicalWidth: CGFloat?,
+                                   scene: HasAnchoring,
+                                   cardContents: [CardItem]) throws -> [ScreenAnnotation<CardItem>]
+}
+
+extension SceneLoadable {
+    func syncCardContentsWithScene(manager: ARManagement,
+                                   anchorImage: UIImage?,
+                                   physicalWidth: CGFloat?,
+                                   scene: HasAnchoring,
+                                   cardContents: [CardItem]) throws -> [ScreenAnnotation<CardItem>]
+    {
+        var annotations = [ScreenAnnotation<CardItem>]()
+
+        // An image should use world tracking so we set the configuration to prevent automatic switching to Image Tracking
+        // Object Detection inherently uses world tracking so an automatic configuration can be used
+        switch scene.anchoring.target {
+        case .image:
+            guard let image = anchorImage, let width = physicalWidth else { return [] }
+            manager.sceneRoot = scene
+            manager.addReferenceImage(for: image, with: width)
+        case .object:
+            manager.setAutomaticConfiguration()
+            manager.addAnchor(for: scene)
+        default:
+            throw LoadingStrategyError.anchorTypeNotSupportedError
+        }
+
+        for cardItem in cardContents {
+            guard let internalEntity = scene.findEntity(named: String(cardItem.id)) else {
+                throw LoadingStrategyError.entityNotFoundError(cardItem.id)
+            }
+            let annotation = ScreenAnnotation(card: cardItem)
+            annotation.setInternalEntity(with: internalEntity)
+            annotations.append(annotation)
+        }
+
+        return annotations
+    }
+}
+
 typealias AnchorID = UUID

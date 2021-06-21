@@ -10,7 +10,7 @@ import Foundation
 import RealityKit
 import SwiftUI
 
-/// A loading strategy that uses the RealityComposer app. After creating the Reality Composer scene, tthe entities in the scene correlate to a real world location relative to the image or object anchor.
+/// A loading strategy that uses the RealityComposer app. After creating the Reality Composer scene, the entities in the scene correlate to a real world location relative to the image or object anchor.
 /// This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
 /// Loading the data into the ARAnnotationViewModel should be done in the onAppear method.
 ///
@@ -31,7 +31,7 @@ import SwiftUI
 /// arModel.load(loadingStrategy: strategy)
 /// ```
 
-public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy where CardItem.ID: LosslessStringConvertible {
+public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy, SceneLoadable where CardItem.ID: LosslessStringConvertible {
     public var cardContents: [CardItem]
     public var anchorImage: UIImage?
     public var physicalWidth: CGFloat?
@@ -49,7 +49,7 @@ public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadin
 
     /**
      Constructor for loading annotations using Data from a JSON Array
-        JSON key/value::
+        JSON key/value:
          "id": String,
          "title": String,
          "descriptionText": String?,
@@ -87,34 +87,8 @@ public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadin
     
     /// Loads the Reality Composer Scene and extracts the Entities pairing them with the data that corresponds to their ID into a list of `ScreenAnnotation`
     public func load(with manager: ARManagement) throws -> [ScreenAnnotation<CardItem>] {
-        var annotations = [ScreenAnnotation<CardItem>]()
-        
-        guard let scene = try? RCScanner.loadScene(rcFileName: rcFile, sceneName: rcScene) else {
-            throw LoadingStrategyError.sceneLoadingFailedError
-        }
-        
-        // An image should use world tracking so we set the configuration to prevent automatic switching to Image Tracking
-        // Object Detection inherently uses world tracking so an automatic configuration can be used
-        switch scene.anchoring.target {
-        case .image:
-            guard let image = anchorImage, let width = physicalWidth else { return [] }
-            manager.sceneRoot = scene
-            manager.addReferenceImage(for: image, with: width)
-        case .object:
-            manager.setAutomaticConfiguration()
-            manager.addAnchor(for: scene)
-        default:
-            throw LoadingStrategyError.anchorTypeNotSupportedError
-        }
-        
-        for cardItem in self.cardContents {
-            guard let internalEntity = scene.findEntity(named: String(cardItem.id)) else {
-                throw LoadingStrategyError.entityNotFoundError(cardItem.id)
-            }
-            let annotation = ScreenAnnotation(card: cardItem)
-            annotation.setInternalEntity(with: internalEntity)
-            annotations.append(annotation)
-        }
+        let scene = try RCScanner.loadScene(rcFileName: self.rcFile, sceneName: self.rcScene)
+        let annotations = try syncCardContentsWithScene(manager: manager, anchorImage: anchorImage, physicalWidth: physicalWidth, scene: scene, cardContents: cardContents)
         
         return annotations
     }

@@ -22,11 +22,12 @@ struct ARCardsJSONLoadingContentView: View {
     }
     
     func loadInitialData() {
+        let realityFilePath = FileManager.default.getDocumentsDirectory().appendingPathComponent(FileManager.realityFiles).appendingPathComponent("ExampleRC.reality")
         guard let anchorImage = UIImage(named: "qrImage"), let url = Bundle.main.url(forResource: "Tests", withExtension: "json") else { return }
         
         do {
             let jsonData = try Data(contentsOf: url)
-            let strategy = try RealityComposerStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
+            let strategy = try RealityFileStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, realityFilePath: realityFilePath, rcScene: "ExampleScene")
             arModel.load(loadingStrategy: strategy)
         } catch {
             print(error)
