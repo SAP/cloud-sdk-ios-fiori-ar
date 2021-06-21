@@ -29,16 +29,7 @@ public protocol IconComponent {
     var icon_: Image? { get }
 }
 
-internal struct CodableCardItem: Codable {
-    var id: String
-    var title: String
-    var descriptionText: String?
-    var detailImage: Data?
-    var actionText: String?
-    var icon: String?
-}
-
-public struct DefaultCardItem: CardItemModel {
+public struct DecodableCardItem: CardItemModel {
     public var id: String
     public var title_: String
     public var descriptionText_: String?
@@ -56,7 +47,7 @@ public struct DefaultCardItem: CardItemModel {
     }
 }
 
-extension DefaultCardItem: Decodable {
+extension DecodableCardItem: Decodable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         

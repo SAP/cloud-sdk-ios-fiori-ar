@@ -9,7 +9,7 @@ import FioriARKit
 import SwiftUI
 
 struct ARCardsJSONLoadingContentView: View {
-    @StateObject var arModel = ARAnnotationViewModel<DefaultCardItem>()
+    @StateObject var arModel = ARAnnotationViewModel<DecodableCardItem>()
     
     var body: some View {
         SingleImageARCardView(arModel: arModel,
@@ -26,7 +26,7 @@ struct ARCardsJSONLoadingContentView: View {
         
         do {
             let jsonData = try Data(contentsOf: url)
-            let strategy = try RCProjectStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
+            let strategy = try RealityComposerStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
             arModel.load(loadingStrategy: strategy)
         } catch {
             print(error)

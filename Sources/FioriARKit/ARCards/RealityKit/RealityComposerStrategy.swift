@@ -31,7 +31,7 @@ import SwiftUI
 /// arModel.load(loadingStrategy: strategy)
 /// ```
 
-public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy where CardItem.ID: LosslessStringConvertible {
+public struct RealityComposerStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy where CardItem.ID: LosslessStringConvertible {
     public var cardContents: [CardItem]
     public var anchorImage: UIImage?
     public var physicalWidth: CGFloat?
@@ -77,8 +77,8 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
          }
         ]
      */
-    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String) throws where CardItem == DefaultCardItem {
-        self.cardContents = try JSONDecoder().decode([DefaultCardItem].self, from: jsonData)
+    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String) throws where CardItem == DecodableCardItem {
+        self.cardContents = try JSONDecoder().decode([DecodableCardItem].self, from: jsonData)
         self.anchorImage = anchorImage
         self.physicalWidth = physicalWidth
         self.rcFile = rcFile
