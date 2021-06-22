@@ -33,6 +33,11 @@ internal enum RCScanner {
         let anchorEntity = try RCScanner.Scene.loadAnchor(contentsOf: realityFileSceneURL)
         return self.createScene(from: anchorEntity)
     }
+    
+    internal static func loadSceneFromUsdzFile(usdzFileURL: URL) throws -> RCScanner.Scene {
+        let anchorEntity = try RCScanner.Scene.loadAnchor(contentsOf: usdzFileURL)
+        return self.createScene(from: anchorEntity)
+    }
 
     internal static func loadSceneAsync(rcFileName: String, completion: @escaping (Swift.Result<RCScanner.Scene, Swift.Error>) -> Void) {
         guard let realityFileURL = Foundation.Bundle(for: RCScanner.Scene.self).url(forResource: rcFileName, withExtension: "reality") else {
