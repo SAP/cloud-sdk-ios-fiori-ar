@@ -28,7 +28,11 @@ struct ContentView: View {
                 }
                 
                 NavigationLink(destination: ARCardsRealityFileLoadingContentView()) {
-                    Text("Reality File Example")
+                    Text("Load Reality File Example")
+                }
+                
+                NavigationLink(destination: ARCardsUSDZFileLoadingContentView()) {
+                    Text("Load USDZ File Example")
                 }
                 
                 NavigationLink(destination: DownloadsView()) {
