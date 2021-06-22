@@ -5,11 +5,5 @@
 # precedence.
 # https://help.github.com/en/articles/about-code-owners
 
-# Default owners for everything in the repo
-*                                 @SAP/cloud-sdk-ios-fioriarkit-admin
-
 # Owners for ARCards
-Sources/FioriIntegrationCards/*   @pgobriensap @MarcoEidinger
-
-# Owners for GitHub Integration
-.github/*                         @pgobriensap @MarcoEidinger
+Sources/FioriIntegrationCards/*   @pgobriensap
