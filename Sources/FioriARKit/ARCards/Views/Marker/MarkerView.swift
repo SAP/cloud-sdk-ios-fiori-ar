@@ -5,6 +5,7 @@
 //  Created by O'Brien, Patrick on 4/17/21.
 //
 
+import FioriThemeManager
 import SwiftUI
 
 public struct MarkerView: View {

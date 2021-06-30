@@ -5,6 +5,7 @@
 //  Created by O'Brien, Patrick on 4/22/21.
 //
 
+import FioriThemeManager
 import SwiftUI
 
 internal struct LineView: View {
