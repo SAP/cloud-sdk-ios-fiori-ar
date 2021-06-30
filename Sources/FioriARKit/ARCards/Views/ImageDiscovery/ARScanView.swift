@@ -5,7 +5,16 @@
 //  Created by O'Brien, Patrick on 4/8/21.
 //
 
+import FioriThemeManager
 import SwiftUI
+
+/**
+ Scanning View which displays a collapsable image to display for anchor detection. The anchor is still detectable when uncollapsed and the View will fade out after detection.
+ 
+  - Parameters:
+    - image: The image that is displayed in the View which represents a detectable anchor
+    - anchorPosition: The position of the anchor on screen after detection
+ */
 
 public struct ARScanView: View {
     let image: Image

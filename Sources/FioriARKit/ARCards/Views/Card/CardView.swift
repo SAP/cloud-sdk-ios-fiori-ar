@@ -5,6 +5,8 @@
 //  Created by O'Brien, Patrick on 4/17/21.
 //
 
+import FioriSwiftUICore
+import FioriThemeManager
 import SwiftUI
 
 extension Fiori {
