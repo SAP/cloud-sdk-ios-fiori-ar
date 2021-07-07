@@ -44,17 +44,24 @@
 ***
 ### Summary
 
-This project is a SwiftUI implementation of the SAP Fiori for iOS ARKit, and is meant to leverage the Augmented Reality capabilities from the frameworks provided by Apple for various Enterprise use cases.
+This project is a SwiftUI implementation of the Augmented Reality (AR) patterns in the [SAP Fiori for iOS Design Guidelines](https://experience.sap.com/fiori-design-ios/).
 
-There is currently support for `AR Cards`. This refers to Cards that match with a corresponding Marker that represent annotations relative to an image or object in the real world.
+Currently supported:
+- [AR Annotations](https://experience.sap.com/fiori-design-ios/article/ar-annotations/)
 
-## AR Cards
+## AR Annotations
 
 https://user-images.githubusercontent.com/77754056/121744202-2ea88c80-cac8-11eb-811d-9c9edb6423fa.mp4
 
-The AR Cards use case is essentially annotating the real world represented by a marker that corresponds to data displayed in a card with an optional action. SwiftUI is used to render the content at these positions since 3D modeling is expensive, tedious, and time consuming. There is a one to one mapping of markers to cards. The current strategy supported for scene creation is by using Reality Composer. Within Reality Composer a scene of annotations can be composed relative to an image or object. Data that's associated with these real world positions can be loaded and  matched into it's respective Card. Supports `Image` and `Object` anchors.
+Annotations refer to [Cards](https://experience.sap.com/fiori-design-ios/article/ar-cards/) that match with a corresponding [Marker](https://experience.sap.com/fiori-design-ios/article/ar-marker/) located relative to an image or object in the real world. To view annotations in the world view, the user scans the image / object with the [AR Scanner](https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner).
 
-The Cards and Markers can also leverage SwiftUI Viewbuilders allowing for custom designs.
+3D modeling is not required to represent AR annotations as the respective controls (`ARScanView`, `MarkerView` and `CardView`) are implemented with SwiftUI in this package.
+
+An app developer needs to provide a scene of markers relative to an `Image` or `Object` anchor. Such scene creation is possible with Apple's [Reality Composer](https://developer.apple.com/augmented-reality/tools/) tool.
+
+Depending on how the scene is stored (`rcproject`, `.reality` or `.usdz` files) the app developer has to specify an appropiate loading strategy to populate the scene and the associated card data.
+
+Cards support SwiftUI [ViewBuilder](https://developer.apple.com/documentation/swiftui/viewbuilder) to allow custom design.
 
 ### Usage
 
@@ -86,6 +93,8 @@ CardItem Models Conform to `CardItemComponent`. The *name* of the Entity (Sphere
 ##### Creating the ContentView and loading the data
 
 ```swift
+import FioriARKit
+
 struct FioriARKitCardsExample: View {
     @StateObject var arModel = ARAnnotationViewModel<ExampleCardModel>()
     
@@ -130,11 +139,9 @@ In both cases, **xcodebuild** tooling will manage cloning and updating the repos
 
 ## Configuration
 
-**FioriARKit** as umbrella product currently will contain everything the package as to offer. As the package evolves the package could be split into multiple products for different use cases.
+**FioriARKit** as umbrella product currently will contain everything the package has to offer. As the package evolves the package could be split into multiple products for different use cases.
 
 ## Limitations
-
-The module is currently in development, and should not yet be used productively. Breaking changes may occur in 0.x.x release(s)
 
 Key gaps which are present at time of open-source project launch:
 - An authoring flow for pinning/editing an annotation in app
@@ -147,7 +154,7 @@ See **Limitations**.
 
 ## How to obtain support
 
-Support for the modules is provided thorough this open-source repository. Please file Github Issues for any issues experienced, or questions.  
+[Create a GitHub issue](https://github.com/SAP/cloud-sdk-ios-fioriarkit/issues/new/choose) to create bug report, file a feature request or ask a question.
 
 ## Contributing
 
