@@ -91,11 +91,11 @@ Cards and Markers support SwiftUI [ViewBuilder](https://developer.apple.com/docu
 
 ### CardItemModel
 
-The data thats associated with the Annotations from the scene are loaded into the project as a list of app developer `CardItem` models that must conform to `CardItemComponent`. The *name* of the Entity (sphere) from Reality Composer corresponds to the *id* property of the Model. The list of initial CardItems are passed into the chosen loading strategy with the scene.
+A loading strategy accepts an array of elements, each element conforming to the `CardItemModel` protocol, to populate card-related data. The *id* property of the model has to correspond to the *name* of the Entity (sphere) from Reality Composer.
 
 ### JSON
 
-Each of the loading strategies also have an initializer for accepting the data from a top level JSON array. The data that's provided by JSON will internally be constrained to using `DecodableCardItem`, a provided concrete implementation of the `CardItemModel`.
+Each of the loading strategies also has an initializer to accept`Data` represented by a JSON array.
 
 ```swift
 // JSON key/value:
@@ -109,15 +109,15 @@ Each of the loading strategies also have an initializer for accepting the data f
 
 ### Loading Strategies
 
-The supported loading strategies (`UsdzFileStrategy`, `RealityFileStrategy`, and `RCProjectStrategy`) consume the initial data required to create the AR Experience and bind the locations from the Reality Composer scene to the data for each `MarkerView` and `CardView`. For an `Image` anchor, the image that will be detected must be passed into the strategies with the physical width of the real world image to create an `ARReferenceImage` for detection. For an `Object` anchor the anchorImage and physicalWidth can be nil.
+The supported loading strategies (`UsdzFileStrategy`, `RealityFileStrategy`, and `RCProjectStrategy`) require, in addition to the scene and card-related data, information about the anchor used for detecting a scene. Using an `Image` anchor requires the app developer to provide anchorImage and its physicalWidth as initializer parameters. For an `Object` anchor the anchorImage and physicalWidth parameters can be nil.
 
 The scene can be represented in different file types and each strategy requires different data and setup.
 - **USDZ Strategy:** Requires a URL path to the `.usdz` file
 - **Reality Strategy:** Requires a URL path to the `.reality` file and the name of the scene 
-- **RCProject Strategy:** The saved `.rcproject` can be dragged into XCode and the name of the `.rcproject` file and the scene name are required.
+- **RCProject Strategy:** Requires the name of the `.rcproject` file and the name of the scene
 
 > **Note**:
-- RCProject strategy requires the .rcproject file as a resource in XCode at build time
+- The RCProject strategy requires that the `.rcproject` file is part of the application bundle so that the file is available already during build time. Drag the file into Xcode to do so.
 
 ## Example Usage: Creating the ContentView and loading the data
 
@@ -141,7 +141,7 @@ struct FioriARKitCardsExample: View {
         })
         .onAppear(perform: loadInitialData)
     }
-
+// Example to use a `UsdzFileStrategy` to populate scene related information (stored in a .usdz file which could have been fetched from a remote server during runtime) as well as card-related information (stored in a .json file which could have been fetched from a remote server as well)
     func loadInitialData() {
         let usdzFilePath = FileManager.default.getDocumentsDirectory().appendingPathComponent(FileManager.usdzFiles).appendingPathComponent("ExampleRC.usdz")
         guard let anchorImage = UIImage(named: "qrImage"), 
