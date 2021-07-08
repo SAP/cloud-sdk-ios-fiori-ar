@@ -42,33 +42,41 @@
 </div>
 
 ***
-### Summary
+# Summary
 
-This project is a SwiftUI implementation of the SAP Fiori for iOS ARKit, and is meant to leverage the Augmented Reality capabilities from the frameworks provided by Apple for various Enterprise use cases.
+This project is a SwiftUI implementation of the Augmented Reality (AR) patterns in the [SAP Fiori for iOS Design Guidelines](https://experience.sap.com/fiori-design-ios/).
 
-There is currently support for `AR Cards`. This refers to Cards that match with a corresponding Marker that represent annotations relative to an image or object in the real world.
+Currently supported:
+- [AR Annotations](https://experience.sap.com/fiori-design-ios/article/ar-annotations/)
 
-## AR Cards
+# AR Annotations
 
 https://user-images.githubusercontent.com/77754056/121744202-2ea88c80-cac8-11eb-811d-9c9edb6423fa.mp4
 
-The AR Cards use case is essentially annotating the real world represented by a marker that corresponds to data displayed in a card with an optional action. SwiftUI is used to render the content at these positions since 3D modeling is expensive, tedious, and time consuming. There is a one to one mapping of markers to cards. The current strategy supported for scene creation is by using Reality Composer. Within Reality Composer a scene of annotations can be composed relative to an image or object. Data that's associated with these real world positions can be loaded and  matched into it's respective Card. Supports `Image` and `Object` anchors.
+Annotations refer to [Cards](https://experience.sap.com/fiori-design-ios/article/ar-cards/) that match with a corresponding [Marker](https://experience.sap.com/fiori-design-ios/article/ar-marker/) located relative to an image or object in the real world. To view annotations in the world view, the user scans the image / object with the [AR Scanner](https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner).
 
-The Cards and Markers can also leverage SwiftUI Viewbuilders allowing for custom designs.
+3D modeling is not required to represent AR annotations as the respective controls (`ARScanView`, `MarkerView` and `CardView`) are implemented with SwiftUI in this package.
 
-### Usage
+An app developer needs to provide a scene of markers relative to an `Image` or `Object` anchor. Such scene creation is possible with Apple's [Reality Composer](https://developer.apple.com/augmented-reality/tools/) tool.
 
-#### Reality Composer Strategy
+Depending on how the scene is stored (`.rcproject`, `.reality` or `.usdz` files) the app developer has to specify an appropiate loading strategy to populate the scene and the associated card data.
 
-##### Composing the scene
+Cards and Markers support SwiftUI [ViewBuilder](https://developer.apple.com/documentation/swiftui/viewbuilder) to allow custom design.
+
+## Reality Composer
+
+### Composing the scene
 
 1. Open the Reality Composer app and create a scene with an image or object anchor
 2. Choose an image or scan an object and give the scene a name e.g. ExampleScene
-3. Place spheres in the desired position
+3. Place spheres in the desired positions
 4. Preview in AR to fine tune
 5. Name the spheres with a type that conforms to LosslessStringConvertable
-6. The name of the sphere will correspond to the `CardItemModel` ID
-7. Add the rcproject file in your xcode project
+6. The name of the sphere will correspond to the `CardItemModel` id
+7. Export the scene depending on the chosen supported loading strategy
+    - Export the scene as `.usdz` file (Enable usdz export in preferences or iOS app settings)
+    - Export the scene as a `.reality` file
+    - Save the entire project as an `.rcproject` with a single scene
 
 > **Notes**:
 - Reality Composer is required to scan an object when choosing an Object Anchor.
@@ -79,15 +87,45 @@ The Cards and Markers can also leverage SwiftUI Viewbuilders allowing for custom
 <img height="400" alt="rcDemo1" src="https://user-images.githubusercontent.com/77754056/119742939-784d7200-be4e-11eb-928d-6d83b07e49ff.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="400" alt="rcDemo2" src="https://user-images.githubusercontent.com/77754056/119743047-a6cb4d00-be4e-11eb-8543-4ed018fa25f3.jpeg">
 </p>
 
-##### Data Consumption
+## Data Consumption
 
-CardItem Models Conform to `CardItemComponent`. The *name* of the Entity (Sphere) from Reality Composer corresponds to the *id* property of the Model. The list of initial CardItems are passed into the `RealityComposerStrategy` with the Reality Composer rcproject File Name and the name of the scene. For an image Anchor, the image that will be detected must be passed into the strategy to create an `ARReferenceImage`.
+### CardItemModel
 
-##### Creating the ContentView and loading the data
+A loading strategy accepts an array of elements, each element conforming to the `CardItemModel` protocol, to populate card-related data. The *id* property of the model has to correspond to the *name* of the Entity (sphere) from Reality Composer.
+
+### JSON
+
+Each of the loading strategies also has an initializer to accept`Data` represented by a JSON array.
 
 ```swift
+// JSON key/value:
+"id": String,
+"title_": String,
+"descriptionText_": String?,
+"detailImage_": Data?, // base64 encoding of Image
+"actionText_": String?,
+"icon_": String? // systemName of SFSymbol
+```
+
+### Loading Strategies
+
+The supported loading strategies (`UsdzFileStrategy`, `RealityFileStrategy`, and `RCProjectStrategy`) require, in addition to the scene and card-related data, information about the anchor used for detecting a scene. Using an `Image` anchor requires the app developer to provide anchorImage and its physicalWidth as initializer parameters. For an `Object` anchor the anchorImage and physicalWidth parameters can be nil.
+
+The scene can be represented in different file types and each strategy requires different data and setup.
+- **USDZ Strategy:** Requires a URL path to the `.usdz` file
+- **Reality Strategy:** Requires a URL path to the `.reality` file and the name of the scene 
+- **RCProject Strategy:** Requires the name of the `.rcproject` file and the name of the scene
+
+> **Note**:
+- The RCProject strategy requires that the `.rcproject` file is part of the application bundle so that the file is available already during build time. Drag the file into Xcode to do so.
+
+## Example Usage: Creating the ContentView and loading the data
+
+```swift
+import FioriARKit
+
 struct FioriARKitCardsExample: View {
-    @StateObject var arModel = ARAnnotationViewModel<ExampleCardModel>()
+    @StateObject var arModel = ARAnnotationViewModel<DecodableCardItem>()
     
     var body: some View {
     /**
@@ -99,16 +137,23 @@ struct FioriARKitCardsExample: View {
         - cardAction: Card Action
     */
         SingleImageARCardView(arModel: arModel, image: Image("qrImage"), cardAction: { id in
-            // action to pass to corresponding card from the CardItemModel ID
+            // action to pass to corresponding card from the CardItemModel id
         })
         .onAppear(perform: loadInitialData)
     }
-
+// Example to use a `UsdzFileStrategy` to populate scene related information (stored in a .usdz file which could have been fetched from a remote server during runtime) as well as card-related information (stored in a .json file which could have been fetched from a remote server as well)
     func loadInitialData() {
-        let cardItems = [ExampleCardModel(id: "WasherFluid", title_: "Recommended Washer Fluid"), ExampleCardModel(id: "OilStick", title_: "Check Oil Stick")]
-        guard let anchorImage = UIImage(named: "qrImage") else { return }
-        let loadingStrategy = RealityComposerStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "realityComposerFileName", rcScene: "sceneName")
-        arModel.load(loadingStrategy: loadingStrategy)
+        let usdzFilePath = FileManager.default.getDocumentsDirectory().appendingPathComponent(FileManager.usdzFiles).appendingPathComponent("ExampleRC.usdz")
+        guard let anchorImage = UIImage(named: "qrImage"), 
+              let jsonUrl = Bundle.main.url(forResource: "Tests", withExtension: "json") else { return }
+        
+        do {
+            let jsonData = try Data(contentsOf: jsonUrl)
+            let strategy = try UsdzFileStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, usdzFilePath: usdzFilePath)
+            arModel.load(loadingStrategy: strategy)
+        } catch {
+            print(error)
+        }
     }
 }
 ```
@@ -130,11 +175,9 @@ In both cases, **xcodebuild** tooling will manage cloning and updating the repos
 
 ## Configuration
 
-**FioriARKit** as umbrella product currently will contain everything the package as to offer. As the package evolves the package could be split into multiple products for different use cases.
+**FioriARKit** as umbrella product currently will contain everything the package has to offer. As the package evolves the package could be split into multiple products for different use cases.
 
 ## Limitations
-
-The module is currently in development, and should not yet be used productively. Breaking changes may occur in 0.x.x release(s)
 
 Key gaps which are present at time of open-source project launch:
 - An authoring flow for pinning/editing an annotation in app
@@ -147,7 +190,7 @@ See **Limitations**.
 
 ## How to obtain support
 
-Support for the modules is provided thorough this open-source repository. Please file Github Issues for any issues experienced, or questions.  
+[Create a GitHub issue](https://github.com/SAP/cloud-sdk-ios-fioriarkit/issues/new/choose) to create bug report, file a feature request or ask a question.
 
 ## Contributing
 

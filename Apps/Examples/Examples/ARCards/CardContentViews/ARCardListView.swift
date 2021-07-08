@@ -10,12 +10,20 @@ import SwiftUI
 struct ARCardListView: View {
     var body: some View {
         List {
-            NavigationLink(destination: ARCardsDefaultContentView()) {
-                Text("ARCards - Default")
+            NavigationLink(destination: ARCardsUSDZFileLoadingContentView()) {
+                Text("USDZ File Strategy")
             }
             
+            NavigationLink(destination: ARCardsRealityFileLoadingContentView()) {
+                Text("Reality File Strategy")
+            }
+            
+            NavigationLink(destination: ARCardsDefaultContentView()) {
+                Text("RCProject Strategy")
+            }
+
             NavigationLink(destination: ARCardsViewBuilderContentView()) {
-                Text("ARCards - ViewBuilder")
+                Text("ViewBuilder Example")
             }
             
             NavigationLink(destination: CarEngineExampleContentView()) {
@@ -24,10 +32,6 @@ struct ARCardListView: View {
             
             NavigationLink(destination: ARCardsJSONLoadingContentView()) {
                 Text("JSON Decoding Example")
-            }
-            
-            NavigationLink(destination: ARCardsRealityFileLoadingContentView()) {
-                Text("Reality File Example")
             }
         }.navigationBarTitle("ARCards")
     }

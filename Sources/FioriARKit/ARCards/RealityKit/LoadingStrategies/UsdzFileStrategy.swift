@@ -45,31 +45,31 @@ public struct UsdzFileStrategy<CardItem: CardItemModel>: AnnotationLoadingStrate
     
     /**
      Constructor for loading annotations using Data from a JSON Array
-        JSON key/value::
+        JSON key/value:
          "id": String,
-         "title": String,
-         "descriptionText": String?,
-         "detailImage": Data?, // base64 encoding of Image
-         "actionText": String?,
-         "icon": String? // systemName of SFSymbol
+         "title_": String,
+         "descriptionText_": String?,
+         "detailImage_": Data?, // base64 encoding of Image
+         "actionText_": String?,
+         "icon_": String? // systemName of SFSymbol
      
         Example:
         [
          {
              "id": "WasherFluid",
-             "title": "Recommended Washer Fluid",
-             "descriptionText": "Rain X",
-             "detailImage": null,
-             "actionText": null,
-             "icon": null
+             "title_": "Recommended Washer Fluid",
+             "descriptionText_": "Rain X",
+             "detailImage_": null,
+             "actionText_": null,
+             "icon_": null
          },
          {
              "id": "Coolant",
-             "title": "Genuine Coolant",
-             "descriptionText": "Price: 20.99",
-             "detailImage": "iVBORw0KGgoAAAANSUhE...",
-             "actionText": "Order",
-             "icon": "cart.fill"
+             "title_": "Genuine Coolant",
+             "descriptionText_": "Price: 20.99",
+             "detailImage_": "iVBORw0KGgoAAAANSUhE...",
+             "actionText_": "Order",
+             "icon_": "cart.fill"
          }
         ]
      */
