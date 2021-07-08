@@ -42,14 +42,14 @@
 </div>
 
 ***
-### Summary
+# Summary
 
 This project is a SwiftUI implementation of the Augmented Reality (AR) patterns in the [SAP Fiori for iOS Design Guidelines](https://experience.sap.com/fiori-design-ios/).
 
 Currently supported:
 - [AR Annotations](https://experience.sap.com/fiori-design-ios/article/ar-annotations/)
 
-## AR Annotations
+# AR Annotations
 
 https://user-images.githubusercontent.com/77754056/121744202-2ea88c80-cac8-11eb-811d-9c9edb6423fa.mp4
 
@@ -59,23 +59,24 @@ Annotations refer to [Cards](https://experience.sap.com/fiori-design-ios/article
 
 An app developer needs to provide a scene of markers relative to an `Image` or `Object` anchor. Such scene creation is possible with Apple's [Reality Composer](https://developer.apple.com/augmented-reality/tools/) tool.
 
-Depending on how the scene is stored (`rcproject`, `.reality` or `.usdz` files) the app developer has to specify an appropiate loading strategy to populate the scene and the associated card data.
+Depending on how the scene is stored (`.rcproject`, `.reality` or `.usdz` files) the app developer has to specify an appropiate loading strategy to populate the scene and the associated card data.
 
-Cards support SwiftUI [ViewBuilder](https://developer.apple.com/documentation/swiftui/viewbuilder) to allow custom design.
+Cards and Markers support SwiftUI [ViewBuilder](https://developer.apple.com/documentation/swiftui/viewbuilder) to allow custom design.
 
-### Usage
+## Reality Composer
 
-#### Reality Composer Strategy
-
-##### Composing the scene
+### Composing the scene
 
 1. Open the Reality Composer app and create a scene with an image or object anchor
 2. Choose an image or scan an object and give the scene a name e.g. ExampleScene
-3. Place spheres in the desired position
+3. Place spheres in the desired positions
 4. Preview in AR to fine tune
 5. Name the spheres with a type that conforms to LosslessStringConvertable
-6. The name of the sphere will correspond to the `CardItemModel` ID
-7. Add the rcproject file in your xcode project
+6. The name of the sphere will correspond to the `CardItemModel` id
+7. Export the scene depending on the chosen supported loading strategy
+    - Export the scene as `.usdz` file (Enable usdz export in preferences or iOS app settings)
+    - Export the scene as a `.reality` file
+    - Save the entire project as an `.rcproject` with a single scene
 
 > **Notes**:
 - Reality Composer is required to scan an object when choosing an Object Anchor.
@@ -86,17 +87,45 @@ Cards support SwiftUI [ViewBuilder](https://developer.apple.com/documentation/sw
 <img height="400" alt="rcDemo1" src="https://user-images.githubusercontent.com/77754056/119742939-784d7200-be4e-11eb-928d-6d83b07e49ff.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="400" alt="rcDemo2" src="https://user-images.githubusercontent.com/77754056/119743047-a6cb4d00-be4e-11eb-8543-4ed018fa25f3.jpeg">
 </p>
 
-##### Data Consumption
+## Data Consumption
 
-CardItem Models Conform to `CardItemComponent`. The *name* of the Entity (Sphere) from Reality Composer corresponds to the *id* property of the Model. The list of initial CardItems are passed into the `RealityComposerStrategy` with the Reality Composer rcproject File Name and the name of the scene. For an image Anchor, the image that will be detected must be passed into the strategy to create an `ARReferenceImage`.
+### CardItemModel
 
-##### Creating the ContentView and loading the data
+The data thats associated with the Annotations from the scene are loaded into the project as a list of app developer `CardItem` models that must conform to `CardItemComponent`. The *name* of the Entity (sphere) from Reality Composer corresponds to the *id* property of the Model. The list of initial CardItems are passed into the chosen loading strategy with the scene.
+
+### JSON
+
+Each of the loading strategies also have an initializer for accepting the data from a top level JSON array. The data that's provided by JSON will internally be constrained to using `DecodableCardItem`, a provided concrete implementation of the `CardItemModel`.
+
+```swift
+// JSON key/value:
+"id": String,
+"title_": String,
+"descriptionText_": String?,
+"detailImage_": Data?, // base64 encoding of Image
+"actionText_": String?,
+"icon_": String? // systemName of SFSymbol
+```
+
+### Loading Strategies
+
+The supported loading strategies (`UsdzFileStrategy`, `RealityFileStrategy`, and `RCProjectStrategy`) consume the initial data required to create the AR Experience and bind the locations from the Reality Composer scene to the data for each `MarkerView` and `CardView`. For an `Image` anchor, the image that will be detected must be passed into the strategies with the physical width of the real world image to create an `ARReferenceImage` for detection. For an `Object` anchor the anchorImage and physicalWidth can be nil.
+
+The scene can be represented in different file types and each strategy requires different data and setup.
+- **USDZ Strategy:** Requires a URL path to the `.usdz` file
+- **Reality Strategy:** Requires a URL path to the `.reality` file and the name of the scene 
+- **RCProject Strategy:** The saved `.rcproject` can be dragged into XCode and the name of the `.rcproject` file and the scene name are required.
+
+> **Note**:
+- RCProject strategy requires the .rcproject file as a resource in XCode at build time
+
+## Example Usage: Creating the ContentView and loading the data
 
 ```swift
 import FioriARKit
 
 struct FioriARKitCardsExample: View {
-    @StateObject var arModel = ARAnnotationViewModel<ExampleCardModel>()
+    @StateObject var arModel = ARAnnotationViewModel<DecodableCardItem>()
     
     var body: some View {
     /**
@@ -108,16 +137,23 @@ struct FioriARKitCardsExample: View {
         - cardAction: Card Action
     */
         SingleImageARCardView(arModel: arModel, image: Image("qrImage"), cardAction: { id in
-            // action to pass to corresponding card from the CardItemModel ID
+            // action to pass to corresponding card from the CardItemModel id
         })
         .onAppear(perform: loadInitialData)
     }
 
     func loadInitialData() {
-        let cardItems = [ExampleCardModel(id: "WasherFluid", title_: "Recommended Washer Fluid"), ExampleCardModel(id: "OilStick", title_: "Check Oil Stick")]
-        guard let anchorImage = UIImage(named: "qrImage") else { return }
-        let loadingStrategy = RealityComposerStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "realityComposerFileName", rcScene: "sceneName")
-        arModel.load(loadingStrategy: loadingStrategy)
+        let usdzFilePath = FileManager.default.getDocumentsDirectory().appendingPathComponent(FileManager.usdzFiles).appendingPathComponent("ExampleRC.usdz")
+        guard let anchorImage = UIImage(named: "qrImage"), 
+              let jsonUrl = Bundle.main.url(forResource: "Tests", withExtension: "json") else { return }
+        
+        do {
+            let jsonData = try Data(contentsOf: jsonUrl)
+            let strategy = try UsdzFileStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, usdzFilePath: usdzFilePath)
+            arModel.load(loadingStrategy: strategy)
+        } catch {
+            print(error)
+        }
     }
 }
 ```
