@@ -82,30 +82,45 @@
 </div>
 
 <hr>
-<h3 id='summary' class='heading'>Summary</h3>
+<h1 id='summary' class='heading'>Summary</h1>
 
-<p>This project is a SwiftUI implementation of the SAP Fiori for iOS ARKit, and is meant to leverage the Augmented Reality capabilities from the frameworks provided by Apple for various Enterprise use cases.</p>
+<p>This project is a SwiftUI implementation of the Augmented Reality (AR) patterns in the <a href="https://experience.sap.com/fiori-design-ios/">SAP Fiori for iOS Design Guidelines</a>.</p>
 
-<p>There is currently support for <code>AR Cards</code>. This refers to Cards that match with a corresponding Marker that represent annotations relative to an image or object in the real world.</p>
-<h2 id='ar-cards' class='heading'>AR Cards</h2>
+<p>Currently supported:</p>
+
+<ul>
+<li><a href="https://experience.sap.com/fiori-design-ios/article/ar-annotations/">AR Annotations</a></li>
+</ul>
+<h1 id='ar-annotations' class='heading'>AR Annotations</h1>
 
 <p><a href="https://user-images.githubusercontent.com/77754056/121744202-2ea88c80-cac8-11eb-811d-9c9edb6423fa.mp4">https://user-images.githubusercontent.com/77754056/121744202-2ea88c80-cac8-11eb-811d-9c9edb6423fa.mp4</a></p>
 
-<p>The AR Cards use case is essentially annotating the real world represented by a marker that corresponds to data displayed in a card with an optional action. SwiftUI is used to render the content at these positions since 3D modeling is expensive, tedious, and time consuming. There is a one to one mapping of markers to cards. The current strategy supported for scene creation is by using Reality Composer. Within Reality Composer a scene of annotations can be composed relative to an image or object. Data that&rsquo;s associated with these real world positions can be loaded and  matched into it&rsquo;s respective Card. Supports <code>Image</code> and <code>Object</code> anchors.</p>
+<p>Annotations refer to <a href="https://experience.sap.com/fiori-design-ios/article/ar-cards/">Cards</a> that match with a corresponding <a href="https://experience.sap.com/fiori-design-ios/article/ar-marker/">Marker</a> located relative to an image or object in the real world. To view annotations in the world view, the user scans the image / object with the <a href="https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner">AR Scanner</a>.</p>
 
-<p>The Cards and Markers can also leverage SwiftUI Viewbuilders allowing for custom designs.</p>
-<h3 id='usage' class='heading'>Usage</h3>
-<h4 id='reality-composer-strategy' class='heading'>Reality Composer Strategy</h4>
-<h5 id='composing-the-scene' class='heading'>Composing the scene</h5>
+<p>3D modeling is not required to represent AR annotations as the respective controls (<code><a href="Structs/ARScanView.html">ARScanView</a></code>, <code><a href="Structs/MarkerView.html">MarkerView</a></code> and <code><a href="Structs/CardView.html">CardView</a></code>) are implemented with SwiftUI in this package.</p>
+
+<p>An app developer needs to provide a scene of markers relative to an <code>Image</code> or <code>Object</code> anchor. Such scene creation is possible with Apple&rsquo;s <a href="https://developer.apple.com/augmented-reality/tools/">Reality Composer</a> tool.</p>
+
+<p>Depending on how the scene is stored (<code>.rcproject</code>, <code>.reality</code> or <code>.usdz</code> files) the app developer has to specify an appropiate loading strategy to populate the scene and the associated card data.</p>
+
+<p>Cards and Markers support SwiftUI <a href="https://developer.apple.com/documentation/swiftui/viewbuilder">ViewBuilder</a> to allow custom design.</p>
+<h2 id='reality-composer' class='heading'>Reality Composer</h2>
+<h3 id='composing-the-scene' class='heading'>Composing the scene</h3>
 
 <ol>
 <li>Open the Reality Composer app and create a scene with an image or object anchor</li>
 <li>Choose an image or scan an object and give the scene a name e.g. ExampleScene</li>
-<li>Place spheres in the desired position</li>
+<li>Place spheres in the desired positions</li>
 <li>Preview in AR to fine tune</li>
 <li>Name the spheres with a type that conforms to LosslessStringConvertable</li>
-<li>The name of the sphere will correspond to the <code><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></code> ID</li>
-<li>Add the rcproject file in your xcode project</li>
+<li>The name of the sphere will correspond to the <code><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></code> id</li>
+<li>Export the scene depending on the chosen supported loading strategy
+
+<ul>
+<li>Export the scene as <code>.usdz</code> file (Enable usdz export in preferences or iOS app settings)</li>
+<li>Export the scene as a <code>.reality</code> file</li>
+<li>Save the entire project as an <code>.rcproject</code> with a single scene</li>
+</ul></li>
 </ol>
 
 <blockquote>
@@ -121,12 +136,45 @@
 <p align="center">
 <img height="400" alt="rcDemo1" src="https://user-images.githubusercontent.com/77754056/119742939-784d7200-be4e-11eb-928d-6d83b07e49ff.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="400" alt="rcDemo2" src="https://user-images.githubusercontent.com/77754056/119743047-a6cb4d00-be4e-11eb-8543-4ed018fa25f3.jpeg">
 </p>
-<h5 id='data-consumption' class='heading'>Data Consumption</h5>
+<h2 id='data-consumption' class='heading'>Data Consumption</h2>
+<h3 id='carditemmodel' class='heading'>CardItemModel</h3>
 
-<p>CardItem Models Conform to <code>CardItemComponent</code>. The <em>name</em> of the Entity (Sphere) from Reality Composer corresponds to the <em>id</em> property of the Model. The list of initial CardItems are passed into the <code><a href="Structs/RealityComposerStrategy.html">RealityComposerStrategy</a></code> with the Reality Composer rcproject File Name and the name of the scene. For an image Anchor, the image that will be detected must be passed into the strategy to create an <code>ARReferenceImage</code>.</p>
-<h5 id='creating-the-contentview-and-loading-the-data' class='heading'>Creating the ContentView and loading the data</h5>
-<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">FioriARKitCardsExample</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
-    <span class="kd">@StateObject</span> <span class="k">var</span> <span class="nv">arModel</span> <span class="o">=</span> <span class="kt">ARAnnotationViewModel</span><span class="o">&lt;</span><span class="kt">ExampleCardModel</span><span class="o">&gt;</span><span class="p">()</span>
+<p>A loading strategy accepts an array of elements, each element conforming to the <code><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></code> protocol, to populate card-related data. The <em>id</em> property of the model has to correspond to the <em>name</em> of the Entity (sphere) from Reality Composer.</p>
+<h3 id='json' class='heading'>JSON</h3>
+
+<p>Each of the loading strategies also has an initializer to accept<code>Data</code> represented by a JSON array.</p>
+<pre class="highlight swift"><code><span class="c1">// JSON key/value:</span>
+<span class="s">"id"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+<span class="s">"title_"</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+<span class="s">"descriptionText_"</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+<span class="s">"detailImage_"</span><span class="p">:</span> <span class="kt">Data</span><span class="p">?,</span> <span class="c1">// base64 encoding of Image</span>
+<span class="s">"actionText_"</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+<span class="s">"icon_"</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="c1">// systemName of SFSymbol</span>
+</code></pre>
+<h3 id='loading-strategies' class='heading'>Loading Strategies</h3>
+
+<p>The supported loading strategies (<code><a href="Structs/UsdzFileStrategy.html">UsdzFileStrategy</a></code>, <code><a href="Structs/RealityFileStrategy.html">RealityFileStrategy</a></code>, and <code><a href="Structs/RCProjectStrategy.html">RCProjectStrategy</a></code>) require, in addition to the scene and card-related data, information about the anchor used for detecting a scene. Using an <code>Image</code> anchor requires the app developer to provide anchorImage and its physicalWidth as initializer parameters. For an <code>Object</code> anchor the anchorImage and physicalWidth parameters can be nil.</p>
+
+<p>The scene can be represented in different file types and each strategy requires different data and setup.</p>
+
+<ul>
+<li><strong>USDZ Strategy:</strong> Requires a URL path to the <code>.usdz</code> file</li>
+<li><strong>Reality Strategy:</strong> Requires a URL path to the <code>.reality</code> file and the name of the scene</li>
+<li><strong>RCProject Strategy:</strong> Requires the name of the <code>.rcproject</code> file and the name of the scene</li>
+</ul>
+
+<blockquote>
+<p><strong>Note</strong>:</p>
+
+<ul>
+<li>The RCProject strategy requires that the <code>.rcproject</code> file is part of the application bundle so that the file is available already during build time. Drag the file into Xcode to do so.</li>
+</ul>
+</blockquote>
+<h2 id='example-usage-creating-the-contentview-and-loading-the-data' class='heading'>Example Usage: Creating the ContentView and loading the data</h2>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">FioriARKit</span>
+
+<span class="kd">struct</span> <span class="kt">FioriARKitCardsExample</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kd">@StateObject</span> <span class="k">var</span> <span class="nv">arModel</span> <span class="o">=</span> <span class="kt">ARAnnotationViewModel</span><span class="o">&lt;</span><span class="kt">DecodableCardItem</span><span class="o">&gt;</span><span class="p">()</span>
 
     <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
     <span class="cm">/**
@@ -138,16 +186,23 @@
         - cardAction: Card Action
     */</span>
         <span class="kt">SingleImageARCardView</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="n">arModel</span><span class="p">,</span> <span class="nv">image</span><span class="p">:</span> <span class="kt">Image</span><span class="p">(</span><span class="s">"qrImage"</span><span class="p">),</span> <span class="nv">cardAction</span><span class="p">:</span> <span class="p">{</span> <span class="n">id</span> <span class="k">in</span>
-            <span class="c1">// action to pass to corresponding card from the CardItemModel ID</span>
+            <span class="c1">// action to pass to corresponding card from the CardItemModel id</span>
         <span class="p">})</span>
         <span class="o">.</span><span class="nf">onAppear</span><span class="p">(</span><span class="nv">perform</span><span class="p">:</span> <span class="n">loadInitialData</span><span class="p">)</span>
     <span class="p">}</span>
-
+<span class="c1">// Example to use a `UsdzFileStrategy` to populate scene related information (stored in a .usdz file which could have been fetched from a remote server during runtime) as well as card-related information (stored in a .json file which could have been fetched from a remote server as well)</span>
     <span class="kd">func</span> <span class="nf">loadInitialData</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">let</span> <span class="nv">cardItems</span> <span class="o">=</span> <span class="p">[</span><span class="kt">ExampleCardModel</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="s">"WasherFluid"</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"Recommended Washer Fluid"</span><span class="p">),</span> <span class="kt">ExampleCardModel</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="s">"OilStick"</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"Check Oil Stick"</span><span class="p">)]</span>
-        <span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
-        <span class="k">let</span> <span class="nv">loadingStrategy</span> <span class="o">=</span> <span class="kt">RealityComposerStrategy</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="n">cardItems</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="n">anchorImage</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="nv">rcFile</span><span class="p">:</span> <span class="s">"realityComposerFileName"</span><span class="p">,</span> <span class="nv">rcScene</span><span class="p">:</span> <span class="s">"sceneName"</span><span class="p">)</span>
-        <span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">loadingStrategy</span><span class="p">)</span>
+        <span class="k">let</span> <span class="nv">usdzFilePath</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="o">.</span><span class="k">default</span><span class="o">.</span><span class="nf">getDocumentsDirectory</span><span class="p">()</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="kt">FileManager</span><span class="o">.</span><span class="n">usdzFiles</span><span class="p">)</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"ExampleRC.usdz"</span><span class="p">)</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">),</span> 
+              <span class="k">let</span> <span class="nv">jsonUrl</span> <span class="o">=</span> <span class="kt">Bundle</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="nf">url</span><span class="p">(</span><span class="nv">forResource</span><span class="p">:</span> <span class="s">"Tests"</span><span class="p">,</span> <span class="nv">withExtension</span><span class="p">:</span> <span class="s">"json"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+
+        <span class="k">do</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="nv">jsonData</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">jsonUrl</span><span class="p">)</span>
+            <span class="k">let</span> <span class="nv">strategy</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">UsdzFileStrategy</span><span class="p">(</span><span class="nv">jsonData</span><span class="p">:</span> <span class="n">jsonData</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="n">anchorImage</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="nv">usdzFilePath</span><span class="p">:</span> <span class="n">usdzFilePath</span><span class="p">)</span>
+            <span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">strategy</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
@@ -171,10 +226,8 @@
 <p>In both cases, <strong>xcodebuild</strong> tooling will manage cloning and updating the repository to your app or framework project.</p>
 <h2 id='configuration' class='heading'>Configuration</h2>
 
-<p><strong>FioriARKit</strong> as umbrella product currently will contain everything the package as to offer. As the package evolves the package could be split into multiple products for different use cases.</p>
+<p><strong>FioriARKit</strong> as umbrella product currently will contain everything the package has to offer. As the package evolves the package could be split into multiple products for different use cases.</p>
 <h2 id='limitations' class='heading'>Limitations</h2>
-
-<p>The module is currently in development, and should not yet be used productively. Breaking changes may occur in 0.x.x release(s)</p>
 
 <p>Key gaps which are present at time of open-source project launch:</p>
 
@@ -188,7 +241,7 @@
 <p>See <strong>Limitations</strong>.</p>
 <h2 id='how-to-obtain-support' class='heading'>How to obtain support</h2>
 
-<p>Support for the modules is provided thorough this open-source repository. Please file Github Issues for any issues experienced, or questions.  </p>
+<p><a href="https://github.com/SAP/cloud-sdk-ios-fioriarkit/issues/new/choose">Create a GitHub issue</a> to create bug report, file a feature request or ask a question.</p>
 <h2 id='contributing' class='heading'>Contributing</h2>
 
 <p>If you want to contribute, please check the <a href="./CONTRIBUTING.md">Contribution Guidelines</a></p>
@@ -214,14 +267,6 @@
                 </li>
                 <li class="nav-group-task">
                   <a href="Classes/ARManager.html">ARManager</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-group-name">
-              <a href="Enums.html">Enumerations</a>
-              <ul class="nav-group-tasks">
-                <li class="nav-group-task">
-                  <a href="Enums.html#/s:10FioriARKit0A0O">Fiori</a>
                 </li>
               </ul>
             </li>
@@ -272,13 +317,13 @@
                   <a href="Structs/ARScanView.html">ARScanView</a>
                 </li>
                 <li class="nav-group-task">
-                  <a href="Structs/AnyViewModifier.html">AnyViewModifier</a>
-                </li>
-                <li class="nav-group-task">
                   <a href="Structs/CardView.html">CardView</a>
                 </li>
                 <li class="nav-group-task">
                   <a href="Structs/CarouselOptions.html">CarouselOptions</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/DecodableCardItem.html">DecodableCardItem</a>
                 </li>
                 <li class="nav-group-task">
                   <a href="Structs/DefaultIcon.html">DefaultIcon</a>
@@ -296,13 +341,19 @@
                   <a href="Structs/MarkerView.html">MarkerView</a>
                 </li>
                 <li class="nav-group-task">
-                  <a href="Structs/RealityComposerStrategy.html">RealityComposerStrategy</a>
+                  <a href="Structs/RCProjectStrategy.html">RCProjectStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/RealityFileStrategy.html">RealityFileStrategy</a>
                 </li>
                 <li class="nav-group-task">
                   <a href="Structs/ScreenAnnotation.html">ScreenAnnotation</a>
                 </li>
                 <li class="nav-group-task">
                   <a href="Structs/SingleImageARCardView.html">SingleImageARCardView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/UsdzFileStrategy.html">UsdzFileStrategy</a>
                 </li>
               </ul>
             </li>

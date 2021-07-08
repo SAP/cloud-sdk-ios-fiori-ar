@@ -78,37 +78,149 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/AnnotationStrategies.swift",
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Models/CardItemModel.swift",
       "line": 32,
-      "symbol": "RealityComposerStrategy.cardContents",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "symbol": "DecodableCardItem",
+      "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/AnnotationStrategies.swift",
-      "line": 33,
-      "symbol": "RealityComposerStrategy.anchorImage",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/AnnotationStrategies.swift",
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Models/CardItemModel.swift",
       "line": 34,
-      "symbol": "RealityComposerStrategy.physicalWidth",
+      "symbol": "DecodableCardItem.title_",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/AnnotationStrategies.swift",
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Models/CardItemModel.swift",
       "line": 35,
-      "symbol": "RealityComposerStrategy.rcFile",
+      "symbol": "DecodableCardItem.descriptionText_",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/AnnotationStrategies.swift",
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Models/CardItemModel.swift",
       "line": 36,
-      "symbol": "RealityComposerStrategy.rcScene",
+      "symbol": "DecodableCardItem.detailImage_",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Models/CardItemModel.swift",
+      "line": 37,
+      "symbol": "DecodableCardItem.actionText_",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Models/CardItemModel.swift",
+      "line": 38,
+      "symbol": "DecodableCardItem.icon_",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Models/CardItemModel.swift",
+      "line": 50,
+      "symbol": "DecodableCardItem",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RCProjectStrategy.swift",
+      "line": 35,
+      "symbol": "RCProjectStrategy.cardContents",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RCProjectStrategy.swift",
+      "line": 36,
+      "symbol": "RCProjectStrategy.anchorImage",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RCProjectStrategy.swift",
+      "line": 37,
+      "symbol": "RCProjectStrategy.physicalWidth",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RCProjectStrategy.swift",
+      "line": 38,
+      "symbol": "RCProjectStrategy.rcFile",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RCProjectStrategy.swift",
+      "line": 39,
+      "symbol": "RCProjectStrategy.rcScene",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RealityFileStrategy.swift",
+      "line": 33,
+      "symbol": "RealityFileStrategy.cardContents",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RealityFileStrategy.swift",
+      "line": 34,
+      "symbol": "RealityFileStrategy.anchorImage",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RealityFileStrategy.swift",
+      "line": 35,
+      "symbol": "RealityFileStrategy.physicalWidth",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RealityFileStrategy.swift",
+      "line": 36,
+      "symbol": "RealityFileStrategy.realityFilePath",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/RealityFileStrategy.swift",
+      "line": 37,
+      "symbol": "RealityFileStrategy.rcScene",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/UsdzFileStrategy.swift",
+      "line": 32,
+      "symbol": "UsdzFileStrategy.cardContents",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/UsdzFileStrategy.swift",
+      "line": 33,
+      "symbol": "UsdzFileStrategy.anchorImage",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/UsdzFileStrategy.swift",
+      "line": 34,
+      "symbol": "UsdzFileStrategy.physicalWidth",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/RealityKit/LoadingStrategies/UsdzFileStrategy.swift",
+      "line": 35,
+      "symbol": "UsdzFileStrategy.usdzFilePath",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
@@ -184,70 +296,70 @@
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 66,
+      "line": 68,
       "symbol": "CardView",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 87,
+      "line": 89,
       "symbol": "CardView.init(title:descriptionText:detailImage:actionText:isSelected:id:action:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 154,
+      "line": 156,
       "symbol": "CardView",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 187,
+      "line": 189,
       "symbol": "CardView",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 193,
+      "line": 195,
       "symbol": "CardView.init(model:isSelected:action:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 207,
+      "line": 209,
       "symbol": "CardView.init(id:title:descriptionText:detailImage:actionText:icon:action:isSelected:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 232,
+      "line": 234,
       "symbol": "DefaultIcon",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 235,
+      "line": 237,
       "symbol": "DefaultIcon.init(icon:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 246,
+      "line": 248,
       "symbol": "ImagePreview",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Card/CardView.swift",
-      "line": 250,
+      "line": 252,
       "symbol": "ImagePreview.init(preview:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -261,77 +373,70 @@
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/ContentViews/SingleImageARCardView.swift",
-      "line": 68,
+      "line": 69,
       "symbol": "SingleImageARCardView.init(arModel:scanLabel:cardLabel:markerLabel:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/ContentViews/SingleImageARCardView.swift",
-      "line": 135,
+      "line": 136,
       "symbol": "SingleImageARCardView.init(arModel:image:cardAction:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/ContentViews/SingleImageARCardView.swift",
-      "line": 152,
+      "line": 153,
       "symbol": "SingleImageARCardView.init(arModel:image:markerLabel:cardAction:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/ContentViews/SingleImageARCardView.swift",
-      "line": 167,
+      "line": 168,
       "symbol": "SingleImageARCardView.init(arModel:image:cardLabel:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/ContentViews/SingleImageARCardView.swift",
-      "line": 185,
+      "line": 186,
       "symbol": "SingleImageARCardView.init(arModel:scanLabel:cardAction:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/ContentViews/SingleImageARCardView.swift",
-      "line": 197,
+      "line": 198,
       "symbol": "SingleImageARCardView.init(arModel:image:cardLabel:markerLabel:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/ContentViews/SingleImageARCardView.swift",
-      "line": 210,
+      "line": 211,
       "symbol": "SingleImageARCardView.init(arModel:scanLabel:cardLabel:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/ContentViews/SingleImageARCardView.swift",
-      "line": 227,
+      "line": 228,
       "symbol": "SingleImageARCardView.init(arModel:scanLabel:markerLabel:cardAction:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/ImageDiscovery/ARScanView.swift",
-      "line": 10,
-      "symbol": "ARScanView",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Marker/MarkerView.swift",
-      "line": 10,
+      "line": 11,
       "symbol": "MarkerView",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/ARCards/Views/Marker/MarkerView.swift",
-      "line": 19,
+      "line": 20,
       "symbol": "MarkerView.init(state:icon:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -414,66 +519,38 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/AnyViewModifier.swift",
-      "line": 11,
-      "symbol": "EnvironmentValues.markerModifier",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/AnyViewModifier.swift",
-      "line": 21,
-      "symbol": "AnyViewModifier",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/AnyViewModifier.swift",
-      "line": 25,
-      "symbol": "AnyViewModifier.init(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/Environment+Extensions.swift",
-      "line": 12,
+      "line": 13,
       "symbol": "EnvironmentValues.titleModifier",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/Environment+Extensions.swift",
-      "line": 17,
+      "line": 18,
       "symbol": "EnvironmentValues.descriptionTextModifier",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/Environment+Extensions.swift",
-      "line": 22,
+      "line": 23,
       "symbol": "EnvironmentValues.detailImageModifier",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/Environment+Extensions.swift",
-      "line": 27,
+      "line": 28,
       "symbol": "EnvironmentValues.actionTextModifier",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/Environment+Extensions.swift",
-      "line": 32,
+      "line": 33,
       "symbol": "EnvironmentValues.carouselOptions",
       "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/cloud-sdk-ios-fioriarkit/cloud-sdk-ios-fioriarkit/Sources/FioriARKit/Fiori.swift",
-      "line": 11,
-      "symbol": "Fiori",
-      "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     }
   ],

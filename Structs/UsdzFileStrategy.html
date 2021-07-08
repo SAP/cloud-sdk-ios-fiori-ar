@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>ScreenAnnotation Structure Reference</title>
+    <title>UsdzFileStrategy Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -11,8 +11,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/ScreenAnnotation" class="dashAnchor"></a>
-    <a title="ScreenAnnotation Structure Reference"></a>
+    <a name="//apple_ref/swift/Struct/UsdzFileStrategy" class="dashAnchor"></a>
+    <a title="UsdzFileStrategy Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p>
@@ -30,7 +30,7 @@
             <a href="../index.html">FioriARKit Reference</a>
             <img id="carat" src="../img/carat.png" />
           </span>
-          ScreenAnnotation Structure Reference
+          UsdzFileStrategy Structure Reference
         </p>
       </div>
     </div>
@@ -39,15 +39,24 @@
         <article class="main-content">
           <section>
             <section class="section">
-              <h1>ScreenAnnotation</h1>
+              <h1>UsdzFileStrategy</h1>
                 <div class="declaration">
                   <div class="language">
                     
-                    <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ScreenAnnotation</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">Identifiable</span><span class="p">,</span> <span class="kt">Equatable</span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span></code></pre>
+                    <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UsdzFileStrategy</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a></span><span class="p">,</span> <span class="kt">SceneLoadable</span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span><span class="p">,</span> <span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span> <span class="p">:</span> <span class="kt">LosslessStringConvertible</span></code></pre>
 
                   </div>
                 </div>
-              <p>Wrapper struct for the <strong>CardItem : CardItemModel</strong>  and the real world anchoring position. Used to set the internal entity.</p>
+              <p>A loading strategy that uses the RealityComposer app. After creating the Reality Composer scene, the entities in the scene correlate to a real world location relative to the image or object anchor.
+This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
+Loading the data into the ARAnnotationViewModel should be done in the onAppear method.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">cardItems</span> <span class="o">=</span> <span class="p">[</span><span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">),</span> <span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"World"</span><span class="p">)]</span>
+<span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+<span class="k">let</span> <span class="nv">usdzFilePath</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="o">.</span><span class="k">default</span><span class="o">.</span><span class="nf">getDocumentsDirectory</span><span class="p">()</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="kt">FileManager</span><span class="o">.</span><span class="n">realityFiles</span><span class="p">)</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"ExampleRC.reality"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">strategy</span> <span class="o">=</span> <span class="kt">UsdzFileStrategy</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="n">cardItems</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="n">anchorImage</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="nv">realityFilePath</span><span class="p">:</span> <span class="n">realityFilePath</span><span class="p">)</span>
+<span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">strategy</span><span class="p">)</span>
+</code></pre>
 
             </section>
             <section class="section task-group-section">
@@ -56,35 +65,9 @@
                   <li class="item">
                     <div>
                       <code>
-                      <a name="/s:s12IdentifiableP2id2IDQzvp"></a>
-                      <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
-                      <a class="token" href="#/s:s12IdentifiableP2id2IDQzvp">id</a>
-                      </code>
-                    </div>
-                    <div class="height-container">
-                      <div class="pointer-container"></div>
-                      <section class="section">
-                        <div class="pointer"></div>
-                        <div class="abstract">
-                          
-                        </div>
-                        <div class="declaration">
-                          <h4>Declaration</h4>
-                          <div class="language">
-                            <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                          </div>
-                        </div>
-                      </section>
-                    </div>
-                  </li>
-                  <li class="item">
-                    <div>
-                      <code>
-                      <a name="/s:10FioriARKit16ScreenAnnotationV4icon7SwiftUI5ImageVSgvp"></a>
-                      <a name="//apple_ref/swift/Property/icon" class="dashAnchor"></a>
-                      <a class="token" href="#/s:10FioriARKit16ScreenAnnotationV4icon7SwiftUI5ImageVSgvp">icon</a>
+                      <a name="/s:10FioriARKit16UsdzFileStrategyV12cardContentsSayxGvp"></a>
+                      <a name="//apple_ref/swift/Property/cardContents" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit16UsdzFileStrategyV12cardContentsSayxGvp">cardContents</a>
                       </code>
                     </div>
                     <div class="height-container">
@@ -99,7 +82,7 @@
                           <h4>Declaration</h4>
                           <div class="language">
                             <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">icon</span><span class="p">:</span> <span class="kt">Image</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">cardContents</span><span class="p">:</span> <span class="p">[</span><span class="kt">CardItem</span><span class="p">]</span></code></pre>
 
                           </div>
                         </div>
@@ -109,9 +92,9 @@
                   <li class="item">
                     <div>
                       <code>
-                      <a name="/s:10FioriARKit16ScreenAnnotationV4cardxvp"></a>
-                      <a name="//apple_ref/swift/Property/card" class="dashAnchor"></a>
-                      <a class="token" href="#/s:10FioriARKit16ScreenAnnotationV4cardxvp">card</a>
+                      <a name="/s:10FioriARKit16UsdzFileStrategyV11anchorImageSo7UIImageCSgvp"></a>
+                      <a name="//apple_ref/swift/Property/anchorImage" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit16UsdzFileStrategyV11anchorImageSo7UIImageCSgvp">anchorImage</a>
                       </code>
                     </div>
                     <div class="height-container">
@@ -126,7 +109,7 @@
                           <h4>Declaration</h4>
                           <div class="language">
                             <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">card</span><span class="p">:</span> <span class="kt">CardItem</span></code></pre>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span></code></pre>
 
                           </div>
                         </div>
@@ -136,9 +119,9 @@
                   <li class="item">
                     <div>
                       <code>
-                      <a name="/s:10FioriARKit16ScreenAnnotationV15isMarkerVisibleSbvp"></a>
-                      <a name="//apple_ref/swift/Property/isMarkerVisible" class="dashAnchor"></a>
-                      <a class="token" href="#/s:10FioriARKit16ScreenAnnotationV15isMarkerVisibleSbvp">isMarkerVisible</a>
+                      <a name="/s:10FioriARKit16UsdzFileStrategyV13physicalWidth12CoreGraphics7CGFloatVSgvp"></a>
+                      <a name="//apple_ref/swift/Property/physicalWidth" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit16UsdzFileStrategyV13physicalWidth12CoreGraphics7CGFloatVSgvp">physicalWidth</a>
                       </code>
                     </div>
                     <div class="height-container">
@@ -153,7 +136,7 @@
                           <h4>Declaration</h4>
                           <div class="language">
                             <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">isMarkerVisible</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span></code></pre>
 
                           </div>
                         </div>
@@ -163,9 +146,9 @@
                   <li class="item">
                     <div>
                       <code>
-                      <a name="/s:10FioriARKit16ScreenAnnotationV13isCardVisibleSbvp"></a>
-                      <a name="//apple_ref/swift/Property/isCardVisible" class="dashAnchor"></a>
-                      <a class="token" href="#/s:10FioriARKit16ScreenAnnotationV13isCardVisibleSbvp">isCardVisible</a>
+                      <a name="/s:10FioriARKit16UsdzFileStrategyV04usdzD4Path10Foundation3URLVvp"></a>
+                      <a name="//apple_ref/swift/Property/usdzFilePath" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit16UsdzFileStrategyV04usdzD4Path10Foundation3URLVvp">usdzFilePath</a>
                       </code>
                     </div>
                     <div class="height-container">
@@ -180,7 +163,7 @@
                           <h4>Declaration</h4>
                           <div class="language">
                             <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">isCardVisible</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">usdzFilePath</span><span class="p">:</span> <span class="kt">URL</span></code></pre>
 
                           </div>
                         </div>
@@ -190,9 +173,9 @@
                   <li class="item">
                     <div>
                       <code>
-                      <a name="/s:10FioriARKit16ScreenAnnotationV4card15isMarkerVisible0f4CardH00F8SelectedACyxGx_S3btcfc"></a>
-                      <a name="//apple_ref/swift/Method/init(card:isMarkerVisible:isCardVisible:isSelected:)" class="dashAnchor"></a>
-                      <a class="token" href="#/s:10FioriARKit16ScreenAnnotationV4card15isMarkerVisible0f4CardH00F8SelectedACyxGx_S3btcfc">init(card:<wbr>isMarkerVisible:<wbr>isCardVisible:<wbr>isSelected:<wbr>)</a>
+                      <a name="/s:10FioriARKit16UsdzFileStrategyV12cardContents11anchorImage13physicalWidth04usdzD4PathACyxGSayxG_So7UIImageCSg12CoreGraphics7CGFloatVSg10Foundation3URLVtcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(cardContents:anchorImage:physicalWidth:usdzFilePath:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit16UsdzFileStrategyV12cardContents11anchorImage13physicalWidth04usdzD4PathACyxGSayxG_So7UIImageCSg12CoreGraphics7CGFloatVSg10Foundation3URLVtcfc">init(cardContents:<wbr>anchorImage:<wbr>physicalWidth:<wbr>usdzFilePath:<wbr>)</a>
                       </code>
                     </div>
                     <div class="height-container">
@@ -200,14 +183,15 @@
                       <section class="section">
                         <div class="pointer"></div>
                         <div class="abstract">
-                          <p>Undocumented</p>
+                          <p>Constructor for loading annotations using an Image as an anchor with a Reality Composer scene
+If Object Anchor is used anchorImage and PhysicalWidth are ignored and can be set to nil</p>
 
                         </div>
                         <div class="declaration">
                           <h4>Declaration</h4>
                           <div class="language">
                             <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">card</span><span class="p">:</span> <span class="kt">CardItem</span><span class="p">,</span> <span class="nv">isMarkerVisible</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">isCardVisible</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">isSelected</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="p">[</span><span class="kt">CardItem</span><span class="p">],</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">usdzFilePath</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span></code></pre>
 
                           </div>
                         </div>
@@ -217,9 +201,9 @@
                   <li class="item">
                     <div>
                       <code>
-                      <a name="/s:10FioriARKit16ScreenAnnotationV17setInternalEntity4withy10RealityKit0G0C_tF"></a>
-                      <a name="//apple_ref/swift/Method/setInternalEntity(with:)" class="dashAnchor"></a>
-                      <a class="token" href="#/s:10FioriARKit16ScreenAnnotationV17setInternalEntity4withy10RealityKit0G0C_tF">setInternalEntity(with:<wbr>)</a>
+                      <a name="/s:10FioriARKit16UsdzFileStrategyV8jsonData11anchorImage13physicalWidth04usdzD4PathACyAA17DecodableCardItemVG10Foundation0G0V_So7UIImageCSg12CoreGraphics7CGFloatVSgAK3URLVtKcAIRszrlufc"></a>
+                      <a name="//apple_ref/swift/Method/init(jsonData:anchorImage:physicalWidth:usdzFilePath:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit16UsdzFileStrategyV8jsonData11anchorImage13physicalWidth04usdzD4PathACyAA17DecodableCardItemVG10Foundation0G0V_So7UIImageCSg12CoreGraphics7CGFloatVSgAK3URLVtKcAIRszrlufc">init(jsonData:<wbr>anchorImage:<wbr>physicalWidth:<wbr>usdzFilePath:<wbr>)</a>
                       </code>
                     </div>
                     <div class="height-container">
@@ -227,14 +211,41 @@
                       <section class="section">
                         <div class="pointer"></div>
                         <div class="abstract">
-                          <p>Sets the internal within the MarkerAnchor</p>
+                          <p>Constructor for loading annotations using Data from a JSON Array
+   JSON key/value:
+    &ldquo;id&rdquo;: String,
+    &ldquo;title_&rdquo;: String,
+    &ldquo;descriptionText_&rdquo;: String?,
+    &ldquo;detailImage_&rdquo;: Data?, // base64 encoding of Image
+    &ldquo;actionText_&rdquo;: String?,
+    &ldquo;icon_&rdquo;: String? // systemName of SFSymbol</p>
+
+<p>Example:
+   [
+    {
+        &ldquo;id&rdquo;: &ldquo;WasherFluid&rdquo;,
+        &ldquo;title_&rdquo;: &ldquo;Recommended Washer Fluid&rdquo;,
+        &ldquo;descriptionText_&rdquo;: &ldquo;Rain X&rdquo;,
+        &ldquo;detailImage_&rdquo;: null,
+        &ldquo;actionText_&rdquo;: null,
+        &ldquo;icon_&rdquo;: null
+    },
+    {
+        &ldquo;id&rdquo;: &ldquo;Coolant&rdquo;,
+        &ldquo;title_&rdquo;: &ldquo;Genuine Coolant&rdquo;,
+        &ldquo;descriptionText_&rdquo;: &ldquo;Price: 20.99&rdquo;,
+        &ldquo;detailImage_&rdquo;: &ldquo;iVBORw0KGgoAAAANSUhE&hellip;&rdquo;,
+        &ldquo;actionText_&rdquo;: &ldquo;Order&rdquo;,
+        &ldquo;icon_&rdquo;: &ldquo;cart.fill&rdquo;
+    }
+   ]</p>
 
                         </div>
                         <div class="declaration">
                           <h4>Declaration</h4>
                           <div class="language">
                             <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">setInternalEntity</span><span class="p">(</span><span class="n">with</span> <span class="nv">entity</span><span class="p">:</span> <span class="kt">Entity</span><span class="p">)</span></code></pre>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">jsonData</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">usdzFilePath</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="k">throws</span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="o">==</span> <span class="kt"><a href="../Structs/DecodableCardItem.html">DecodableCardItem</a></span></code></pre>
 
                           </div>
                         </div>
@@ -244,9 +255,9 @@
                   <li class="item">
                     <div>
                       <code>
-                      <a name="/s:SQ2eeoiySbx_xtFZ"></a>
-                      <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
-                      <a class="token" href="#/s:SQ2eeoiySbx_xtFZ">==(_:<wbr>_:<wbr>)</a>
+                      <a name="/s:10FioriARKit16UsdzFileStrategyV4load4withSayAA16ScreenAnnotationVyxGGAA12ARManagement_p_tKF"></a>
+                      <a name="//apple_ref/swift/Method/load(with:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit16UsdzFileStrategyV4load4withSayAA16ScreenAnnotationVyxGGAA12ARManagement_p_tKF">load(with:<wbr>)</a>
                       </code>
                     </div>
                     <div class="height-container">
@@ -254,13 +265,14 @@
                       <section class="section">
                         <div class="pointer"></div>
                         <div class="abstract">
-                          
+                          <p>Loads the USDZ Files Scene and extracts the Entities pairing them with the data that corresponds to their ID into a list of <code><a href="../Structs/ScreenAnnotation.html">ScreenAnnotation</a></code></p>
+
                         </div>
                         <div class="declaration">
                           <h4>Declaration</h4>
                           <div class="language">
                             <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">==</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">ScreenAnnotation</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">ScreenAnnotation</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">load</span><span class="p">(</span><span class="n">with</span> <span class="nv">manager</span><span class="p">:</span> <span class="kt"><a href="../Protocols/ARManagement.html">ARManagement</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/ScreenAnnotation.html">ScreenAnnotation</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">]</span></code></pre>
 
                           </div>
                         </div>

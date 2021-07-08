@@ -49,6 +49,35 @@
                   <li class="item">
                     <div>
                       <code>
+                      <a name="/s:10FioriARKit17DecodableCardItemV"></a>
+                      <a name="//apple_ref/swift/Struct/DecodableCardItem" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit17DecodableCardItemV">DecodableCardItem</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Undocumented</p>
+
+                          <a href="Structs/DecodableCardItem.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DecodableCardItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">DecodableCardItem</span><span class="p">:</span> <span class="kt">Decodable</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
                       <a name="/s:10FioriARKit13MarkerControlV"></a>
                       <a name="//apple_ref/swift/Struct/MarkerControl" class="dashAnchor"></a>
                       <a class="token" href="#/s:10FioriARKit13MarkerControlV">MarkerControl</a>
@@ -77,9 +106,9 @@
                   <li class="item">
                     <div>
                       <code>
-                      <a name="/s:10FioriARKit23RealityComposerStrategyV"></a>
-                      <a name="//apple_ref/swift/Struct/RealityComposerStrategy" class="dashAnchor"></a>
-                      <a class="token" href="#/s:10FioriARKit23RealityComposerStrategyV">RealityComposerStrategy</a>
+                      <a name="/s:10FioriARKit17RCProjectStrategyV"></a>
+                      <a name="//apple_ref/swift/Struct/RCProjectStrategy" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit17RCProjectStrategyV">RCProjectStrategy</a>
                       </code>
                     </div>
                     <div class="height-container">
@@ -87,9 +116,11 @@
                       <section class="section">
                         <div class="pointer"></div>
                         <div class="abstract">
-                          <p>A loading strategy that uses the RealityComposer app. After creating the Reality Composer scene, tthe entities in the scene correlate to a real world location relative to the image or object anchor.
+                          <p>A loading strategy that uses the RealityComposer app. After creating the Reality Composer scene, the entities in the scene correlate to a real world location relative to the image or object anchor.
 This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
 Loading the data into the ARAnnotationViewModel should be done in the onAppear method.</p>
+
+<p>If an Object Anchor is used the anchorImage and physicalWidth can be set to nil and are ignored</p>
 <h2 id='usage' class='heading'>Usage</h2>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">cardItems</span> <span class="o">=</span> <span class="p">[</span><span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">),</span> <span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"World"</span><span class="p">)]</span>
 <span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
@@ -97,13 +128,87 @@ Loading the data into the ARAnnotationViewModel should be done in the onAppear m
 <span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">strategy</span><span class="p">)</span>
 </code></pre>
 
-                          <a href="Structs/RealityComposerStrategy.html" class="slightly-smaller">See more</a>
+                          <a href="Structs/RCProjectStrategy.html" class="slightly-smaller">See more</a>
                         </div>
                         <div class="declaration">
                           <h4>Declaration</h4>
                           <div class="language">
                             <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RealityComposerStrategy</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a></span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span><span class="p">,</span> <span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span> <span class="p">:</span> <span class="kt">LosslessStringConvertible</span></code></pre>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RCProjectStrategy</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a></span><span class="p">,</span> <span class="kt">SceneLoadable</span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span><span class="p">,</span> <span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span> <span class="p">:</span> <span class="kt">LosslessStringConvertible</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit19RealityFileStrategyV"></a>
+                      <a name="//apple_ref/swift/Struct/RealityFileStrategy" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit19RealityFileStrategyV">RealityFileStrategy</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>A loading strategy that uses the RealityComposer app. After creating the Reality Composer scene, the entities in the scene correlate to a real world location relative to the image or object anchor.
+This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
+Loading the data into the ARAnnotationViewModel should be done in the onAppear method.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">cardItems</span> <span class="o">=</span> <span class="p">[</span><span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">),</span> <span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"World"</span><span class="p">)]</span>
+<span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+<span class="k">let</span> <span class="nv">realityFilePath</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="o">.</span><span class="k">default</span><span class="o">.</span><span class="nf">getDocumentsDirectory</span><span class="p">()</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="kt">FileManager</span><span class="o">.</span><span class="n">realityFiles</span><span class="p">)</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"ExampleRC.reality"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">strategy</span> <span class="o">=</span> <span class="kt">RealityFileStrategy</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="n">cardItems</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="n">anchorImage</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="nv">realityFilePath</span><span class="p">:</span> <span class="n">realityFilePath</span><span class="p">,</span> <span class="nv">rcScene</span><span class="p">:</span> <span class="s">"ExampleScene"</span><span class="p">)</span>
+<span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">strategy</span><span class="p">)</span>
+</code></pre>
+
+                          <a href="Structs/RealityFileStrategy.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">RealityFileStrategy</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a></span><span class="p">,</span> <span class="kt">SceneLoadable</span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span><span class="p">,</span> <span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span> <span class="p">:</span> <span class="kt">LosslessStringConvertible</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:10FioriARKit16UsdzFileStrategyV"></a>
+                      <a name="//apple_ref/swift/Struct/UsdzFileStrategy" class="dashAnchor"></a>
+                      <a class="token" href="#/s:10FioriARKit16UsdzFileStrategyV">UsdzFileStrategy</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>A loading strategy that uses the RealityComposer app. After creating the Reality Composer scene, the entities in the scene correlate to a real world location relative to the image or object anchor.
+This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
+Loading the data into the ARAnnotationViewModel should be done in the onAppear method.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">cardItems</span> <span class="o">=</span> <span class="p">[</span><span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">),</span> <span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"World"</span><span class="p">)]</span>
+<span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+<span class="k">let</span> <span class="nv">usdzFilePath</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="o">.</span><span class="k">default</span><span class="o">.</span><span class="nf">getDocumentsDirectory</span><span class="p">()</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="kt">FileManager</span><span class="o">.</span><span class="n">realityFiles</span><span class="p">)</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"ExampleRC.reality"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">strategy</span> <span class="o">=</span> <span class="kt">UsdzFileStrategy</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="n">cardItems</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="n">anchorImage</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="nv">realityFilePath</span><span class="p">:</span> <span class="n">realityFilePath</span><span class="p">)</span>
+<span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">strategy</span><span class="p">)</span>
+</code></pre>
+
+                          <a href="Structs/UsdzFileStrategy.html" class="slightly-smaller">See more</a>
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UsdzFileStrategy</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a></span><span class="p">,</span> <span class="kt">SceneLoadable</span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="Protocols.html#/s:10FioriARKit13CardItemModelP">CardItemModel</a></span><span class="p">,</span> <span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span> <span class="p">:</span> <span class="kt">LosslessStringConvertible</span></code></pre>
 
                           </div>
                         </div>
@@ -433,7 +538,7 @@ Loading the data into the ARAnnotationViewModel should be done in the onAppear m
                       <section class="section">
                         <div class="pointer"></div>
                         <div class="abstract">
-                          <p>Undocumented</p>
+                          <p>Scanning View which displays a collapsable image to display for anchor detection. The anchor is still detectable when uncollapsed and the View will fade out after detection.</p>
 
                           <a href="Structs/ARScanView.html" class="slightly-smaller">See more</a>
                         </div>
@@ -444,6 +549,37 @@ Loading the data into the ARAnnotationViewModel should be done in the onAppear m
                             <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ARScanView</span> <span class="p">:</span> <span class="kt">View</span></code></pre>
 
                           </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>image</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The image that is displayed in the View which represents a detectable anchor</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>anchorPosition</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The position of the anchor on screen after detection</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </section>
                     </div>
@@ -476,34 +612,6 @@ Loading the data into the ARAnnotationViewModel should be done in the onAppear m
                       </section>
                     </div>
                   </li>
-                  <li class="item">
-                    <div>
-                      <code>
-                      <a name="/s:10FioriARKit15AnyViewModifierV"></a>
-                      <a name="//apple_ref/swift/Struct/AnyViewModifier" class="dashAnchor"></a>
-                      <a class="token" href="#/s:10FioriARKit15AnyViewModifierV">AnyViewModifier</a>
-                      </code>
-                    </div>
-                    <div class="height-container">
-                      <div class="pointer-container"></div>
-                      <section class="section">
-                        <div class="pointer"></div>
-                        <div class="abstract">
-                          <p>Undocumented</p>
-
-                          <a href="Structs/AnyViewModifier.html" class="slightly-smaller">See more</a>
-                        </div>
-                        <div class="declaration">
-                          <h4>Declaration</h4>
-                          <div class="language">
-                            <p class="aside-title">Swift</p>
-                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">AnyViewModifier</span> <span class="p">:</span> <span class="kt">ViewModifier</span></code></pre>
-
-                          </div>
-                        </div>
-                      </section>
-                    </div>
-                  </li>
                 </ul>
               </div>
             </section>
@@ -521,14 +629,6 @@ Loading the data into the ARAnnotationViewModel should be done in the onAppear m
                 </li>
                 <li class="nav-group-task">
                   <a href="Classes/ARManager.html">ARManager</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-group-name">
-              <a href="Enums.html">Enumerations</a>
-              <ul class="nav-group-tasks">
-                <li class="nav-group-task">
-                  <a href="Enums.html#/s:10FioriARKit0A0O">Fiori</a>
                 </li>
               </ul>
             </li>
@@ -579,13 +679,13 @@ Loading the data into the ARAnnotationViewModel should be done in the onAppear m
                   <a href="Structs/ARScanView.html">ARScanView</a>
                 </li>
                 <li class="nav-group-task">
-                  <a href="Structs/AnyViewModifier.html">AnyViewModifier</a>
-                </li>
-                <li class="nav-group-task">
                   <a href="Structs/CardView.html">CardView</a>
                 </li>
                 <li class="nav-group-task">
                   <a href="Structs/CarouselOptions.html">CarouselOptions</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/DecodableCardItem.html">DecodableCardItem</a>
                 </li>
                 <li class="nav-group-task">
                   <a href="Structs/DefaultIcon.html">DefaultIcon</a>
@@ -603,13 +703,19 @@ Loading the data into the ARAnnotationViewModel should be done in the onAppear m
                   <a href="Structs/MarkerView.html">MarkerView</a>
                 </li>
                 <li class="nav-group-task">
-                  <a href="Structs/RealityComposerStrategy.html">RealityComposerStrategy</a>
+                  <a href="Structs/RCProjectStrategy.html">RCProjectStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/RealityFileStrategy.html">RealityFileStrategy</a>
                 </li>
                 <li class="nav-group-task">
                   <a href="Structs/ScreenAnnotation.html">ScreenAnnotation</a>
                 </li>
                 <li class="nav-group-task">
                   <a href="Structs/SingleImageARCardView.html">SingleImageARCardView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="Structs/UsdzFileStrategy.html">UsdzFileStrategy</a>
                 </li>
               </ul>
             </li>
