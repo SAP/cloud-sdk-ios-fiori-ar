@@ -29,16 +29,12 @@ public protocol ARManagement: AnyObject {
     func configureSession(with configuration: ARConfiguration, options: ARSession.RunOptions)
     func setAutomaticConfiguration()
     func addReferenceImage(for image: UIImage, _ name: String, with physicalWidth: CGFloat, configuration: ARConfiguration)
+    func setDelegate(delegate: ARSessionDelegate)
     func addAnchor(for entity: HasAnchoring)
     func tearDown()
 }
 
 public extension ARManagement {
-    /// Set the ARView to automatically configure
-    func setAutomaticConfiguration() {
-        self.arView?.automaticallyConfigureSession = true
-    }
-    
     /// Set the configuration for the ARView's session with options
     func configureSession(with configuration: ARConfiguration, options: ARSession.RunOptions = []) {
         self.configureSession(with: configuration, options: options)
@@ -78,17 +74,19 @@ extension SceneLoadable {
 
         // An image should use world tracking so we set the configuration to prevent automatic switching to Image Tracking
         // Object Detection inherently uses world tracking so an automatic configuration can be used
-        switch scene.anchoring.target {
-        case .image:
-            guard let image = anchorImage, let width = physicalWidth else { return [] }
-            manager.sceneRoot = scene
-            manager.addReferenceImage(for: image, with: width)
-        case .object:
-            manager.setAutomaticConfiguration()
-            manager.addAnchor(for: scene)
-        default:
-            throw LoadingStrategyError.anchorTypeNotSupportedError
-        }
+        #if !targetEnvironment(simulator)
+            switch scene.anchoring.target {
+            case .image:
+                guard let image = anchorImage, let width = physicalWidth else { return [] }
+                manager.sceneRoot = scene
+                manager.addReferenceImage(for: image, with: width)
+            case .object:
+                manager.setAutomaticConfiguration()
+                manager.addAnchor(for: scene)
+            default:
+                throw LoadingStrategyError.anchorTypeNotSupportedError
+            }
+        #endif
 
         for cardItem in cardContents {
             guard let internalEntity = scene.findEntity(named: String(cardItem.id)) else {

@@ -33,9 +33,10 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// Stores useful information such as anchor position and image/object data. In the case of image anchor it is also used to instantiate an AnchorEntity
     private var arkitAnchor: ARAnchor?
     
+    // Perhaps a better way to implement the initializers and set the ARManagement?
     override public init() {
         super.init()
-        self.arManager.arView?.session.delegate = self
+        self.arManager.setDelegate(delegate: self)
         self.arManager.onSceneUpate = self.updateScene(on:)
     }
     
@@ -103,9 +104,11 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
             guard let root = arManager.sceneRoot else { return }
             self.arkitAnchor = imageAnchor
             
-            let anchorEntity = AnchorEntity(anchor: imageAnchor)
-            anchorEntity.addChild(root)
-            self.arManager.arView?.scene.addAnchor(anchorEntity)
+            #if !targetEnvironment(simulator)
+                let anchorEntity = AnchorEntity(anchor: imageAnchor)
+                anchorEntity.addChild(root)
+                self.arManager.arView?.scene.addAnchor(anchorEntity)
+            #endif
             
             self.showAnnotationsAfterDiscoveryFlow()
             

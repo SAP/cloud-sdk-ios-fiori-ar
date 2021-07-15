@@ -20,6 +20,7 @@ import SwiftUI
 ///  - referenceImages: List of current ARReferenceImages which have been loaded into the configuration
 ///  - detectionObjects: List of current ARReferenceImages which have been loaded into the configuration
 /// ```
+
 public class ARManager: ARManagement {
     public var arView: ARView?
     public var sceneRoot: HasAnchoring?
@@ -33,7 +34,9 @@ public class ARManager: ARManagement {
     
     public init() {
         self.arView = ARView(frame: .zero)
-        self.arView?.session.run(ARWorldTrackingConfiguration())
+        #if !targetEnvironment(simulator)
+            self.arView?.session.run(ARWorldTrackingConfiguration())
+        #endif
         self.subscription = self.arView?.scene.subscribe(to: SceneEvents.Update.self) { [unowned self] in
             onSceneUpate?($0)
         }
@@ -41,7 +44,22 @@ public class ARManager: ARManagement {
     
     /// Set the configuration for the ARView's session with options
     public func configureSession(with configuration: ARConfiguration, options: ARSession.RunOptions = []) {
-        self.arView?.session.run(configuration, options: options)
+        #if !targetEnvironment(simulator)
+            self.arView?.session.run(configuration, options: options)
+        #endif
+    }
+    
+    public func setDelegate(delegate: ARSessionDelegate) {
+        #if !targetEnvironment(simulator)
+            self.arView?.session.delegate = delegate
+        #endif
+    }
+    
+    /// Set the ARView to automatically configure
+    public func setAutomaticConfiguration() {
+        #if !targetEnvironment(simulator)
+            self.arView?.automaticallyConfigureSession = true
+        #endif
     }
     
     /// Cleans up the arView which is necessary for SwiftUI navigation
