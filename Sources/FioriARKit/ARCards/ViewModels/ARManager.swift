@@ -20,8 +20,8 @@ import SwiftUI
 ///  - referenceImages: List of current ARReferenceImages which have been loaded into the configuration
 ///  - detectionObjects: List of current ARReferenceImages which have been loaded into the configuration
 /// ```
-public class ARManager: ARManagement {
-    public var arView: ARView?
+public class ARManager {
+    internal var arView: ARView?
     public var sceneRoot: HasAnchoring?
     public var onSceneUpate: ((SceneEvents.Update) -> Void)?
     
@@ -33,23 +33,66 @@ public class ARManager: ARManagement {
     
     public init() {
         self.arView = ARView(frame: .zero)
-        self.arView?.session.run(ARWorldTrackingConfiguration())
+        self.configureSession(with: ARWorldTrackingConfiguration())
         self.subscription = self.arView?.scene.subscribe(to: SceneEvents.Update.self) { [unowned self] in
             onSceneUpate?($0)
         }
     }
     
-    /// Set the configuration for the ARView's session with options
-    public func configureSession(with configuration: ARConfiguration, options: ARSession.RunOptions = []) {
-        self.arView?.session.run(configuration, options: options)
-    }
-    
     /// Cleans up the arView which is necessary for SwiftUI navigation
-    public func tearDown() {
+    internal func tearDown() {
         self.arView = nil
         self.subscription = nil
     }
+    
+    /// Set the configuration for the ARView's session with run options
+    public func configureSession(with configuration: ARConfiguration, options: ARSession.RunOptions = []) {
+        #if !targetEnvironment(simulator)
+            self.arView?.session.run(configuration, options: options)
+        #else
+            fatalError("FioriARKit Does Not Support Simulator")
+        #endif
+    }
+    
+    /// Set the session for automatic configuration
+    public func setAutomaticConfiguration() {
+        #if !targetEnvironment(simulator)
+            self.arView?.automaticallyConfigureSession = true
+        #endif
+    }
 
+    internal func setDelegate(to delegate: ARSessionDelegate) {
+        #if !targetEnvironment(simulator)
+            self.arView?.session.delegate = delegate
+        #endif
+    }
+
+    internal func addARKitAnchor(for anchor: ARAnchor, children: [Entity] = []) {
+        #if !targetEnvironment(simulator)
+            let anchorEntity = AnchorEntity(anchor: anchor)
+            children.forEach { anchorEntity.addChild($0) }
+            self.addAnchor(for: anchorEntity)
+        #endif
+    }
+    
+    // An image should use world tracking so we set the configuration to prevent automatic switching to Image Tracking
+    // Object Detection inherently uses world tracking so an automatic configuration can be used
+    internal func setupScene(anchorImage: UIImage?, physicalWidth: CGFloat?, scene: HasAnchoring) throws {
+        #if !targetEnvironment(simulator)
+            switch scene.anchoring.target {
+            case .image:
+                guard let image = anchorImage, let width = physicalWidth else { return }
+                self.sceneRoot = scene
+                self.addReferenceImage(for: image, with: width)
+            case .object:
+                self.setAutomaticConfiguration()
+                self.addAnchor(for: scene)
+            default:
+                throw LoadingStrategyError.anchorTypeNotSupportedError
+            }
+        #endif
+    }
+    
     /// Adds a Entity which conforms to HasAnchoring to the arView.scene
     public func addAnchor(for entity: HasAnchoring) {
         self.arView?.scene.addAnchor(entity)
@@ -57,7 +100,7 @@ public class ARManager: ARManagement {
     
     /// Adds an ARReferenceImage to the configuration for the session to discover
     /// Optionally can set the configuration to ARImageTrackingConfiguration
-    public func addReferenceImage(for image: UIImage, _ name: String = "", with physicalWidth: CGFloat, configuration: ARConfiguration = ARWorldTrackingConfiguration()) {
+    public func addReferenceImage(for image: UIImage, _ name: String? = nil, with physicalWidth: CGFloat, configuration: ARConfiguration = ARWorldTrackingConfiguration()) {
         guard let referenceImage = createReferenceImage(image, name, physicalWidth) else { return }
         self.referenceImages.insert(referenceImage)
         
@@ -70,14 +113,14 @@ public class ARManager: ARManagement {
         }
     }
     
-    internal func createReferenceImage(_ uiImage: UIImage, _ name: String = "", _ physicalWidth: CGFloat) -> ARReferenceImage? {
+    private func createReferenceImage(_ uiImage: UIImage, _ name: String? = nil, _ physicalWidth: CGFloat) -> ARReferenceImage? {
         guard let cgImage = createCGImage(uiImage: uiImage) else { return nil }
         let image = ARReferenceImage(cgImage, orientation: .up, physicalWidth: physicalWidth)
         image.name = name
         return image
     }
     
-    internal func createCGImage(uiImage: UIImage) -> CGImage? {
+    private func createCGImage(uiImage: UIImage) -> CGImage? {
         guard let ciImage = CIImage(image: uiImage) else { return nil }
         let context = CIContext(options: nil)
         return context.createCGImage(ciImage, from: ciImage.extent)

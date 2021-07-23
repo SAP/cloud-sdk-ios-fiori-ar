@@ -13,7 +13,7 @@ import SwiftUI
 ///  ViewModel for managing an ARCards experience. Provides and sets the annotation data/anchor locations to the view and the flow for the discovery animations.
 open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableObject, ARSessionDelegate {
     /// Manages all common functionality for the ARView
-    internal var arManager: ARManagement = ARManager()
+    internal var arManager = ARManager()
     
     /// An array of **ScreenAnnotations** which are displayed in the scene  contain the marker position and their card contents
     /// The annotations internal entities within this list should be in the ARView scene. Set by the annotation loading strategy
@@ -35,7 +35,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     
     override public init() {
         super.init()
-        self.arManager.arView?.session.delegate = self
+        self.arManager.setDelegate(to: self)
         self.arManager.onSceneUpate = self.updateScene(on:)
     }
     
@@ -44,7 +44,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// Updates scene on frame change
     /// Used to project the location of the Entities from the world space onto the screen space
     /// Potential to add a closure here for developer to add logic on frame change
-    public func updateScene(on event: SceneEvents.Update) {
+    private func updateScene(on event: SceneEvents.Update) {
         for (index, entity) in self.annotations.enumerated() {
             guard let projectedPoint = arManager.arView?.project(entity.marker.internalEnitity.position(relativeTo: nil)) else { return }
             self.annotations[index].screenPosition = projectedPoint
@@ -91,8 +91,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     
     private func getAnchorPosition(for arAnchor: ARAnchor) -> CGPoint? {
         let anchorTranslation = SIMD3<Float>(x: arAnchor.transform.columns.3.x, y: arAnchor.transform.columns.3.y, z: arAnchor.transform.columns.3.z)
-        guard let objectCenter = arManager.arView?.project(anchorTranslation) else { return nil }
-        return objectCenter
+        return self.arManager.arView?.project(anchorTranslation)
     }
 
     // MARK: ARSession Delegate
@@ -100,15 +99,10 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// Tells the delegate that one or more anchors have been added to the session.
     public func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
         if let imageAnchor = anchors.compactMap({ $0 as? ARImageAnchor }).first {
-            guard let root = arManager.sceneRoot else { return }
+            guard let sceneRoot = arManager.sceneRoot else { return }
             self.arkitAnchor = imageAnchor
-            
-            let anchorEntity = AnchorEntity(anchor: imageAnchor)
-            anchorEntity.addChild(root)
-            self.arManager.arView?.scene.addAnchor(anchorEntity)
-            
+            self.arManager.addARKitAnchor(for: imageAnchor, children: [sceneRoot])
             self.showAnnotationsAfterDiscoveryFlow()
-            
         } else if let objectAnchor = anchors.compactMap({ $0 as? ARObjectAnchor }).first {
             self.arkitAnchor = objectAnchor
             self.showAnnotationsAfterDiscoveryFlow()

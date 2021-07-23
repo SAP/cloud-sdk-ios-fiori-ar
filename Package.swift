@@ -25,7 +25,7 @@ let package = Package(
         .target(
             name: "FioriARKit",
             dependencies: ["FioriSwiftUI"],
-            resources: [.process("Resources")]
+            resources: [.process("ARCards/Resources")]
         ),
         .testTarget(
             name: "FioriARKitTests",
