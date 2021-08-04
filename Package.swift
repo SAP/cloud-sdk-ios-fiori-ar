@@ -29,7 +29,8 @@ let package = Package(
         ),
         .testTarget(
             name: "FioriARKitTests",
-            dependencies: ["FioriARKit"]
+            dependencies: ["FioriARKit"],
+            resources: [.process("TestResources")]
         )
     ]
 )

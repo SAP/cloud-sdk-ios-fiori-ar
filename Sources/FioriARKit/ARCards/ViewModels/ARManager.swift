@@ -33,7 +33,7 @@ public class ARManager {
     
     public init() {
         self.arView = ARView(frame: .zero)
-        self.configureSession(with: ARWorldTrackingConfiguration())
+        do { try self.configureSession(with: ARWorldTrackingConfiguration()) } catch { print(error) }
         self.subscription = self.arView?.scene.subscribe(to: SceneEvents.Update.self) { [unowned self] in
             onSceneUpate?($0)
         }
@@ -46,11 +46,11 @@ public class ARManager {
     }
     
     /// Set the configuration for the ARView's session with run options
-    public func configureSession(with configuration: ARConfiguration, options: ARSession.RunOptions = []) {
+    public func configureSession(with configuration: ARConfiguration, options: ARSession.RunOptions = []) throws {
         #if !targetEnvironment(simulator)
             self.arView?.session.run(configuration, options: options)
         #else
-            fatalError("FioriARKit Does Not Support Simulator")
+            throw ARManagerError.fioriARKitDoesNotSupportSimulatorError
         #endif
     }
     
@@ -106,10 +106,10 @@ public class ARManager {
         
         if let worldConfig = configuration as? ARWorldTrackingConfiguration {
             worldConfig.detectionImages = self.referenceImages
-            self.configureSession(with: worldConfig)
+            do { try self.configureSession(with: worldConfig) } catch { print(error) }
         } else if let imageConfig = configuration as? ARImageTrackingConfiguration {
             imageConfig.trackingImages = self.referenceImages
-            self.configureSession(with: imageConfig)
+            do { try self.configureSession(with: imageConfig) } catch { print(error) }
         }
     }
     
@@ -125,4 +125,8 @@ public class ARManager {
         let context = CIContext(options: nil)
         return context.createCGImage(ciImage, from: ciImage.extent)
     }
+}
+
+private enum ARManagerError: Error {
+    case fioriARKitDoesNotSupportSimulatorError
 }
