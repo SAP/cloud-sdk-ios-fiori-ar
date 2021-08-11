@@ -16,8 +16,8 @@ internal enum RCScanner {
         case fileNotFound(String)
     }
 
-    internal static func loadScene(rcFileName: String, sceneName: String) throws -> RCScanner.Scene {
-        guard let realityFileURL = Foundation.Bundle.main.url(forResource: rcFileName, withExtension: "reality") else {
+    internal static func loadScene(rcFileName: String, sceneName: String, bundle: Bundle) throws -> RCScanner.Scene {
+        guard let realityFileURL = bundle.url(forResource: rcFileName, withExtension: "reality") else {
             throw RCScanner.LoadRealityFileError.fileNotFound("\(rcFileName).reality")
         }
 

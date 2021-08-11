@@ -18,16 +18,16 @@ final class TestLoadingStrategies: XCTestCase {
         ARManager()
     }
     
-    // RCProjectStrategy searches in main bundle for the reality file that the .rcproject provides, thoughts on testing?
-//    func testRCProjectStrategyCardItemLoad() throws {
-//        let manager = makeARManagerSUT()
-//        let realityStrategy = RCProjectStrategy(cardContents: TestsItems.carEngineCardItems, rcFile: "???", rcScene: "???")
-//        let annotations = try realityStrategy.load(with: manager)
-//
-//        let first = try XCTUnwrap(annotations.first)
-//
-//        XCTAssertEqual(annotations.count, 6)
-//    }
+
+    func testRCProjectStrategyCardItemLoad() throws {
+        let manager = makeARManagerSUT()
+        let realityStrategy = RCProjectStrategy(cardContents: TestsItems.carEngineCardItems, rcFile: "Test", rcScene: "TestScene", bundle: Bundle.testBundle)
+        let annotations = try realityStrategy.load(with: manager)
+
+        _ = try XCTUnwrap(annotations.first)
+
+        XCTAssertEqual(annotations.count, 6)
+    }
     
     func testRealityFileStrategyCardItemLoad() throws {
         let manager = self.makeARManagerSUT()
