@@ -22,6 +22,7 @@ import SwiftUI
 ///  - physicalWidth: The width of the image in meters
 ///  - rcFile: Name of the Reality Composer File without the extension. *Note: .rcproject file, not a .reality file*
 ///  - sceneName: Name given to the scene in the Reality Composer app.
+///  - bundle: bundle containing the Reality Composer File. If not supplied then `Bundle.main` is used
 ///
 /// ## Usage
 /// ```
@@ -37,14 +38,16 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
     public var physicalWidth: CGFloat?
     public var rcFile: String
     public var rcScene: String
+    private var bundle: Bundle
     
     /// Constructor for loading annotations using an Image as an anchor with a Reality Composer scene
-    public init(cardContents: [CardItem], anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String) {
+    public init(cardContents: [CardItem], anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String, bundle: Bundle = Bundle.main) {
         self.cardContents = cardContents
         self.anchorImage = anchorImage
         self.physicalWidth = physicalWidth
         self.rcFile = rcFile
         self.rcScene = rcScene
+        self.bundle = bundle
     }
 
     /**
@@ -77,17 +80,18 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
          }
         ]
      */
-    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String) throws where CardItem == DecodableCardItem {
+    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String, bundle: Bundle = Bundle.main) throws where CardItem == DecodableCardItem {
         self.cardContents = try JSONDecoder().decode([DecodableCardItem].self, from: jsonData)
         self.anchorImage = anchorImage
         self.physicalWidth = physicalWidth
         self.rcFile = rcFile
         self.rcScene = rcScene
+        self.bundle = bundle
     }
     
     /// Loads the Reality Composer Scene and extracts the Entities pairing them with the data that corresponds to their ID into a list of `ScreenAnnotation`
     public func load(with manager: ARManager) throws -> [ScreenAnnotation<CardItem>] {
-        let scene = try RCScanner.loadScene(rcFileName: self.rcFile, sceneName: self.rcScene)
+        let scene = try RCScanner.loadScene(rcFileName: self.rcFile, sceneName: self.rcScene, bundle: self.bundle)
         let annotations = try syncCardContentsWithScene(manager: manager, anchorImage: anchorImage, physicalWidth: physicalWidth, scene: scene, cardContents: cardContents)
         
         return annotations
