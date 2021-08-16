@@ -30,10 +30,27 @@ public class ARManager {
     var detectionObjects: Set<ARReferenceObject> = []
     
     var subscription: Cancellable!
-    
+
     public init() {
+        self.setup(canBeFatal: true)
+    }
+
+    internal init(canBeFatal: Bool) {
+        self.setup(canBeFatal: canBeFatal)
+    }
+    
+    internal func setup(canBeFatal: Bool = true) {
         self.arView = ARView(frame: .zero)
-        do { try self.configureSession(with: ARWorldTrackingConfiguration()) } catch { print(error) }
+
+        do {
+            try self.configureSession(with: ARWorldTrackingConfiguration())
+        } catch {
+            if canBeFatal {
+                fatalError(error.localizedDescription)
+            } else {
+                print(error)
+            }
+        }
         self.subscription = self.arView?.scene.subscribe(to: SceneEvents.Update.self) { [unowned self] in
             onSceneUpate?($0)
         }
@@ -106,10 +123,10 @@ public class ARManager {
         
         if let worldConfig = configuration as? ARWorldTrackingConfiguration {
             worldConfig.detectionImages = self.referenceImages
-            do { try self.configureSession(with: worldConfig) } catch { print(error) }
+            do { try self.configureSession(with: worldConfig) } catch { print(error.localizedDescription) }
         } else if let imageConfig = configuration as? ARImageTrackingConfiguration {
             imageConfig.trackingImages = self.referenceImages
-            do { try self.configureSession(with: imageConfig) } catch { print(error) }
+            do { try self.configureSession(with: imageConfig) } catch { print(error.localizedDescription) }
         }
     }
     
@@ -127,6 +144,13 @@ public class ARManager {
     }
 }
 
-private enum ARManagerError: Error {
+private enum ARManagerError: Error, LocalizedError {
     case fioriARKitDoesNotSupportSimulatorError
+    
+    public var errorDescription: String? {
+        switch self {
+        case .fioriARKitDoesNotSupportSimulatorError:
+            return NSLocalizedString("FioriARKit does not support the Simulator", comment: "")
+        }
+    }
 }

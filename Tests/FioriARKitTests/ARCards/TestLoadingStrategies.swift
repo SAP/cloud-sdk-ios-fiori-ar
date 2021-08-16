@@ -15,18 +15,25 @@ final class TestLoadingStrategies: XCTestCase {
         // Note:
         // The strategies may need to process data into the manager which is why its passed in
         // If the stratey conforms to SceneLoadable then the ARManager.setupScene method will have no effect when ran on simulator, but the ScreenAnnotations will still be returned
-        ARManager()
+        ARManager(canBeFatal: false)
     }
     
-
     func testRCProjectStrategyCardItemLoad() throws {
-        let manager = makeARManagerSUT()
-        let realityStrategy = RCProjectStrategy(cardContents: TestsItems.carEngineCardItems, rcFile: "Test", rcScene: "TestScene", bundle: Bundle.testBundle)
+        let manager = self.makeARManagerSUT()
+        let realityStrategy = RCProjectStrategy(cardContents: TestsItems.carEngineCardItems, rcFile: "Test", rcScene: "TestScene", bundle: Bundle.module)
         let annotations = try realityStrategy.load(with: manager)
 
-        _ = try XCTUnwrap(annotations.first)
-
+        let first = try XCTUnwrap(annotations.first)
+        
         XCTAssertEqual(annotations.count, 6)
+        XCTAssertEqual(first.card.id, "WasherFluid")
+        XCTAssertEqual(first.card.title_, "Recommended Washer Fluid")
+        XCTAssertEqual(first.card.descriptionText_, "Rain X")
+        XCTAssertNil(first.card.detailImage_)
+        XCTAssertNil(first.card.actionText_)
+        XCTAssertNil(first.card.icon_)
+        XCTAssertNotNil(first.marker)
+        XCTAssertNotNil(first.marker.internalEnitity)
     }
     
     func testRealityFileStrategyCardItemLoad() throws {
