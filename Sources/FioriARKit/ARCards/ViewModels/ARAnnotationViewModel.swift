@@ -13,7 +13,7 @@ import SwiftUI
 ///  ViewModel for managing an ARCards experience. Provides and sets the annotation data/anchor locations to the view and the flow for the discovery animations.
 open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableObject, ARSessionDelegate {
     /// Manages all common functionality for the ARView
-    internal var arManager = ARManager()
+    internal var arManager: ARManager!
     
     /// An array of **ScreenAnnotations** which are displayed in the scene  contain the marker position and their card contents
     /// The annotations internal entities within this list should be in the ARView scene. Set by the annotation loading strategy
@@ -35,6 +35,14 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     
     override public init() {
         super.init()
+        self.arManager = ARManager()
+        self.arManager.setDelegate(to: self)
+        self.arManager.onSceneUpate = self.updateScene(on:)
+    }
+    
+    internal init(arManager: ARManager) {
+        super.init()
+        self.arManager = arManager
         self.arManager.setDelegate(to: self)
         self.arManager.onSceneUpate = self.updateScene(on:)
     }

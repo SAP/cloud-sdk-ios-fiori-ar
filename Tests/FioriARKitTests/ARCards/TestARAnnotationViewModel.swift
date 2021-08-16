@@ -11,7 +11,7 @@ import XCTest
 
 final class TestARAnnotationViewModel: XCTestCase {
     func makeViewModelSUT() -> ARAnnotationViewModel<TestCardItem> {
-        ARAnnotationViewModel<TestCardItem>()
+        ARAnnotationViewModel<TestCardItem>(arManager: ARManager(canBeFatal: false))
     }
     
     func testInit() {

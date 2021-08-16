@@ -12,7 +12,7 @@ import XCTest
 
 final class TestARManager: XCTestCase {
     func makeARManagerSUT() -> ARManager {
-        ARManager()
+        ARManager(canBeFatal: false)
     }
     
     func testInit() {
