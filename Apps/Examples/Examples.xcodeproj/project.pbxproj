@@ -29,6 +29,7 @@
 		2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909726437D630076150D /* ExampleCardItem.swift */; };
 		2CDD909B26437E7A0076150D /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909A26437E7A0076150D /* Tests.swift */; };
 		2CDD90A2264383540076150D /* ExampleRC.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD90A1264383540076150D /* ExampleRC.rcproject */; };
+		8A6F605926EFFF6600FA9FD5 /* DemoARService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6F605826EFFF6600FA9FD5 /* DemoARService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		2CDD909726437D630076150D /* ExampleCardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCardItem.swift; sourceTree = "<group>"; };
 		2CDD909A26437E7A0076150D /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		2CDD90A1264383540076150D /* ExampleRC.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = ExampleRC.rcproject; sourceTree = "<group>"; };
+		8A6F605826EFFF6600FA9FD5 /* DemoARService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoARService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 		2C4C71AF26436A4500B462A9 /* ARCards */ = {
 			isa = PBXGroup;
 			children = (
+				8A6F605726EFFF3F00FA9FD5 /* Networking */,
 				2C2D2BCA2645BF5000A1E1B1 /* Utils */,
 				2C2744942644DE210088E5DC /* Models */,
 				2C2744932644DE040088E5DC /* CardContentViews */,
@@ -186,6 +189,14 @@
 				2CDD90A1264383540076150D /* ExampleRC.rcproject */,
 			);
 			path = RealityComposer;
+			sourceTree = "<group>";
+		};
+		8A6F605726EFFF3F00FA9FD5 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				8A6F605826EFFF6600FA9FD5 /* DemoARService.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -279,6 +290,7 @@
 				2C48248F264DC40600E230E6 /* StringIdentifyingCardItem.swift in Sources */,
 				2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */,
 				2CDD909B26437E7A0076150D /* Tests.swift in Sources */,
+				8A6F605926EFFF6600FA9FD5 /* DemoARService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
