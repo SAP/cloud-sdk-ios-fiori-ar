@@ -5,6 +5,7 @@
 //  Created by O'Brien, Patrick on 5/5/21.
 //
 
+import FioriARKit
 import SwiftUI
 
 struct ContentView: View {
@@ -21,7 +22,7 @@ struct ContentView: View {
 
                 NavigationLink(destination: DemoARService()) {
                     Text("Demo how to interact with SAP Mobile Services and its AR feature")
-                }
+				}
             }.navigationBarTitle("Examples")
         }.navigationViewStyle(StackNavigationViewStyle())
     }
