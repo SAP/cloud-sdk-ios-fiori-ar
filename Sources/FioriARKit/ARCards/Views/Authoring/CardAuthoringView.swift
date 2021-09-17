@@ -64,32 +64,6 @@ struct TitleBarView: View {
     }
 }
 
-private struct UploadAnchorImageTabView: View {
-    var onAddAnchorImage: (() -> Void)?
-    
-    var body: some View {
-        VStack(alignment: .center, spacing: 36) {
-            Text("The anchor is an image that the software can recognize to successfully place the markers in relation to the anchor. Make sure that the anchor image is scannable on the site of the experience.")
-                .multilineTextAlignment(.center)
-                .font(.system(size: 17))
-                .padding(.horizontal, 46)
-            
-            Button(action: { onAddAnchorImage?() }, label: {
-                Text("Upload Anchor Image")
-                    .font(.system(size: 15))
-                    .bold()
-                    .frame(width: 187, height: 40)
-                    .foregroundColor(.white)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.sapBlue)
-                    )
-            })
-        }
-        .padding(.top, 148)
-    }
-}
-
 private struct TabView: View {
     @Binding var currentTab: TabSelection
     
