@@ -114,9 +114,9 @@ public struct CardView<Title: View, DescriptionText: View, DetailImage: View, Ac
     
     @ViewBuilder var descriptionText: some View {
         if isModelInit {
-            _descriptionText.modifier(titleModifier.concat(Fiori.CardItem.descriptionText).concat(Fiori.CardItem.descriptionTextCumulative))
+            _descriptionText.modifier(descriptionTextModifier.concat(Fiori.CardItem.descriptionText).concat(Fiori.CardItem.descriptionTextCumulative))
         } else {
-            _title.modifier(titleModifier.concat(Fiori.CardItem.descriptionText))
+            _descriptionText.modifier(descriptionTextModifier.concat(Fiori.CardItem.descriptionText))
         }
     }
     
