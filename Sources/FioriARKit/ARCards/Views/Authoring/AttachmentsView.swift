@@ -9,24 +9,19 @@ import SwiftUI
 
 struct AttachementsView: View {
     @Binding var attachmentItemModels: [AttachmentItemModel]
-    
-    @State private var containerSize: CGSize = .zero
-    @State private var screenWidth = Int(UIScreen.main.bounds.width)
-    
     var onAddAttachment: (() -> Void)?
+    var onSelectAttachment: ((AttachmentItemModel) -> Void)?
     
-    init(attachmentItemModels: Binding<[AttachmentItemModel]>) {
+    init(attachmentItemModels: Binding<[AttachmentItemModel]>, onAddAttachment: (() -> Void)? = nil, onSelectAttachment: ((AttachmentItemModel) -> Void)? = nil) {
         self._attachmentItemModels = attachmentItemModels
+        self.onAddAttachment = onAddAttachment
+        self.onSelectAttachment = onSelectAttachment
     }
     
     var addAttachmentView: some View {
         VStack {
             RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray,
-                        style: StrokeStyle(lineWidth: 1,
-                                           lineCap: .round,
-                                           lineJoin: .round,
-                                           dash: [7]))
+                .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
                 .overlay(Image(systemName: "plus").font(.system(size: 22)).foregroundColor(.blue))
                 .frame(width: 110, height: 110)
             Spacer()
@@ -45,18 +40,21 @@ struct AttachementsView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVGrid(columns: Array(repeating: GridItem(.adaptive(minimum: 110)), count: 1), spacing: 5) {
                     ForEach(attachmentItemModels) { attachementItemModel in
-                        
-                        if attachementItemModel.title == "AddAttachment" {
+                        if attachementItemModel.title == AttachmentItemModel.addAttachment {
                             addAttachmentView
                                 .onTapGesture {
                                     onAddAttachment?()
-                                    attachmentItemModels.append(AttachmentItemModel(title: "filename.pdf", subtitle: "file size", info: "optional info"))
                                 }
+                            
                         } else {
                             AttachmentCardView(item: attachementItemModel)
+                                .onTapGesture {
+                                    onSelectAttachment?(attachementItemModel)
+                                }
                         }
                     }
                 }
+                .padding(.top, 5)
             }
         }
         .padding(.vertical, 14)
@@ -98,11 +96,18 @@ struct AttachmentCardView: View {
                         .bold()
                         .lineLimit(2)
                         .truncationMode(.middle)
-                    Text(item.subtitle)
-                    Text(item.info)
+                    if let subtitle = item.subtitle {
+                        Text(subtitle)
+                    }
+                    if let info = item.info {
+                        Text(info)
+                    }
                 }
+                
                 .lineLimit(1)
                 .font(.system(size: 11))
+                .foregroundColor(Color.black)
+                .padding(.horizontal, 3)
                 Spacer()
             }
             Spacer()
