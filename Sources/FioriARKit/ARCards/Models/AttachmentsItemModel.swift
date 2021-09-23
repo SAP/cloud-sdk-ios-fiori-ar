@@ -10,8 +10,8 @@ import SwiftUI
 public struct AttachmentItemModel: Identifiable {
     public var id = UUID()
     public var title: String = ""
-    public var subtitle: String = ""
-    public var info: String = ""
+    public var subtitle: String?
+    public var info: String?
     public var image: Image?
     public var icon: Image?
     
