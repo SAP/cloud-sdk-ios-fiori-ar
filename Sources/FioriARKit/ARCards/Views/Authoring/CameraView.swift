@@ -5,16 +5,21 @@
 //  Created by Diaz, Ernesto on 9/17/21.
 //
 
-import UIKit
 import Photos
 import SwiftUI
+import UIKit
 
 struct CameraView: UIViewControllerRepresentable {
-    
     @Binding var takenImage: UIImage?
     @Binding var fileName: String?
+    
     @Environment(\.presentationMode) var isPresented
+    
     var sourceType: UIImagePickerController.SourceType
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(picker: self)
+    }
     
     func makeUIViewController(context: Context) -> some UIViewController {
         let imagePicker = UIImagePickerController()
@@ -23,14 +28,7 @@ struct CameraView: UIViewControllerRepresentable {
         return imagePicker
     }
     
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-        
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(picker: self)
-    }
-    
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
 }
 
 class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
@@ -40,9 +38,8 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
         self.picker = picker
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        //Gets file name if image is from photo library
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        // Gets file name if image is from photo library
         if let asset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset {
             let assetResources = PHAssetResource.assetResources(for: asset)
             self.picker.fileName = assetResources.first!.originalFilename
@@ -52,5 +49,4 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
         self.picker.takenImage = takenImage
         self.picker.isPresented.wrappedValue.dismiss()
     }
-    
 }
