@@ -33,7 +33,7 @@ struct UploadAnchorImageTabView: View {
                             .foregroundColor(.white)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.sapBlue)
+                                    .fill(Color.fnBlue)
                             )
                     })
                 }

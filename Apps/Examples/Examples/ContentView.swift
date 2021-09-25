@@ -20,7 +20,7 @@ struct ContentView: View {
                     Text("Download Image Anchors")
                 }
                 
-                NavigationLink(destination: CardAuthoringView()) {
+                NavigationLink(destination: ARCardAuthoringContentView()) {
                     Text("Card Authoring")
                 }
             }.navigationBarTitle("Examples")

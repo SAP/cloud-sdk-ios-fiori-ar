@@ -52,3 +52,13 @@ public extension View {
         environment(\.carouselOptions, options)
     }
 }
+
+public extension View {
+    /// Passes the Card Editing callback down from the environment
+    ///
+    /// - Parameters:
+    ///     - perform: Returns a CardEditing with an associated value `DecodableCardItem` that has been created, updated, or deleted
+    func onCardEdit(perform action: @escaping (CardEditing) -> Void) -> some View {
+        environment(\.onCardEdit, action)
+    }
+}

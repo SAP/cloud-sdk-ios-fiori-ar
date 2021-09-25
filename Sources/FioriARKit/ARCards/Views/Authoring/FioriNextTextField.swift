@@ -34,7 +34,7 @@ struct FioriNextTextFieldStyle: TextFieldStyle {
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .strokeBorder(editingText ? Color.sapBlue : Color.clear, lineWidth: 2)
+                        .strokeBorder(editingText ? Color.fnBlue : Color.clear, lineWidth: 2)
                         .background(
                             VStack(spacing: 0) {
                                 Color.fioriNextBackgroundGrey
@@ -42,7 +42,7 @@ struct FioriNextTextFieldStyle: TextFieldStyle {
                                     if text.isEmpty {
                                         Color.fioriNextSeparatorGrey.frame(height: 2)
                                     } else {
-                                        Color.sapBlue.frame(height: 2)
+                                        Color.fnBlue.frame(height: 2)
                                     }
                                 }
                             }
