@@ -35,9 +35,9 @@ public extension EnvironmentValues {
         set { self[CarouselOptionsKey.self] = newValue }
     }
     
-    var onCardCreation: ((DecodableCardItem) -> Void)? {
-        get { self[CardCreationKey.self] }
-        set { self[CardCreationKey.self] = newValue }
+    var onCardEdit: (CardEditing) -> Void {
+        get { self[CardEditKey.self] }
+        set { self[CardEditKey.self] = newValue }
     }
 }
 
@@ -58,9 +58,9 @@ struct ActionTextModifierKey: EnvironmentKey {
 }
 
 struct CarouselOptionsKey: EnvironmentKey {
-    static let defaultValue = CarouselOptions(itemSpacing: 36, alignment: .bottom)
+    public static let defaultValue = CarouselOptions(itemSpacing: 36, alignment: .bottom)
 }
 
-private struct CardCreationKey: EnvironmentKey {
-    static let defaultValue: ((DecodableCardItem) -> Void)? = nil
+struct CardEditKey: EnvironmentKey {
+    public static let defaultValue: (CardEditing) -> Void = { _ in }
 }
