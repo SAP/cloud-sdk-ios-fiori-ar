@@ -11,6 +11,7 @@
 		2C3C67602674006B00B2B243 /* CarEngineRC1.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */; };
 		2C48248C264DC33300E230E6 /* CarEngineExampleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C48248B264DC33300E230E6 /* CarEngineExampleContentView.swift */; };
 		2C48248F264DC40600E230E6 /* StringIdentifyingCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C48248E264DC40600E230E6 /* StringIdentifyingCardItem.swift */; };
+		2C4A404626FEA11100D11A8F /* ARCardAuthoringContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4A404526FEA11000D11A8F /* ARCardAuthoringContentView.swift */; };
 		2C4C71A02643697F00B462A9 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C719F2643697F00B462A9 /* ExamplesApp.swift */; };
 		2C4C71A22643697F00B462A9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4C71A12643697F00B462A9 /* ContentView.swift */; };
 		2C4C71A42643698000B462A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C4C71A32643698000B462A9 /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 		2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = CarEngineRC1.rcproject; sourceTree = "<group>"; };
 		2C48248B264DC33300E230E6 /* CarEngineExampleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarEngineExampleContentView.swift; sourceTree = "<group>"; };
 		2C48248E264DC40600E230E6 /* StringIdentifyingCardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringIdentifyingCardItem.swift; sourceTree = "<group>"; };
+		2C4A404526FEA11000D11A8F /* ARCardAuthoringContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardAuthoringContentView.swift; sourceTree = "<group>"; };
 		2C4C719C2643697F00B462A9 /* Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Examples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C4C719F2643697F00B462A9 /* ExamplesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplesApp.swift; sourceTree = "<group>"; };
 		2C4C71A12643697F00B462A9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				2C554AE12681189B007784D6 /* ARCardsRealityFileLoadingContentView.swift */,
 				2CCF965A2682535000566523 /* ARCardsUSDZFileLoadingContentView.swift */,
 				2CC2A027268BFB8F0091C42B /* ARCardListView.swift */,
+				2C4A404526FEA11000D11A8F /* ARCardAuthoringContentView.swift */,
 			);
 			path = CardContentViews;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C4A404626FEA11100D11A8F /* ARCardAuthoringContentView.swift in Sources */,
 				2C3C67602674006B00B2B243 /* CarEngineRC1.rcproject in Sources */,
 				2C554AE4268118E0007784D6 /* FileManager+Extensions.swift in Sources */,
 				2C4C71A22643697F00B462A9 /* ContentView.swift in Sources */,
