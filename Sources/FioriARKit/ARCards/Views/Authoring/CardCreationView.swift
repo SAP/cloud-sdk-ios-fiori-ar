@@ -21,11 +21,12 @@ struct CardCreationView: View {
     @Binding var attachmentModels: [AttachmentItemModel]
     @Binding var currentCardID: UUID?
     
-    @State var image: Image?
+    @State var detailImage: Image?
     @State var title: String
     @State var subtitle: String
     @State var actionText: String
     @State var actionContentText: String
+    @State var icon: Image?
     
     @State var hasButton = false
     @State var hasCoverImage = false
@@ -37,7 +38,7 @@ struct CardCreationView: View {
         
         let currentCard = cardItems.wrappedValue.first(where: { UUID(uuidString: $0.id) == currentCardID.wrappedValue })
         
-        self._image = State(initialValue: currentCard?.detailImage_)
+        self._detailImage = State(initialValue: currentCard?.detailImage_)
         self._title = State(initialValue: currentCard?.title_ ?? "")
         self._subtitle = State(initialValue: currentCard?.descriptionText_ ?? "")
         self._actionText = State(initialValue: currentCard?.actionText_ ?? "")
@@ -76,19 +77,20 @@ struct CardCreationView: View {
                 Color
                     .fioriNextBackgroundGrey
                 
-                CardPreview(detailImage: $image, title: $title, descriptionText: $subtitle, actionText: $actionText)
+                CardPreview(detailImage: $detailImage, title: $title, descriptionText: $subtitle, actionText: $actionText, icon: $icon)
+                    .offset(y: -10)
             }
             .frame(height: 246)
 
             CardDetailsView(cardItems: $cardItems,
-                            image: $image,
+                            detailImage: $detailImage,
                             title: $title,
                             subtitle: $subtitle,
                             actionText: $actionText,
                             actionContentText: $actionContentText,
                             actionButtonToggle: $hasButton,
                             coverImageToggle: $hasCoverImage,
-                            onAction: {
+                            toggleActionSheet: {
                                 if let currentID = currentCardID {
                                     updateCard(for: currentID)
                                 } else {
@@ -108,7 +110,7 @@ struct CardCreationView: View {
     }
     
     func createCard() {
-        let newCard = DecodableCardItem(id: UUID().uuidString, title_: self.title, descriptionText_: self.subtitle, detailImage_: self.image, actionText_: self.actionText, icon_: nil)
+        let newCard = DecodableCardItem(id: UUID().uuidString, title_: self.title, descriptionText_: self.subtitle, detailImage_: self.detailImage, actionText_: self.actionText, icon_: nil)
         self.cardItems.append(newCard)
         
         self.onCardEdit(.created(card: newCard))
@@ -119,7 +121,7 @@ struct CardCreationView: View {
         self.cardItems[index] = DecodableCardItem(id: currentID.uuidString,
                                                   title_: self.title,
                                                   descriptionText_: self.subtitle,
-                                                  detailImage_: self.image,
+                                                  detailImage_: self.detailImage,
                                                   actionText_: self.actionText,
                                                   icon_: nil)
         
@@ -139,7 +141,7 @@ struct CardCreationView: View {
 private struct CardDetailsView: View {
     @Binding var cardItems: [DecodableCardItem]
     
-    @Binding var image: Image?
+    @Binding var detailImage: Image?
     @Binding var title: String
     @Binding var subtitle: String
     @Binding var actionText: String
@@ -148,7 +150,11 @@ private struct CardDetailsView: View {
     @Binding var actionButtonToggle: Bool
     @Binding var coverImageToggle: Bool
     
-    var onAction: (() -> Void)?
+    @State var actionSheetPresented = false
+    var toggleActionSheet: (() -> Void)?
+    
+    @State var pickerPresented = false
+    @State var pickerSource: UIImagePickerController.SourceType = .photoLibrary
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -169,10 +175,10 @@ private struct CardDetailsView: View {
                     
                     ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
                     
-                    CoverImageDetail(titleText: "Custom Cover Image (Optional)", isOn: $coverImageToggle)
+                    CoverImageDetail(titleText: "Custom Cover Image (Optional)", isOn: $coverImageToggle, presentActionSheet: $actionSheetPresented, detailImage: $detailImage)
                     
                     Button(action: {
-                        onAction?()
+                        toggleActionSheet?()
                     }, label: {
                         Text("Create")
                             .font(.system(size: 15))
@@ -192,19 +198,44 @@ private struct CardDetailsView: View {
         }
         .background(Color.white)
         .cornerRadius(16)
+        .actionSheet(isPresented: $actionSheetPresented) {
+            ActionSheet(title: Text("Choose an option..."),
+                        message: Text("Selection for Card Cover Image"),
+                        buttons: [.default(Text("Camera"), action: {
+                            pickerSource = .camera
+                            pickerPresented.toggle()
+                        }), .default(Text("Photos"), action: {
+                            pickerSource = .photoLibrary
+                            pickerPresented.toggle()
+                        }), .cancel()])
+        }
+        .fullScreenCover(isPresented: $pickerPresented) {
+            CameraView(takenImage: $detailImage, fileName: .constant(nil), sourceType: pickerSource)
+                .edgesIgnoringSafeArea(.all)
+        }
     }
 }
 
-struct CardPreview: View {
+private struct CardPreview: View {
     @Binding var detailImage: Image?
     @Binding var title: String
     @Binding var descriptionText: String
     @Binding var actionText: String
+    @Binding var icon: Image?
     
     var body: some View {
         VStack(spacing: 10) {
             VStack {
-                detailImage
+                if let detailImage = detailImage {
+                    detailImage
+                        .resizable()
+                        .scaledToFill()
+                    
+                } else {
+                    (icon ?? Image(systemName: "info"))
+                        .font(.system(size: 37))
+                        .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
+                }
             }
             .frame(width: 214, height: 93)
             .background(Color.preferredColor(.tertiaryFill))
@@ -218,18 +249,24 @@ struct CardPreview: View {
                     .lineLimit(2)
                     .truncationMode(.tail)
                     .frame(width: 198, alignment: .leading)
-                Text(descriptionText)
-                    .font(.subheadline)
-                    .foregroundColor(Color.preferredColor(.secondaryLabel, background: .lightConstant))
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .frame(width: 198, alignment: .leading)
+                
+                if !descriptionText.isEmpty {
+                    Text(descriptionText)
+                        .font(.subheadline)
+                        .foregroundColor(Color.preferredColor(.secondaryLabel, background: .lightConstant))
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(width: 198, alignment: .leading)
+                }
             }
-            .padding(.bottom, 10)
+            .padding(.bottom, 5)
             
             Button(action: {}, label: {
                 Text(actionText)
             })
+                .font(.system(size: 18))
+                .lineLimit(1)
+                .foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant))
                 .frame(width: 198, height: actionText.isEmpty ? 0 : 44)
         }
         .frame(width: 230)
@@ -292,22 +329,38 @@ private struct ToggleDetail: View {
 
 private struct CoverImageDetail: View {
     var titleText: String = ""
+    
     @Binding var isOn: Bool
+    @Binding var presentActionSheet: Bool
+    @Binding var detailImage: Image?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 9.5) {
             Toggle(titleText, isOn: $isOn)
                 .toggleStyle(SwitchToggleStyle(tint: Color.fnBlue))
                 .padding(.vertical, 5)
-            
+
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
-                .frame(height: 145)
                 .overlay(
-                    Image(systemName: "photo")
-                        .foregroundColor(Color.imageGrey)
-                        .font(.system(size: 40))
+                    Group {
+                        if let detailImage = detailImage {
+                            detailImage
+                                .resizable()
+                                .scaledToFill()
+                        } else {
+                            Image(systemName: "photo")
+                                .foregroundColor(Color.imageGrey)
+                                .font(.system(size: 40))
+                        }
+                    }
                 )
+                .frame(height: 145)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .contentShape(RoundedRectangle(cornerRadius: 10))
+                .onTapGesture {
+                    presentActionSheet.toggle()
+                }
         }
     }
 }

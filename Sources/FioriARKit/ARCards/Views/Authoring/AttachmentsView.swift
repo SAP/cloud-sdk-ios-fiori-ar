@@ -57,7 +57,6 @@ struct AttachementsView: View {
                 .padding(.top, 5)
             }
         }
-        .padding(.vertical, 14)
         .padding(.horizontal, 16)
         .onAppear {
             if !attachmentItemModels.contains(where: { $0.title == AttachmentItemModel.addAttachment }) {
