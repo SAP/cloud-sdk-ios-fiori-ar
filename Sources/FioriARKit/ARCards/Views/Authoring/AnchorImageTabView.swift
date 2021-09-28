@@ -8,24 +8,26 @@
 import SwiftUI
 
 struct UploadAnchorImageTabView: View {
-    @State private var selectedImage: UIImage?
-    @State private var imageName: String?
-    @State private var isImagePickerPresented = false
-    @State private var showActionSheet = false
-    @State private var sourceType: UIImagePickerController.SourceType?
-//    var onAddAnchorImage: (() -> Void)?
+    @Binding var anchorImage: Image?
     
+    @State private var actionSheetPresented = false
+    
+    @State private var pickerPresented = false
+    @State private var pickerSource: UIImagePickerController.SourceType = .photoLibrary
+    
+    @State private var imageName: String?
+   
     var body: some View {
-        VStack(alignment: .center, spacing: 36) {
-            if let _ = selectedImage {
-                ImageAnchorView(selectedImage: $selectedImage, imageName: imageName ?? "")
+        VStack {
+            if let _ = anchorImage {
+                ImageAnchorView(anchorImage: $anchorImage, imageName: imageName ?? "")
                 
             } else {
                 VStack(spacing: 46) {
                     Text("The anchor is an image that the software can recognize to successfully place the markers in relation to the anchor. Make sure that the anchor image is scannable on the site of the experience.")
                         .multilineTextAlignment(.center)
                         .font(.system(size: 17))
-                    Button(action: { showActionSheet.toggle() }, label: {
+                    Button(action: { actionSheetPresented.toggle() }, label: {
                         Text("Upload Anchor Image")
                             .font(.system(size: 15))
                             .bold()
@@ -41,68 +43,69 @@ struct UploadAnchorImageTabView: View {
                 .padding(.horizontal, 32)
             }
         }
-        .actionSheet(isPresented: $showActionSheet, content: { () -> ActionSheet in
-            ActionSheet(title: Text("Select Image"), message: Text(""), buttons: [
-                ActionSheet.Button.default(Text("Camera"), action: {
-                    self.isImagePickerPresented.toggle()
-                    self.sourceType = .camera
-                    self.imageName = nil
-                }),
-                ActionSheet.Button.default(Text("Library"), action: {
-                    self.isImagePickerPresented.toggle()
-                    self.sourceType = .photoLibrary
-                }),
-                ActionSheet.Button.cancel()
-            ])
-        })
-        .sheet(isPresented: self.$isImagePickerPresented) {
-            CameraView(takenImage: self.$selectedImage, fileName: self.$imageName, sourceType: self.sourceType!)
+        .actionSheet(isPresented: $actionSheetPresented) {
+            ActionSheet(title: Text("Choose an option..."),
+                        message: Text("Selection for Anchor Image"),
+                        buttons: [.default(Text("Camera"), action: {
+                            pickerSource = .camera
+                            pickerPresented.toggle()
+                        }), .default(Text("Photos"), action: {
+                            pickerSource = .photoLibrary
+                            pickerPresented.toggle()
+                        }), .cancel()])
+        }
+        .fullScreenCover(isPresented: $pickerPresented) {
+            CameraView(takenImage: $anchorImage, fileName: $imageName, sourceType: pickerSource)
+                .edgesIgnoringSafeArea(.all)
         }
     }
 }
 
 struct ImageAnchorView: View {
-    @Binding var selectedImage: UIImage?
+    @Binding var anchorImage: Image?
     var imageName: String
     
     var body: some View {
         VStack(spacing: 16) {
             HStack {
                 Text("Image Anchor")
-                Image(systemName: "info.circle")
-                    .foregroundColor(.blue)
-                    .font(.system(size: 18))
-                
+                    .bold()
                 Spacer()
             }
-            
-            VStack(spacing: 29) {
-                if let image = selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 343, height: 257)
-                        .padding(.top, 32)
+            VStack {
+                VStack {
+                    if let anchorImage = anchorImage {
+                        anchorImage
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 196)
+                            .clipped()
+                    }
                 }
-            
+                .contentShape(Rectangle())
+                .padding(.vertical, 60)
+                    
                 HStack {
                     Text(imageName)
-                        .foregroundColor(Color.gray)
+                        .foregroundColor(Color.black)
                     Spacer()
-                    Button("Delete") {
-                        selectedImage = nil
-                    }
-                    .foregroundColor(Color.black)
+                    Button(action: {
+                               anchorImage = nil
+                           },
+                           label: {
+                               Text("Delete")
+                                   .foregroundColor(Color.black)
+                                   .bold()
+                           })
                 }
                 .font(.system(size: 13))
                 .padding(.horizontal, 16)
                 .padding(.bottom, 21)
             }
-            .frame(width: 343, height: 357)
             .background(Color.imageGrey)
             .cornerRadius(10)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
+        .frame(height: 357)
+        .padding(16)
     }
 }
