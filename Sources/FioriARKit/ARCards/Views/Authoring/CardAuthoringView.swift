@@ -15,13 +15,16 @@ public struct CardAuthoringView: View {
     
     @State private var currentTab: TabSelection
     
+    @State private var anchorImage: Image?
     @State private var cardItems: [DecodableCardItem]
     @State private var attachmentItemModels: [AttachmentItemModel]
-    
     @State private var currentCardID: UUID?
+    
+    @State private var hideNavBar = true
     
     public init(_ cardItems: [DecodableCardItem] = []) {
         _currentTab = State(initialValue: .left)
+        _anchorImage = State(initialValue: nil)
         _cardItems = State(initialValue: cardItems)
         _attachmentItemModels = State(initialValue: [])
         _currentCardID = State(initialValue: nil)
@@ -30,6 +33,7 @@ public struct CardAuthoringView: View {
     public var body: some View {
         VStack(spacing: 0) {
             TitleBarView(onLeftAction: {
+                hideNavBar = false
                 presentationMode.wrappedValue.dismiss()
             }, onRightAction: {
                 startAR()
@@ -54,7 +58,7 @@ public struct CardAuthoringView: View {
                     cardCreationIsPresented.toggle()
                 }
             case .right:
-                UploadAnchorImageTabView()
+                UploadAnchorImageTabView(anchorImage: $anchorImage)
             }
             Spacer()
         }
@@ -68,7 +72,7 @@ public struct CardAuthoringView: View {
                 isActive: $cardCreationIsPresented,
                 label: { EmptyView() })
         )
-        .navigationBarHidden(true)
+        .navigationBarHidden(hideNavBar)
         .navigationBarTitle("")
         .edgesIgnoringSafeArea(.top)
         .onAppear(perform: populateAttachmentView)
@@ -109,8 +113,7 @@ private struct TabView: View {
                 }
         }
         .font(.system(size: 14))
-        .padding(.top, 15)
-        .padding(.horizontal, 16)
+        .padding(16)
     }
     
     func tab(title: String, isSelected: Bool) -> some View {
