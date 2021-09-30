@@ -16,7 +16,7 @@ struct UploadAnchorImageTabView: View {
     @State private var pickerSource: UIImagePickerController.SourceType = .photoLibrary
     
     @State private var imageName: String?
-   
+    
     var body: some View {
         VStack {
             if let _ = anchorImage {
@@ -55,8 +55,22 @@ struct UploadAnchorImageTabView: View {
                         }), .cancel()])
         }
         .fullScreenCover(isPresented: $pickerPresented) {
-            CameraView(takenImage: $anchorImage, fileName: $imageName, sourceType: pickerSource)
+            ImagePickerView(takenImage: $anchorImage, fileName: $imageName, sourceType: pickerSource)
                 .edgesIgnoringSafeArea(.all)
+        }
+    }
+}
+
+struct ImageContainerView: View {
+    var image: Image?
+    
+    var body: some View {
+        Group {
+            if let image = image {
+                image
+                    .resizable()
+                    .scaledToFill()
+            }
         }
     }
 }
@@ -72,37 +86,36 @@ struct ImageAnchorView: View {
                     .bold()
                 Spacer()
             }
-            VStack {
-                VStack {
+            ZStack {
+                Color.imageGrey
+                VStack(spacing: 60) {
                     if let anchorImage = anchorImage {
                         anchorImage
                             .resizable()
-                            .scaledToFill()
+                            .aspectRatio(contentMode: .fill)
                             .frame(height: 196)
                             .clipped()
+                            .contentShape(Rectangle())
+                            .padding(.top, 60)
                     }
+                        
+                    HStack {
+                        Text(imageName)
+                            .foregroundColor(Color.black)
+                        Spacer()
+                        Button(action: {
+                            anchorImage = nil
+                        }, label: {
+                            Text("Delete")
+                                .foregroundColor(Color.black)
+                                .bold()
+                        })
+                    }
+                    .font(.system(size: 13))
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 21)
                 }
-                .contentShape(Rectangle())
-                .padding(.vertical, 60)
-                    
-                HStack {
-                    Text(imageName)
-                        .foregroundColor(Color.black)
-                    Spacer()
-                    Button(action: {
-                               anchorImage = nil
-                           },
-                           label: {
-                               Text("Delete")
-                                   .foregroundColor(Color.black)
-                                   .bold()
-                           })
-                }
-                .font(.system(size: 13))
-                .padding(.horizontal, 16)
-                .padding(.bottom, 21)
             }
-            .background(Color.imageGrey)
             .cornerRadius(10)
         }
         .frame(height: 357)

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct CardAuthoringView: View {
+public struct AnnotationSceneAuthoringView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onCardEdit) var onCardEdit
     
@@ -41,11 +41,12 @@ public struct CardAuthoringView: View {
             leftBarLabel: {
                 Image(systemName: "xmark")
                     .font(.system(size: 22))
-                    .foregroundColor(Color.fnBlue)
+                    .foregroundColor(Color.black)
             },
             rightBarLabel: {
                 Image(systemName: "arkit")
                     .font(.system(size: 22))
+                    .foregroundColor(Color.black)
             })
                 .background(Color.white)
             
@@ -83,7 +84,7 @@ public struct CardAuthoringView: View {
             if !attachmentItemModels.contains(where: { UUID(uuidString: card.id) == $0.id }) {
                 let newAttachmentModel = AttachmentItemModel(id: UUID(uuidString: card.id) ?? UUID(),
                                                              title: card.title_,
-                                                             subtitle: card.descriptionText_,
+                                                             subtitle: card.position_ == nil ? "Not Pinned Yet" : "Pinned",
                                                              info: nil,
                                                              image: card.detailImage_,
                                                              icon: card.icon_)

@@ -62,13 +62,13 @@ struct CardCreationView: View {
             leftBarLabel: {
                 Image(systemName: "xmark")
                     .font(.system(size: 22))
-                    .foregroundColor(Color.fnBlue)
+                    .foregroundColor(.black)
                 
             }, rightBarLabel: {
                 if let _ = currentCardID {
                     Image(systemName: "trash")
                         .font(.system(size: 22))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.black)
                 }
             })
                 .background(Color.fioriNextBackgroundGrey)
@@ -76,12 +76,11 @@ struct CardCreationView: View {
             ZStack {
                 Color
                     .fioriNextBackgroundGrey
-                
                 CardPreview(detailImage: $detailImage, title: $title, descriptionText: $subtitle, actionText: $actionText, icon: $icon)
                     .offset(y: -10)
             }
             .frame(height: 246)
-
+            
             CardDetailsView(cardItems: $cardItems,
                             detailImage: $detailImage,
                             title: $title,
@@ -166,34 +165,36 @@ private struct CardDetailsView: View {
             Divider()
             
             ScrollView {
-                VStack(alignment: .center, spacing: 15) {
-                    TextDetail(textField: $title, titleText: "Title")
-
-                    TextDetail(textField: $subtitle, titleText: "Subtitle")
-                    
-                    TextDetail(textField: $actionContentText, titleText: "Content", placeholder: "URL")
-                    
-                    ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
-                    
-                    CoverImageDetail(titleText: "Custom Cover Image (Optional)", isOn: $coverImageToggle, presentActionSheet: $actionSheetPresented, detailImage: $detailImage)
-                    
-                    Button(action: {
-                        toggleActionSheet?()
-                    }, label: {
-                        Text("Create")
-                            .font(.system(size: 15))
-                            .bold()
-                            .frame(width: 343, height: 40)
-                            .foregroundColor(.white)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.fnBlue)
-                            )
-                    })
-                        .padding(.bottom, 54)
+                ZStack {
+                    VStack(alignment: .center, spacing: 15) {
+                        TextDetail(textField: $title, titleText: "Title")
+                        
+                        TextDetail(textField: $subtitle, titleText: "Subtitle")
+                        
+                        TextDetail(textField: $actionContentText, titleText: "Content", placeholder: "URL")
+                        
+                        ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
+                        
+                        CoverImageDetail(titleText: "Custom Cover Image (Optional)", isOn: $coverImageToggle, presentActionSheet: $actionSheetPresented, detailImage: $detailImage)
+                        
+                        Button(action: {
+                            toggleActionSheet?()
+                        }, label: {
+                            Text("Create")
+                                .font(.system(size: 15))
+                                .bold()
+                                .frame(width: 343, height: 40)
+                                .foregroundColor(.white)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.fnBlue)
+                                )
+                        })
+                            .padding(.bottom, 54)
+                    }
+                    .padding(.top, 9.5)
+                    .padding(.horizontal, 16)
                 }
-                .padding(.top, 9.5)
-                .padding(.horizontal, 16)
             }
         }
         .background(Color.white)
@@ -210,7 +211,7 @@ private struct CardDetailsView: View {
                         }), .cancel()])
         }
         .fullScreenCover(isPresented: $pickerPresented) {
-            CameraView(takenImage: $detailImage, fileName: .constant(nil), sourceType: pickerSource)
+            ImagePickerView(takenImage: $detailImage, fileName: .constant(nil), sourceType: pickerSource)
                 .edgesIgnoringSafeArea(.all)
         }
     }
@@ -281,7 +282,7 @@ private struct TextDetail: View {
     
     var titleText: String
     var placeholder: String?
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 9.5) {
             Text(titleText)
@@ -321,8 +322,16 @@ private struct ToggleDetail: View {
             Toggle(titleText, isOn: $isOn)
                 .toggleStyle(SwitchToggleStyle(tint: Color.fnBlue))
                 .font(.system(size: 15))
+                .onChange(of: isOn) { newValue in
+                    if !newValue {
+                        textField = ""
+                    }
+                }
             
             FioriNextTextField(text: $textField, placeHolder: titleText)
+                .onChange(of: textField) { newValue in
+                    isOn = newValue.isEmpty ? false : true
+                }
         }
     }
 }
@@ -339,28 +348,39 @@ private struct CoverImageDetail: View {
             Toggle(titleText, isOn: $isOn)
                 .toggleStyle(SwitchToggleStyle(tint: Color.fnBlue))
                 .padding(.vertical, 5)
-
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
-                .overlay(
-                    Group {
-                        if let detailImage = detailImage {
-                            detailImage
-                                .resizable()
-                                .scaledToFill()
-                        } else {
-                            Image(systemName: "photo")
-                                .foregroundColor(Color.imageGrey)
-                                .font(.system(size: 40))
-                        }
+                .onChange(of: isOn) { newValue in
+                    if !newValue {
+                        detailImage = nil
                     }
-                )
-                .frame(height: 145)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .contentShape(RoundedRectangle(cornerRadius: 10))
-                .onTapGesture {
-                    presentActionSheet.toggle()
                 }
+            
+            VStack {
+                if let detailImage = detailImage {
+                    detailImage
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 145)
+                        .clipped()
+                } else {
+                    Image(systemName: "photo")
+                        .foregroundColor(Color.imageGrey)
+                        .font(.system(size: 40))
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 145)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .contentShape(RoundedRectangle(cornerRadius: 10))
+            .zIndex(-1)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
+            )
+            .onChange(of: detailImage) { newValue in
+                isOn = newValue == nil ? false : true
+            }
+            .onTapGesture {
+                presentActionSheet.toggle()
+            }
         }
     }
 }
