@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View, RightBarLabel: View {
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
     var title: String
     var onLeftAction: (() -> Void)?
     var onRightAction: (() -> Void)?
@@ -48,6 +50,6 @@ struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View,
         }
         .padding(.horizontal, 16)
         .frame(height: 52)
-        .padding(.top, 44)
+        .padding(.top, verticalSizeClass == .compact ? 0 : 44)
     }
 }
