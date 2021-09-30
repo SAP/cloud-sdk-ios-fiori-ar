@@ -51,9 +51,7 @@ public extension View {
     func carouselOptions(_ options: CarouselOptions) -> some View {
         environment(\.carouselOptions, options)
     }
-}
-
-public extension View {
+    
     /// Passes the Card Editing callback down from the environment
     ///
     /// - Parameters:
