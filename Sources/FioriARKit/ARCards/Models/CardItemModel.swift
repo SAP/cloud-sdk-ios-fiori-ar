@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-public protocol CardItemModel: Identifiable, TitleComponent, DescriptionTextComponent, DetailImageComponent, ActionTextComponent, IconComponent {}
+public protocol CardItemModel: Identifiable, TitleComponent, SubtitleComponent, DetailImageComponent, ActionTextComponent, IconComponent {}
 
 public protocol TitleComponent {
     var title_: String { get }
 }
 
-public protocol DescriptionTextComponent {
+public protocol SubtitleComponent {
     var descriptionText_: String? { get }
 }
 
@@ -29,6 +29,14 @@ public protocol IconComponent {
     var icon_: Image? { get }
 }
 
+public struct Vector3: Codable {
+    public var x: Float
+    public var y: Float
+    public var z: Float
+    
+    static let zero = Vector3(x: .zero, y: .zero, z: .zero)
+}
+
 public struct DecodableCardItem: CardItemModel {
     public var id: String
     public var title_: String
@@ -36,6 +44,17 @@ public struct DecodableCardItem: CardItemModel {
     public var detailImage_: Image?
     public var actionText_: String?
     public var icon_: Image?
+    public var position_: Vector3?
+    
+    public init(id: String, title_: String, descriptionText_: String? = nil, detailImage_: Image? = nil, actionText_: String? = nil, icon_: Image? = nil, position_: Vector3? = nil) {
+        self.id = id
+        self.title_ = title_
+        self.descriptionText_ = descriptionText_
+        self.detailImage_ = detailImage_
+        self.actionText_ = actionText_
+        self.icon_ = icon_
+        self.position_ = position_
+    }
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -44,6 +63,7 @@ public struct DecodableCardItem: CardItemModel {
         case detailImage_
         case actionText_
         case icon_
+        case position_
     }
 }
 
@@ -67,5 +87,6 @@ extension DecodableCardItem: Decodable {
         self.actionText_ = try values.decode(String?.self, forKey: .actionText_)
         let iconString: String? = try values.decode(String?.self, forKey: .icon_)
         self.icon_ = iconString != nil ? Image(systemName: iconString!) : nil
+        self.position_ = try values.decode(Vector3?.self, forKey: .position_)
     }
 }

@@ -17,17 +17,7 @@ struct AttachementsView: View {
         self.onAddAttachment = onAddAttachment
         self.onSelectAttachment = onSelectAttachment
     }
-    
-    var addAttachmentView: some View {
-        VStack {
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
-                .overlay(Image(systemName: "plus").font(.system(size: 22)).foregroundColor(.blue))
-                .frame(width: 110, height: 110)
-            Spacer()
-        }
-    }
-    
+
     public var body: some View {
         VStack(spacing: 11) {
             HStack {
@@ -38,14 +28,13 @@ struct AttachementsView: View {
             }
             
             ScrollView(.vertical, showsIndicators: false) {
-                LazyVGrid(columns: Array(repeating: GridItem(.adaptive(minimum: 110)), count: 1), spacing: 5) {
+                LazyVGrid(columns: Array(repeating: GridItem(.adaptive(minimum: 110), alignment: .top), count: 1), spacing: 8) {
                     ForEach(attachmentItemModels) { attachementItemModel in
                         if attachementItemModel.title == AttachmentItemModel.addAttachment {
-                            addAttachmentView
+                            AddAttachmentView()
                                 .onTapGesture {
                                     onAddAttachment?()
                                 }
-                            
                         } else {
                             AttachmentCardView(item: attachementItemModel)
                                 .onTapGesture {
@@ -66,6 +55,15 @@ struct AttachementsView: View {
     }
 }
 
+struct AddAttachmentView: View {
+    var body: some View {
+        RoundedRectangle(cornerRadius: 8)
+            .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
+            .overlay(Image(systemName: "plus").font(.system(size: 22)).foregroundColor(.blue))
+            .frame(width: 110, height: 110)
+    }
+}
+
 struct AttachmentCardView: View {
     var item: AttachmentItemModel
     
@@ -75,14 +73,14 @@ struct AttachmentCardView: View {
                 (item.icon ?? Image(systemName: "info"))
                     .font(.system(size: 28))
                     .foregroundColor(.gray)
-                    
+                
                 if let image = item.image {
                     image
                         .resizable()
                         .scaledToFill()
                 }
             }
-            .frame(width: 107.32, height: 107.32)
+            .frame(width: 110, height: 110)
             .cornerRadius(8)
             .background(
                 RoundedRectangle(cornerRadius: 8)
@@ -97,12 +95,13 @@ struct AttachmentCardView: View {
                         .truncationMode(.middle)
                     if let subtitle = item.subtitle {
                         Text(subtitle)
+                            .foregroundColor(.gray)
                     }
                     if let info = item.info {
                         Text(info)
+                            .foregroundColor(.gray)
                     }
                 }
-                
                 .lineLimit(1)
                 .font(.system(size: 11))
                 .foregroundColor(Color.black)
@@ -111,6 +110,5 @@ struct AttachmentCardView: View {
             }
             Spacer()
         }
-        .padding(.bottom, 5)
     }
 }
