@@ -16,6 +16,7 @@ struct FioriNextTextField: View {
     var body: some View {
         TextField("", text: $text, onEditingChanged: { editingText = $0 }, onCommit: {})
             .textFieldStyle(FioriNextTextFieldStyle(editingText: $editingText, placeholder: placeHolder, text: text))
+            .foregroundColor(Color.black)
             .font(.system(size: 17))
     }
 }
@@ -34,15 +35,15 @@ struct FioriNextTextFieldStyle: TextFieldStyle {
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .strokeBorder(editingText ? Color.fnBlue : Color.clear, lineWidth: 2)
+                        .strokeBorder(editingText ? Color.fioriNextBlue : Color.clear, lineWidth: 2)
                         .background(
                             VStack(spacing: 0) {
                                 Color.fioriNextBackgroundGrey
                                 if !editingText {
                                     if text.isEmpty {
-                                        Color.fioriNextSeparatorGrey.frame(height: 2)
+                                        Color.fioriNextSecondaryGrey.opacity(0.83).frame(height: 2)
                                     } else {
-                                        Color.fnBlue.frame(height: 2)
+                                        Color.fioriNextBlue.frame(height: 2)
                                     }
                                 }
                             }
@@ -52,7 +53,7 @@ struct FioriNextTextFieldStyle: TextFieldStyle {
                         Text(text.isEmpty ? placeholder : "")
                             .font(.system(size: 17))
                             .italic()
-                            .foregroundColor(Color.placeholderGrey)
+                            .foregroundColor(Color.fioriNextSecondaryGrey.opacity(0.83))
                             .padding(.leading, 12)
                         Spacer()
                     }

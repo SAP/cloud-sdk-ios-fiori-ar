@@ -14,7 +14,7 @@ struct ExamplesApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView() // CardCreationView(isPresented: .constant(true))
+            ContentView() // CardFormView(isPresented: .constant(true))
         }
     }
 }
