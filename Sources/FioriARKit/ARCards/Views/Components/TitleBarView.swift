@@ -39,7 +39,9 @@ struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View,
                 Spacer()
             }
             
-            Text(title).bold()
+            Text(title)
+                .foregroundColor(Color.black)
+                .bold()
             
             HStack {
                 Spacer()
@@ -51,5 +53,6 @@ struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View,
         .padding(.horizontal, 16)
         .frame(height: 52)
         .padding(.top, verticalSizeClass == .compact ? 0 : 44)
+        .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
     }
 }

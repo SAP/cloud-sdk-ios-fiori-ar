@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct UploadAnchorImageTabView: View {
-    @Binding var anchorImage: Image?
+    @Environment(\.verticalSizeClass) var vSizeClass
+    
+    @Binding var anchorImage: UIImage?
     
     @State private var actionSheetPresented = false
     
@@ -26,6 +28,7 @@ struct UploadAnchorImageTabView: View {
                 VStack(spacing: 46) {
                     Text("The anchor is an image that the software can recognize to successfully place the markers in relation to the anchor. Make sure that the anchor image is scannable on the site of the experience.")
                         .multilineTextAlignment(.center)
+                        .foregroundColor(Color.black)
                         .font(.system(size: 17))
                     Button(action: { actionSheetPresented.toggle() }, label: {
                         Text("Upload Anchor Image")
@@ -35,14 +38,15 @@ struct UploadAnchorImageTabView: View {
                             .foregroundColor(.white)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.fnBlue)
+                                    .fill(Color.fioriNextBlue)
                             )
                     })
                 }
-                .padding(.top, 148)
+                .padding(.top, vSizeClass == .compact ? 30 : 148)
                 .padding(.horizontal, 32)
             }
         }
+        .background(Color.white)
         .actionSheet(isPresented: $actionSheetPresented) {
             ActionSheet(title: Text("Choose an option..."),
                         message: Text("Selection for Anchor Image"),
@@ -55,28 +59,15 @@ struct UploadAnchorImageTabView: View {
                         }), .cancel()])
         }
         .fullScreenCover(isPresented: $pickerPresented) {
-            ImagePickerView(takenImage: $anchorImage, fileName: $imageName, sourceType: pickerSource)
+            ImagePickerView(image: .constant(nil), uiImage: $anchorImage, fileName: $imageName, sourceType: pickerSource)
                 .edgesIgnoringSafeArea(.all)
         }
     }
 }
 
-struct ImageContainerView: View {
-    var image: Image?
-    
-    var body: some View {
-        Group {
-            if let image = image {
-                image
-                    .resizable()
-                    .scaledToFill()
-            }
-        }
-    }
-}
-
 struct ImageAnchorView: View {
-    @Binding var anchorImage: Image?
+    @Environment(\.verticalSizeClass) var vSizeClass
+    @Binding var anchorImage: UIImage?
     var imageName: String
     
     var body: some View {
@@ -87,13 +78,13 @@ struct ImageAnchorView: View {
                 Spacer()
             }
             ZStack {
-                Color.imageGrey
+                Color.fioriNextSecondaryGrey.opacity(0.24)
                 VStack(spacing: 60) {
                     if let anchorImage = anchorImage {
-                        anchorImage
+                        Image(uiImage: anchorImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(height: 196)
+                            .frame(height: vSizeClass == .compact ? 98 : 196)
                             .clipped()
                             .contentShape(Rectangle())
                             .padding(.top, 60)
@@ -118,7 +109,7 @@ struct ImageAnchorView: View {
             }
             .cornerRadius(10)
         }
-        .frame(height: 357)
+        .frame(height: vSizeClass == .compact ? 178 : 357)
         .padding(16)
     }
 }
