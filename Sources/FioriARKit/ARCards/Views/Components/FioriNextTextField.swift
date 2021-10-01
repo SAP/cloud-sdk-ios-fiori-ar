@@ -34,26 +34,14 @@ struct FioriNextTextFieldStyle: TextFieldStyle {
             .frame(height: 44)
             .background(
                 ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .strokeBorder(editingText ? Color.fioriNextBlue : Color.clear, lineWidth: 2)
-                        .background(
-                            VStack(spacing: 0) {
-                                Color.fioriNextBackgroundGrey
-                                if !editingText {
-                                    if text.isEmpty {
-                                        Color.fioriNextSecondaryGrey.opacity(0.83).frame(height: 2)
-                                    } else {
-                                        Color.fioriNextBlue.frame(height: 2)
-                                    }
-                                }
-                            }
-                            .cornerRadius(8)
-                        )
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(editingText ? Color.fioriNextTint : Color.fioriNextSecondaryFill.opacity(0.83), lineWidth: editingText ? 2 : 0.33)
+                        .background(Color.fioriNextPrimaryBackground.cornerRadius(10))
                     HStack {
                         Text(text.isEmpty ? placeholder : "")
                             .font(.system(size: 17))
                             .italic()
-                            .foregroundColor(Color.fioriNextSecondaryGrey.opacity(0.83))
+                            .foregroundColor(Color.fioriNextSecondaryFill.opacity(0.83))
                             .padding(.leading, 12)
                         Spacer()
                     }

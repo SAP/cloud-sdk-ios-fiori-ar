@@ -19,10 +19,6 @@ struct ContentView: View {
                 NavigationLink(destination: DownloadsView()) {
                     Text("Download Image Anchors")
                 }
-                
-                NavigationLink(destination: ARCardAuthoringContentView()) {
-                    Text("Card Authoring")
-                }
             }.navigationBarTitle("Examples")
         }.navigationViewStyle(StackNavigationViewStyle())
     }
