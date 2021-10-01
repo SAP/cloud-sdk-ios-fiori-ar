@@ -15,12 +15,12 @@ public enum CardEditing {
 }
 
 struct CardFormView: View {
-    @Environment(\.verticalSizeClass) var vSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onCardEdit) var onCardEdit
     
     @Binding var cardItems: [DecodableCardItem]
-    @Binding var attachmentModels: [AttachmentItemModel]
+    @Binding var attachmentModels: [AttachmentsItemModel]
     @Binding var currentCardID: UUID?
     
     @State var detailImage: Image?
@@ -35,7 +35,7 @@ struct CardFormView: View {
     
     var isUpdate: Bool = false
     
-    init(cardItems: Binding<[DecodableCardItem]>, attachmentModels: Binding<[AttachmentItemModel]>, currentCardID: Binding<UUID?>) {
+    init(cardItems: Binding<[DecodableCardItem]>, attachmentModels: Binding<[AttachmentsItemModel]>, currentCardID: Binding<UUID?>) {
         self._cardItems = cardItems
         self._attachmentModels = attachmentModels
         self._currentCardID = currentCardID
@@ -77,16 +77,16 @@ struct CardFormView: View {
                         .foregroundColor(.black)
                 }
             })
-                .background(Color.fioriNextBackgroundGrey)
+                .background(Color.fioriNextPrimaryBackground)
             
             AdaptiveStack {
                 ZStack {
                     Color
-                        .fioriNextBackgroundGrey
+                        .fioriNextPrimaryBackground
                     CardPreview(detailImage: $detailImage, title: $title, descriptionText: $subtitle, actionText: $actionText, icon: $icon, hasButton: $hasButton)
-                        .offset(y: vSizeClass == .compact ? -70 : -10)
+                        .offset(y: verticalSizeClass == .compact ? -70 : -10)
                 }
-                .frame(maxHeight: vSizeClass == .compact ? .infinity : 246)
+                .frame(maxHeight: verticalSizeClass == .compact ? .infinity : 246)
                 
                 CardDetailsView(isUpdate: isUpdate,
                                 detailImage: $detailImage,
@@ -106,7 +106,7 @@ struct CardFormView: View {
                                 })
                     .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
             }
-            .background(Color.fioriNextBackgroundGrey)
+            .background(Color.fioriNextPrimaryBackground)
         }
         .onDisappear {
             currentCardID = nil
@@ -116,7 +116,7 @@ struct CardFormView: View {
         }
         .navigationBarHidden(true)
         .navigationBarTitle("")
-        .edgesIgnoringSafeArea(vSizeClass == .compact ? [.horizontal, .bottom] : .vertical)
+        .edgesIgnoringSafeArea(verticalSizeClass == .compact ? [.horizontal, .bottom] : .vertical)
     }
     
     func createCard() {
@@ -202,7 +202,7 @@ private struct CardDetailsView: View {
                                 .foregroundColor(.white)
                                 .background(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.fioriNextBlue)
+                                        .fill(Color.fioriNextTint)
                                 )
                         })
                             .padding(.bottom, 54)
@@ -305,6 +305,7 @@ private struct TextDetail: View {
             Text(titleText)
                 .foregroundColor(Color.black)
                 .font(.system(size: 15))
+                .bold()
             FioriNextTextField(text: $textField, placeHolder: placeholder ?? titleText)
         }
     }
@@ -317,15 +318,18 @@ private struct ToggleDetail: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 9.5) {
-            Toggle(titleText, isOn: $isOn)
-                .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextBlue))
-                .foregroundColor(Color.black)
-                .font(.system(size: 15))
-                .onChange(of: isOn) { newValue in
-                    if !newValue {
-                        textField = ""
-                    }
+            Toggle(isOn: $isOn) {
+                Text(titleText)
+                    .foregroundColor(Color.black)
+                    .bold()
+                    .font(.system(size: 15))
+            }
+            .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextTint))
+            .onChange(of: isOn) { newValue in
+                if !newValue {
+                    textField = ""
                 }
+            }
             
             FioriNextTextField(text: $textField, placeHolder: titleText)
                 .onChange(of: textField) { newValue in
@@ -344,17 +348,20 @@ private struct CoverImageDetail: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 9.5) {
-            Toggle(titleText, isOn: $isOn)
-                .foregroundColor(Color.black)
-                .font(.system(size: 15))
-                .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextBlue))
-                .padding(.vertical, 5)
-                .onChange(of: isOn) { newValue in
-                    if !newValue {
-                        detailImage = nil
-                    }
+            Toggle(isOn: $isOn) {
+                Text(titleText)
+                    .foregroundColor(Color.black)
+                    .bold()
+                    .font(.system(size: 15))
+            }
+            .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextTint))
+            .padding(.vertical, 5)
+            .onChange(of: isOn) { newValue in
+                if !newValue {
+                    detailImage = nil
                 }
-                .zIndex(0)
+            }
+            .zIndex(0)
             
             VStack {
                 if let detailImage = detailImage {
@@ -365,18 +372,19 @@ private struct CoverImageDetail: View {
                         .clipped()
                 } else {
                     Image(systemName: "photo")
-                        .foregroundColor(Color.fioriNextSecondaryGrey.opacity(0.24))
+                        .foregroundColor(Color.fioriNextSecondaryFill.opacity(0.24))
                         .font(.system(size: 40))
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 145)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .contentShape(RoundedRectangle(cornerRadius: 10))
-            .zIndex(-1)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(detailImage == nil ? Color.gray : Color.clear, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
+                    .strokeBorder(detailImage == nil ? Color.fioriNextSecondaryFill.opacity(0.83) : Color.clear, lineWidth: 0.33)
+                    .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color.fioriNextSecondaryFill.opacity(0.06)))
             )
+            .zIndex(-1)
             .onChange(of: detailImage) { newValue in
                 isOn = newValue == nil ? false : true
             }
@@ -388,7 +396,7 @@ private struct CoverImageDetail: View {
 }
 
 private struct AdaptiveStack<Content>: View where Content: View {
-    @Environment(\.verticalSizeClass) var vSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     
     var content: Content
     
@@ -397,7 +405,7 @@ private struct AdaptiveStack<Content>: View where Content: View {
     }
     
     var body: some View {
-        if vSizeClass == .compact {
+        if verticalSizeClass == .compact {
             HStack {
                 content
             }

@@ -7,15 +7,24 @@
 
 import SwiftUI
 
-struct AttachementsView: View {
-    @Binding var attachmentItemModels: [AttachmentItemModel]
+public struct AttachmentsItemModel: Identifiable {
+    public var id = UUID()
+    public var title: String = ""
+    public var subtitle: String?
+    public var info: String?
+    public var image: Image?
+    public var icon: Image?
+}
+
+struct AttachmentsView: View {
+    @Binding var attachmentsItemModels: [AttachmentsItemModel]
     var label: String
     var onAddAttachment: (() -> Void)?
-    var onSelectAttachment: ((AttachmentItemModel) -> Void)?
+    var onSelectAttachment: ((AttachmentsItemModel) -> Void)?
     
-    init(label: String, attachmentItemModels: Binding<[AttachmentItemModel]>, onAddAttachment: (() -> Void)? = nil, onSelectAttachment: ((AttachmentItemModel) -> Void)? = nil) {
+    init(label: String, attachmentsItemModels: Binding<[AttachmentsItemModel]>, onAddAttachment: (() -> Void)? = nil, onSelectAttachment: ((AttachmentsItemModel) -> Void)? = nil) {
         self.label = label
-        self._attachmentItemModels = attachmentItemModels
+        self._attachmentsItemModels = attachmentsItemModels
         self.onAddAttachment = onAddAttachment
         self.onSelectAttachment = onSelectAttachment
     }
@@ -23,25 +32,30 @@ struct AttachementsView: View {
     public var body: some View {
         VStack(spacing: 11) {
             HStack {
-                Text("\(label) (\(attachmentItemModels.count - 1))")
+                Text(label)
                     .foregroundColor(Color.black)
-                    .font(.system(size: 15))
                     .bold()
+                    .font(.system(size: 15))
+                    +
+                    Text(" (\(attachmentsItemModels.count))")
+                    .foregroundColor(Color.black)
+                    .bold()
+                    .font(.system(size: 15))
                 Spacer()
             }
             
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVGrid(columns: Array(repeating: GridItem(.adaptive(minimum: 110), alignment: .top), count: 1), spacing: 8) {
-                    ForEach(attachmentItemModels) { attachementItemModel in
-                        if attachementItemModel.title == AttachmentItemModel.addAttachment {
-                            AddAttachmentView()
+                    ForEach(-1 ..< attachmentsItemModels.count, id: \.self) { index in
+                        if index == -1 {
+                            AddAttachmentView
                                 .onTapGesture {
                                     onAddAttachment?()
                                 }
                         } else {
-                            AttachmentCardView(item: attachementItemModel)
+                            AttachmentCardView(item: attachmentsItemModels[index])
                                 .onTapGesture {
-                                    onSelectAttachment?(attachementItemModel)
+                                    onSelectAttachment?(attachmentsItemModels[index])
                                 }
                         }
                     }
@@ -50,25 +64,18 @@ struct AttachementsView: View {
             }
         }
         .padding(.horizontal, 16)
-        .onAppear {
-            if !attachmentItemModels.contains(where: { $0.title == AttachmentItemModel.addAttachment }) {
-                attachmentItemModels.insert(AttachmentItemModel(title: AttachmentItemModel.addAttachment), at: 0)
-            }
-        }
     }
-}
-
-private struct AddAttachmentView: View {
-    var body: some View {
+    
+    private var AddAttachmentView: some View {
         RoundedRectangle(cornerRadius: 16)
             .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
-            .overlay(Image(systemName: "plus").font(.system(size: 22)).foregroundColor(.blue))
+            .overlay(Image(systemName: "plus").font(.system(size: 22)).foregroundColor(Color.fioriNextTint))
             .frame(width: 110, height: 110)
     }
 }
 
 private struct AttachmentCardView: View {
-    var item: AttachmentItemModel
+    var item: AttachmentsItemModel
     
     var body: some View {
         VStack {

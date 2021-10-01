@@ -8,22 +8,20 @@
 import SwiftUI
 
 struct UploadAnchorImageTabView: View {
-    @Environment(\.verticalSizeClass) var vSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     
     @Binding var anchorImage: UIImage?
     
     @State private var actionSheetPresented = false
-    
     @State private var pickerPresented = false
-    @State private var pickerSource: UIImagePickerController.SourceType = .photoLibrary
     
+    @State private var pickerSource: UIImagePickerController.SourceType = .photoLibrary
     @State private var imageName: String?
     
     var body: some View {
         VStack {
             if let _ = anchorImage {
                 ImageAnchorView(anchorImage: $anchorImage, imageName: imageName ?? "")
-                
             } else {
                 VStack(spacing: 46) {
                     Text("The anchor is an image that the software can recognize to successfully place the markers in relation to the anchor. Make sure that the anchor image is scannable on the site of the experience.")
@@ -38,13 +36,14 @@ struct UploadAnchorImageTabView: View {
                             .foregroundColor(.white)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.fioriNextBlue)
+                                    .fill(Color.fioriNextTint)
                             )
                     })
                 }
-                .padding(.top, vSizeClass == .compact ? 30 : 148)
+                .padding(.top, verticalSizeClass == .compact ? 30 : 148)
                 .padding(.horizontal, 32)
             }
+            Spacer()
         }
         .background(Color.white)
         .actionSheet(isPresented: $actionSheetPresented) {
@@ -66,9 +65,14 @@ struct UploadAnchorImageTabView: View {
 }
 
 struct ImageAnchorView: View {
-    @Environment(\.verticalSizeClass) var vSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     @Binding var anchorImage: UIImage?
     var imageName: String
+    
+    init(anchorImage: Binding<UIImage?>, imageName: String = "") {
+        self._anchorImage = anchorImage
+        self.imageName = imageName
+    }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -78,17 +82,20 @@ struct ImageAnchorView: View {
                 Spacer()
             }
             ZStack {
-                Color.fioriNextSecondaryGrey.opacity(0.24)
-                VStack(spacing: 60) {
+                Color.fioriNextSecondaryFill.opacity(0.24)
+                VStack {
                     if let anchorImage = anchorImage {
                         Image(uiImage: anchorImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(height: vSizeClass == .compact ? 98 : 196)
+                            .frame(height: 196)
                             .clipped()
                             .contentShape(Rectangle())
-                            .padding(.top, 60)
+                            .padding(.top, verticalSizeClass == .compact ? 0 : 60)
+                            .padding(.horizontal, verticalSizeClass == .compact ? 180 : 0)
                     }
+                    
+                    Spacer()
                         
                     HStack {
                         Text(imageName)
@@ -104,12 +111,12 @@ struct ImageAnchorView: View {
                     }
                     .font(.system(size: 13))
                     .padding(.horizontal, 16)
-                    .padding(.bottom, 21)
+                    .padding(.bottom, verticalSizeClass == .compact ? 13 : 21)
                 }
             }
-            .cornerRadius(10)
+            .frame(maxHeight: verticalSizeClass == .compact ? .infinity : 357)
+            .cornerRadius(10, corners: verticalSizeClass == .compact ? [.topLeft, .topRight] : .allCorners)
         }
-        .frame(height: vSizeClass == .compact ? 178 : 357)
-        .padding(16)
+        .padding(.horizontal, verticalSizeClass == .compact ? 0 : 16)
     }
 }

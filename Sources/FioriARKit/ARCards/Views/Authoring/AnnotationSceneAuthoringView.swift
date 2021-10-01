@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct AnnotationSceneAuthoringView: View {
-    @Environment(\.verticalSizeClass) var vSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onCardEdit) var onCardEdit
     
@@ -18,7 +18,7 @@ public struct AnnotationSceneAuthoringView: View {
     
     @State private var anchorImage: UIImage?
     @State private var cardItems: [DecodableCardItem]
-    @State private var attachmentItemModels: [AttachmentItemModel]
+    @State private var attachmentsItemModels: [AttachmentsItemModel]
     @State private var currentCardID: UUID?
     
     @State private var hideNavBar = true
@@ -27,7 +27,7 @@ public struct AnnotationSceneAuthoringView: View {
         _currentTab = State(initialValue: .left)
         _anchorImage = State(initialValue: nil)
         _cardItems = State(initialValue: cardItems)
-        _attachmentItemModels = State(initialValue: [])
+        _attachmentsItemModels = State(initialValue: [])
         _currentCardID = State(initialValue: nil)
     }
     
@@ -53,47 +53,47 @@ public struct AnnotationSceneAuthoringView: View {
             
             VStack(spacing: 0) {
                 TabView(currentTab: $currentTab, leftTabTitle: "Cards", rightTabTitle: "Anchor Image")
+                    .padding(.bottom, 16)
                 
                 switch currentTab {
                 case .left:
-                    AttachementsView(label: "Cards", attachmentItemModels: $attachmentItemModels,
-                                     onAddAttachment: { cardCreationIsPresented.toggle() }) { attachmentItemModel in
-                        currentCardID = attachmentItemModel.id
+                    AttachmentsView(label: "Cards", attachmentsItemModels: $attachmentsItemModels, onAddAttachment: { cardCreationIsPresented.toggle() }) { attachmentsItemModel in
+                        currentCardID = attachmentsItemModel.id
                         cardCreationIsPresented.toggle()
                     }
                 case .right:
                     UploadAnchorImageTabView(anchorImage: $anchorImage)
-                    Spacer()
                 }
             }
-            .padding(.horizontal, vSizeClass == .compact ? 40 : 0)
+            .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
             .background(Color.white)
         }
         .background(
             NavigationLink(destination:
                 CardFormView(cardItems: $cardItems,
-                             attachmentModels: $attachmentItemModels,
+                             attachmentModels: $attachmentsItemModels,
                              currentCardID: $currentCardID)
                     .onCardEdit(perform: onCardEdit),
                 isActive: $cardCreationIsPresented,
                 label: { EmptyView() })
         )
         .navigationBarHidden(hideNavBar)
+        .preferredColorScheme(.light)
         .navigationBarTitle("")
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: populateAttachmentView)
     }
     
     func populateAttachmentView() {
-        self.attachmentItemModels.removeAll()
+        self.attachmentsItemModels.removeAll()
         self.cardItems.forEach { card in
-            let newAttachmentModel = AttachmentItemModel(id: UUID(uuidString: card.id) ?? UUID(),
-                                                         title: card.title_,
-                                                         subtitle: card.position_ == nil ? "Not Pinned Yet" : "Pinned",
-                                                         info: nil,
-                                                         image: card.detailImage_,
-                                                         icon: card.icon_)
-            attachmentItemModels.append(newAttachmentModel)
+            let newAttachmentModel = AttachmentsItemModel(id: UUID(uuidString: card.id) ?? UUID(),
+                                                          title: card.title_,
+                                                          subtitle: card.position_ == nil ? "Not Pinned Yet" : "Pinned",
+                                                          info: nil,
+                                                          image: card.detailImage_,
+                                                          icon: card.icon_)
+            attachmentsItemModels.append(newAttachmentModel)
         }
     }
     
@@ -122,16 +122,16 @@ private struct TabView: View {
                 }
         }
         .font(.system(size: 14))
-        .padding(16)
+        .padding(.horizontal, 16)
     }
     
     func tab(title: String, isSelected: Bool) -> some View {
         VStack(spacing: 6) {
             Text(title)
-                .foregroundColor(isSelected ? Color.fioriNextBlue : Color.black)
+                .foregroundColor(isSelected ? Color.fioriNextTint : Color.black)
                 .bold()
             if isSelected {
-                Color.fioriNextBlue.frame(height: 2)
+                Color.fioriNextTint.frame(height: 2)
             } else {
                 Color.clear.frame(height: 2)
             }
