@@ -5,6 +5,7 @@
 //  Created by O'Brien, Patrick on 9/16/21.
 //
 
+import Combine
 import SwiftUI
 
 public enum CardEditing {
@@ -13,7 +14,8 @@ public enum CardEditing {
     case deleted(card: DecodableCardItem)
 }
 
-struct CardCreationView: View {
+struct CardFormView: View {
+    @Environment(\.verticalSizeClass) var vSizeClass
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onCardEdit) var onCardEdit
     
@@ -31,6 +33,8 @@ struct CardCreationView: View {
     @State var hasButton = false
     @State var hasCoverImage = false
     
+    var isUpdate: Bool = false
+    
     init(cardItems: Binding<[DecodableCardItem]>, attachmentModels: Binding<[AttachmentItemModel]>, currentCardID: Binding<UUID?>) {
         self._cardItems = cardItems
         self._attachmentModels = attachmentModels
@@ -46,6 +50,8 @@ struct CardCreationView: View {
         
         self._hasButton = State(initialValue: currentCard?.actionText_ == nil ? false : true)
         self._hasCoverImage = State(initialValue: currentCard?.detailImage_ == nil ? false : true)
+        
+        self.isUpdate = currentCardID.wrappedValue == nil ? false : true
     }
     
     var body: some View {
@@ -73,39 +79,44 @@ struct CardCreationView: View {
             })
                 .background(Color.fioriNextBackgroundGrey)
             
-            ZStack {
-                Color
-                    .fioriNextBackgroundGrey
-                CardPreview(detailImage: $detailImage, title: $title, descriptionText: $subtitle, actionText: $actionText, icon: $icon)
-                    .offset(y: -10)
+            AdaptiveStack {
+                ZStack {
+                    Color
+                        .fioriNextBackgroundGrey
+                    CardPreview(detailImage: $detailImage, title: $title, descriptionText: $subtitle, actionText: $actionText, icon: $icon, hasButton: $hasButton)
+                        .offset(y: vSizeClass == .compact ? -70 : -10)
+                }
+                .frame(maxHeight: vSizeClass == .compact ? .infinity : 246)
+                
+                CardDetailsView(isUpdate: isUpdate,
+                                detailImage: $detailImage,
+                                title: $title,
+                                subtitle: $subtitle,
+                                actionText: $actionText,
+                                actionContentText: $actionContentText,
+                                actionButtonToggle: $hasButton,
+                                coverImageToggle: $hasCoverImage,
+                                toggleActionSheet: {
+                                    if let currentID = currentCardID {
+                                        updateCard(for: currentID)
+                                    } else {
+                                        createCard()
+                                    }
+                                    presentationMode.wrappedValue.dismiss()
+                                })
+                    .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
             }
-            .frame(height: 246)
-            
-            CardDetailsView(cardItems: $cardItems,
-                            detailImage: $detailImage,
-                            title: $title,
-                            subtitle: $subtitle,
-                            actionText: $actionText,
-                            actionContentText: $actionContentText,
-                            actionButtonToggle: $hasButton,
-                            coverImageToggle: $hasCoverImage,
-                            toggleActionSheet: {
-                                if let currentID = currentCardID {
-                                    updateCard(for: currentID)
-                                } else {
-                                    createCard()
-                                }
-                                presentationMode.wrappedValue.dismiss()
-                            })
-                .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
+            .background(Color.fioriNextBackgroundGrey)
         }
         .onDisappear {
             currentCardID = nil
         }
+        .onChange(of: actionContentText) { newValue in
+            icon = newValue.isEmpty ? nil : Image(systemName: "link")
+        }
         .navigationBarHidden(true)
         .navigationBarTitle("")
-        .edgesIgnoringSafeArea(.vertical)
-        .background(Color.fioriNextBackgroundGrey)
+        .edgesIgnoringSafeArea(vSizeClass == .compact ? [.horizontal, .bottom] : .vertical)
     }
     
     func createCard() {
@@ -138,7 +149,7 @@ struct CardCreationView: View {
 }
 
 private struct CardDetailsView: View {
-    @Binding var cardItems: [DecodableCardItem]
+    var isUpdate: Bool
     
     @Binding var detailImage: Image?
     @Binding var title: String
@@ -174,20 +185,24 @@ private struct CardDetailsView: View {
                         TextDetail(textField: $actionContentText, titleText: "Content", placeholder: "URL")
                         
                         ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
+                            .zIndex(1)
                         
-                        CoverImageDetail(titleText: "Custom Cover Image (Optional)", isOn: $coverImageToggle, presentActionSheet: $actionSheetPresented, detailImage: $detailImage)
+                        CoverImageDetail(titleText: "Custom Cover Image (Optional)",
+                                         isOn: $coverImageToggle,
+                                         presentActionSheet: $actionSheetPresented,
+                                         detailImage: $detailImage)
                         
                         Button(action: {
                             toggleActionSheet?()
                         }, label: {
-                            Text("Create")
+                            Text(isUpdate ? "Update" : "Create")
                                 .font(.system(size: 15))
                                 .bold()
                                 .frame(width: 343, height: 40)
                                 .foregroundColor(.white)
                                 .background(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.fnBlue)
+                                        .fill(Color.fioriNextBlue)
                                 )
                         })
                             .padding(.bottom, 54)
@@ -198,7 +213,8 @@ private struct CardDetailsView: View {
             }
         }
         .background(Color.white)
-        .cornerRadius(16)
+        .cornerRadius(16, corners: [.topLeft, .topRight])
+        .adaptsToKeyboard()
         .actionSheet(isPresented: $actionSheetPresented) {
             ActionSheet(title: Text("Choose an option..."),
                         message: Text("Selection for Card Cover Image"),
@@ -211,7 +227,7 @@ private struct CardDetailsView: View {
                         }), .cancel()])
         }
         .fullScreenCover(isPresented: $pickerPresented) {
-            ImagePickerView(takenImage: $detailImage, fileName: .constant(nil), sourceType: pickerSource)
+            ImagePickerView(image: $detailImage, uiImage: .constant(nil), fileName: .constant(nil), sourceType: pickerSource)
                 .edgesIgnoringSafeArea(.all)
         }
     }
@@ -223,6 +239,7 @@ private struct CardPreview: View {
     @Binding var descriptionText: String
     @Binding var actionText: String
     @Binding var icon: Image?
+    @Binding var hasButton: Bool
     
     var body: some View {
         VStack(spacing: 10) {
@@ -234,7 +251,7 @@ private struct CardPreview: View {
                     
                 } else {
                     (icon ?? Image(systemName: "info"))
-                        .font(.system(size: 37))
+                        .font(.system(size: 30))
                         .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
                 }
             }
@@ -268,7 +285,7 @@ private struct CardPreview: View {
                 .font(.system(size: 18))
                 .lineLimit(1)
                 .foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant))
-                .frame(width: 198, height: actionText.isEmpty ? 0 : 44)
+                .frame(width: 198, height: hasButton ? 44 : 0)
         }
         .frame(width: 230)
         .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
@@ -286,28 +303,9 @@ private struct TextDetail: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 9.5) {
             Text(titleText)
+                .foregroundColor(Color.black)
                 .font(.system(size: 15))
             FioriNextTextField(text: $textField, placeHolder: placeholder ?? titleText)
-        }
-    }
-}
-
-private struct ContentDetail: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 9.5) {
-            Text("Content")
-                .font(.system(size: 15))
-            
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
-                .frame(height: 66)
-                .overlay(
-                    Text("Add Content")
-                        .foregroundColor(Color.fnBlue)
-                        .font(.system(size: 15))
-                        .bold()
-                )
-                .onTapGesture {}
         }
     }
 }
@@ -320,7 +318,8 @@ private struct ToggleDetail: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 9.5) {
             Toggle(titleText, isOn: $isOn)
-                .toggleStyle(SwitchToggleStyle(tint: Color.fnBlue))
+                .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextBlue))
+                .foregroundColor(Color.black)
                 .font(.system(size: 15))
                 .onChange(of: isOn) { newValue in
                     if !newValue {
@@ -346,13 +345,16 @@ private struct CoverImageDetail: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 9.5) {
             Toggle(titleText, isOn: $isOn)
-                .toggleStyle(SwitchToggleStyle(tint: Color.fnBlue))
+                .foregroundColor(Color.black)
+                .font(.system(size: 15))
+                .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextBlue))
                 .padding(.vertical, 5)
                 .onChange(of: isOn) { newValue in
                     if !newValue {
                         detailImage = nil
                     }
                 }
+                .zIndex(0)
             
             VStack {
                 if let detailImage = detailImage {
@@ -363,7 +365,7 @@ private struct CoverImageDetail: View {
                         .clipped()
                 } else {
                     Image(systemName: "photo")
-                        .foregroundColor(Color.imageGrey)
+                        .foregroundColor(Color.fioriNextSecondaryGrey.opacity(0.24))
                         .font(.system(size: 40))
                 }
             }
@@ -373,13 +375,36 @@ private struct CoverImageDetail: View {
             .zIndex(-1)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
+                    .stroke(detailImage == nil ? Color.gray : Color.clear, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
             )
             .onChange(of: detailImage) { newValue in
                 isOn = newValue == nil ? false : true
             }
             .onTapGesture {
                 presentActionSheet.toggle()
+            }
+        }
+    }
+}
+
+private struct AdaptiveStack<Content>: View where Content: View {
+    @Environment(\.verticalSizeClass) var vSizeClass
+    
+    var content: Content
+    
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+    
+    var body: some View {
+        if vSizeClass == .compact {
+            HStack {
+                content
+            }
+            .padding(.horizontal, 40)
+        } else {
+            VStack {
+                content
             }
         }
     }

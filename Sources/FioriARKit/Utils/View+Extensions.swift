@@ -59,4 +59,12 @@ public extension View {
     func onCardEdit(perform action: @escaping (CardEditing) -> Void) -> some View {
         environment(\.onCardEdit, action)
     }
+    
+    internal func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners))
+    }
+    
+    internal func adaptsToKeyboard() -> some View {
+        modifier(AdaptsToKeyboard())
+    }
 }

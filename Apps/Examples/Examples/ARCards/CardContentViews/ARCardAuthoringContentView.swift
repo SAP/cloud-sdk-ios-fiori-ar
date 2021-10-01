@@ -23,7 +23,7 @@ struct ARCardAuthoringContentView: View {
                     print("Created: \(card.title_)")
                 case .updated(let card):
                     print("Updated: \(card.title_)")
-                case .deleted(let card):
+                case .deleted(card: let card):
                     print("Deleted: \(card.title_)")
                 }
             }

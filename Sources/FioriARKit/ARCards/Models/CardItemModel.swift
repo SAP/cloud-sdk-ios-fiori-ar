@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-public protocol CardItemModel: Identifiable, TitleComponent, SubtitleComponent, DetailImageComponent, ActionTextComponent, IconComponent {}
+public protocol CardItemModel: Identifiable, TitleComponent, DescriptionTextComponent, DetailImageComponent, ActionTextComponent, IconComponent {}
 
 public protocol TitleComponent {
     var title_: String { get }
 }
 
-public protocol SubtitleComponent {
+public protocol DescriptionTextComponent {
     var descriptionText_: String? { get }
 }
 

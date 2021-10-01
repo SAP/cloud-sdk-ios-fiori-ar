@@ -9,10 +9,12 @@ import SwiftUI
 
 struct AttachementsView: View {
     @Binding var attachmentItemModels: [AttachmentItemModel]
+    var label: String
     var onAddAttachment: (() -> Void)?
     var onSelectAttachment: ((AttachmentItemModel) -> Void)?
     
-    init(attachmentItemModels: Binding<[AttachmentItemModel]>, onAddAttachment: (() -> Void)? = nil, onSelectAttachment: ((AttachmentItemModel) -> Void)? = nil) {
+    init(label: String, attachmentItemModels: Binding<[AttachmentItemModel]>, onAddAttachment: (() -> Void)? = nil, onSelectAttachment: ((AttachmentItemModel) -> Void)? = nil) {
+        self.label = label
         self._attachmentItemModels = attachmentItemModels
         self.onAddAttachment = onAddAttachment
         self.onSelectAttachment = onSelectAttachment
@@ -21,7 +23,8 @@ struct AttachementsView: View {
     public var body: some View {
         VStack(spacing: 11) {
             HStack {
-                Text("Annotation Cards (\(attachmentItemModels.count - 1))")
+                Text("\(label) (\(attachmentItemModels.count - 1))")
+                    .foregroundColor(Color.black)
                     .font(.system(size: 15))
                     .bold()
                 Spacer()
@@ -55,16 +58,16 @@ struct AttachementsView: View {
     }
 }
 
-struct AddAttachmentView: View {
+private struct AddAttachmentView: View {
     var body: some View {
-        RoundedRectangle(cornerRadius: 8)
+        RoundedRectangle(cornerRadius: 16)
             .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
             .overlay(Image(systemName: "plus").font(.system(size: 22)).foregroundColor(.blue))
             .frame(width: 110, height: 110)
     }
 }
 
-struct AttachmentCardView: View {
+private struct AttachmentCardView: View {
     var item: AttachmentItemModel
     
     var body: some View {
@@ -105,10 +108,10 @@ struct AttachmentCardView: View {
                 .lineLimit(1)
                 .font(.system(size: 11))
                 .foregroundColor(Color.black)
-                .padding(.horizontal, 3)
                 Spacer()
             }
             Spacer()
         }
+        .frame(width: 110)
     }
 }

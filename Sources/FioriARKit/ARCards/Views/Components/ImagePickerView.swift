@@ -10,10 +10,11 @@ import SwiftUI
 import UIKit
 
 struct ImagePickerView: UIViewControllerRepresentable {
-    @Binding var takenImage: Image?
-    @Binding var fileName: String?
-    
     @Environment(\.presentationMode) var isPresented
+    
+    @Binding var image: Image?
+    @Binding var uiImage: UIImage?
+    @Binding var fileName: String?
     
     var sourceType: UIImagePickerController.SourceType
     
@@ -42,7 +43,9 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
         guard let pickedImage = info[.originalImage] as? UIImage,
               let resized = pickedImage.resize(to: 0.50) else { return }
         // Large images causes unexpected layout issues in SwiftUI
-        self.picker.takenImage = Image(uiImage: pickedImage.size.height * pickedImage.scale > 2000 ? resized : pickedImage)
+        let uiImage = pickedImage.size.height * pickedImage.scale > 2000 ? resized : pickedImage
+        self.picker.image = Image(uiImage: uiImage)
+        self.picker.uiImage = uiImage
         self.picker.isPresented.wrappedValue.dismiss()
     }
 }
