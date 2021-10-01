@@ -17,7 +17,6 @@ struct ARCardAuthoringContentView: View {
     var body: some View {
         AnnotationSceneAuthoringView(cardItems)
             .onCardEdit { cardEdit in
-                    
                 switch cardEdit {
                 case .created(let card):
                     print("Created: \(card.title_)")
