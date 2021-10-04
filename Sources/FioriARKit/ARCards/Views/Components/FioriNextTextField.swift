@@ -31,7 +31,7 @@ struct FioriNextTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
             .padding(.leading, 12)
-            .frame(height: 44)
+            .frame(height: 46)
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
