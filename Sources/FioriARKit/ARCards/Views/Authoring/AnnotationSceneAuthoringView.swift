@@ -33,22 +33,24 @@ public struct AnnotationSceneAuthoringView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            TitleBarView(onLeftAction: {
-                hideNavBar = false
-                presentationMode.wrappedValue.dismiss()
-            }, onRightAction: {
-                startAR()
-            }, title: "Title",
-            leftBarLabel: {
-                Image(systemName: "xmark")
-                    .font(.system(size: 22))
-                    .foregroundColor(Color.black)
-            },
-            rightBarLabel: {
-                Image(systemName: "arkit")
-                    .font(.system(size: 22))
-                    .foregroundColor(Color.black)
-            })
+            TitleBarView(title: "Title",
+                         onLeftAction: {
+                             hideNavBar = false
+                             presentationMode.wrappedValue.dismiss()
+                         },
+                         onRightAction: {
+                             startAR()
+                         },
+                         leftBarLabel: {
+                             Image(systemName: "xmark")
+                                 .font(.system(size: 22))
+                                 .foregroundColor(Color.black)
+                         },
+                         rightBarLabel: {
+                             Image(systemName: "arkit")
+                                 .font(.system(size: 22))
+                                 .foregroundColor(Color.black)
+                         })
                 .background(Color.white)
             
             VStack(spacing: 0) {
