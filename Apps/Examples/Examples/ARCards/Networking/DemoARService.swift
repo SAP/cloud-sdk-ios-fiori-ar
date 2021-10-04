@@ -5,6 +5,7 @@ import SwiftUI
 
 struct DemoARService: View {
     @State private var uiImage: UIImage? = nil
+    private var sceneId = "A4A77E02-1C16-434F-AE04-A951EA2C6633"
     private var networkingAPI: ARCardsNetworkingService
     @ObservedObject private var model: DemoARServiceModel
     
@@ -25,27 +26,42 @@ struct DemoARService: View {
     }
     
     var body: some View {
-        VStack {
-            Text(self.model.status)
-                .frame(maxHeight: 600)
-            if let image = uiImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-            }
-        }.onAppear(perform: {
-            self.networkingAPI.getImage(fileId: "f9d795dd-96b4-4f40-8b75-f09e0c903fdc") { result in
-                switch result {
-                case .success(let image):
-                    self.uiImage = image
-                case .failure:
-                    ()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                if self.model.loadingStatus == .finished, let scene = self.model.scene {
+                    Text("Scene \(sceneId) has \(scene.cards.count) cards and has \(scene.sourceFile == nil ? "no" : scene.sourceFile!.type.rawValue) source file")
+                    ForEach(scene.cards, id: \.self) { card in
+                        HStack {
+                            Text("\(scene.cards.firstIndex(of: card)! + 1). \(card.title_)")
+                            if let image = card.detailImage_ {
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100, height: 100)
+                            } else {
+                                EmptyView().frame(width: 100, height: 100)
+                            }
+                        }
+                    }
+                } else {
+                    Text("Fetching cards for scene \(sceneId) ...")
                 }
-            }
+            }.onAppear(perform: {
+                self.model.loadData(for: sceneId)
 
-            self.model.loadData()
-        })
+            })
+                .frame(maxWidth: .infinity)
+        }
+    }
+}
+
+extension DecodableCardItem: Hashable {
+    public static func == (lhs: DecodableCardItem, rhs: DecodableCardItem) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 
@@ -79,32 +95,44 @@ extension SAPURLSession {
     }
 }
 
+enum DemoARServiceModelDataLoading {
+    case notStarted
+    case inProgress
+    case finished
+}
+
 class DemoARServiceModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var networkingAPI: ARCardsNetworkingService!
 
-    @Published var status: String = "Fetching cards for scene..."
+    // @Published var cards: [DecodableCardItem] = []
+    @Published var scene: ARScene? = nil
+
+    @Published var loadingStatus: DemoARServiceModelDataLoading = .notStarted
 
     init(networkingAPI: ARCardsNetworkingService) {
         self.networkingAPI = networkingAPI
     }
 
-    func loadData() {
-        self.networkingAPI.getCards(for: "A4A77E02-1C16-434F-AE04-A951EA2C6677")
+    func loadData(for sceneId: String) {
+        self.loadingStatus = .inProgress
+//        self.networkingAPI.getCards(for: sceneId)
+//            .receive(on: DispatchQueue.main)
+//            .sink { completion in
+//                print(completion)
+//            } receiveValue: { cards in
+//                self.cards = cards
+//                self.loadingStatus = .finished
+//            }
+//            .store(in: &self.cancellables)
+
+        self.networkingAPI.getScene(for: sceneId)
             .receive(on: DispatchQueue.main)
             .sink { completion in
-                switch completion {
-                case .finished:
-                    print("cards fetched :)")
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            } receiveValue: { cards in
-                if cards.count > 0 {
-                    self.status = "\(cards.count) cards are available. Details: \(cards.debugDescription)"
-                } else {
-                    self.status = "No cards are available."
-                }
+                print(completion)
+            } receiveValue: { scene in
+                self.scene = scene
+                self.loadingStatus = .finished
             }
             .store(in: &self.cancellables)
     }
