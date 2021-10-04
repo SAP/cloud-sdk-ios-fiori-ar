@@ -7,10 +7,10 @@ import Foundation
 
 extension ARService.AnnotationAnchor {
 
-    /** Update an existing annotation */
-    internal enum UdpateAnnotation {
+    /** Get an existing annotation */
+    internal enum GetAnnotation {
 
-        internal static let service = APIService<Response>(id: "udpateAnnotation", tag: "annotationAnchor", method: "PUT", path: "/scene/{sceneId}/annotationAnchor/{id}", hasBody: true)
+        internal static let service = APIService<Response>(id: "getAnnotation", tag: "annotationAnchor", method: "GET", path: "/scene/{sceneId}/annotationAnchor/{id}", hasBody: false)
 
         internal final class Request: APIRequest<Response> {
 
@@ -22,32 +22,39 @@ extension ARService.AnnotationAnchor {
                 /** ID of annotation anchor */
                 internal var id: String
 
-                internal init(sceneId: String, id: String) {
+                /** Language */
+                internal var language: String?
+
+                internal init(sceneId: String, id: String, language: String? = nil) {
                     self.sceneId = sceneId
                     self.id = id
+                    self.language = language
                 }
             }
 
             internal var options: Options
 
-            internal var body: AnnotationAnchor
-
-            internal init(body: AnnotationAnchor, options: Options, encoder: RequestEncoder? = nil) {
-                self.body = body
+            internal init(options: Options) {
                 self.options = options
-                super.init(service: UdpateAnnotation.service) { defaultEncoder in
-                    return try (encoder ?? defaultEncoder).encode(body)
-                }
+                super.init(service: GetAnnotation.service)
             }
 
             /// convenience initialiser so an Option doesn't have to be created
-            internal convenience init(sceneId: String, id: String, body: AnnotationAnchor) {
-                let options = Options(sceneId: sceneId, id: id)
-                self.init(body: body, options: options)
+            internal convenience init(sceneId: String, id: String, language: String? = nil) {
+                let options = Options(sceneId: sceneId, id: id, language: language)
+                self.init(options: options)
             }
 
             internal override var path: String {
                 return super.path.replacingOccurrences(of: "{" + "sceneId" + "}", with: "\(self.options.sceneId)").replacingOccurrences(of: "{" + "id" + "}", with: "\(self.options.id)")
+            }
+
+            internal override var queryParameters: [String: Any] {
+                var params: [String: Any] = [:]
+                if let language = options.language {
+                  params["language"] = language
+                }
+                return params
             }
         }
 
@@ -57,9 +64,6 @@ extension ARService.AnnotationAnchor {
             /** successful operation */
             case status200(AnnotationAnchor)
 
-            /** Invalid input such as: body is invalid json format, body is missing required property or value, sceneId value is not consistent, change or add card language */
-            case status400
-
             /** Business user is not authenticated */
             case status401
 
@@ -68,6 +72,9 @@ extension ARService.AnnotationAnchor {
 
             /** Invalid request path or method */
             case status405
+
+            /** Can't provide required language card */
+            case status406(SupportLanguage)
 
             /** Server internal error */
             case status500
@@ -79,9 +86,28 @@ extension ARService.AnnotationAnchor {
                 }
             }
 
+            internal var failure: SupportLanguage? {
+                switch self {
+                case .status406(let response): return response
+                default: return nil
+                }
+            }
+
+            /// either success or failure value. Success is anything in the 200..<300 status code range
+            internal var responseResult: APIResponseResult<AnnotationAnchor, SupportLanguage> {
+                if let successValue = success {
+                    return .success(successValue)
+                } else if let failureValue = failure {
+                    return .failure(failureValue)
+                } else {
+                    fatalError("Response does not have success or failure response")
+                }
+            }
+
             internal var response: Any {
                 switch self {
                 case .status200(let response): return response
+                case .status406(let response): return response
                 default: return ()
                 }
             }
@@ -89,10 +115,10 @@ extension ARService.AnnotationAnchor {
             internal var statusCode: Int {
                 switch self {
                 case .status200: return 200
-                case .status400: return 400
                 case .status401: return 401
                 case .status404: return 404
                 case .status405: return 405
+                case .status406: return 406
                 case .status500: return 500
                 }
             }
@@ -100,10 +126,10 @@ extension ARService.AnnotationAnchor {
             internal var successful: Bool {
                 switch self {
                 case .status200: return true
-                case .status400: return false
                 case .status401: return false
                 case .status404: return false
                 case .status405: return false
+                case .status406: return false
                 case .status500: return false
                 }
             }
@@ -111,10 +137,10 @@ extension ARService.AnnotationAnchor {
             internal init(statusCode: Int, data: Data, decoder: ResponseDecoder) throws {
                 switch statusCode {
                 case 200: self = try .status200(decoder.decode(AnnotationAnchor.self, from: data))
-                case 400: self = .status400
                 case 401: self = .status401
                 case 404: self = .status404
                 case 405: self = .status405
+                case 406: self = try .status406(decoder.decode(SupportLanguage.self, from: data))
                 case 500: self = .status500
                 default: throw APIClientError.unexpectedStatusCode(statusCode: statusCode, data: data)
                 }
