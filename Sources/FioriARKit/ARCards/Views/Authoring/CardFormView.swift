@@ -56,27 +56,28 @@ struct CardFormView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            TitleBarView(onLeftAction: {
-                presentationMode.wrappedValue.dismiss()
-            }, onRightAction: {
-                if let currentID = currentCardID {
-                    deleteCard(for: currentID)
-                }
-                presentationMode.wrappedValue.dismiss()
-            },
-            title: "Title",
-            leftBarLabel: {
-                Image(systemName: "xmark")
-                    .font(.system(size: 22))
-                    .foregroundColor(.black)
-                
-            }, rightBarLabel: {
-                if let _ = currentCardID {
-                    Image(systemName: "trash")
-                        .font(.system(size: 22))
-                        .foregroundColor(.black)
-                }
-            })
+            TitleBarView(title: title.isEmpty ? "New Annotation" : title,
+                         onLeftAction: {
+                             presentationMode.wrappedValue.dismiss()
+                         },
+                         onRightAction: {
+                             if let currentID = currentCardID {
+                                 deleteCard(for: currentID)
+                             }
+                             presentationMode.wrappedValue.dismiss()
+                         },
+                         leftBarLabel: {
+                             Image(systemName: "xmark")
+                                 .font(.system(size: 22))
+                                 .foregroundColor(.black)
+                         },
+                         rightBarLabel: {
+                             if let _ = currentCardID {
+                                 Image(systemName: "trash")
+                                     .font(.system(size: 22))
+                                     .foregroundColor(.black)
+                             }
+                         })
                 .background(Color.fioriNextPrimaryBackground)
             
             AdaptiveStack {
@@ -177,10 +178,10 @@ private struct CardDetailsView: View {
             
             ScrollView {
                 ZStack {
-                    VStack(alignment: .center, spacing: 15) {
+                    VStack(alignment: .center, spacing: 14) {
                         TextDetail(textField: $title, titleText: "Title")
                         
-                        TextDetail(textField: $subtitle, titleText: "Subtitle")
+                        TextDetail(textField: $subtitle, titleText: "Subtitle (Optional)")
                         
                         TextDetail(textField: $actionContentText, titleText: "Content", placeholder: "URL")
                         
@@ -301,7 +302,7 @@ private struct TextDetail: View {
     var placeholder: String?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 9.5) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(titleText)
                 .foregroundColor(Color.black)
                 .font(.system(size: 15))
@@ -317,7 +318,7 @@ private struct ToggleDetail: View {
     @Binding var isOn: Bool
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 9.5) {
+        VStack(alignment: .leading, spacing: 8) {
             Toggle(isOn: $isOn) {
                 Text(titleText)
                     .foregroundColor(Color.black)
@@ -347,7 +348,7 @@ private struct CoverImageDetail: View {
     @Binding var detailImage: Image?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 9.5) {
+        VStack(alignment: .leading, spacing: 8) {
             Toggle(isOn: $isOn) {
                 Text(titleText)
                     .foregroundColor(Color.black)
