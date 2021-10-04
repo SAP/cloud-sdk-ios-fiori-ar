@@ -32,23 +32,62 @@ All properties can be passed into the initializer, with `required` properties be
 If a model has `additionalProperties` it will have a subscript to access these by string
 
 ## APIClient
-The `APIClient` is used to encode, authorize, send, monitor, and decode the requests. There is a `APIClient.default` that uses the default `baseURL` otherwise a custom one can be initialized:
+The `APIClient` is used to encode, authorize, send, monitor, and decode the requests. Initialization:
 
 ```swift
 public init(baseURL: String, sapURLSession: SAPURLSession)
 ```
 
-#### APIClient properties
+### APIClient properties
 
 - `baseURL`: The base url that every request `path` will be appended to
 - `sapURLSession`: An `SAPFoundation.SAPURLSession` that can be customized
 - `decodingQueue`: The `DispatchQueue` to decode responses on
 
-#### Making a request
+### Making a request (Combine/Publisher-based)
+
+Combine/Publisher-based API is **recommended**, especially if you have to chain multiple network requests (e.g. load profile images for all users)
+
 To make a request first initialize a [Request](#request) and then pass it to `makeRequest`. The `complete` closure will be called with an `APIResponse`
 
 ```swift
-func makeRequest<T>(_ request: APIRequest<T>, queue: DispatchQueue = DispatchQueue.main, complete: @escaping (APIResponse<T>) -> Void) -> Request? {
+func makeRequest<T>(_ request: APIRequest<T>) -> AnyPublisher<APIResponse<T>, Never>
+```
+
+Example request (that is not neccessarily in this api):
+
+```swift
+private var cancellables = Set<AnyCancellable>()
+
+let getUserRequest = ARService.User.GetUser.Request(id: 123)
+let apiClient = APIClient(baseURL: "https://mytrial-dev-userDirectory.cfapps.eu10.hana.ondemand.com/serviceDestination", sapURLSession: OnboardingSessionManager.shared.onboardingSession!.sapURLSession) // note that OnboardingSessionManager belongs to SAPFioriFlows framework from the SAP BTP SDK for iOS
+
+apiClient.makeRequest(getUserRequest)
+	.receive(on: DispatchQueue.main)
+    .sink { completion in
+        print(completion)
+    } receiveValue: { apiResponse in
+    	switch apiResponse {
+        case .result(let apiResponseValue):
+        	if let user = apiResponseValue.success {
+        		print("GetUser returned user \(user)")
+        	} else {
+        		print("GetUser returned \(apiResponseValue)")
+        	}
+        case .error(let apiError):
+        	print("GetUser failed with \(apiError)")
+    	}
+    }
+    .store(in: &self.cancellables)
+}
+```
+
+### Making a request (Callback-based)
+
+To make a request first initialize a [Request](#request) and then pass it to `makeRequest`. The `complete` closure will be called with an `APIResponse`
+
+```swift
+func makeRequest<T>(_ request: APIRequest<T>, completionQueue: DispatchQueue = DispatchQueue.main, complete: @escaping (APIResponse<T>) -> Void) -> SAPURLSessionTask?
 ```
 
 Example request (that is not neccessarily in this api):
@@ -71,7 +110,7 @@ apiClient.makeRequest(getUserRequest) { apiResponse in
 }
 ```
 
-#### APIResponse
+### APIResponse
 The `APIResponse` that gets passed to the completion closure contains the following properties:
 
 - `request`: The original request
@@ -80,7 +119,7 @@ The `APIResponse` that gets passed to the completion closure contains the follow
 - `urlResponse`: The `HTTPURLResponse` that was returned by the request
 - `data`: The `Data` returned by the request.
 
-#### Encoding and Decoding
+### Encoding and Decoding
 Only JSON requests and responses are supported. These are encoded and decoded by `JSONEncoder` and `JSONDecoder` respectively, using Swift's `Codable` apis.
 There are some options to control how invalid JSON is handled when decoding and these are available as static properties on `ARService`:
 
@@ -94,7 +133,7 @@ Dates are encoded and decoded differently according to the swagger date format. 
 - `date`
     - `DateDay.dateFormatter`: defaults to `yyyy-MM-dd`
 
-#### APIClientError
+### APIClientError
 This is error enum that `APIResponse.result` may contain:
 
 ```swift
@@ -109,9 +148,6 @@ public enum APIClientError: Error {
 }
 ```
 
-#### Reactive and Promises
-To add support for a specific asynchronous library, just add an extension on `APIClient` and add a function that wraps the `makeRequest` function and converts from a closure based syntax to returning the object of choice (stream, future...ect)
-
 ## Models
 
 - **AnnotationAnchor**
@@ -119,17 +155,23 @@ To add support for a specific asynchronous library, just add an extension on `AP
 - **Marker**
 - **ReferenceAnchor**
 - **Scene**
+- **SupportLanguage**
 
 ## Requests
 
 - **ARService.AnnotationAnchor**
+	- **DeleteAnnotation**: DELETE `/scene/{sceneid}/annotationanchor/{id}`
+	- **GetAnnotation**: GET `/scene/{sceneid}/annotationanchor/{id}`
 	- **GetAnnotationAnchorsByScene**: GET `/annotationanchor/findbyscene`
-	- **UdpateAnnotation**: PUT `/annotationanchor`
+	- **UdpateAnnotation**: PUT `/scene/{sceneid}/annotationanchor/{id}`
 - **ARService.File**
+	- **DeleteFileById**: DELETE `/file/{fileid}`
 	- **GetFileById**: GET `/file/{fileid}`
+	- **UpdateFileById**: PUT `/file/{fileid}`
 - **ARService.Scene**
 	- **AddScene**: POST `/scene`
-	- **DeleteSceneById**: DELETE `/scene/{sceneid}`
+	- **DeleteScene**: DELETE `/scene/{sceneid}`
 	- **GetSceneById**: GET `/scene/{sceneid}`
-	- **GetScenes**: GET `/scenes`
 	- **GetScenesByAliases**: GET `/scene/findbyalias`
+	- **GetScenesByIds**: GET `/scene`
+	- **UpdateScene**: PATCH `/scene/{sceneid}`
