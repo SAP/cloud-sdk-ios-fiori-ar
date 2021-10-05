@@ -105,7 +105,6 @@ struct CardFormView: View {
                                     }
                                     presentationMode.wrappedValue.dismiss()
                                 })
-                    .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
             }
             .background(Color.fioriNextPrimaryBackground)
         }
@@ -205,6 +204,8 @@ private struct CardDetailsView: View {
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color.fioriNextTint)
                                 )
+                                .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
+                                .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
                         })
                             .padding(.bottom, 54)
                     }
@@ -214,8 +215,9 @@ private struct CardDetailsView: View {
             }
         }
         .background(Color.white)
-        .cornerRadius(16, corners: [.topLeft, .topRight])
         .adaptsToKeyboard()
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
         .actionSheet(isPresented: $actionSheetPresented) {
             ActionSheet(title: Text("Choose an option..."),
                         message: Text("Selection for Card Cover Image"),
@@ -358,7 +360,9 @@ private struct CoverImageDetail: View {
             .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextTint))
             .padding(.vertical, 5)
             .onChange(of: isOn) { newValue in
-                if !newValue {
+                if newValue {
+                    presentActionSheet.toggle()
+                } else {
                     detailImage = nil
                 }
             }

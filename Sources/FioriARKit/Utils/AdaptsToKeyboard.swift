@@ -9,31 +9,34 @@ import Combine
 import SwiftUI
 
 struct AdaptsToKeyboard: ViewModifier {
-    @State var currentHeight: CGFloat = 0
+    @State var keyboardPadding: CGFloat = 0
     
     func body(content: Content) -> some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in
             content
-                .padding(.bottom, self.currentHeight)
-                .onAppear(perform: {
-                    NotificationCenter.Publisher(center: NotificationCenter.default, name: UIResponder.keyboardWillShowNotification)
-                        .merge(with: NotificationCenter.Publisher(center: NotificationCenter.default, name: UIResponder.keyboardWillChangeFrameNotification))
-                        .compactMap { notification in
-                            withAnimation(.easeOut(duration: 0.10)) {
-                                notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
-                            }
-                        }
-                        .map { rect in
-                            rect.height - geometry.safeAreaInsets.bottom
-                        }
-                        .subscribe(Subscribers.Assign(object: self, keyPath: \.currentHeight))
-                    
-                    NotificationCenter.Publisher(center: NotificationCenter.default, name: UIResponder.keyboardWillHideNotification)
-                        .compactMap { _ in
-                            CGFloat.zero
-                        }
-                        .subscribe(Subscribers.Assign(object: self, keyPath: \.currentHeight))
-                })
+                .padding(.bottom, keyboardPadding)
+                .onReceive(Publishers.keyboardHeight) { keyboardHeight in
+                    keyboardPadding = keyboardHeight
+                }
+                .animation(.easeInOut(duration: 0.30))
         }
+    }
+}
+
+private extension Publishers {
+    static var keyboardHeight: AnyPublisher<CGFloat, Never> {
+        let willChange = NotificationCenter.default.publisher(for: UIApplication.keyboardWillChangeFrameNotification)
+            .map(\.keyboardHeight)
+        
+        let willHide = NotificationCenter.default.publisher(for: UIApplication.keyboardWillHideNotification)
+            .map { _ in CGFloat.zero }
+        
+        return willChange.merge(with: willHide).eraseToAnyPublisher()
+    }
+}
+
+private extension Notification {
+    var keyboardHeight: CGFloat {
+        (userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
     }
 }
