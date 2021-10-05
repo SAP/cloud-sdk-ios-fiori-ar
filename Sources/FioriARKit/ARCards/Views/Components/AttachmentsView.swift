@@ -91,9 +91,9 @@ private struct AttachmentCardView: View {
                 }
             }
             .frame(width: 110, height: 110)
-            .cornerRadius(8)
+            .cornerRadius(16)
             .background(
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: 16)
                     .stroke(Color.gray, lineWidth: 1)
             )
             
