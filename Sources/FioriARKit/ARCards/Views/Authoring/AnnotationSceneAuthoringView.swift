@@ -5,12 +5,16 @@
 //  Created by O'Brien, Patrick on 9/13/21.
 //
 
+import Combine
 import SwiftUI
+import SAPFoundation
 
 public struct AnnotationSceneAuthoringView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onCardEdit) var onCardEdit
+
+    private var model: AnnotationSceneAuthoringModel
     
     @State private var cardCreationIsPresented = false
     
@@ -23,12 +27,14 @@ public struct AnnotationSceneAuthoringView: View {
     
     @State private var hideNavBar = true
     
-    public init(_ cardItems: [DecodableCardItem] = []) {
+    public init(_ cardItems: [DecodableCardItem] = [], sapURLSession: SAPURLSession) {
         _currentTab = State(initialValue: .left)
         _anchorImage = State(initialValue: nil)
         _cardItems = State(initialValue: cardItems)
         _attachmentsItemModels = State(initialValue: [])
         _currentCardID = State(initialValue: nil)
+        let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/augmentedreality/v1") // TODO: refactor baseURL out of SDK
+        self.model = AnnotationSceneAuthoringModel(networkingAPI: networkingAPI)
     }
     
     public var body: some View {
@@ -100,10 +106,14 @@ public struct AnnotationSceneAuthoringView: View {
     }
     
     func startAR() {
-        if self.anchorImage == nil || self.cardItems.isEmpty {
+        if self.anchorImage != nil && !self.cardItems.isEmpty {
             print("TODO")
+            self.model.createSceneOnServer(anchorImage: self.anchorImage, cards: self.cardItems)
+            
         }
     }
+
+
 }
 
 private struct TabView: View {
@@ -145,4 +155,31 @@ private struct TabView: View {
 private enum TabSelection {
     case left
     case right
+}
+
+class AnnotationSceneAuthoringModel: ObservableObject {
+    private var cancellables = Set<AnyCancellable>()
+    private var networkingAPI: ARCardsNetworkingService!
+
+    init(networkingAPI: ARCardsNetworkingService) {
+        self.networkingAPI = networkingAPI
+    }
+
+    func createSceneOnServer(anchorImage: UIImage?, cards: [DecodableCardItem]) {
+        guard let anchorImage = anchorImage else { return }
+        guard let anchorImageData = anchorImage.pngData() else { return }
+
+        self.networkingAPI.createScene(
+            identfiedBy: anchorImageData,
+            anchorImagePhysicalWidth: 0.1,
+            cards: cards
+        )
+        .receive(on: DispatchQueue.main)
+        .sink { completion in
+            print(completion)
+        } receiveValue: { createdSceneId in
+            print("Scene with id \(createdSceneId) created")
+        }
+        .store(in: &self.cancellables)
+    }
 }
