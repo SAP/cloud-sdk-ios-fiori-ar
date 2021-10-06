@@ -28,8 +28,11 @@ struct DemoARService: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
+                Button("Create new scene") {
+                    self.model.createNewScene()
+                }
                 if self.model.loadingStatus == .finished, let scene = self.model.scene {
-                    Text("Scene \(sceneId) has \(scene.cards.count) cards and has \(scene.sourceFile == nil ? "no" : scene.sourceFile!.type.rawValue) source file")
+                    Text("Scene \(scene.sceneId) has \(scene.cards.count) cards and has \(scene.sourceFile == nil ? "no" : scene.sourceFile!.type.rawValue) source file")
                     ForEach(scene.cards, id: \.self) { card in
                         HStack {
                             Text("\(scene.cards.firstIndex(of: card)! + 1). \(card.title_)")
@@ -116,15 +119,15 @@ class DemoARServiceModel: ObservableObject {
 
     func loadData(for sceneId: String) {
         self.loadingStatus = .inProgress
-//        self.networkingAPI.getCards(for: sceneId)
-//            .receive(on: DispatchQueue.main)
-//            .sink { completion in
-//                print(completion)
-//            } receiveValue: { cards in
-//                self.cards = cards
-//                self.loadingStatus = .finished
-//            }
-//            .store(in: &self.cancellables)
+        //        self.networkingAPI.getCards(for: sceneId)
+        //            .receive(on: DispatchQueue.main)
+        //            .sink { completion in
+        //                print(completion)
+        //            } receiveValue: { cards in
+        //                self.cards = cards
+        //                self.loadingStatus = .finished
+        //            }
+        //            .store(in: &self.cancellables)
 
         self.networkingAPI.getScene(for: sceneId)
             .receive(on: DispatchQueue.main)
@@ -135,5 +138,28 @@ class DemoARServiceModel: ObservableObject {
                 self.loadingStatus = .finished
             }
             .store(in: &self.cancellables)
+    }
+
+    func createNewScene() {
+        guard let anchorImage = UIImage(named: "qrImage") else { return }
+        guard let anchorImageData = anchorImage.pngData() else { return }
+        let dummyCard = DecodableCardItem(id: UUID().uuidString, title_: "Hello", descriptionText_: "Hello World", detailImage_: nil, actionText_: nil, icon_: nil)
+
+
+        self.networkingAPI.createScene(
+            identfiedBy: anchorImageData,
+            anchorImagePhysicalWidth: 0.1,
+            cards: [dummyCard]
+        )
+        .receive(on: DispatchQueue.main)
+        .map { newSceneId in
+            self.loadData(for: newSceneId)
+        }
+        .sink { completion in
+            print(completion)
+        } receiveValue: { createdSceneId in
+            print("Scene with id \(createdSceneId) created")
+        }
+        .store(in: &self.cancellables)
     }
 }
