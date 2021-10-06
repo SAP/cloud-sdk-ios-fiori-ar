@@ -271,9 +271,9 @@ public struct ARCardsNetworkingService {
                 marker: Marker(icon: nil, iconAndroid: nil, iconIos: nil), // TODO: how to handle?
                 sceneId: sceneId,
                 id: UUID().uuidString,
-                relPositionx: 1,
-                relPositiony: 1,
-                relPositionz: 1
+                relPositionx: ((card.position_) != nil) ? Double(card.position_!.x) : nil,
+                relPositiony: ((card.position_) != nil) ? Double(card.position_!.y) : nil,
+                relPositionz: ((card.position_) != nil) ? Double(card.position_!.z) : nil
             )
         }
         let scene = Scene(id: sceneId, alias: nil, annotationAnchors: annotationAnchors, nameInSourceFile: nil, referenceAnchor: refAnchor, sourceFile: nil, sourceFileType: nil)
