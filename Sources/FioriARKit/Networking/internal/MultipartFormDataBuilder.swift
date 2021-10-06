@@ -24,14 +24,14 @@ struct MultipartFormDataBuilder {
         return fieldString
     }
 
-    func addDataField(named name: String, data: Data, mimeType: String) {
-        httpBody.append(dataFormField(named: name, data: data, mimeType: mimeType))
+    func addDataField(named name: String, data: Data, mimeType: String, filename: String) {
+        httpBody.append(dataFormField(named: name, data: data, mimeType: mimeType, filename: filename))
     }
 
     private func dataFormField(named name: String,
                                data: Data,
                                mimeType: String,
-                               filename: String = "qrImage.png") -> Data {
+                               filename: String) -> Data {
         let fieldData = NSMutableData()
 
         fieldData.append("--\(boundary)\r\n")

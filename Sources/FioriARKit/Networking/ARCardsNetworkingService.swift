@@ -248,6 +248,60 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
+    // MARK: createScene - Combine
+
+    public func createScene(identfiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, cards: [DecodableCardItem]) -> AnyPublisher<String, Error> {
+        let sceneId = UUID().uuidString
+        let imageAnchorFormDataName = UUID().uuidString
+        let imageAnchorFileName = "qrImage.png"
+
+
+        let refAnchor = ReferenceAnchor(data: imageAnchorFormDataName, name: imageAnchorFileName, physicalWidth: width, type: .image)
+        let annotationAnchors = cards.map { card in
+
+            AnnotationAnchor(
+                card: Card(
+                    language: NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en",
+                    actionData: nil, // TODO: how to handle?
+                    actionText: card.actionText_,
+                    actionType: nil, // TODO: how to handle?
+                    description: card.descriptionText_,
+                    image: nil,
+                    title: card.title_),
+                marker: Marker(icon: nil, iconAndroid: nil, iconIos: nil), // TODO: how to handle?
+                sceneId: sceneId,
+                id: UUID().uuidString,
+                relPositionx: 1,
+                relPositiony: 1,
+                relPositionz: 1
+            )
+        }
+        let scene = Scene(id: sceneId, alias: nil, annotationAnchors: annotationAnchors, nameInSourceFile: nil, referenceAnchor: refAnchor, sourceFile: nil, sourceFileType: nil)
+        //let scene = ARScene(sceneId: sceneId, annotationAnchorImage: Image(systemName: "pencil"), annotationAnchorImagePysicalWidth: width, cards: cards)
+        let jsonDataScene = try! JSONEncoder().encode(scene)
+        let jsonStringScene = String(data: jsonDataScene, encoding: .utf8)!
+
+        // TODO: handle card images
+        let anchorImageUploadFile = UploadFile(type: .data(anchorImage), fileName: imageAnchorFileName, partName: imageAnchorFormDataName, mimeType: "image/png")
+        let files: [UploadFile] = [anchorImageUploadFile]
+
+        let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
+        return api.makeRequest(ARService.Scene.AddScene.Request(scene: jsonStringScene, files: files))
+            .tryMap { response in
+                switch response.result {
+                case .success(let data):
+                    guard data.successful, let createdScene = data.success else { return "" }
+                    return createdScene.id
+                case .failure(let apiClientError):
+                  throw apiClientError
+                }
+            }
+            .mapError { error in
+                self.sdkClientError(from: error as! APIClientError)
+            }
+            .eraseToAnyPublisher()
+    }
+
     internal func save(sourceFile: ARSceneSourceFileWithData, into directory: URL = FileManager.default.temporaryDirectory) throws -> ARSceneSourceFile {
         let localFileURL = directory.appendingPathComponent(sourceFile.id)
         guard let absoluteDirectory = URL(string: "file://" + localFileURL.path) else {

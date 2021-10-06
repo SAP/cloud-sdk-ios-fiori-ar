@@ -64,17 +64,20 @@ internal struct UploadFile: Equatable {
 
     internal let type: FileType
     internal let fileName: String?
+    internal let partName: String?
     internal let mimeType: String?
 
     internal init(type: FileType) {
         self.type = type
         self.fileName = nil
+        self.partName = nil
         self.mimeType = nil
     }
 
-    internal init(type: FileType, fileName: String, mimeType: String) {
+    internal init(type: FileType, fileName: String, partName: String, mimeType: String) {
         self.type = type
         self.fileName = fileName
+        self.partName = partName
         self.mimeType = mimeType
     }
 

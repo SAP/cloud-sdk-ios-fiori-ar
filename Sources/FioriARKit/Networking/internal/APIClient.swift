@@ -66,8 +66,8 @@ internal class APIClient {
                 if let file = value as? UploadFile {
                     switch file.type {
                     case let .data(data):
-                        if let fileName = file.fileName, let mimeType = file.mimeType {
-                            builder.addDataField(named: fileName, data: data, mimeType: mimeType)
+                        if let fileName = file.fileName, let mimeType = file.mimeType, let partName = file.partName {
+                            builder.addDataField(named: partName, data: data, mimeType: mimeType, filename: fileName)
                         }
                     case .url(_):
 						assert(false, "NOT SUPPORTED YET")
@@ -160,8 +160,8 @@ internal class APIClient {
                 if let file = value as? UploadFile {
                     switch file.type {
                     case let .data(data):
-                        if let fileName = file.fileName, let mimeType = file.mimeType {
-                            builder.addDataField(named: fileName, data: data, mimeType: mimeType)
+                        if let fileName = file.fileName, let mimeType = file.mimeType, let partName = file.partName {
+                            builder.addDataField(named: partName, data: data, mimeType: mimeType, filename: fileName)
                         }
                     case .url(_):
                         assert(false, "NOT SUPPORTED YET")
