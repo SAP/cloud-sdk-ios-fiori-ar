@@ -14,7 +14,7 @@ However, a different SDK API is recommended to hide internal aspects and provide
 |---|---|
 |`ARCardsNetworkingService`|`APIClient`|
 |`ARCardsNetworkingServiceError`|`APIClientError`|
-|`DecodableCardItem` which implements `CardItemModel` |`Card`|
+|`CodableCardItem` which implements `CardItemModel` |`Card`|
 |???|`Scene` and other sub-types
 
 *Note: names are not yet finalized*

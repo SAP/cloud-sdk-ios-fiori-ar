@@ -18,7 +18,7 @@ final class TestScreenAnnotation: XCTestCase {
     }
     
     func makeScreenAnnotationTwoSUT() -> ScreenAnnotation<TestCardItem> {
-        let cardItemTwo = TestCardItem(id: "2", title_: "Test Card 2", descriptionText_: nil, detailImage_: nil, actionText_: nil, icon_: Image(systemName: "arkit"))
+        let cardItemTwo = TestCardItem(id: "2", title_: "Test Card 2", descriptionText_: nil, detailImage_: nil, actionText_: nil, icon_: "arkit")
         let screenAnnotation = ScreenAnnotation(card: cardItemTwo)
         return screenAnnotation
     }

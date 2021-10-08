@@ -73,8 +73,8 @@ public struct UsdzFileStrategy<CardItem: CardItemModel>: AnnotationLoadingStrate
          }
         ]
      */
-    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, usdzFilePath: URL) throws where CardItem == DecodableCardItem {
-        self.cardContents = try JSONDecoder().decode([DecodableCardItem].self, from: jsonData)
+    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, usdzFilePath: URL) throws where CardItem == CodableCardItem {
+        self.cardContents = try JSONDecoder().decode([CodableCardItem].self, from: jsonData)
         self.anchorImage = anchorImage
         self.physicalWidth = physicalWidth
         self.usdzFilePath = usdzFilePath

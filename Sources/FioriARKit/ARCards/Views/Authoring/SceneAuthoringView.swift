@@ -6,10 +6,10 @@
 //
 
 import Combine
-import SwiftUI
 import SAPFoundation
+import SwiftUI
 
-public struct AnnotationSceneAuthoringView: View {
+public struct SceneAuthoringView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onCardEdit) var onCardEdit
@@ -21,13 +21,13 @@ public struct AnnotationSceneAuthoringView: View {
     @State private var currentTab: TabSelection
     
     @State private var anchorImage: UIImage?
-    @State private var cardItems: [DecodableCardItem]
-    @State private var attachmentsItemModels: [AttachmentsItemModel]
+    @State private var cardItems: [CodableCardItem]
+    @State private var attachmentsItemModels: [AttachmentUIMetadata]
     @State private var currentCardID: UUID?
     
     @State private var hideNavBar = true
     
-    public init(_ cardItems: [DecodableCardItem] = [], sapURLSession: SAPURLSession) {
+    public init(_ cardItems: [CodableCardItem] = [], sapURLSession: SAPURLSession) {
         _currentTab = State(initialValue: .left)
         _anchorImage = State(initialValue: nil)
         _cardItems = State(initialValue: cardItems)
@@ -65,12 +65,12 @@ public struct AnnotationSceneAuthoringView: View {
                 
                 switch currentTab {
                 case .left:
-                    AttachmentsView(label: "Cards", attachmentsItemModels: $attachmentsItemModels, onAddAttachment: { cardCreationIsPresented.toggle() }) { attachmentsItemModel in
-                        currentCardID = attachmentsItemModel.id
+                    AttachmentsView(label: "Cards", attachmentsUIMetadata: $attachmentsItemModels, onAddAttachment: { cardCreationIsPresented.toggle() }, onSelectAttachment: { attachmentsUIMetadata in
+                        currentCardID = attachmentsUIMetadata.id
                         cardCreationIsPresented.toggle()
-                    }
+                    })
                 case .right:
-                    UploadAnchorImageTabView(anchorImage: $anchorImage)
+                    AnchorImageTabView(anchorImage: $anchorImage)
                 }
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
@@ -95,25 +95,28 @@ public struct AnnotationSceneAuthoringView: View {
     func populateAttachmentView() {
         self.attachmentsItemModels.removeAll()
         self.cardItems.forEach { card in
-            let newAttachmentModel = AttachmentsItemModel(id: UUID(uuidString: card.id) ?? UUID(),
+            
+            var detailImage: Image?
+            if let data = card.detailImage_, let uiImage = UIImage(data: data) {
+                detailImage = Image(uiImage: uiImage)
+            }
+            
+            let newAttachmentModel = AttachmentUIMetadata(id: UUID(uuidString: card.id) ?? UUID(),
                                                           title: card.title_,
                                                           subtitle: card.position_ == nil ? "Not Pinned Yet" : "Pinned",
                                                           info: nil,
-                                                          image: card.detailImage_,
-                                                          icon: card.icon_)
+                                                          image: detailImage,
+                                                          icon: card.icon_ == nil ? nil : Image(card.icon_!))
             attachmentsItemModels.append(newAttachmentModel)
         }
     }
     
     func startAR() {
-        if self.anchorImage != nil && !self.cardItems.isEmpty {
+        if self.anchorImage != nil, !self.cardItems.isEmpty {
             print("TODO")
             self.model.createSceneOnServer(anchorImage: self.anchorImage, cards: self.cardItems)
-            
         }
     }
-
-
 }
 
 private struct TabView: View {
@@ -165,7 +168,7 @@ class AnnotationSceneAuthoringModel: ObservableObject {
         self.networkingAPI = networkingAPI
     }
 
-    func createSceneOnServer(anchorImage: UIImage?, cards: [DecodableCardItem]) {
+    func createSceneOnServer(anchorImage: UIImage?, cards: [CodableCardItem]) {
         guard let anchorImage = anchorImage else { return }
         guard let anchorImageData = anchorImage.pngData() else { return }
 

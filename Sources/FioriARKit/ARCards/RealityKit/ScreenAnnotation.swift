@@ -16,7 +16,7 @@ public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable
         self.card.id
     }
     
-    public var icon: Image? {
+    public var icon: String? {
         self.card.icon_
     }
     
