@@ -20,33 +20,33 @@ public enum TestsItems {
                                                          descriptionText_: "Price: 20.99",
                                                          detailImage_: nil,
                                                          actionText_: "Order",
-                                                         icon_: Image(systemName: "cart.fill")),
+                                                         icon_: "cart.fill"),
                                             
                                             TestCardItem(id: "Oilstick",
                                                          title_: "Check Oil Stick",
                                                          descriptionText_: "Suggested Date: 06/02/2021",
-                                                         detailImage_: Image("Schedule"),
+                                                         detailImage_: UIImage(named: "Schedule")?.pngData(),
                                                          actionText_: "Schedule",
-                                                         icon_: Image(systemName: "calendar")),
+                                                         icon_: "calendar"),
                                             
                                             TestCardItem(id: "BrakeFluid",
                                                          title_: "Brake Fluid Manual",
                                                          descriptionText_: nil,
                                                          detailImage_: nil,
                                                          actionText_: "Open Car Manual",
-                                                         icon_: Image(systemName: "book.fill")),
+                                                         icon_: "book.fill"),
                                             
                                             TestCardItem(id: "Battery",
                                                          title_: "Jump Battery",
                                                          descriptionText_: "Instructional Video",
-                                                         detailImage_: Image("Battery"),
+                                                         detailImage_: UIImage(named: "Battery")?.pngData(),
                                                          actionText_: "Play Video",
-                                                         icon_: Image(systemName: "play.fill")),
+                                                         icon_: "play.fill"),
                                             
                                             TestCardItem(id: "Fusebox",
                                                          title_: "Service App",
                                                          descriptionText_: "Change Fuse",
                                                          detailImage_: nil,
                                                          actionText_: "Open App",
-                                                         icon_: Image(systemName: "link"))]
+                                                         icon_: "link")]
 }

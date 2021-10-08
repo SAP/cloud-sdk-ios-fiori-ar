@@ -125,7 +125,7 @@ The scene can be represented in different file types and each strategy requires 
 import FioriARKit
 
 struct FioriARKitCardsExample: View {
-    @StateObject var arModel = ARAnnotationViewModel<DecodableCardItem>()
+    @StateObject var arModel = ARAnnotationViewModel<CodableCardItem>()
     
     var body: some View {
     /**

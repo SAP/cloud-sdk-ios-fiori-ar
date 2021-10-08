@@ -76,8 +76,8 @@ public struct RealityFileStrategy<CardItem: CardItemModel>: AnnotationLoadingStr
          }
         ]
      */
-    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, realityFilePath: URL, rcScene: String) throws where CardItem == DecodableCardItem {
-        self.cardContents = try JSONDecoder().decode([DecodableCardItem].self, from: jsonData)
+    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, realityFilePath: URL, rcScene: String) throws where CardItem == CodableCardItem {
+        self.cardContents = try JSONDecoder().decode([CodableCardItem].self, from: jsonData)
         self.anchorImage = anchorImage
         self.physicalWidth = physicalWidth
         self.realityFilePath = realityFilePath

@@ -11,7 +11,7 @@ public struct ARScene {
     public var sourceFile: ARSceneSourceFile?
     public var annotationAnchorImage: Image
     public var annotationAnchorImagePysicalWidth: Double
-    public var cards: [DecodableCardItem]
+    public var cards: [CodableCardItem]
 }
 
 internal struct ARSceneSourceFileWithData {

@@ -209,16 +209,21 @@ public extension CardView where
     init(id: CardItem.ID,
          title: String,
          descriptionText: String? = nil,
-         detailImage: Image? = nil,
+         detailImage: Data? = nil,
          actionText: String? = nil,
-         icon: Image?,
+         icon: String?,
          action: ((CardItem.ID) -> Void)? = nil,
          isSelected: Bool)
     {
+        var image: Image?
+        if let data = detailImage, let uiImage = UIImage(data: data) {
+            image = Image(uiImage: uiImage)
+        }
+        
         self.id = id
         self._title = Text(title)
         self._descriptionText = descriptionText != nil ? ViewBuilder.buildEither(first: Text(descriptionText!)) : ViewBuilder.buildEither(second: EmptyView())
-        self._detailImage = detailImage != nil ? ViewBuilder.buildEither(first: ImagePreview(preview: detailImage!)) : ViewBuilder.buildEither(second: DefaultIcon(icon: icon))
+        self._detailImage = image != nil ? ViewBuilder.buildEither(first: ImagePreview(preview: image!)) : ViewBuilder.buildEither(second: DefaultIcon(iconString: icon))
         self._actionText = actionText != nil ? ViewBuilder.buildEither(first: Text(actionText!)) : ViewBuilder.buildEither(second: EmptyView())
         self.action = action
         self.isSelected = isSelected
@@ -234,8 +239,8 @@ public extension CardView where
 public struct DefaultIcon: View {
     private var icon: Image
     
-    public init(icon: Image?) {
-        self.icon = icon ?? Image(systemName: "info")
+    public init(iconString: String?) {
+        self.icon = iconString == nil ? Image(systemName: "info") : Image(systemName: iconString!)
     }
     
     public var body: some View {

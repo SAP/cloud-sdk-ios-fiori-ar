@@ -9,9 +9,9 @@ import Combine
 import SwiftUI
 
 public enum CardEditing {
-    case created(card: DecodableCardItem)
-    case updated(card: DecodableCardItem)
-    case deleted(card: DecodableCardItem)
+    case created(card: CodableCardItem)
+    case updated(card: CodableCardItem)
+    case deleted(card: CodableCardItem)
 }
 
 struct CardFormView: View {
@@ -19,11 +19,11 @@ struct CardFormView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onCardEdit) var onCardEdit
     
-    @Binding var cardItems: [DecodableCardItem]
-    @Binding var attachmentModels: [AttachmentsItemModel]
+    @Binding var cardItems: [CodableCardItem]
+    @Binding var attachmentModels: [AttachmentUIMetadata]
     @Binding var currentCardID: UUID?
     
-    @State var detailImage: Image?
+    @State var detailImage: Data?
     @State var title: String
     @State var subtitle: String
     @State var actionText: String
@@ -35,7 +35,7 @@ struct CardFormView: View {
     
     var isUpdate: Bool = false
     
-    init(cardItems: Binding<[DecodableCardItem]>, attachmentModels: Binding<[AttachmentsItemModel]>, currentCardID: Binding<UUID?>) {
+    init(cardItems: Binding<[CodableCardItem]>, attachmentModels: Binding<[AttachmentUIMetadata]>, currentCardID: Binding<UUID?>) {
         self._cardItems = cardItems
         self._attachmentModels = attachmentModels
         self._currentCardID = currentCardID
@@ -120,7 +120,7 @@ struct CardFormView: View {
     }
     
     func createCard() {
-        let newCard = DecodableCardItem(id: UUID().uuidString, title_: self.title, descriptionText_: self.subtitle, detailImage_: self.detailImage, actionText_: self.actionText, icon_: nil)
+        let newCard = CodableCardItem(id: UUID().uuidString, title_: self.title, descriptionText_: self.subtitle, detailImage_: self.detailImage, actionText_: self.actionText, icon_: nil)
         self.cardItems.append(newCard)
         
         self.onCardEdit(.created(card: newCard))
@@ -128,12 +128,12 @@ struct CardFormView: View {
     
     func updateCard(for currentID: UUID) {
         guard let index = cardItems.firstIndex(where: { UUID(uuidString: $0.id) == currentCardID }) else { return }
-        self.cardItems[index] = DecodableCardItem(id: currentID.uuidString,
-                                                  title_: self.title,
-                                                  descriptionText_: self.subtitle,
-                                                  detailImage_: self.detailImage,
-                                                  actionText_: self.actionText,
-                                                  icon_: nil)
+        self.cardItems[index] = CodableCardItem(id: currentID.uuidString,
+                                                title_: self.title,
+                                                descriptionText_: self.subtitle,
+                                                detailImage_: self.detailImage,
+                                                actionText_: self.actionText,
+                                                icon_: nil)
         
         self.onCardEdit(.updated(card: self.cardItems[index]))
     }
@@ -151,7 +151,7 @@ struct CardFormView: View {
 private struct CardDetailsView: View {
     var isUpdate: Bool
     
-    @Binding var detailImage: Image?
+    @Binding var detailImage: Data?
     @Binding var title: String
     @Binding var subtitle: String
     @Binding var actionText: String
@@ -230,14 +230,14 @@ private struct CardDetailsView: View {
                         }), .cancel()])
         }
         .fullScreenCover(isPresented: $pickerPresented) {
-            ImagePickerView(image: $detailImage, uiImage: .constant(nil), fileName: .constant(nil), sourceType: pickerSource)
+            ImagePickerView(imageData: $detailImage, sourceType: pickerSource)
                 .edgesIgnoringSafeArea(.all)
         }
     }
 }
 
 private struct CardPreview: View {
-    @Binding var detailImage: Image?
+    @Binding var detailImage: Data?
     @Binding var title: String
     @Binding var descriptionText: String
     @Binding var actionText: String
@@ -247,11 +247,10 @@ private struct CardPreview: View {
     var body: some View {
         VStack(spacing: 10) {
             VStack {
-                if let detailImage = detailImage {
-                    detailImage
+                if let data = detailImage, let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
-                    
                 } else {
                     (icon ?? Image(systemName: "info"))
                         .font(.system(size: 30))
@@ -347,7 +346,7 @@ private struct CoverImageDetail: View {
     
     @Binding var isOn: Bool
     @Binding var presentActionSheet: Bool
-    @Binding var detailImage: Image?
+    @Binding var detailImage: Data?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -369,8 +368,8 @@ private struct CoverImageDetail: View {
             .zIndex(0)
             
             VStack {
-                if let detailImage = detailImage {
-                    detailImage
+                if let data = detailImage, let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(height: 145)

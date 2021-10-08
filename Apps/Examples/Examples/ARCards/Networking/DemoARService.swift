@@ -36,8 +36,8 @@ struct DemoARService: View {
                     ForEach(scene.cards, id: \.self) { card in
                         HStack {
                             Text("\(scene.cards.firstIndex(of: card)! + 1). \(card.title_)")
-                            if let image = card.detailImage_ {
-                                image
+                            if let data = card.detailImage_, let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 100, height: 100)
@@ -58,8 +58,8 @@ struct DemoARService: View {
     }
 }
 
-extension DecodableCardItem: Hashable {
-    public static func == (lhs: DecodableCardItem, rhs: DecodableCardItem) -> Bool {
+extension CodableCardItem: Hashable {
+    public static func == (lhs: CodableCardItem, rhs: CodableCardItem) -> Bool {
         lhs.id == rhs.id
     }
 
@@ -108,7 +108,7 @@ class DemoARServiceModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var networkingAPI: ARCardsNetworkingService!
 
-    // @Published var cards: [DecodableCardItem] = []
+    // @Published var cards: [CodableCardItem] = []
     @Published var scene: ARScene? = nil
 
     @Published var loadingStatus: DemoARServiceModelDataLoading = .notStarted
@@ -143,8 +143,7 @@ class DemoARServiceModel: ObservableObject {
     func createNewScene() {
         guard let anchorImage = UIImage(named: "qrImage") else { return }
         guard let anchorImageData = anchorImage.pngData() else { return }
-        let dummyCard = DecodableCardItem(id: UUID().uuidString, title_: "Hello", descriptionText_: "Hello World", detailImage_: nil, actionText_: nil, icon_: nil)
-
+        let dummyCard = CodableCardItem(id: UUID().uuidString, title_: "Hello", descriptionText_: "Hello World", detailImage_: nil, actionText_: nil, icon_: nil)
 
         self.networkingAPI.createScene(
             identfiedBy: anchorImageData,

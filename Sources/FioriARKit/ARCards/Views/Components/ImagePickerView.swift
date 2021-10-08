@@ -14,9 +14,23 @@ struct ImagePickerView: UIViewControllerRepresentable {
     
     @Binding var image: Image?
     @Binding var uiImage: UIImage?
+    @Binding var imageData: Data?
     @Binding var fileName: String?
     
     var sourceType: UIImagePickerController.SourceType
+    
+    init(image: Binding<Image?> = .constant(nil),
+         uiImage: Binding<UIImage?> = .constant(nil),
+         imageData: Binding<Data?> = .constant(nil),
+         fileName: Binding<String?> = .constant(nil),
+         sourceType: UIImagePickerController.SourceType)
+    {
+        self._image = image
+        self._uiImage = uiImage
+        self._imageData = imageData
+        self._fileName = fileName
+        self.sourceType = sourceType
+    }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(picker: self)
@@ -44,8 +58,10 @@ class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerContro
               let resized = pickedImage.resize(to: 0.50) else { return }
         // Large images causes unexpected layout issues in SwiftUI
         let uiImage = pickedImage.size.height * pickedImage.scale > 2000 ? resized : pickedImage
-        self.picker.image = Image(uiImage: uiImage)
         self.picker.uiImage = uiImage
+        self.picker.image = Image(uiImage: uiImage)
+        self.picker.imageData = uiImage.pngData()
+        
         self.picker.isPresented.wrappedValue.dismiss()
     }
 }

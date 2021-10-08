@@ -18,7 +18,7 @@ struct AdaptsToKeyboard: ViewModifier {
                 .onReceive(Publishers.keyboardHeight) { keyboardHeight in
                     keyboardPadding = keyboardHeight
                 }
-                .animation(.easeInOut(duration: 0.30))
+                .animation(.easeInOut(duration: 0.30), value: keyboardPadding)
         }
     }
 }
