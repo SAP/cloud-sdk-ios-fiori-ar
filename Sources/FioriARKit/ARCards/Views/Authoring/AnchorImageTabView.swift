@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UploadAnchorImageTabView: View {
+struct AnchorImageTabView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
     @Binding var anchorImage: UIImage?
@@ -60,7 +60,7 @@ struct UploadAnchorImageTabView: View {
                         }), .cancel()])
         }
         .fullScreenCover(isPresented: $pickerPresented) {
-            ImagePickerView(image: .constant(nil), uiImage: $anchorImage, fileName: $imageName, sourceType: pickerSource)
+            ImagePickerView(uiImage: $anchorImage, fileName: $imageName, sourceType: pickerSource)
                 .edgesIgnoringSafeArea(.all)
         }
     }

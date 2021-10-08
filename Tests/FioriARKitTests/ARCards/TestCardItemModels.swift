@@ -21,9 +21,9 @@ final class TestCardItemModels: XCTestCase {
         let testModelWithoutNil = TestCardItem(id: "2",
                                                title_: "TestTitle2",
                                                descriptionText_: "DescriptionText",
-                                               detailImage_: Image(systemName: "arkit"),
+                                               detailImage_: UIImage(systemName: "arkit")?.pngData(),
                                                actionText_: "Tap",
-                                               icon_: Image(systemName: "arkit"))
+                                               icon_: "arkit")
         
         XCTAssertEqual(testModel.id, "1")
         XCTAssertEqual(testModel.title_, "TestTitle1")
@@ -43,18 +43,18 @@ final class TestCardItemModels: XCTestCase {
     func testJSONExtraction() throws {
         let jsonUrl = try XCTUnwrap(Bundle.module.url(forResource: "TestItems", withExtension: "json"))
         let jsonData = try Data(contentsOf: jsonUrl)
-        let decodedCardItems = try JSONDecoder().decode([DecodableCardItem].self, from: jsonData)
+        let decodedCardItems = try JSONDecoder().decode([CodableCardItem].self, from: jsonData)
         
         let firstCardItem = try XCTUnwrap(decodedCardItems.first)
         
         XCTAssertEqual(decodedCardItems.count, 6)
-        XCTAssertTrue((firstCardItem as Any) is DecodableCardItem)
+        XCTAssertTrue((firstCardItem as Any) is CodableCardItem)
     }
     
     func testJSONExtractionData() throws {
         let jsonUrl = try XCTUnwrap(Bundle.module.url(forResource: "TestItems", withExtension: "json"))
         let jsonData = try Data(contentsOf: jsonUrl)
-        let decodedCardItems = try JSONDecoder().decode([DecodableCardItem].self, from: jsonData)
+        let decodedCardItems = try JSONDecoder().decode([CodableCardItem].self, from: jsonData)
         
         let firstCardItem = try XCTUnwrap(decodedCardItems.first)
         

@@ -80,8 +80,8 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
          }
         ]
      */
-    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String, bundle: Bundle = Bundle.main) throws where CardItem == DecodableCardItem {
-        self.cardContents = try JSONDecoder().decode([DecodableCardItem].self, from: jsonData)
+    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String, bundle: Bundle = Bundle.main) throws where CardItem == CodableCardItem {
+        self.cardContents = try JSONDecoder().decode([CodableCardItem].self, from: jsonData)
         self.anchorImage = anchorImage
         self.physicalWidth = physicalWidth
         self.rcFile = rcFile

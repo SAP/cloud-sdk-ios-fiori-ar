@@ -121,7 +121,7 @@ public struct ARCardsNetworkingService {
     ///   - sceneId: uautoupdatingCurrent niqiue identifier for a scene describing an argument reality experience with annotations
     ///   - language: for which texts shall be returned (ISO-631-1)
     /// - Returns: AR cards (incl. image data if available)
-    public func getCards(for sceneId: String, language: String = NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en") -> AnyPublisher<[DecodableCardItem], Error> {
+    public func getCards(for sceneId: String, language: String = NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en") -> AnyPublisher<[CodableCardItem], Error> {
         let scenePublisher = self.getUnresolvedScene(for: sceneId, language: language)
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
@@ -146,22 +146,22 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
 
         return Publishers.Zip(scenePublisher, filesPublisher)
-            .flatMap { scene, files -> AnyPublisher<[DecodableCardItem], Error> in
+            .flatMap { scene, files -> AnyPublisher<[CodableCardItem], Error> in
 
-                var cards: [DecodableCardItem] = []
+                var cards: [CodableCardItem] = []
 
                 // resolve cards, i.e. merge image data into card (if available)
                 for anchor in scene.annotationAnchors ?? [] {
-                    var image: Image?
+                    var data: Data?
                     if let fileId = anchor.card.image, let file = files.first(where: { $0.id == fileId }), let uiimage = file.image {
-                        image = Image(uiImage: uiimage)
+                        data = uiimage.pngData()
                     }
 
-                    let card = DecodableCardItem(
+                    let card = CodableCardItem(
                         id: anchor.id ?? UUID().uuidString,
                         title_: anchor.card.title ?? "",
                         descriptionText_: anchor.card.description ?? "",
-                        detailImage_: image,
+                        detailImage_: data,
                         actionText_: anchor.card.actionText,
                         icon_: nil
                     )
@@ -214,20 +214,20 @@ public struct ARCardsNetworkingService {
         return Publishers.Zip3(scenePublisher, imagesFilesPublisher, sourceFilePublisher)
             .flatMap { scene, imageFiles, sourceFile -> AnyPublisher<ARScene, Error> in
 
-                var cards: [DecodableCardItem] = []
+                var cards: [CodableCardItem] = []
 
                 // resolve cards, i.e. merge image data into card (if available)
                 for anchor in scene.annotationAnchors ?? [] {
-                    var image: Image?
+                    var data: Data?
                     if let fileId = anchor.card.image, let file = imageFiles.first(where: { $0.id == fileId }), let uiimage = file.image {
-                        image = Image(uiImage: uiimage)
+                        data = uiimage.pngData()
                     }
 
-                    let card = DecodableCardItem(
+                    let card = CodableCardItem(
                         id: anchor.id ?? UUID().uuidString,
                         title_: anchor.card.title ?? "",
                         descriptionText_: anchor.card.description ?? "",
-                        detailImage_: image,
+                        detailImage_: data,
                         actionText_: anchor.card.actionText,
                         icon_: nil
                     )
@@ -250,11 +250,10 @@ public struct ARCardsNetworkingService {
 
     // MARK: createScene - Combine
 
-    public func createScene(identfiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, cards: [DecodableCardItem]) -> AnyPublisher<String, Error> {
+    public func createScene(identfiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, cards: [CodableCardItem]) -> AnyPublisher<String, Error> {
         let sceneId = UUID().uuidString
         let imageAnchorFormDataName = UUID().uuidString
         let imageAnchorFileName = "qrImage.png"
-
 
         let refAnchor = ReferenceAnchor(data: imageAnchorFormDataName, name: imageAnchorFileName, physicalWidth: width, type: .image)
         let annotationAnchors = cards.map { card in
@@ -267,17 +266,18 @@ public struct ARCardsNetworkingService {
                     actionType: nil, // TODO: how to handle?
                     description: card.descriptionText_,
                     image: nil,
-                    title: card.title_),
+                    title: card.title_
+                ),
                 marker: Marker(icon: nil, iconAndroid: nil, iconIos: nil), // TODO: how to handle?
                 sceneId: sceneId,
                 id: UUID().uuidString,
-                relPositionx: ((card.position_) != nil) ? Double(card.position_!.x) : nil,
-                relPositiony: ((card.position_) != nil) ? Double(card.position_!.y) : nil,
-                relPositionz: ((card.position_) != nil) ? Double(card.position_!.z) : nil
+                relPositionx: (card.position_ != nil) ? Double(card.position_!.x) : nil,
+                relPositiony: (card.position_ != nil) ? Double(card.position_!.y) : nil,
+                relPositionz: (card.position_ != nil) ? Double(card.position_!.z) : nil
             )
         }
         let scene = Scene(id: sceneId, alias: nil, annotationAnchors: annotationAnchors, nameInSourceFile: nil, referenceAnchor: refAnchor, sourceFile: nil, sourceFileType: nil)
-        //let scene = ARScene(sceneId: sceneId, annotationAnchorImage: Image(systemName: "pencil"), annotationAnchorImagePysicalWidth: width, cards: cards)
+        // let scene = ARScene(sceneId: sceneId, annotationAnchorImage: Image(systemName: "pencil"), annotationAnchorImagePysicalWidth: width, cards: cards)
         let jsonDataScene = try! JSONEncoder().encode(scene)
         let jsonStringScene = String(data: jsonDataScene, encoding: .utf8)!
 
@@ -293,7 +293,7 @@ public struct ARCardsNetworkingService {
                     guard data.successful, let createdScene = data.success else { return "" }
                     return createdScene.id
                 case .failure(let apiClientError):
-                  throw apiClientError
+                    throw apiClientError
                 }
             }
             .mapError { error in

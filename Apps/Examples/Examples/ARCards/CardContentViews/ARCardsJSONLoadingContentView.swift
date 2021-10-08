@@ -9,7 +9,7 @@ import FioriARKit
 import SwiftUI
 
 struct ARCardsJSONLoadingContentView: View {
-    @StateObject var arModel = ARAnnotationViewModel<DecodableCardItem>()
+    @StateObject var arModel = ARAnnotationViewModel<CodableCardItem>()
     
     var body: some View {
         SingleImageARCardView(arModel: arModel,
