@@ -55,7 +55,7 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
         JSON key/value:
          "id": String,
          "title_": String,
-         "descriptionText_": String?,
+         "subtitle_": String?,
          "detailImage_": Data?, // base64 encoding of Image
          "actionText_": String?,
          "icon_": String? // systemName of SFSymbol
@@ -65,7 +65,7 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
          {
              "id": "WasherFluid",
              "title_": "Recommended Washer Fluid",
-             "descriptionText_": "Rain X",
+             "subtitle_": "Rain X",
              "detailImage_": null,
              "actionText_": null,
              "icon_": null
@@ -73,7 +73,7 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
          {
              "id": "Coolant",
              "title_": "Genuine Coolant",
-             "descriptionText_": "Price: 20.99",
+             "subtitle_": "Price: 20.99",
              "detailImage_": "iVBORw0KGgoAAAANSUhE...",
              "actionText_": "Order",
              "icon_": "cart.fill"

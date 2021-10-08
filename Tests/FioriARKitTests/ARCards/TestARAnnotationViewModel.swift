@@ -49,7 +49,7 @@ final class TestARAnnotationViewModel: XCTestCase {
         
         XCTAssertEqual(first.card.id, "WasherFluid")
         XCTAssertEqual(first.card.title_, "Recommended Washer Fluid")
-        XCTAssertEqual(first.card.descriptionText_, "Rain X")
+        XCTAssertEqual(first.card.subtitle_, "Rain X")
         XCTAssertNil(first.card.detailImage_)
         XCTAssertNil(first.card.actionText_)
         XCTAssertNil(first.card.icon_)

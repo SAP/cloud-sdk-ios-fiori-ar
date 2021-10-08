@@ -101,7 +101,7 @@ Each of the loading strategies also has an initializer to accept`Data` represent
 // JSON key/value:
 "id": String,
 "title_": String,
-"descriptionText_": String?,
+"subtitle_": String?,
 "detailImage_": Data?, // base64 encoding of Image
 "actionText_": String?,
 "icon_": String? // systemName of SFSymbol
