@@ -143,7 +143,7 @@ class DemoARServiceModel: ObservableObject {
     func createNewScene() {
         guard let anchorImage = UIImage(named: "qrImage") else { return }
         guard let anchorImageData = anchorImage.pngData() else { return }
-        let dummyCard = CodableCardItem(id: UUID().uuidString, title_: "Hello", descriptionText_: "Hello World", detailImage_: nil, actionText_: nil, icon_: nil)
+        let dummyCard = CodableCardItem(id: UUID().uuidString, title_: "Hello", subtitle_: "Hello World", detailImage_: nil, actionText_: nil, icon_: nil)
 
         self.networkingAPI.createScene(
             identfiedBy: anchorImageData,

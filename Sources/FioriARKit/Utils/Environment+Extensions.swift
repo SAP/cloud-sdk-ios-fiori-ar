@@ -15,9 +15,9 @@ public extension EnvironmentValues {
         set { self[TitleModifierKey.self] = newValue }
     }
     
-    var descriptionTextModifier: AnyViewModifier {
-        get { self[DescriptionTextModifierKey.self] }
-        set { self[DescriptionTextModifierKey.self] = newValue }
+    var subtitleModifier: AnyViewModifier {
+        get { self[SubtitleModifierKey.self] }
+        set { self[SubtitleModifierKey.self] = newValue }
     }
     
     var detailImageModifier: AnyViewModifier {
@@ -45,7 +45,7 @@ struct TitleModifierKey: EnvironmentKey {
     public static let defaultValue = AnyViewModifier { $0 }
 }
 
-struct DescriptionTextModifierKey: EnvironmentKey {
+struct SubtitleModifierKey: EnvironmentKey {
     public static let defaultValue = AnyViewModifier { $0 }
 }
 

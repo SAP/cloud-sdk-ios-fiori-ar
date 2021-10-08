@@ -44,7 +44,7 @@ struct CardFormView: View {
         
         self._detailImage = State(initialValue: currentCard?.detailImage_)
         self._title = State(initialValue: currentCard?.title_ ?? "")
-        self._subtitle = State(initialValue: currentCard?.descriptionText_ ?? "")
+        self._subtitle = State(initialValue: currentCard?.subtitle_ ?? "")
         self._actionText = State(initialValue: currentCard?.actionText_ ?? "")
         self._actionContentText = State(initialValue: "")
         
@@ -84,7 +84,7 @@ struct CardFormView: View {
                 ZStack {
                     Color
                         .fioriNextPrimaryBackground
-                    CardPreview(detailImage: $detailImage, title: $title, descriptionText: $subtitle, actionText: $actionText, icon: $icon, hasButton: $hasButton)
+                    CardPreview(detailImage: $detailImage, title: $title, subtitle: $subtitle, actionText: $actionText, icon: $icon, hasButton: $hasButton)
                         .offset(y: verticalSizeClass == .compact ? -70 : -10)
                 }
                 .frame(maxHeight: verticalSizeClass == .compact ? .infinity : 246)
@@ -120,7 +120,7 @@ struct CardFormView: View {
     }
     
     func createCard() {
-        let newCard = CodableCardItem(id: UUID().uuidString, title_: self.title, descriptionText_: self.subtitle, detailImage_: self.detailImage, actionText_: self.actionText, icon_: nil)
+        let newCard = CodableCardItem(id: UUID().uuidString, title_: self.title, subtitle_: self.subtitle, detailImage_: self.detailImage, actionText_: self.actionText, icon_: nil)
         self.cardItems.append(newCard)
         
         self.onCardEdit(.created(card: newCard))
@@ -130,7 +130,7 @@ struct CardFormView: View {
         guard let index = cardItems.firstIndex(where: { UUID(uuidString: $0.id) == currentCardID }) else { return }
         self.cardItems[index] = CodableCardItem(id: currentID.uuidString,
                                                 title_: self.title,
-                                                descriptionText_: self.subtitle,
+                                                subtitle_: self.subtitle,
                                                 detailImage_: self.detailImage,
                                                 actionText_: self.actionText,
                                                 icon_: nil)
@@ -239,7 +239,7 @@ private struct CardDetailsView: View {
 private struct CardPreview: View {
     @Binding var detailImage: Data?
     @Binding var title: String
-    @Binding var descriptionText: String
+    @Binding var subtitle: String
     @Binding var actionText: String
     @Binding var icon: Image?
     @Binding var hasButton: Bool
@@ -270,8 +270,8 @@ private struct CardPreview: View {
                     .truncationMode(.tail)
                     .frame(width: 198, alignment: .leading)
                 
-                if !descriptionText.isEmpty {
-                    Text(descriptionText)
+                if !subtitle.isEmpty {
+                    Text(subtitle)
                         .font(.subheadline)
                         .foregroundColor(Color.preferredColor(.secondaryLabel, background: .lightConstant))
                         .lineLimit(1)

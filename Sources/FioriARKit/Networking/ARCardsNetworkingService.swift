@@ -160,7 +160,7 @@ public struct ARCardsNetworkingService {
                     let card = CodableCardItem(
                         id: anchor.id ?? UUID().uuidString,
                         title_: anchor.card.title ?? "",
-                        descriptionText_: anchor.card.description ?? "",
+                        subtitle_: anchor.card.description ?? "",
                         detailImage_: data,
                         actionText_: anchor.card.actionText,
                         icon_: nil
@@ -226,7 +226,7 @@ public struct ARCardsNetworkingService {
                     let card = CodableCardItem(
                         id: anchor.id ?? UUID().uuidString,
                         title_: anchor.card.title ?? "",
-                        descriptionText_: anchor.card.description ?? "",
+                        subtitle_: anchor.card.description ?? "",
                         detailImage_: data,
                         actionText_: anchor.card.actionText,
                         icon_: nil
@@ -264,7 +264,7 @@ public struct ARCardsNetworkingService {
                     actionData: nil, // TODO: how to handle?
                     actionText: card.actionText_,
                     actionType: nil, // TODO: how to handle?
-                    description: card.descriptionText_,
+                    description: card.subtitle_,
                     image: nil,
                     title: card.title_
                 ),
