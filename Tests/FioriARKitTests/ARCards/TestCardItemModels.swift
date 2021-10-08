@@ -13,28 +13,28 @@ final class TestCardItemModels: XCTestCase {
     func testCardItemModelConformance() {
         let testModel = TestCardItem(id: "1",
                                      title_: "TestTitle1",
-                                     descriptionText_: nil,
+                                     subtitle_: nil,
                                      detailImage_: nil,
                                      actionText_: nil,
                                      icon_: nil)
         
         let testModelWithoutNil = TestCardItem(id: "2",
                                                title_: "TestTitle2",
-                                               descriptionText_: "DescriptionText",
+                                               subtitle_: "Subtitle",
                                                detailImage_: UIImage(systemName: "arkit")?.pngData(),
                                                actionText_: "Tap",
                                                icon_: "arkit")
         
         XCTAssertEqual(testModel.id, "1")
         XCTAssertEqual(testModel.title_, "TestTitle1")
-        XCTAssertNil(testModel.descriptionText_)
+        XCTAssertNil(testModel.subtitle_)
         XCTAssertNil(testModel.detailImage_)
         XCTAssertNil(testModel.actionText_)
         XCTAssertNil(testModel.icon_)
         
         XCTAssertEqual(testModelWithoutNil.id, "2")
         XCTAssertEqual(testModelWithoutNil.title_, "TestTitle2")
-        XCTAssertEqual(testModelWithoutNil.descriptionText_, "DescriptionText")
+        XCTAssertEqual(testModelWithoutNil.subtitle_, "Subtitle")
         XCTAssertNotNil(testModelWithoutNil.detailImage_, "TestTitle2")
         XCTAssertEqual(testModelWithoutNil.actionText_, "Tap")
         XCTAssertNotNil(testModelWithoutNil.icon_)
@@ -60,7 +60,7 @@ final class TestCardItemModels: XCTestCase {
         
         XCTAssertEqual(firstCardItem.id, "WasherFluid")
         XCTAssertEqual(firstCardItem.title_, "Recommended Washer Fluid")
-        XCTAssertEqual(firstCardItem.descriptionText_, "Rain X")
+        XCTAssertEqual(firstCardItem.subtitle_, "Rain X")
         XCTAssertNil(firstCardItem.detailImage_)
         XCTAssertNil(firstCardItem.actionText_)
         XCTAssertNil(firstCardItem.icon_)

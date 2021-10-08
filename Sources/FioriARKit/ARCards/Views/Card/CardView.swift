@@ -28,7 +28,7 @@ extension Fiori {
             }
         }
         
-        struct DescriptionText: ViewModifier {
+        struct Subtitle: ViewModifier {
             func body(content: Content) -> some View {
                 content
                     .font(.subheadline)
@@ -51,34 +51,34 @@ extension Fiori {
         }
         
         typealias TitleCumulative = EmptyModifier
-        typealias DescriptionTextCumulative = EmptyModifier
+        typealias SubtitleCumulative = EmptyModifier
         typealias DetailImageCumulative = EmptyModifier
         typealias ActionTextCumulative = EmptyModifier
         
         static let title = Title()
-        static let descriptionText = DescriptionText()
+        static let subtitle = Subtitle()
         static let detailImage = DetailImage()
         static let titleCumulative = TitleCumulative()
-        static let descriptionTextCumulative = DescriptionTextCumulative()
+        static let subtitleCumulative = SubtitleCumulative()
         static let detailImageCumulative = DetailImageCumulative()
         static let actionTextCumulative = ActionTextCumulative()
     }
 }
 
-public struct CardView<Title: View, DescriptionText: View, DetailImage: View, ActionText: View, CardItem>: View where CardItem: CardItemModel {
+public struct CardView<Title: View, Subtitle: View, DetailImage: View, ActionText: View, CardItem>: View where CardItem: CardItemModel {
     @Environment(\.titleModifier) private var titleModifier
-    @Environment(\.descriptionTextModifier) private var descriptionTextModifier
+    @Environment(\.subtitleModifier) private var subtitleModifier
     @Environment(\.detailImageModifier) private var detailImageModifer
     @Environment(\.actionTextModifier) private var actionTextModifier
     
     private let _title: Title
-    private let _descriptionText: DescriptionText
+    private let _subtitle: Subtitle
     private let _detailImage: DetailImage
     private let _actionText: ActionText
     
     private var isModelInit: Bool = false
     private var isTitleNil: Bool = false
-    private var isDescriptionTextNil: Bool = false
+    private var isSubtitleNil: Bool = false
     private var isDetailImageNil: Bool = false
     private var isActionTextNil: Bool = false
     
@@ -88,7 +88,7 @@ public struct CardView<Title: View, DescriptionText: View, DetailImage: View, Ac
     
     public init(
         @ViewBuilder title: @escaping () -> Title,
-        @ViewBuilder descriptionText: @escaping () -> DescriptionText,
+        @ViewBuilder subtitle: @escaping () -> Subtitle,
         @ViewBuilder detailImage: @escaping () -> DetailImage,
         @ViewBuilder actionText: @escaping () -> ActionText,
         isSelected: Bool,
@@ -96,7 +96,7 @@ public struct CardView<Title: View, DescriptionText: View, DetailImage: View, Ac
         action: ((CardItem.ID) -> Void)?
     ) {
         self._title = title()
-        self._descriptionText = descriptionText()
+        self._subtitle = subtitle()
         self._detailImage = detailImage()
         self._actionText = actionText()
         self.isSelected = isSelected
@@ -112,11 +112,11 @@ public struct CardView<Title: View, DescriptionText: View, DetailImage: View, Ac
         }
     }
     
-    @ViewBuilder var descriptionText: some View {
+    @ViewBuilder var subtitle: some View {
         if isModelInit {
-            _descriptionText.modifier(descriptionTextModifier.concat(Fiori.CardItem.descriptionText).concat(Fiori.CardItem.descriptionTextCumulative))
+            _subtitle.modifier(subtitleModifier.concat(Fiori.CardItem.subtitle).concat(Fiori.CardItem.subtitleCumulative))
         } else {
-            _descriptionText.modifier(descriptionTextModifier.concat(Fiori.CardItem.descriptionText))
+            _subtitle.modifier(subtitleModifier.concat(Fiori.CardItem.subtitle))
         }
     }
     
@@ -140,8 +140,8 @@ public struct CardView<Title: View, DescriptionText: View, DetailImage: View, Ac
         ((self.isModelInit && self.isTitleNil) || Title.self == EmptyView.self) ? true : false
     }
 
-    var isDescriptionTextEmptyView: Bool {
-        ((self.isModelInit && self.isDescriptionTextNil) || DescriptionText.self == EmptyView.self) ? true : false
+    var isSubtitleEmptyView: Bool {
+        ((self.isModelInit && self.isSubtitleNil) || Subtitle.self == EmptyView.self) ? true : false
     }
     
     var isDetailImageEmptyView: Bool {
@@ -167,7 +167,7 @@ public extension CardView {
             
             VStack(spacing: 4) {
                 title
-                descriptionText
+                subtitle
             }
             .padding(.bottom, 10)
             
@@ -188,7 +188,7 @@ public extension CardView {
 
 public extension CardView where
     Title == Text,
-    DescriptionText == _ConditionalContent<Text, EmptyView>,
+    Subtitle == _ConditionalContent<Text, EmptyView>,
     DetailImage == _ConditionalContent<ImagePreview, DefaultIcon>,
     ActionText == _ConditionalContent<Text, EmptyView>
 {
@@ -198,7 +198,7 @@ public extension CardView where
     {
         self.init(id: model.id,
                   title: model.title_,
-                  descriptionText: model.descriptionText_,
+                  subtitle: model.subtitle_,
                   detailImage: model.detailImage_,
                   actionText: model.actionText_,
                   icon: model.icon_,
@@ -208,7 +208,7 @@ public extension CardView where
     
     init(id: CardItem.ID,
          title: String,
-         descriptionText: String? = nil,
+         subtitle: String? = nil,
          detailImage: Data? = nil,
          actionText: String? = nil,
          icon: String?,
@@ -222,7 +222,7 @@ public extension CardView where
         
         self.id = id
         self._title = Text(title)
-        self._descriptionText = descriptionText != nil ? ViewBuilder.buildEither(first: Text(descriptionText!)) : ViewBuilder.buildEither(second: EmptyView())
+        self._subtitle = subtitle != nil ? ViewBuilder.buildEither(first: Text(subtitle!)) : ViewBuilder.buildEither(second: EmptyView())
         self._detailImage = image != nil ? ViewBuilder.buildEither(first: ImagePreview(preview: image!)) : ViewBuilder.buildEither(second: DefaultIcon(iconString: icon))
         self._actionText = actionText != nil ? ViewBuilder.buildEither(first: Text(actionText!)) : ViewBuilder.buildEither(second: EmptyView())
         self.action = action
@@ -230,7 +230,7 @@ public extension CardView where
 
         self.isModelInit = true
         self.isTitleNil = false
-        self.isDescriptionTextNil = descriptionText == nil ? true : false
+        self.isSubtitleNil = subtitle == nil ? true : false
         self.isDetailImageNil = detailImage == nil ? true : false
         self.isActionTextNil = actionText == nil ? true : false
     }
