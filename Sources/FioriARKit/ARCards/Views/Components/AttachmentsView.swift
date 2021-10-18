@@ -18,12 +18,17 @@ public struct AttachmentUIMetadata: Identifiable {
 
 struct AttachmentsView: View {
     @Binding var attachmentsUIMetadata: [AttachmentUIMetadata]
-    var label: String
-    var onAddAttachment: (() -> Void)?
-    var onSelectAttachment: ((AttachmentUIMetadata) -> Void)?
     
-    init(label: String, attachmentsUIMetadata: Binding<[AttachmentUIMetadata]>, onAddAttachment: (() -> Void)? = nil, onSelectAttachment: ((AttachmentUIMetadata) -> Void)? = nil) {
-        self.label = label
+    let title: String?
+    let onAddAttachment: (() -> Void)?
+    let onSelectAttachment: ((AttachmentUIMetadata) -> Void)?
+    
+    init(title: String? = nil,
+         attachmentsUIMetadata: Binding<[AttachmentUIMetadata]>,
+         onAddAttachment: (() -> Void)? = nil,
+         onSelectAttachment: ((AttachmentUIMetadata) -> Void)? = nil)
+    {
+        self.title = title
         self._attachmentsUIMetadata = attachmentsUIMetadata
         self.onAddAttachment = onAddAttachment
         self.onSelectAttachment = onSelectAttachment
@@ -31,31 +36,29 @@ struct AttachmentsView: View {
 
     public var body: some View {
         VStack(spacing: 11) {
-            HStack {
-                Text(label)
-                    .foregroundColor(Color.black)
-                    .bold()
-                    .font(.system(size: 15))
-                    +
-                    Text(" (\(attachmentsUIMetadata.count))")
-                    .foregroundColor(Color.black)
-                    .bold()
-                    .font(.system(size: 15))
-                Spacer()
+            if let title = title {
+                HStack {
+                    Text(title) + Text(" (\(attachmentsUIMetadata.count))")
+                    Spacer()
+                }
+                .foregroundColor(Color.black)
+                .font(.system(size: 15, weight: .bold))
             }
             
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVGrid(columns: Array(repeating: GridItem(.adaptive(minimum: 110), alignment: .top), count: 1), spacing: 8) {
                     ForEach(0 ..< attachmentsUIMetadata.count + 1, id: \.self) { index in
                         if index == 0 {
-                            AddAttachmentView
-                                .onTapGesture {
-                                    onAddAttachment?()
-                                }
+                            if let onAddAttachment = onAddAttachment {
+                                AddAttachmentView
+                                    .onTapGesture {
+                                        onAddAttachment()
+                                    }
+                            }
                         } else {
                             AttachmentCardView(item: attachmentsUIMetadata[index - 1])
                                 .onTapGesture {
-                                    onSelectAttachment?(attachmentsUIMetadata[index])
+                                    onSelectAttachment?(attachmentsUIMetadata[index - 1])
                                 }
                         }
                     }

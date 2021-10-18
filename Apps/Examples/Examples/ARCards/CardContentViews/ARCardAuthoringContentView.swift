@@ -10,10 +10,11 @@ import SAPFoundation
 import SwiftUI
 
 struct ARCardAuthoringContentView: View {
-    let cardItems = [CodableCardItem(id: UUID().uuidString, title_: "Hello"),
-                     CodableCardItem(id: UUID().uuidString, title_: "World"),
-                     CodableCardItem(id: UUID().uuidString, title_: "Fizz"),
-                     CodableCardItem(id: UUID().uuidString, title_: "Buzz")]
+    let cardItems = [CodableCardItem(id: UUID().uuidString, title_: "Hello", subtitle_: "World", actionText_: "Watch Video", position_: SIMD3<Float>(x: -0.1, y: 0, z: 0)),
+                     CodableCardItem(id: UUID().uuidString, title_: "World", position_: SIMD3<Float>(x: 0, y: 0, z: 0)),
+                     CodableCardItem(id: UUID().uuidString, title_: "Fizz", position_: SIMD3<Float>(x: 0.1, y: 0, z: 0)),
+                     CodableCardItem(id: UUID().uuidString, title_: "Buzz"),
+                     CodableCardItem(id: UUID().uuidString, title_: "FizzBuzz")]
 
     private var sapURLSession: SAPURLSession
 

@@ -28,7 +28,7 @@ struct CardFormView: View {
     @State var subtitle: String
     @State var actionText: String
     @State var actionContentText: String
-    @State var icon: Image?
+    @State var icon: String?
     
     @State var hasButton = false
     @State var hasCoverImage = false
@@ -40,13 +40,14 @@ struct CardFormView: View {
         self._attachmentModels = attachmentModels
         self._currentCardID = currentCardID
         
-        let currentCard = cardItems.wrappedValue.first(where: { UUID(uuidString: $0.id) == currentCardID.wrappedValue })
+        let currentCard = cardItems.wrappedValue.first(where: { $0.id == currentCardID.wrappedValue?.uuidString })
         
         self._detailImage = State(initialValue: currentCard?.detailImage_)
         self._title = State(initialValue: currentCard?.title_ ?? "")
         self._subtitle = State(initialValue: currentCard?.subtitle_ ?? "")
         self._actionText = State(initialValue: currentCard?.actionText_ ?? "")
         self._actionContentText = State(initialValue: "")
+        self._icon = State(initialValue: currentCard?.icon_)
         
         self._hasButton = State(initialValue: currentCard?.actionText_ == nil ? false : true)
         self._hasCoverImage = State(initialValue: currentCard?.detailImage_ == nil ? false : true)
@@ -112,7 +113,7 @@ struct CardFormView: View {
             currentCardID = nil
         }
         .onChange(of: actionContentText) { newValue in
-            icon = newValue.isEmpty ? nil : Image(systemName: "link")
+            icon = newValue.isEmpty ? nil : "link"
         }
         .navigationBarHidden(true)
         .navigationBarTitle("")
@@ -127,7 +128,7 @@ struct CardFormView: View {
     }
     
     func updateCard(for currentID: UUID) {
-        guard let index = cardItems.firstIndex(where: { UUID(uuidString: $0.id) == currentCardID }) else { return }
+        guard let index = cardItems.firstIndex(where: { $0.id == currentCardID?.uuidString }) else { return }
         self.cardItems[index] = CodableCardItem(id: currentID.uuidString,
                                                 title_: self.title,
                                                 subtitle_: self.subtitle,
@@ -139,7 +140,7 @@ struct CardFormView: View {
     }
     
     func deleteCard(for currentID: UUID) {
-        guard let cardToDelete = cardItems.first(where: { UUID(uuidString: $0.id) == currentID }) else { return }
+        guard let cardToDelete = cardItems.first(where: { $0.id == currentID.uuidString }) else { return }
         
         self.cardItems.removeAll(where: { $0.id == cardToDelete.id })
         self.attachmentModels.removeAll(where: { $0.id == currentID })
@@ -169,8 +170,7 @@ private struct CardDetailsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Card Details")
-                .font(.system(size: 15))
-                .bold()
+                .font(.system(size: 15, weight: .bold))
                 .padding(16)
             
             Divider()
@@ -196,8 +196,7 @@ private struct CardDetailsView: View {
                             toggleActionSheet?()
                         }, label: {
                             Text(isUpdate ? "Update" : "Create")
-                                .font(.system(size: 15))
-                                .bold()
+                                .font(.system(size: 15, weight: .bold))
                                 .frame(width: 343, height: 40)
                                 .foregroundColor(.white)
                                 .background(
@@ -236,12 +235,12 @@ private struct CardDetailsView: View {
     }
 }
 
-private struct CardPreview: View {
+struct CardPreview: View {
     @Binding var detailImage: Data?
     @Binding var title: String
     @Binding var subtitle: String
     @Binding var actionText: String
-    @Binding var icon: Image?
+    @Binding var icon: String?
     @Binding var hasButton: Bool
     
     var body: some View {
@@ -252,9 +251,15 @@ private struct CardPreview: View {
                         .resizable()
                         .scaledToFill()
                 } else {
-                    (icon ?? Image(systemName: "info"))
-                        .font(.system(size: 30))
-                        .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
+                    if let icon = icon {
+                        Image(systemName: icon)
+                            .font(.system(size: 30))
+                            .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
+                    } else {
+                        Image(systemName: "info")
+                            .font(.system(size: 30))
+                            .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
+                    }
                 }
             }
             .frame(width: 214, height: 93)
@@ -306,8 +311,7 @@ private struct TextDetail: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(titleText)
                 .foregroundColor(Color.black)
-                .font(.system(size: 15))
-                .bold()
+                .font(.system(size: 15, weight: .bold))
             FioriNextTextField(text: $textField, placeHolder: placeholder ?? titleText)
         }
     }
@@ -323,8 +327,7 @@ private struct ToggleDetail: View {
             Toggle(isOn: $isOn) {
                 Text(titleText)
                     .foregroundColor(Color.black)
-                    .bold()
-                    .font(.system(size: 15))
+                    .font(.system(size: 15, weight: .bold))
             }
             .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextTint))
             .onChange(of: isOn) { newValue in
@@ -353,8 +356,7 @@ private struct CoverImageDetail: View {
             Toggle(isOn: $isOn) {
                 Text(titleText)
                     .foregroundColor(Color.black)
-                    .bold()
-                    .font(.system(size: 15))
+                    .font(.system(size: 15, weight: .bold))
             }
             .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextTint))
             .padding(.vertical, 5)

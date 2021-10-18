@@ -30,8 +30,7 @@ struct AnchorImageTabView: View {
                         .font(.system(size: 17))
                     Button(action: { actionSheetPresented.toggle() }, label: {
                         Text("Upload Anchor Image")
-                            .font(.system(size: 15))
-                            .bold()
+                            .font(.system(size: 15, weight: .bold))
                             .frame(width: 187, height: 40)
                             .foregroundColor(.white)
                             .background(
@@ -80,7 +79,8 @@ struct ImageAnchorView: View {
         VStack(spacing: 16) {
             HStack {
                 Text("Image Anchor")
-                    .bold()
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundColor(Color.black)
                 Spacer()
             }
             ZStack {
@@ -101,17 +101,13 @@ struct ImageAnchorView: View {
                         
                     HStack {
                         Text(imageName)
-                            .foregroundColor(Color.black)
                         Spacer()
-                        Button(action: {
+                        Button("Delete") {
                             anchorImage = nil
-                        }, label: {
-                            Text("Delete")
-                                .foregroundColor(Color.black)
-                                .bold()
-                        })
+                        }
                     }
-                    .font(.system(size: 13))
+                    .foregroundColor(Color.black)
+                    .font(.system(size: 13, weight: .bold))
                     .padding(.horizontal, 16)
                     .padding(.bottom, verticalSizeClass == .compact ? 13 : 21)
                 }

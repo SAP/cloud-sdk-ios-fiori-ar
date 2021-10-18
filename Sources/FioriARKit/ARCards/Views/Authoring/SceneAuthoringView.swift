@@ -14,27 +14,28 @@ public struct SceneAuthoringView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onCardEdit) var onCardEdit
 
-    private var model: AnnotationSceneAuthoringModel
+    @StateObject private var networkModel: AnnotationSceneAuthoringModel
+    @StateObject private var arModel: ARAnnotationViewModel<CodableCardItem>
     
-    @State private var cardCreationIsPresented = false
-    
-    @State private var currentTab: TabSelection
-    
-    @State private var anchorImage: UIImage?
-    @State private var cardItems: [CodableCardItem]
-    @State private var attachmentsItemModels: [AttachmentUIMetadata]
-    @State private var currentCardID: UUID?
-    
+    @State private var currentTab: TabSelection = .left
     @State private var hideNavBar = true
+
+    @State private var cardCreationIsPresented = false
+    @State private var isARExperiencePresented = false
+    
+    @State private var anchorImage: UIImage? = nil
+    @State private var physicalWidth: CGFloat? = 0.1
+    @State private var cardItems: [CodableCardItem]
+    
+    @State private var attachmentsMetadata: [AttachmentUIMetadata] = []
+    @State private var currentCardID: UUID? = nil
     
     public init(_ cardItems: [CodableCardItem] = [], sapURLSession: SAPURLSession) {
-        _currentTab = State(initialValue: .left)
-        _anchorImage = State(initialValue: nil)
         _cardItems = State(initialValue: cardItems)
-        _attachmentsItemModels = State(initialValue: [])
-        _currentCardID = State(initialValue: nil)
-        let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/augmentedreality/v1") // TODO: refactor baseURL out of SDK
-        self.model = AnnotationSceneAuthoringModel(networkingAPI: networkingAPI)
+        let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/augmentedreality/v1")
+        // TODO: refactor baseURL out of SDK
+        _networkModel = StateObject(wrappedValue: AnnotationSceneAuthoringModel(networkingAPI: networkingAPI))
+        _arModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
     }
     
     public var body: some View {
@@ -60,12 +61,12 @@ public struct SceneAuthoringView: View {
                 .background(Color.white)
             
             VStack(spacing: 0) {
-                TabView(currentTab: $currentTab, leftTabTitle: "Cards", rightTabTitle: "Anchor Image")
+                TabbedView(currentTab: $currentTab, leftTabTitle: "Cards", rightTabTitle: "Anchor Image")
                     .padding(.bottom, 16)
                 
                 switch currentTab {
                 case .left:
-                    AttachmentsView(label: "Cards", attachmentsUIMetadata: $attachmentsItemModels, onAddAttachment: { cardCreationIsPresented.toggle() }, onSelectAttachment: { attachmentsUIMetadata in
+                    AttachmentsView(title: "Cards", attachmentsUIMetadata: $attachmentsMetadata, onAddAttachment: { cardCreationIsPresented.toggle() }, onSelectAttachment: { attachmentsUIMetadata in
                         currentCardID = attachmentsUIMetadata.id
                         cardCreationIsPresented.toggle()
                     })
@@ -79,7 +80,7 @@ public struct SceneAuthoringView: View {
         .background(
             NavigationLink(destination:
                 CardFormView(cardItems: $cardItems,
-                             attachmentModels: $attachmentsItemModels,
+                             attachmentModels: $attachmentsMetadata,
                              currentCardID: $currentCardID)
                     .onCardEdit(perform: onCardEdit),
                 isActive: $cardCreationIsPresented,
@@ -90,10 +91,16 @@ public struct SceneAuthoringView: View {
         .navigationBarTitle("")
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: populateAttachmentView)
+        .fullScreenCover(isPresented: $isARExperiencePresented) {
+            MarkerPositioningFlowView(arModel: arModel,
+                                      cardItems: $cardItems,
+                                      image: Image(uiImage: anchorImage!),
+                                      cardAction: { _ in })
+        }
     }
     
     func populateAttachmentView() {
-        self.attachmentsItemModels.removeAll()
+        self.attachmentsMetadata.removeAll()
         self.cardItems.forEach { card in
             
             var detailImage: Image?
@@ -107,19 +114,21 @@ public struct SceneAuthoringView: View {
                                                           info: nil,
                                                           image: detailImage,
                                                           icon: card.icon_ == nil ? nil : Image(card.icon_!))
-            attachmentsItemModels.append(newAttachmentModel)
+            attachmentsMetadata.append(newAttachmentModel)
         }
     }
     
     func startAR() {
-        if self.anchorImage != nil, !self.cardItems.isEmpty {
-            print("TODO")
-            self.model.createSceneOnServer(anchorImage: self.anchorImage, cards: self.cardItems)
+        if self.anchorImage != nil || !self.cardItems.isEmpty {
+            print("Loading:...", self.cardItems.map(\.position_))
+            let vectorStrategy = VectorLoadingStrategy(cardContents: cardItems, anchorImage: anchorImage!, physicalWidth: physicalWidth!)
+            arModel.load(loadingStrategy: vectorStrategy)
+            self.isARExperiencePresented.toggle()
         }
     }
 }
 
-private struct TabView: View {
+private struct TabbedView: View {
     @Binding var currentTab: TabSelection
     
     var leftTabTitle: String
@@ -136,7 +145,7 @@ private struct TabView: View {
                     currentTab = .right
                 }
         }
-        .font(.system(size: 14))
+        .font(.system(size: 14, weight: .bold))
         .padding(.horizontal, 16)
     }
     
@@ -144,7 +153,6 @@ private struct TabView: View {
         VStack(spacing: 6) {
             Text(title)
                 .foregroundColor(isSelected ? Color.fioriNextTint : Color.black)
-                .bold()
             if isSelected {
                 Color.fioriNextTint.frame(height: 2)
             } else {
