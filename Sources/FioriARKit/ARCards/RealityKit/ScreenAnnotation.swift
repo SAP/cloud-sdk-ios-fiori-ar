@@ -16,32 +16,38 @@ public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable
         self.card.id
     }
     
-    public var icon: String? {
-        self.card.icon_
-    }
+    internal var isSelected: Bool
     
     public var card: CardItem
+    internal var entity: Entity?
     
     public internal(set) var isMarkerVisible: Bool
     public internal(set) var isCardVisible: Bool
     
-    internal var marker: MarkerAnchor
-    internal var screenPosition: CGPoint
-    internal var isSelected: Bool
+    internal var screenPosition: CGPoint?
 
     public init(card: CardItem, isMarkerVisible: Bool = false, isCardVisible: Bool = true, isSelected: Bool = false) {
-        self.marker = MarkerAnchor()
         self.card = card
         self.isMarkerVisible = isMarkerVisible
         self.isCardVisible = isCardVisible
-        self.screenPosition = CGPoint(x: -200, y: -200)
         self.isSelected = isSelected
     }
-    
-    /// Sets the internal within the MarkerAnchor
-    public func setInternalEntity(with entity: Entity) {
-        self.marker.internalEnitity = entity
+
+    internal func setInternalEntityVisibility(to isVisible: Bool) {
+        isVisible ? self.showInternalEntity() : self.hideInternalEntity()
     }
+    
+    internal mutating func toggleDimension() {
+        if self.isMarkerVisible {
+            self.setMarkerVisibility(to: false)
+            self.showInternalEntity()
+        } else {
+            self.setMarkerVisibility(to: true)
+            self.hideInternalEntity()
+        }
+    }
+    
+    // MARK: Screen
     
     internal mutating func setMarkerVisibility(to isVisible: Bool) {
         self.isMarkerVisible = isVisible
@@ -49,6 +55,25 @@ public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable
     
     internal mutating func setCardVisibility(to isVisible: Bool) {
         self.isCardVisible = isVisible
+    }
+    
+    internal mutating func setCardPosition(to position: SIMD3<Float>?) {
+        self.card.position_ = position
+    }
+    
+    // MARK: Entity
+    
+    /// Sets the internal within the EntityManager
+    public mutating func setInternalEntity(with entity: Entity) {
+        self.entity = entity
+    }
+    
+    internal func hideInternalEntity() {
+        self.entity?.components[ModelComponent.self] = ModelComponent(mesh: MeshResource.generateSphere(radius: 0.03), materials: [OcclusionMaterial()])
+    }
+    
+    internal func showInternalEntity() {
+        self.entity?.components[ModelComponent.self] = ModelComponent(mesh: MeshResource.generateSphere(radius: 0.03), materials: [SimpleMaterial(color: .red, isMetallic: false)])
     }
     
     public static func == (lhs: ScreenAnnotation<CardItem>, rhs: ScreenAnnotation<CardItem>) -> Bool {

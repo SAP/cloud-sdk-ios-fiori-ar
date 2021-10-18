@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public protocol CardItemModel: Identifiable, TitleComponent, SubtitleComponent, DetailImageComponent, ActionTextComponent, IconComponent {}
+public protocol CardItemModel: Identifiable, TitleComponent, SubtitleComponent, DetailImageComponent, ActionTextComponent, IconComponent, PositionComponent {}
 
 public protocol TitleComponent {
     var title_: String { get }
@@ -29,16 +29,20 @@ public protocol IconComponent {
     var icon_: String? { get }
 }
 
-public struct CodableCardItem: CardItemModel, Codable {
+public protocol PositionComponent {
+    var position_: SIMD3<Float>? { get set }
+}
+
+public struct CodableCardItem: CardItemModel, Codable, Equatable {
     public var id: String
     public var title_: String
     public var subtitle_: String?
     public var detailImage_: Data?
     public var actionText_: String?
     public var icon_: String?
-    public var position_: Vector3?
+    public var position_: SIMD3<Float>?
     
-    public init(id: String, title_: String, subtitle_: String? = nil, detailImage_: Data? = nil, actionText_: String? = nil, icon_: String? = nil, position_: Vector3? = nil) {
+    public init(id: String, title_: String, subtitle_: String? = nil, detailImage_: Data? = nil, actionText_: String? = nil, icon_: String? = nil, position_: SIMD3<Float>? = nil) {
         self.id = id
         self.title_ = title_
         self.subtitle_ = subtitle_
@@ -47,12 +51,8 @@ public struct CodableCardItem: CardItemModel, Codable {
         self.icon_ = icon_
         self.position_ = position_
     }
-}
-
-public struct Vector3: Codable {
-    public var x: Float
-    public var y: Float
-    public var z: Float
     
-    static let zero = Vector3(x: .zero, y: .zero, z: .zero)
+    public static func == (lhs: CodableCardItem, rhs: CodableCardItem) -> Bool {
+        lhs.id == rhs.id
+    }
 }

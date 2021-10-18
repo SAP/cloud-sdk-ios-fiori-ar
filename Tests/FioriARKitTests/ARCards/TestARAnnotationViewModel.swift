@@ -31,7 +31,7 @@ final class TestARAnnotationViewModel: XCTestCase {
         XCTAssertFalse(vm.annotations.isEmpty)
         XCTAssertNotNil(vm.currentAnnotation)
         
-        vm.cleanUpSession()
+        vm.resetAllAnchors()
         
         XCTAssertNil(vm.arManager.arView)
         XCTAssertTrue(vm.annotations.isEmpty)
