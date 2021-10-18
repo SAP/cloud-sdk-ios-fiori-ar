@@ -11,11 +11,11 @@ import SwiftUI
 import XCTest
 
 final class TestMarkerAnchor: XCTestCase {
-    func makeMarkerAnchorSUT() -> MarkerAnchor {
-        MarkerAnchor()
+    func makeMarkerAnchorSUT() -> EntityManager {
+        EntityManager()
     }
     
-    func getModelComponent(markerAnchor: MarkerAnchor) -> ModelComponent? {
+    func getModelComponent(markerAnchor: EntityManager) -> ModelComponent? {
         markerAnchor.internalEnitity.components[ModelComponent.self] as? ModelComponent
     }
     

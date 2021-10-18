@@ -42,9 +42,8 @@ struct CustomScanView: View {
         ZStack {
             if let position = position {
                 Text("Discovered!")
-                    .font(.system(size: 17))
+                    .font(.system(size: 17, weight: .bold))
                     .foregroundColor(.black)
-                    .bold()
                     .background(
                         RoundedRectangle(cornerRadius: 8)
                             .fill(Color.green.opacity(0.7))

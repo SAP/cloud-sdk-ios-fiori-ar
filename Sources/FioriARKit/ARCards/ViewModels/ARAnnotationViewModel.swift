@@ -53,14 +53,24 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// Used to project the location of the Entities from the world space onto the screen space
     /// Potential to add a closure here for developer to add logic on frame change
     private func updateScene(on event: SceneEvents.Update) {
-        for (index, entity) in self.annotations.enumerated() {
-            guard let projectedPoint = arManager.arView?.project(entity.marker.internalEnitity.position(relativeTo: nil)) else { return }
+        for (index, annotation) in self.annotations.enumerated() {
+            guard let internalEntity = annotation.entity,
+                  let projectedPoint = arManager.arView?.project(internalEntity.position(relativeTo: nil)) else { return }
             self.annotations[index].screenPosition = projectedPoint
+            self.annotations[index].card.position_ = internalEntity.position(relativeTo: nil)
         }
     }
     
-    internal func cleanUpSession() {
+    internal func resetAllAnchors() {
+        guard let _ = try? self.arManager.configureSession(options: [.removeExistingAnchors]) else { return }
         self.annotations.removeAll()
+        self.arManager.removeRoot()
+        self.anchorPosition = nil
+    }
+    
+    internal func stopSession() {
+        self.annotations.removeAll()
+        self.anchorPosition = nil
         self.currentAnnotation = nil
         self.arManager.tearDown()
     }
@@ -73,7 +83,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
         self.currentAnnotation = self.annotations.first
     }
     
-    /// Sets the visibility of the Marker View for  a CardItem identified by its ID *Note: The `MarkerAnchor` still exists in the scene*
+    /// Sets the visibility of the Marker View for  a CardItem identified by its ID *Note: The `EntityManager` still exists in the scene*
     public func setMarkerVisibility(for id: CardItem.ID, to isVisible: Bool) {
         for (index, annotation) in self.annotations.enumerated() where annotation.id == id {
             self.annotations[index].setMarkerVisibility(to: isVisible)

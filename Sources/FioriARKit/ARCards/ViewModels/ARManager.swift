@@ -22,7 +22,7 @@ import SwiftUI
 /// ```
 public class ARManager {
     internal var arView: ARView?
-    public var sceneRoot: HasAnchoring?
+    public var sceneRoot: Entity?
     public var onSceneUpate: ((SceneEvents.Update) -> Void)?
     
     var worldMap: ARWorldMap?
@@ -43,7 +43,7 @@ public class ARManager {
         self.arView = ARView(frame: .zero)
 
         do {
-            try self.configureSession(with: ARWorldTrackingConfiguration())
+            try self.configureSession()
         } catch {
             if canBeFatal {
                 fatalError(error.localizedDescription)
@@ -60,10 +60,16 @@ public class ARManager {
     internal func tearDown() {
         self.arView = nil
         self.subscription = nil
+        self.onSceneUpate = nil
+    }
+    
+    internal func removeRoot() {
+        self.sceneRoot?.removeFromParent()
+        self.sceneRoot = nil
     }
     
     /// Set the configuration for the ARView's session with run options
-    public func configureSession(with configuration: ARConfiguration, options: ARSession.RunOptions = []) throws {
+    public func configureSession(with configuration: ARConfiguration = ARWorldTrackingConfiguration(), options: ARSession.RunOptions = []) throws {
         #if !targetEnvironment(simulator)
             self.arView?.session.run(configuration, options: options)
         #else
@@ -110,6 +116,16 @@ public class ARManager {
         #endif
     }
     
+    internal func resetAnchorImages() {
+        #if !targetEnvironment(simulator)
+            if let worldConfig = arView?.session.configuration as? ARWorldTrackingConfiguration {
+                worldConfig.detectionImages = []
+            } else if let imageConfig = arView?.session.configuration as? ARImageTrackingConfiguration {
+                imageConfig.trackingImages = []
+            }
+        #endif
+    }
+    
     /// Adds a Entity which conforms to HasAnchoring to the arView.scene
     public func addAnchor(for entity: HasAnchoring) {
         self.arView?.scene.addAnchor(entity)
@@ -117,10 +133,12 @@ public class ARManager {
     
     /// Adds an ARReferenceImage to the configuration for the session to discover
     /// Optionally can set the configuration to ARImageTrackingConfiguration
-    public func addReferenceImage(for image: UIImage, _ name: String? = nil, with physicalWidth: CGFloat, configuration: ARConfiguration = ARWorldTrackingConfiguration()) {
+    public func addReferenceImage(for image: UIImage, _ name: String? = nil, with physicalWidth: CGFloat, configuration: ARConfiguration = ARWorldTrackingConfiguration(), resetImages: Bool = false) {
         guard let referenceImage = createReferenceImage(image, name, physicalWidth) else { return }
+        if resetImages {
+            self.referenceImages.removeAll()
+        }
         self.referenceImages.insert(referenceImage)
-        
         if let worldConfig = configuration as? ARWorldTrackingConfiguration {
             worldConfig.detectionImages = self.referenceImages
             do { try self.configureSession(with: worldConfig) } catch { print(error.localizedDescription) }

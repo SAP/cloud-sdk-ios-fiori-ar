@@ -36,7 +36,7 @@ import SwiftUI
                            CustomScanView(image: Image("qrImage"), position: anchorPosition)
                        },
                        cardLabel: { cardmodel, isSelected in
-                           CustomCardView(model: cardmodel, isSelected: isSelected)
+                           CustomCardView(networkModel: cardmodel, isSelected: isSelected)
                        },
                        markerLabel: { state, icon  in
                            CustomMarkerView(state: state)
@@ -98,7 +98,7 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
     }
     
     private func onDismiss() {
-        self.arModel.cleanUpSession()
+        self.arModel.resetAllAnchors()
     }
     
     private struct DismissButton: View {
@@ -112,7 +112,6 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
             }, label: {
                 Text(Image(systemName: "xmark"))
                     .fontWeight(.light)
-                    .font(.system(.title2))
                     .font(.system(size: 19))
                     .frame(width: 44, height: 44)
                     .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant))

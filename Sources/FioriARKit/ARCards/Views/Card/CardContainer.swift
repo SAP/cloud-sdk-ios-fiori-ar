@@ -29,9 +29,11 @@ internal struct CardContainer<Label: View, CardItem: CardItemModel>: View {
 extension CardContainer {
     var body: some View {
         Group {
-            if _isCardVisible {
-                label_
-            }
+            // if _isCardVisible {
+            label_
+                .opacity(_isCardVisible ? 1 : 0)
+                .disabled(!_isCardVisible)
+            // }
         }
     }
 }

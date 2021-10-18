@@ -1,5 +1,5 @@
 //
-//  MarkerAnchor.swift
+//  EntityManager.swift
 //  Examples
 //
 //  Created by O'Brien, Patrick on 12/11/20.
@@ -16,21 +16,20 @@ import UIKit
 //  - Debuggin Mode
 //  - Editing Mode for adjusting position in app
 
-internal class MarkerAnchor: Entity, HasAnchoring {
-    public var internalEnitity: Entity! {
-        didSet {
-            self.hideInternalEntity()
-        }
-    }
-
+internal class EntityManager {
+    public var internalEnitity: Entity?
+    
     internal required init() {
         let internalEntity = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03), materials: [SimpleMaterial(color: .red, isMetallic: false)])
         internalEntity.generateCollisionShapes(recursive: true)
         self.internalEnitity = internalEntity
     }
-    
+
     internal func hideInternalEntity() {
-        let invisibleMaterial = OcclusionMaterial()
-        self.internalEnitity.components[ModelComponent.self] = ModelComponent(mesh: MeshResource.generateBox(size: 0.1), materials: [invisibleMaterial])
+        self.internalEnitity?.components[ModelComponent.self] = ModelComponent(mesh: MeshResource.generateSphere(radius: 0.03), materials: [OcclusionMaterial()])
+    }
+    
+    internal func showInternalEntity() {
+        self.internalEnitity?.components[ModelComponent.self] = ModelComponent(mesh: MeshResource.generateSphere(radius: 0.03), materials: [SimpleMaterial(color: .red, isMetallic: false)])
     }
 }
