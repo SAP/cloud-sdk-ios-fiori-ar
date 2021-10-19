@@ -53,11 +53,10 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// Used to project the location of the Entities from the world space onto the screen space
     /// Potential to add a closure here for developer to add logic on frame change
     private func updateScene(on event: SceneEvents.Update) {
-        for (index, annotation) in self.annotations.enumerated() {
-            guard let internalEntity = annotation.entity,
+        for (index, _) in self.annotations.enumerated() {
+            guard let internalEntity = annotations[index].entity,
                   let projectedPoint = arManager.arView?.project(internalEntity.position(relativeTo: nil)) else { return }
             self.annotations[index].screenPosition = projectedPoint
-            self.annotations[index].card.position_ = internalEntity.position(relativeTo: nil)
         }
     }
     
@@ -84,9 +83,18 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     }
     
     /// Sets the visibility of the Marker View for  a CardItem identified by its ID *Note: The `EntityManager` still exists in the scene*
-    public func setMarkerVisibility(for id: CardItem.ID, to isVisible: Bool) {
-        for (index, annotation) in self.annotations.enumerated() where annotation.id == id {
-            self.annotations[index].setMarkerVisibility(to: isVisible)
+    public func setMarkerVisibility(for card: CardItem?, to isVisible: Bool) {
+        guard let card = card else { return }
+        for (index, annotation) in self.annotations.enumerated() where annotation.id == card.id {
+            currentAnnotation = self.annotations[index]
+            self.annotations[index].isMarkerVisible = true
+            self.annotations[index].hideInternalEntity()
+        }
+    }
+    
+    public func updateCardItemPositions() {
+        for (index, _) in self.annotations.enumerated() {
+            self.annotations[index].card.position_ = self.annotations[index].entity?.position
         }
     }
     
@@ -103,6 +111,29 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
             
             for (index, _) in self.annotations.enumerated() {
                 self.annotations[index].setMarkerVisibility(to: true)
+            }
+        }
+    }
+    
+    func addNewEntity(for cardItem: CardItem?) {
+        guard let cardItem = cardItem else { return }
+        let newEntity = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03), materials: [SimpleMaterial(color: .red, isMetallic: false)])
+        newEntity.generateCollisionShapes(recursive: true)
+        self.arManager.arView?.installGestures([.scale, .translation], for: newEntity)
+        self.arManager.sceneRoot?.addChild(newEntity)
+        for (index, annotation) in self.annotations.enumerated() where cardItem.id == annotation.id {
+            annotations[index].entity = newEntity
+            annotations[index].card.position_ = newEntity.position
+            annotations[index].isCardVisible = true
+        }
+    }
+    
+    func removeEntity(for cardItem: CardItem?) {
+        guard let cardItem = cardItem else { return }
+        for (index, annotation) in self.annotations.enumerated() where cardItem.id == annotation.id {
+            if let entity = annotations[index].entity {
+                arManager.sceneRoot?.removeChild(entity)
+                annotations[index].entity = nil
             }
         }
     }

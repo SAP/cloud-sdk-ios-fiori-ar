@@ -21,9 +21,11 @@ enum MarkerFlowState {
 
 struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>: View where CardItem: CardItemModel, CardItem.ID: StringProtocol {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    var onDismiss: (() -> Void)?
     
     @ObservedObject public var arModel: ARAnnotationViewModel<CardItem>
     @Binding var cardItems: [CardItem]
+    @Binding var attachments: [AttachmentUIMetadata]
     
     @State var attachmentsMetadata: [AttachmentUIMetadata] = []
     @State var cardItem: CardItem? = nil
@@ -41,12 +43,16 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
     
     public init(arModel: ARAnnotationViewModel<CardItem>,
                 cardItems: Binding<[CardItem]>,
+                attachments: Binding<[AttachmentUIMetadata]>,
+                onDismiss: (() -> Void)? = nil,
                 @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
                 @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
                 @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
     {
         self.arModel = arModel
         self._cardItems = cardItems
+        self._attachments = attachments
+        self.onDismiss = onDismiss
         self.scanLabel = scanLabel
         self.cardLabel = cardLabel
         self.markerLabel = markerLabel
@@ -68,6 +74,70 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                         arModel.annotations[index].showInternalEntity()
                         arModel.annotations[index].setMarkerVisibility(to: false)
                     }
+                }
+                
+                if flowState == .beforeDrop {
+                    Button(action: {
+                        arModel.addNewEntity(for: cardItem)
+                        flowState = .dropped
+                        firstPage = true
+                    }, label: {
+                        Text("Drop Marker")
+                            .font(.system(size: 15, weight: .bold))
+                            .frame(width: 343, height: 40)
+                            .foregroundColor(.white)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.fioriNextTint)
+                            )
+                    })
+                        .padding(.bottom, 100)
+                }
+                
+                if flowState == .dropped {
+                    HStack(spacing: 8) {
+                        Button(action: { flowState = .selectCard }, label: {
+                            Text("Add Another")
+                                .font(.system(size: 15, weight: .bold))
+                                .frame(width: 122, height: 40)
+                                .foregroundColor(.black)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.white)
+                                )
+                        })
+                        
+                        Button(action: { flowState = .preview }, label: {
+                            Text("Go To Preview")
+                                .font(.system(size: 15, weight: .bold))
+                                .frame(width: 213, height: 40)
+                                .foregroundColor(.white)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.fioriNextTint)
+                                )
+                        })
+                    }
+                    .padding(.bottom, 100)
+                }
+                
+                if flowState == .preview {
+                    VStack(spacing: 20) {
+                        CardPreview(cardItem: cardItem)
+                        Button(action: {
+                            flowState = .arscene
+                        }, label: {
+                            Text("Publish")
+                                .font(.system(size: 15, weight: .bold))
+                                .frame(width: 343, height: 40)
+                                .foregroundColor(.white)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.fioriNextTint)
+                                )
+                        })
+                    }
+                    .padding(.bottom, 100)
                 }
                 
                 PartialSheetView(title: .constant("Add Annotation"), sheetState: $sheetState) {
@@ -97,7 +167,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         .edgesIgnoringSafeArea(.all)
         .navigationBarTitle("")
         .navigationBarHidden(true)
-        .overlay(BackButton(flowState: $flowState, onAction: onDismiss), alignment: .topLeading)
+        .overlay(BackButton(flowState: $flowState, onAction: dismiss), alignment: .topLeading)
         .overlay(EditButton(flowState: $flowState, onAction: onEdit), alignment: .topTrailing)
         .overlay(Text(String(reflecting: flowState)).font(.system(size: 24)).foregroundColor(.white), alignment: .bottomTrailing)
         .onTapGesture {
@@ -112,18 +182,28 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         .onChange(of: flowState) { newValue in
             switch newValue {
             case .arscene:
+                for (index, _) in arModel.annotations.enumerated() {
+                    arModel.annotations[index].setMarkerVisibility(to: true)
+                }
+                sheetState = .notVisible
                 withAnimation { carouselVisible = true }
             case .editMarker:
                 withAnimation { carouselVisible = false }
             case .selectCard:
                 sheetState = .open
+                for (index, _) in arModel.annotations.enumerated() {
+                    arModel.annotations[index].isMarkerVisible = false
+                    arModel.annotations[index].hideInternalEntity()
+                }
             case .confirmCard:
                 sheetState = .open
             case .beforeDrop:
                 sheetState = .closed
-                markersVisible = false
-            default:
-                break
+            case .dropped:
+                refreshAttachmentView()
+            case .preview:
+                sheetState = .notVisible
+                arModel.setMarkerVisibility(for: cardItem, to: true)
             }
         }
         .onAppear(perform: populateAttachmentView)
@@ -149,18 +229,22 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 }
             }
     }
+    
+    func refreshAttachmentView() {
+        self.arModel.updateCardItemPositions()
+        self.cardItems = self.arModel.annotations.map(\.card)
+        self.populateAttachmentView()
+    }
 
-    func onDismiss() {
+    func dismiss() {
         switch self.flowState {
         case .preview:
             self.flowState = .dropped
+            self.sheetState = .closed
         default:
-            for (index, annotation) in self.arModel.annotations.enumerated() {
-                self.arModel.annotations[index].setCardPosition(to: self.arModel.annotations[index].entity?.position)
-                self.arModel.annotations[index].entity = nil
-            }
+            self.arModel.updateCardItemPositions()
             self.cardItems = self.arModel.annotations.map(\.card)
-            print("Saving...", self.cardItems.map(\.position_))
+            self.onDismiss?()
             self.arModel.resetAllAnchors()
             self.presentationMode.wrappedValue.dismiss()
         }
@@ -172,8 +256,12 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
             self.flowState = .editMarker
         case .editMarker:
             self.flowState = .selectCard
-        case .beforeDrop, .dropped:
+        case .beforeDrop:
             self.flowState = .selectCard
+            self.refreshAttachmentView()
+        case .dropped:
+            self.refreshAttachmentView()
+            self.arModel.removeEntity(for: self.cardItem)
         case .selectCard, .confirmCard, .preview:
             break
         }
@@ -275,12 +363,7 @@ private struct CardSelectionView<CardItem: CardItemModel>: View {
         VStack {
             ZStack {
                 Color.fioriNextPrimaryBackground
-                CardPreview(detailImage: .constant(cardItem?.detailImage_),
-                            title: .constant(cardItem?.title_ ?? ""),
-                            subtitle: .constant(cardItem?.subtitle_ ?? ""),
-                            actionText: .constant(cardItem?.actionText_ ?? ""),
-                            icon: .constant(cardItem?.icon_),
-                            hasButton: .constant(cardItem?.actionText_ != nil))
+                CardPreview(cardItem: cardItem)
             }
             
             Spacer()
@@ -326,11 +409,15 @@ extension MarkerPositioningFlowView where Scan == ARScanView,
 {
     init(arModel: ARAnnotationViewModel<CardItem>,
          cardItems: Binding<[CardItem]>,
+         attachments: Binding<[AttachmentUIMetadata]>,
+         onDismiss: (() -> Void)? = nil,
          image: Image,
          cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
                   cardItems: cardItems,
+                  attachments: attachments,
+                  onDismiss: onDismiss,
                   scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })

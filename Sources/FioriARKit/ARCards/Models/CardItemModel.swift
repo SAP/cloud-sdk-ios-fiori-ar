@@ -51,8 +51,4 @@ public struct CodableCardItem: CardItemModel, Codable, Equatable {
         self.icon_ = icon_
         self.position_ = position_
     }
-    
-    public static func == (lhs: CodableCardItem, rhs: CodableCardItem) -> Bool {
-        lhs.id == rhs.id
-    }
 }
