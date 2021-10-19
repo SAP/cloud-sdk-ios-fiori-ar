@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct AttachmentUIMetadata: Identifiable {
+public struct AttachmentUIMetadata: Identifiable, Equatable {
     public var id = UUID()
     public var title: String = ""
     public var subtitle: String?

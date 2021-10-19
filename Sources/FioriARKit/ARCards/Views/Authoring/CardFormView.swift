@@ -34,8 +34,13 @@ struct CardFormView: View {
     @State var hasCoverImage = false
     
     var isUpdate: Bool = false
+    var onDismiss: (() -> Void)?
     
-    init(cardItems: Binding<[CodableCardItem]>, attachmentModels: Binding<[AttachmentUIMetadata]>, currentCardID: Binding<UUID?>) {
+    init(cardItems: Binding<[CodableCardItem]>,
+         attachmentModels: Binding<[AttachmentUIMetadata]>,
+         currentCardID: Binding<UUID?>,
+         onDismiss: (() -> Void)?)
+    {
         self._cardItems = cardItems
         self._attachmentModels = attachmentModels
         self._currentCardID = currentCardID
@@ -53,6 +58,7 @@ struct CardFormView: View {
         self._hasCoverImage = State(initialValue: currentCard?.detailImage_ == nil ? false : true)
         
         self.isUpdate = currentCardID.wrappedValue == nil ? false : true
+        self.onDismiss = onDismiss
     }
     
     var body: some View {
@@ -66,6 +72,7 @@ struct CardFormView: View {
                                  deleteCard(for: currentID)
                              }
                              presentationMode.wrappedValue.dismiss()
+                             onDismiss?()
                          },
                          leftBarLabel: {
                              Image(systemName: "xmark")
@@ -98,19 +105,18 @@ struct CardFormView: View {
                                 actionContentText: $actionContentText,
                                 actionButtonToggle: $hasButton,
                                 coverImageToggle: $hasCoverImage,
-                                toggleActionSheet: {
+                                editCardAction: {
                                     if let currentID = currentCardID {
                                         updateCard(for: currentID)
                                     } else {
                                         createCard()
                                     }
                                     presentationMode.wrappedValue.dismiss()
+                                    onDismiss?()
+                                    currentCardID = nil
                                 })
             }
             .background(Color.fioriNextPrimaryBackground)
-        }
-        .onDisappear {
-            currentCardID = nil
         }
         .onChange(of: actionContentText) { newValue in
             icon = newValue.isEmpty ? nil : "link"
@@ -121,9 +127,14 @@ struct CardFormView: View {
     }
     
     func createCard() {
-        let newCard = CodableCardItem(id: UUID().uuidString, title_: self.title, subtitle_: self.subtitle, detailImage_: self.detailImage, actionText_: self.actionText, icon_: nil)
-        self.cardItems.append(newCard)
+        let newCard = CodableCardItem(id: UUID().uuidString,
+                                      title_: self.title,
+                                      subtitle_: self.subtitle,
+                                      detailImage_: self.detailImage,
+                                      actionText_: self.actionText,
+                                      icon_: nil) // TODO: Fix
         
+        self.cardItems.append(newCard)
         self.onCardEdit(.created(card: newCard))
     }
     
@@ -134,16 +145,33 @@ struct CardFormView: View {
                                                 subtitle_: self.subtitle,
                                                 detailImage_: self.detailImage,
                                                 actionText_: self.actionText,
-                                                icon_: nil)
+                                                icon_: nil,
+                                                position_: self.cardItems[index].position_)
         
         self.onCardEdit(.updated(card: self.cardItems[index]))
     }
+    
+//    func updateCard(for currentID: UUID) {
+//        guard let index = cardItems.firstIndex(where: { $0.id == currentID.uuidString }) else { return }
+//        let position = self.cardItems[index].position_
+//        self.cardItems.removeAll(where: { $0.id == currentID.uuidString })
+//        let newCard = CodableCardItem(id: currentID.uuidString,
+//                                      title_: self.title,
+//                                      subtitle_: self.subtitle,
+//                                      detailImage_: self.detailImage,
+//                                      actionText_: self.actionText,
+//                                      icon_: nil,
+//                                      position_:  position)
+//
+//        self.cardItems.insert(newCard, at: index)
+//        self.onCardEdit(.updated(card: self.cardItems[index]))
+//    }
     
     func deleteCard(for currentID: UUID) {
         guard let cardToDelete = cardItems.first(where: { $0.id == currentID.uuidString }) else { return }
         
         self.cardItems.removeAll(where: { $0.id == cardToDelete.id })
-        self.attachmentModels.removeAll(where: { $0.id == currentID })
+        // self.attachmentModels.removeAll(where: { $0.id == currentID })
         
         self.onCardEdit(.deleted(card: cardToDelete))
     }
@@ -162,7 +190,7 @@ private struct CardDetailsView: View {
     @Binding var coverImageToggle: Bool
     
     @State var actionSheetPresented = false
-    var toggleActionSheet: (() -> Void)?
+    var editCardAction: (() -> Void)?
     
     @State var pickerPresented = false
     @State var pickerSource: UIImagePickerController.SourceType = .photoLibrary
@@ -193,7 +221,7 @@ private struct CardDetailsView: View {
                                          detailImage: $detailImage)
                         
                         Button(action: {
-                            toggleActionSheet?()
+                            editCardAction?()
                         }, label: {
                             Text(isUpdate ? "Update" : "Create")
                                 .font(.system(size: 15, weight: .bold))
@@ -242,6 +270,30 @@ struct CardPreview: View {
     @Binding var actionText: String
     @Binding var icon: String?
     @Binding var hasButton: Bool
+
+    init(detailImage: Binding<Data?>,
+         title: Binding<String>,
+         subtitle: Binding<String>,
+         actionText: Binding<String>,
+         icon: Binding<String?>,
+         hasButton: Binding<Bool>)
+    {
+        _detailImage = detailImage
+        _title = title
+        _subtitle = subtitle
+        _actionText = actionText
+        _icon = icon
+        _hasButton = hasButton
+    }
+    
+    init<CardItem>(cardItem: CardItem?) where CardItem: CardItemModel {
+        _detailImage = .constant(cardItem?.detailImage_)
+        _title = .constant(cardItem?.title_ ?? "")
+        _subtitle = .constant(cardItem?.subtitle_ ?? "")
+        _actionText = .constant(cardItem?.actionText_ ?? "")
+        _icon = .constant(cardItem?.icon_)
+        _hasButton = .constant(cardItem?.actionText_ != nil)
+    }
     
     var body: some View {
         VStack(spacing: 10) {

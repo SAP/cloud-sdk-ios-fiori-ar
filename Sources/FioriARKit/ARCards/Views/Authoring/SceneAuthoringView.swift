@@ -81,7 +81,8 @@ public struct SceneAuthoringView: View {
             NavigationLink(destination:
                 CardFormView(cardItems: $cardItems,
                              attachmentModels: $attachmentsMetadata,
-                             currentCardID: $currentCardID)
+                             currentCardID: $currentCardID,
+                             onDismiss: { self.populateAttachmentView() })
                     .onCardEdit(perform: onCardEdit),
                 isActive: $cardCreationIsPresented,
                 label: { EmptyView() })
@@ -94,6 +95,8 @@ public struct SceneAuthoringView: View {
         .fullScreenCover(isPresented: $isARExperiencePresented) {
             MarkerPositioningFlowView(arModel: arModel,
                                       cardItems: $cardItems,
+                                      attachments: $attachmentsMetadata,
+                                      onDismiss: { self.populateAttachmentView() },
                                       image: Image(uiImage: anchorImage!),
                                       cardAction: { _ in })
         }
@@ -102,7 +105,6 @@ public struct SceneAuthoringView: View {
     func populateAttachmentView() {
         self.attachmentsMetadata.removeAll()
         self.cardItems.forEach { card in
-            
             var detailImage: Image?
             if let data = card.detailImage_, let uiImage = UIImage(data: data) {
                 detailImage = Image(uiImage: uiImage)
@@ -120,7 +122,6 @@ public struct SceneAuthoringView: View {
     
     func startAR() {
         if self.anchorImage != nil || !self.cardItems.isEmpty {
-            print("Loading:...", self.cardItems.map(\.position_))
             let vectorStrategy = VectorLoadingStrategy(cardContents: cardItems, anchorImage: anchorImage!, physicalWidth: physicalWidth!)
             arModel.load(loadingStrategy: vectorStrategy)
             self.isARExperiencePresented.toggle()
