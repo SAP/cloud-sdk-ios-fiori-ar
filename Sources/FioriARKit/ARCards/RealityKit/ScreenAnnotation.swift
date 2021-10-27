@@ -16,67 +16,67 @@ public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable
         self.card.id
     }
     
-    internal var isSelected: Bool
-    
     public var card: CardItem
+    
+    public internal(set) var markerState: MarkerControl.State
+    
     internal var entity: Entity?
-    
-    public internal(set) var isMarkerVisible: Bool
-    public internal(set) var isCardVisible: Bool
-    
     internal var screenPosition: CGPoint?
-
-    public init(card: CardItem, isMarkerVisible: Bool = false, isCardVisible: Bool = true, isSelected: Bool = false) {
-        self.card = card
-        self.isMarkerVisible = isMarkerVisible
-        self.isCardVisible = isCardVisible
-        self.isSelected = isSelected
-    }
-
-    internal func setInternalEntityVisibility(to isVisible: Bool) {
-        isVisible ? self.showInternalEntity() : self.hideInternalEntity()
+    
+    internal var isCardVisible: Bool {
+        self.entity != nil
     }
     
-    internal mutating func toggleDimension() {
-        if self.isMarkerVisible {
-            self.setMarkerVisibility(to: false)
-            self.showInternalEntity()
-        } else {
-            self.setMarkerVisibility(to: true)
-            self.hideInternalEntity()
+    public init(card: CardItem) {
+        self.card = card
+        self.markerState = .notVisible
+    }
+    
+    internal mutating func updateCardPosition() {
+        self.card.position_ = self.entity?.position
+    }
+    
+    internal mutating func setScreenPosition(to position: CGPoint?) {
+        self.screenPosition = position
+        if position == nil {
+            self.setMarkerState(to: .notVisible)
         }
     }
     
-    // MARK: Screen
-    
-    internal mutating func setMarkerVisibility(to isVisible: Bool) {
-        self.isMarkerVisible = isVisible
+    internal mutating func setMarkerState(to state: MarkerControl.State) {
+        if self.markerState != .world, state == .world {
+            self.showInternalEntity()
+        }
+        if self.markerState == .world, state != .world {
+            self.hideInternalEntity()
+        }
+        self.markerState = state
     }
     
-    internal mutating func setCardVisibility(to isVisible: Bool) {
-        self.isCardVisible = isVisible
-    }
-    
-    internal mutating func setCardPosition(to position: SIMD3<Float>?) {
-        self.card.position_ = position
-    }
-    
-    // MARK: Entity
-    
-    /// Sets the internal within the EntityManager
-    public mutating func setInternalEntity(with entity: Entity) {
+    internal mutating func setEntity(to entity: Entity?) {
         self.entity = entity
+        self.updateCardPosition()
+        self.hideInternalEntity()
     }
     
-    internal func hideInternalEntity() {
+    internal mutating func removeEntity() {
+        self.setMarkerState(to: .normal)
+        self.entity?.removeFromParent()
+        self.setScreenPosition(to: nil)
+        self.setEntity(to: nil)
+        self.updateCardPosition()
+    }
+    
+    internal mutating func removeEntityFromScene() {
+        self.updateCardPosition()
+        self.entity?.removeFromParent()
+    }
+    
+    private func hideInternalEntity() {
         self.entity?.components[ModelComponent.self] = ModelComponent(mesh: MeshResource.generateSphere(radius: 0.03), materials: [OcclusionMaterial()])
     }
     
-    internal func showInternalEntity() {
+    private func showInternalEntity() {
         self.entity?.components[ModelComponent.self] = ModelComponent(mesh: MeshResource.generateSphere(radius: 0.03), materials: [SimpleMaterial(color: .red, isMetallic: false)])
-    }
-    
-    public static func == (lhs: ScreenAnnotation<CardItem>, rhs: ScreenAnnotation<CardItem>) -> Bool {
-        lhs.id == rhs.id
     }
 }

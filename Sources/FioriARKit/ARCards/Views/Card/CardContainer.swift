@@ -10,14 +10,12 @@ import SwiftUI
 internal struct CardContainer<Label: View, CardItem: CardItemModel>: View {
     var _isSelected: Bool
     var _cardItemModel: CardItem
-    var _isCardVisible: Bool
     
     let _label: (CardItem, Bool) -> Label
 
-    internal init(cardItemModel: CardItem, isSelected: Bool, isCardVisible: Bool, @ViewBuilder label: @escaping (CardItem, Bool) -> Label) {
+    internal init(cardItemModel: CardItem, isSelected: Bool, @ViewBuilder label: @escaping (CardItem, Bool) -> Label) {
         self._cardItemModel = cardItemModel
         self._isSelected = isSelected
-        self._isCardVisible = isCardVisible
         self._label = label
     }
     
@@ -28,12 +26,6 @@ internal struct CardContainer<Label: View, CardItem: CardItemModel>: View {
 
 extension CardContainer {
     var body: some View {
-        Group {
-            // if _isCardVisible {
-            label_
-                .opacity(_isCardVisible ? 1 : 0)
-                .disabled(!_isCardVisible)
-            // }
-        }
+        label_
     }
 }

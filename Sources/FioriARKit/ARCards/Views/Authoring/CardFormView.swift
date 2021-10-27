@@ -63,7 +63,7 @@ struct CardFormView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            TitleBarView(title: title.isEmpty ? "New Annotation" : title,
+            TitleBarView(title: isUpdate ? title : "New Annotation",
                          onLeftAction: {
                              presentationMode.wrappedValue.dismiss()
                          },
@@ -72,7 +72,6 @@ struct CardFormView: View {
                                  deleteCard(for: currentID)
                              }
                              presentationMode.wrappedValue.dismiss()
-                             onDismiss?()
                          },
                          leftBarLabel: {
                              Image(systemName: "xmark")
@@ -112,8 +111,6 @@ struct CardFormView: View {
                                         createCard()
                                     }
                                     presentationMode.wrappedValue.dismiss()
-                                    onDismiss?()
-                                    currentCardID = nil
                                 })
             }
             .background(Color.fioriNextPrimaryBackground)
@@ -121,9 +118,14 @@ struct CardFormView: View {
         .onChange(of: actionContentText) { newValue in
             icon = newValue.isEmpty ? nil : "link"
         }
+        .onDisappear {
+            onDismiss?()
+            currentCardID = nil
+        }
         .navigationBarHidden(true)
         .navigationBarTitle("")
         .edgesIgnoringSafeArea(verticalSizeClass == .compact ? [.horizontal, .bottom] : .vertical)
+        .ignoresSafeArea(.keyboard)
     }
     
     func createCard() {
@@ -151,28 +153,10 @@ struct CardFormView: View {
         self.onCardEdit(.updated(card: self.cardItems[index]))
     }
     
-//    func updateCard(for currentID: UUID) {
-//        guard let index = cardItems.firstIndex(where: { $0.id == currentID.uuidString }) else { return }
-//        let position = self.cardItems[index].position_
-//        self.cardItems.removeAll(where: { $0.id == currentID.uuidString })
-//        let newCard = CodableCardItem(id: currentID.uuidString,
-//                                      title_: self.title,
-//                                      subtitle_: self.subtitle,
-//                                      detailImage_: self.detailImage,
-//                                      actionText_: self.actionText,
-//                                      icon_: nil,
-//                                      position_:  position)
-//
-//        self.cardItems.insert(newCard, at: index)
-//        self.onCardEdit(.updated(card: self.cardItems[index]))
-//    }
-    
     func deleteCard(for currentID: UUID) {
         guard let cardToDelete = cardItems.first(where: { $0.id == currentID.uuidString }) else { return }
         
         self.cardItems.removeAll(where: { $0.id == cardToDelete.id })
-        // self.attachmentModels.removeAll(where: { $0.id == currentID })
-        
         self.onCardEdit(.deleted(card: cardToDelete))
     }
 }
@@ -196,21 +180,27 @@ private struct CardDetailsView: View {
     @State var pickerSource: UIImagePickerController.SourceType = .photoLibrary
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Card Details")
-                .font(.system(size: 15, weight: .bold))
-                .padding(16)
+        VStack(spacing: 0) {
+            HStack {
+                Text("Card Details")
+                    .font(.system(size: 15, weight: .bold))
+                    .padding(16)
+                Spacer()
+            }
             
             Divider()
             
             ScrollView {
                 ZStack {
-                    VStack(alignment: .center, spacing: 14) {
+                    VStack(spacing: 14) {
                         TextDetail(textField: $title, titleText: "Title")
+                            .foregroundColor(Color.black)
                         
                         TextDetail(textField: $subtitle, titleText: "Subtitle (Optional)")
+                            .foregroundColor(Color.black)
                         
                         TextDetail(textField: $actionContentText, titleText: "Content", placeholder: "URL")
+                            .foregroundColor(Color.black)
                         
                         ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
                             .zIndex(1)
@@ -344,7 +334,7 @@ struct CardPreview: View {
                 .font(.system(size: 18))
                 .lineLimit(1)
                 .foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant))
-                .frame(width: 198, height: hasButton ? 44 : 0)
+                .frame(width: 198, height: hasButton && !actionText.isEmpty ? 44 : 0)
         }
         .frame(width: 230)
         .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
@@ -353,7 +343,7 @@ struct CardPreview: View {
     }
 }
 
-private struct TextDetail: View {
+struct TextDetail: View {
     @Binding var textField: String
     
     var titleText: String
@@ -362,7 +352,6 @@ private struct TextDetail: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(titleText)
-                .foregroundColor(Color.black)
                 .font(.system(size: 15, weight: .bold))
             FioriNextTextField(text: $textField, placeHolder: placeholder ?? titleText)
         }
@@ -404,7 +393,7 @@ private struct CoverImageDetail: View {
     @Binding var detailImage: Data?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(spacing: 8) {
             Toggle(isOn: $isOn) {
                 Text(titleText)
                     .foregroundColor(Color.black)
@@ -421,35 +410,45 @@ private struct CoverImageDetail: View {
             }
             .zIndex(0)
             
-            VStack {
-                if let data = detailImage, let uiImage = UIImage(data: data) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(height: 145)
-                        .clipped()
-                } else {
-                    Image(systemName: "photo")
-                        .foregroundColor(Color.fioriNextSecondaryFill.opacity(0.24))
-                        .font(.system(size: 40))
+            ImageSelectionView(detailImage: detailImage, imageHeight: 145)
+                .zIndex(-1)
+                .onChange(of: detailImage) { newValue in
+                    isOn = newValue == nil ? false : true
                 }
-            }
-            .frame(maxWidth: .infinity, minHeight: 145)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .contentShape(RoundedRectangle(cornerRadius: 10))
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(detailImage == nil ? Color.fioriNextSecondaryFill.opacity(0.83) : Color.clear, lineWidth: 0.33)
-                    .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color.fioriNextSecondaryFill.opacity(0.06)))
-            )
-            .zIndex(-1)
-            .onChange(of: detailImage) { newValue in
-                isOn = newValue == nil ? false : true
-            }
-            .onTapGesture {
-                presentActionSheet.toggle()
+                .onTapGesture {
+                    presentActionSheet.toggle()
+                }
+        }
+    }
+}
+
+struct ImageSelectionView: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    var detailImage: Data?
+    var imageHeight: CGFloat
+
+    var body: some View {
+        VStack {
+            if let data = detailImage, let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: imageHeight)
+                    .clipped()
+            } else {
+                Image(systemName: "photo")
+                    .foregroundColor(Color.fioriNextSecondaryFill.opacity(0.24))
+                    .font(.system(size: 40))
             }
         }
+        .frame(maxWidth: horizontalSizeClass == .regular ? 311 : .infinity, minHeight: imageHeight)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .contentShape(RoundedRectangle(cornerRadius: 10))
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .strokeBorder(detailImage == nil ? Color.fioriNextSecondaryFill.opacity(0.83) : Color.clear, lineWidth: 0.33)
+                .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color.fioriNextSecondaryFill.opacity(0.06)))
+        )
     }
 }
 

@@ -126,6 +126,20 @@ public class ARManager {
         #endif
     }
     
+    public func addChild(for entity: HasCollision) {
+        self.arView?.installGestures([.scale, .translation], for: entity)
+        self.sceneRoot?.addChild(entity)
+    }
+    
+    public func removeEntityGestures() {
+        self.arView?
+            .gestureRecognizers?
+            .filter { $0 is EntityGestureRecognizer }
+            .forEach {
+                arView?.removeGestureRecognizer($0)
+            }
+    }
+    
     /// Adds a Entity which conforms to HasAnchoring to the arView.scene
     public func addAnchor(for entity: HasAnchoring) {
         self.arView?.scene.addAnchor(entity)

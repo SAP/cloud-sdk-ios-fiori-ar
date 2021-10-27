@@ -16,23 +16,23 @@ enum PartialSheetState: CGFloat {
 }
 
 struct PartialSheetView<Content>: View where Content: View {
-    @Binding var title: String
+    var title: String
     @Binding var sheetState: PartialSheetState
     
     let onDismiss: (() -> Void)?
     let content: () -> Content
     
-    init(title: Binding<String>, sheetState: Binding<PartialSheetState>, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) {
-        _title = title
+    init(_ sheetState: Binding<PartialSheetState>, title: String, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) {
         _sheetState = sheetState
+        self.title = title
         self.onDismiss = onDismiss
         self.content = content
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             VStack {
-                handle
+                SheetHandle()
                 HStack {
                     Text(title)
                         .foregroundColor(Color.black)
@@ -40,8 +40,10 @@ struct PartialSheetView<Content>: View where Content: View {
                     
                     Spacer()
                     
-                    dismissView
-                        .opacity(sheetState != .closed ? 1 : 0)
+                    DismissView {
+                        onDismiss?()
+                    }
+                    .opacity(sheetState != .closed ? 1 : 0)
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 10)
@@ -60,29 +62,6 @@ struct PartialSheetView<Content>: View where Content: View {
         )
         .offset(y: sheetState.rawValue)
         .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0), value: sheetState)
-    }
-    
-    private var dismissView: some View {
-        Button(action: {
-            sheetState = .closed
-            onDismiss?()
-        }, label: {
-            Image(systemName: "xmark")
-                .font(.system(size: 14, weight: .bold, design: .default))
-                .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
-                .background(
-                    Circle()
-                        .fill(Color.fioriNextSecondaryFill.opacity(0.16))
-                        .frame(width: 28, height: 28)
-                )
-        })
-    }
-    
-    private var handle: some View {
-        RoundedRectangle(cornerRadius: 4)
-            .fill(Color(red: 137 / 255, green: 145 / 255, blue: 154 / 255, opacity: 0.41))
-            .frame(width: 36, height: 5)
-            .padding(.vertical, 6)
     }
     
     private var dragGesture: _EndedGesture<DragGesture> {
@@ -126,5 +105,33 @@ struct PartialSheetView<Content>: View where Content: View {
     private enum SwipeDirection {
         case up
         case down
+    }
+}
+
+struct SheetHandle: View {
+    var body: some View {
+        RoundedRectangle(cornerRadius: 4)
+            .fill(Color(red: 137 / 255, green: 145 / 255, blue: 154 / 255, opacity: 0.41))
+            .frame(width: 36, height: 5)
+            .padding(.vertical, 6)
+    }
+}
+
+struct DismissView: View {
+    let onDismiss: (() -> Void)?
+    
+    var body: some View {
+        Button(action: {
+            onDismiss?()
+        }, label: {
+            Image(systemName: "xmark")
+                .font(.system(size: 14, weight: .bold, design: .default))
+                .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                .background(
+                    Circle()
+                        .fill(Color.fioriNextSecondaryFill.opacity(0.16))
+                        .frame(width: 28, height: 28)
+                )
+        })
     }
 }

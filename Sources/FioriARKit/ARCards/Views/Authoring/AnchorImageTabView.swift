@@ -11,12 +11,10 @@ struct AnchorImageTabView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
     @Binding var anchorImage: UIImage?
+    @Binding var physicalWidth: String
     
-    @State private var actionSheetPresented = false
-    @State private var pickerPresented = false
-    
-    @State private var pickerSource: UIImagePickerController.SourceType = .photoLibrary
     @State private var imageName: String?
+    @State private var anchorImageFormPresented = false
     
     var body: some View {
         VStack {
@@ -28,7 +26,7 @@ struct AnchorImageTabView: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(Color.black)
                         .font(.system(size: 17))
-                    Button(action: { actionSheetPresented.toggle() }, label: {
+                    Button(action: { anchorImageFormPresented.toggle() }, label: {
                         Text("Upload Anchor Image")
                             .font(.system(size: 15, weight: .bold))
                             .frame(width: 187, height: 40)
@@ -47,20 +45,12 @@ struct AnchorImageTabView: View {
             Spacer()
         }
         .background(Color.white)
-        .actionSheet(isPresented: $actionSheetPresented) {
-            ActionSheet(title: Text("Choose an option..."),
-                        message: Text("Selection for Anchor Image"),
-                        buttons: [.default(Text("Camera"), action: {
-                            pickerSource = .camera
-                            pickerPresented.toggle()
-                        }), .default(Text("Photos"), action: {
-                            pickerSource = .photoLibrary
-                            pickerPresented.toggle()
-                        }), .cancel()])
-        }
-        .fullScreenCover(isPresented: $pickerPresented) {
-            ImagePickerView(uiImage: $anchorImage, fileName: $imageName, sourceType: pickerSource)
-                .edgesIgnoringSafeArea(.all)
+        .sheet(isPresented: $anchorImageFormPresented) {
+            AnchorImageFormView(anchorImage: $anchorImage,
+                                physicalWidth: $physicalWidth,
+                                imageName: $imageName) {
+                anchorImageFormPresented.toggle()
+            }
         }
     }
 }

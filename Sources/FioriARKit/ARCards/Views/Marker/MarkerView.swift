@@ -98,11 +98,25 @@ public struct MarkerView: View {
             }
     }
     
+    var ghost: some View {
+        unselected
+            .opacity(0.75)
+    }
+    
+    var notVisible: some View {
+        EmptyView()
+    }
+    
     public var body: some View {
-        if state == .selected {
-            selected
-        } else {
+        switch state {
+        case .normal:
             unselected
+        case .selected:
+            selected
+        case .ghost:
+            ghost
+        case .notVisible, .world:
+            notVisible
         }
     }
 }
