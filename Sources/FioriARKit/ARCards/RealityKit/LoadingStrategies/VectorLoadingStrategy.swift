@@ -28,19 +28,14 @@ public struct VectorLoadingStrategy<CardItem: CardItemModel>: AnnotationLoadingS
         manager.addReferenceImage(for: self.anchorImage, with: self.physicalWidth, resetImages: true)
         
         for cardItem in self.cardContents {
-            var annotation = ScreenAnnotation(card: cardItem, isCardVisible: cardItem.position_ != nil)
+            var annotation = ScreenAnnotation(card: cardItem)
             
             if let position = cardItem.position_ {
-                let internalEntity = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03), materials: [SimpleMaterial(color: .red, isMetallic: false)])
-                internalEntity.generateCollisionShapes(recursive: true)
+                let internalEntity = ModelEntity.generateEntity()
                 internalEntity.position = position
-                annotation.setInternalEntity(with: internalEntity)
-                annotation.hideInternalEntity()
-                
-                manager.arView?.installGestures([.scale, .translation], for: internalEntity)
-                manager.sceneRoot?.addChild(internalEntity)
+                annotation.setEntity(to: internalEntity)
+                manager.addChild(for: internalEntity)
             }
-            
             annotations.append(annotation)
         }
         

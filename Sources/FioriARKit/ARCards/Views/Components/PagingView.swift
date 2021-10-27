@@ -33,6 +33,7 @@ struct PagingView<Left, Right>: View where Left: View, Right: View {
                 .frame(width: geo.size.width, height: geo.size.height)
             }
             .offset(x: firstPage ? 0 : -geo.size.width)
+            .animation(.default, value: firstPage)
         }
     }
 }

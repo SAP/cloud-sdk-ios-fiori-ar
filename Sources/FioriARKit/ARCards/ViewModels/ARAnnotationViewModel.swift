@@ -53,21 +53,25 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// Used to project the location of the Entities from the world space onto the screen space
     /// Potential to add a closure here for developer to add logic on frame change
     private func updateScene(on event: SceneEvents.Update) {
-        for (index, _) in self.annotations.enumerated() {
-            guard let internalEntity = annotations[index].entity,
-                  let projectedPoint = arManager.arView?.project(internalEntity.position(relativeTo: nil)) else { return }
-            self.annotations[index].screenPosition = projectedPoint
-        }
+        self.annotations
+            .indices
+            .forEach {
+                if let internalEntity = annotations[$0].entity,
+                   let projectedPoint = arManager.arView?.project(internalEntity.position(relativeTo: nil))
+                {
+                    annotations[$0].screenPosition = projectedPoint
+                }
+            }
     }
     
-    internal func resetAllAnchors() {
-        guard let _ = try? self.arManager.configureSession(options: [.removeExistingAnchors]) else { return }
+    func resetAllAnchors() {
+        guard let _ = try? arManager.configureSession(options: [.removeExistingAnchors]) else { return }
         self.annotations.removeAll()
         self.arManager.removeRoot()
         self.anchorPosition = nil
     }
     
-    internal func stopSession() {
+    func stopSession() {
         self.annotations.removeAll()
         self.anchorPosition = nil
         self.currentAnnotation = nil
@@ -79,68 +83,114 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// Loads a strategy into the arModel and sets **annotations** member from the returned [ScreenAnnotation]
     public func load<Strategy: AnnotationLoadingStrategy>(loadingStrategy: Strategy) where CardItem == Strategy.CardItem {
         do { self.annotations = try loadingStrategy.load(with: self.arManager) } catch { print("Annotation Loading Error: \(error)") }
-        self.currentAnnotation = self.annotations.first
+        self.setSelectedAnnotation(for: self.annotations.first)
     }
     
-    /// Sets the visibility of the Marker View for  a CardItem identified by its ID *Note: The `EntityManager` still exists in the scene*
-    public func setMarkerVisibility(for card: CardItem?, to isVisible: Bool) {
-        guard let card = card else { return }
-        for (index, annotation) in self.annotations.enumerated() where annotation.id == card.id {
-            currentAnnotation = self.annotations[index]
-            self.annotations[index].isMarkerVisible = true
-            self.annotations[index].hideInternalEntity()
-        }
-    }
-    
-    public func updateCardItemPositions() {
-        for (index, _) in self.annotations.enumerated() {
-            self.annotations[index].card.position_ = self.annotations[index].entity?.position
-        }
-    }
-    
-    // The carousel must recalculate and refresh the size of its container on card removal/insertion to center cards
-//    public func setCardVisibility(for id: CardItem.ID, to isVisible: Bool) {
-//        for (index, annotation) in self.annotations.enumerated() {
-//            if annotation.id == id { annotations[index].setCardVisibility(to: isVisible) }
-//        }
-//    }
-    // Cards are initially set to visible
-    private func showAnnotationsAfterDiscoveryFlow() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            withAnimation { self.discoveryFlowHasFinished = true }
-            
-            for (index, _) in self.annotations.enumerated() {
-                self.annotations[index].setMarkerVisibility(to: true)
+    func updateCardItemPositions() {
+        self.annotations
+            .indices
+            .forEach {
+                annotations[$0].updateCardPosition()
             }
-        }
     }
     
-    func addNewEntity(for cardItem: CardItem?) {
-        guard let cardItem = cardItem else { return }
-        let newEntity = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.03), materials: [SimpleMaterial(color: .red, isMetallic: false)])
-        newEntity.generateCollisionShapes(recursive: true)
-        self.arManager.arView?.installGestures([.scale, .translation], for: newEntity)
-        self.arManager.sceneRoot?.addChild(newEntity)
-        for (index, annotation) in self.annotations.enumerated() where cardItem.id == annotation.id {
-            annotations[index].entity = newEntity
-            annotations[index].card.position_ = newEntity.position
-            annotations[index].isCardVisible = true
-        }
-    }
-    
-    func removeEntity(for cardItem: CardItem?) {
-        guard let cardItem = cardItem else { return }
-        for (index, annotation) in self.annotations.enumerated() where cardItem.id == annotation.id {
-            if let entity = annotations[index].entity {
-                arManager.sceneRoot?.removeChild(entity)
-                annotations[index].entity = nil
+    func setAllMarkerState(to state: MarkerControl.State) {
+        self.annotations
+            .indices
+            .forEach {
+                annotations[$0].setMarkerState(to: state)
             }
+    }
+    
+    func setMarkerState(for cardItem: CardItem?, to state: MarkerControl.State) {
+        self.annotations
+            .enumerated()
+            .filter { $1.id == cardItem?.id }
+            .forEach { index, _ in
+                annotations[index].setMarkerState(to: state)
+            }
+    }
+    
+    func onlyShowEntity(for cardItem: CardItem) {
+        self.setAllMarkerState(to: .ghost)
+        self.annotations
+            .enumerated()
+            .filter { $1.id == cardItem.id }
+            .forEach { index, _ in
+                annotations[index].setMarkerState(to: .world)
+            }
+    }
+    
+    func setSelectedAnnotation(for annotation: ScreenAnnotation<CardItem>?) {
+        if let annotation = annotation, let index = annotations.firstIndex(of: annotation) {
+            self.annotations
+                .indices
+                .filter { $0 != index }
+                .forEach {
+                    annotations[$0].setMarkerState(to: .normal)
+                }
+            self.currentAnnotation = annotation
+            self.annotations[index].setMarkerState(to: .selected)
         }
     }
     
+    func addNewEntity(to cardItem: CardItem?) {
+        guard let cardItem = cardItem else { return }
+        let newEntity = ModelEntity.generateEntity()
+        self.annotations
+            .enumerated()
+            .filter { $1.id == cardItem.id }
+            .forEach { index, _ in
+                arManager.addChild(for: newEntity)
+                annotations[index].setEntity(to: newEntity)
+            }
+    }
+    
+    func deleteEntity(for cardItem: CardItem?) {
+        self.annotations
+            .enumerated()
+            .filter { $1.id == cardItem?.id }
+            .forEach { index, _ in
+                annotations[index].removeEntity()
+            }
+    }
+    
+    func removeEntitiesFromScene() {
+        self.arManager.removeEntityGestures()
+        self.annotations
+            .indices
+            .forEach {
+                annotations[$0].removeEntityFromScene()
+            }
+    }
+    
+    func reAddEntitiesToScene(exclude: [CardItem] = []) {
+        self.annotations
+            .enumerated()
+            .filter { _, annotation in
+                exclude.contains { card in
+                    card.id != annotation.id
+                }
+            }
+            .forEach { index, _ in
+                if let entity = annotations[index].entity as? HasCollision, let position = annotations[index].card.position_ {
+                    entity.position = position
+                    arManager.addChild(for: entity)
+                }
+            }
+    }
+    
+    // MARK: Image / Object Anchor
+
     private func getAnchorPosition(for arAnchor: ARAnchor) -> CGPoint? {
         let anchorTranslation = SIMD3<Float>(x: arAnchor.transform.columns.3.x, y: arAnchor.transform.columns.3.y, z: arAnchor.transform.columns.3.z)
         return self.arManager.arView?.project(anchorTranslation)
+    }
+    
+    private func showAnnotationsAfterDiscoveryFlow() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + (self.discoveryFlowHasFinished ? 0 : 3)) {
+            withAnimation { self.discoveryFlowHasFinished = true }
+        }
     }
 
     // MARK: ARSession Delegate

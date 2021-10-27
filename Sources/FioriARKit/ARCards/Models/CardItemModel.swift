@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public protocol CardItemModel: Identifiable, TitleComponent, SubtitleComponent, DetailImageComponent, ActionTextComponent, IconComponent, PositionComponent {}
+public protocol CardItemModel: Identifiable, Equatable, TitleComponent, SubtitleComponent, DetailImageComponent, ActionTextComponent, IconComponent, PositionComponent {}
 
 public protocol TitleComponent {
     var title_: String { get }
@@ -33,7 +33,7 @@ public protocol PositionComponent {
     var position_: SIMD3<Float>? { get set }
 }
 
-public struct CodableCardItem: CardItemModel, Codable, Equatable {
+public struct CodableCardItem: CardItemModel, Codable {
     public var id: String
     public var title_: String
     public var subtitle_: String?
