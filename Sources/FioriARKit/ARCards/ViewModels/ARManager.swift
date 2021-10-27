@@ -94,7 +94,7 @@ public class ARManager {
         #if !targetEnvironment(simulator)
             let anchorEntity = AnchorEntity(anchor: anchor)
             children.forEach { anchorEntity.addChild($0) }
-            self.addAnchor(for: anchorEntity)
+            self.addAnchor(anchor: anchorEntity)
         #endif
     }
     
@@ -109,7 +109,7 @@ public class ARManager {
                 self.addReferenceImage(for: image, with: width)
             case .object:
                 self.setAutomaticConfiguration()
-                self.addAnchor(for: scene)
+                self.addAnchor(anchor: scene)
             default:
                 throw LoadingStrategyError.anchorTypeNotSupportedError
             }
@@ -126,9 +126,9 @@ public class ARManager {
         #endif
     }
     
-    public func addChild(for entity: HasCollision) {
+    public func addChild(for entity: HasCollision, preservingWorldTransform: Bool = false) {
         self.arView?.installGestures([.scale, .translation], for: entity)
-        self.sceneRoot?.addChild(entity)
+        self.sceneRoot?.addChild(entity, preservingWorldTransform: preservingWorldTransform)
     }
     
     public func removeEntityGestures() {
@@ -141,10 +141,20 @@ public class ARManager {
     }
     
     /// Adds a Entity which conforms to HasAnchoring to the arView.scene
-    public func addAnchor(for entity: HasAnchoring) {
-        self.arView?.scene.addAnchor(entity)
+    public func addAnchor(anchor: HasAnchoring) {
+        self.arView?.scene.addAnchor(anchor)
     }
     
+    /// Removes the specified HasAnchoring from the scene
+    public func removeAnchor(anchor: HasAnchoring) {
+        self.arView?.scene.removeAnchor(anchor)
+    }
+    
+    /// Finds Entity in the scene from the given name, returns nil if the entity does not exist in the scene
+    public func findEntity(named: String) -> Entity? {
+        self.arView?.scene.findEntity(named: named)
+    }
+
     /// Adds an ARReferenceImage to the configuration for the session to discover
     /// Optionally can set the configuration to ARImageTrackingConfiguration
     public func addReferenceImage(for image: UIImage, _ name: String? = nil, with physicalWidth: CGFloat, configuration: ARConfiguration = ARWorldTrackingConfiguration(), resetImages: Bool = false) {

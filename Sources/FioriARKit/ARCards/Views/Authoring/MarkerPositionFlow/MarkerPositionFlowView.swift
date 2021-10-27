@@ -144,13 +144,14 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 sheetTitle = "Preview Annotation"
                 sheetState = .open
             case .beforeDrop:
-                sheetTitle = "View Annotation"
-                sheetState = .closed
-            case .dropped:
                 arModel.removeEntitiesFromScene()
                 setPinValue(cardItem: cardItem, pinValue: .pinned)
                 arModel.addNewEntity(to: cardItem)
                 arModel.setMarkerState(for: cardItem, to: .world)
+                sheetTitle = "View Annotation"
+                sheetState = .closed
+            case .dropped:
+                arModel.dropEntity(for: cardItem)
                 sheetState = .closed
                 firstPage = true
             case .preview:
@@ -186,6 +187,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         case .dropped:
             self.setPinValue(cardItem: self.cardItem, pinValue: .notPinned)
             self.arModel.deleteEntity(for: self.cardItem)
+            self.arModel.deleteCameraAnchor()
             self.flowState = .selectCard
         case .selectCard, .confirmCard, .preview:
             break
