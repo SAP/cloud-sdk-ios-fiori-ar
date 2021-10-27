@@ -136,13 +136,31 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     
     func addNewEntity(to cardItem: CardItem?) {
         guard let cardItem = cardItem else { return }
+        
         let newEntity = ModelEntity.generateEntity()
+        let cameraAnchor = AnchorEntity(.camera)
+        cameraAnchor.name = AnchorEntity.cameraAnchor
+        cameraAnchor.addChild(newEntity)
+        newEntity.position.z = -0.25
+        
         self.annotations
             .enumerated()
             .filter { $1.id == cardItem.id }
             .forEach { index, _ in
-                arManager.addChild(for: newEntity)
+                arManager.addAnchor(anchor: cameraAnchor)
                 annotations[index].setEntity(to: newEntity)
+            }
+    }
+    
+    func dropEntity(for cardItem: CardItem?) {
+        self.annotations
+            .enumerated()
+            .filter { $1.id == cardItem?.id }
+            .forEach { index, _ in
+                if let entity = annotations[index].entity as? HasCollision {
+                    arManager.addChild(for: entity, preservingWorldTransform: true)
+                    deleteCameraAnchor()
+                }
             }
     }
     
@@ -178,6 +196,12 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
                     arManager.addChild(for: entity)
                 }
             }
+    }
+    
+    func deleteCameraAnchor() {
+        if let cameraAnchor = arManager.findEntity(named: AnchorEntity.cameraAnchor) as? HasAnchoring {
+            self.arManager.removeAnchor(anchor: cameraAnchor)
+        }
     }
     
     // MARK: Image / Object Anchor
