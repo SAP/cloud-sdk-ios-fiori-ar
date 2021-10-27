@@ -27,9 +27,9 @@
 		2CC2A028268BFB8F0091C42B /* ARCardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2A027268BFB8F0091C42B /* ARCardListView.swift */; };
 		2CCF965926824D9D00566523 /* ExampleRC.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2CCF965826824D9D00566523 /* ExampleRC.usdz */; };
 		2CCF965B2682535000566523 /* ARCardsUSDZFileLoadingContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CCF965A2682535000566523 /* ARCardsUSDZFileLoadingContentView.swift */; };
+		2CD13EDA2728D717009160C8 /* ExampleRC.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2CD13ED92728D717009160C8 /* ExampleRC.rcproject */; };
 		2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909726437D630076150D /* ExampleCardItem.swift */; };
 		2CDD909B26437E7A0076150D /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909A26437E7A0076150D /* Tests.swift */; };
-		2CDD90A2264383540076150D /* ExampleRC.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD90A1264383540076150D /* ExampleRC.rcproject */; };
 		8A6F605926EFFF6600FA9FD5 /* DemoARService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6F605826EFFF6600FA9FD5 /* DemoARService.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,9 +56,9 @@
 		2CC2A027268BFB8F0091C42B /* ARCardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardListView.swift; sourceTree = "<group>"; };
 		2CCF965826824D9D00566523 /* ExampleRC.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = ExampleRC.usdz; sourceTree = "<group>"; };
 		2CCF965A2682535000566523 /* ARCardsUSDZFileLoadingContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsUSDZFileLoadingContentView.swift; sourceTree = "<group>"; };
+		2CD13ED92728D717009160C8 /* ExampleRC.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = ExampleRC.rcproject; sourceTree = "<group>"; };
 		2CDD909726437D630076150D /* ExampleCardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCardItem.swift; sourceTree = "<group>"; };
 		2CDD909A26437E7A0076150D /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		2CDD90A1264383540076150D /* ExampleRC.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = ExampleRC.rcproject; sourceTree = "<group>"; };
 		8A6F605826EFFF6600FA9FD5 /* DemoARService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoARService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -187,9 +187,9 @@
 		2CDD909F264382D40076150D /* RealityComposer */ = {
 			isa = PBXGroup;
 			children = (
+				2CD13ED92728D717009160C8 /* ExampleRC.rcproject */,
 				2CCF965826824D9D00566523 /* ExampleRC.usdz */,
 				2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */,
-				2CDD90A1264383540076150D /* ExampleRC.rcproject */,
 			);
 			path = RealityComposer;
 			sourceTree = "<group>";
@@ -285,11 +285,11 @@
 				2CCF965B2682535000566523 /* ARCardsUSDZFileLoadingContentView.swift in Sources */,
 				2C554AE22681189B007784D6 /* ARCardsRealityFileLoadingContentView.swift in Sources */,
 				2C4C71B126436A5C00B462A9 /* ARCardsContentView.swift in Sources */,
+				2CD13EDA2728D717009160C8 /* ExampleRC.rcproject in Sources */,
 				2C5225B1267BF28A0089A062 /* ARCardsJSONLoadingContentView.swift in Sources */,
 				2C48248C264DC33300E230E6 /* CarEngineExampleContentView.swift in Sources */,
 				2C4C71B526436ADC00B462A9 /* ARCardsViewBuilderContentView.swift in Sources */,
 				2C4C71A02643697F00B462A9 /* ExamplesApp.swift in Sources */,
-				2CDD90A2264383540076150D /* ExampleRC.rcproject in Sources */,
 				2C9371282644D3C3001932D1 /* DownloadsView.swift in Sources */,
 				2C48248F264DC40600E230E6 /* StringIdentifyingCardItem.swift in Sources */,
 				2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */,

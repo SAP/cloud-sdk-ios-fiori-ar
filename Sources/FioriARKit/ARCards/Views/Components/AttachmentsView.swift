@@ -17,19 +17,19 @@ public struct AttachmentUIMetadata: Identifiable, Equatable {
 }
 
 struct AttachmentsView: View {
-    @Binding var attachmentsUIMetadata: [AttachmentUIMetadata]
+    var attachmentsUIMetadata: [AttachmentUIMetadata]
     
     let title: String?
     let onAddAttachment: (() -> Void)?
     let onSelectAttachment: ((AttachmentUIMetadata) -> Void)?
     
     init(title: String? = nil,
-         attachmentsUIMetadata: Binding<[AttachmentUIMetadata]>,
+         attachmentsUIMetadata: [AttachmentUIMetadata],
          onAddAttachment: (() -> Void)? = nil,
          onSelectAttachment: ((AttachmentUIMetadata) -> Void)? = nil)
     {
         self.title = title
-        self._attachmentsUIMetadata = attachmentsUIMetadata
+        self.attachmentsUIMetadata = attachmentsUIMetadata
         self.onAddAttachment = onAddAttachment
         self.onSelectAttachment = onSelectAttachment
     }

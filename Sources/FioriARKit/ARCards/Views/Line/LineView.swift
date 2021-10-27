@@ -35,15 +35,15 @@ internal struct LineView: View {
             }
             .stroke(gradient, lineWidth: 3)
             .opacity(opacity)
-            .animateOnAppear(animation: Animation.easeIn(duration: 0.3)) {
+            .animateOnAppear(animation: Animation.easeIn(duration: 0.2)) {
                 opacity = 1
                 // Delay Fade Out
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                    withAnimation(Animation.easeOut(duration: 0.3)) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    withAnimation(Animation.easeOut(duration: 0.2)) {
                         opacity = 0
                     }
                     // Delay reseting Displaying line or else the animation stops recieving updated positions appearing to be frozen
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                         displayLine = false
                     }
                 }

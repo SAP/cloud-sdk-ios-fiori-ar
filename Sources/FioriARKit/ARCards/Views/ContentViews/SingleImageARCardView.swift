@@ -82,10 +82,7 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
             ARContainer(arStorage: arModel.arManager)
             
             if arModel.discoveryFlowHasFinished {
-                ARAnnotationContentView($arModel.annotations,
-                                        currentAnnotation: $arModel.currentAnnotation,
-                                        cardLabel: cardLabel,
-                                        markerLabel: markerLabel)
+                ARAnnotationContentView(arModel, cardLabel: cardLabel, markerLabel: markerLabel)
                 
             } else {
                 scanLabel($arModel.anchorPosition)

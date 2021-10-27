@@ -17,5 +17,11 @@ public struct MarkerControl {
         case normal
         /// Selected State
         case selected
+        /// Ghost State
+        case ghost
+        /// Not Visible State
+        case notVisible
+        /// World State
+        case world
     }
 }

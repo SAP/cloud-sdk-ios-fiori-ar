@@ -41,8 +41,7 @@ extension SceneLoadable {
                 throw LoadingStrategyError.entityNotFoundError(cardItem.id)
             }
             var annotation = ScreenAnnotation(card: cardItem)
-            annotation.setInternalEntity(with: internalEntity)
-            annotation.setInternalEntityVisibility(to: false)
+            annotation.setEntity(to: internalEntity)
             annotations.append(annotation)
         }
 

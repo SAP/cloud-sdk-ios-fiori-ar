@@ -20,13 +20,12 @@ public struct SceneAuthoringView: View {
     @State private var currentTab: TabSelection = .left
     @State private var hideNavBar = true
 
-    @State private var cardCreationIsPresented = false
+    @State private var isCardCreationPresented = false
     @State private var isARExperiencePresented = false
     
     @State private var anchorImage: UIImage? = nil
-    @State private var physicalWidth: CGFloat? = 0.1
+    @State private var physicalWidth: String = ""
     @State private var cardItems: [CodableCardItem]
-    
     @State private var attachmentsMetadata: [AttachmentUIMetadata] = []
     @State private var currentCardID: UUID? = nil
     
@@ -66,12 +65,15 @@ public struct SceneAuthoringView: View {
                 
                 switch currentTab {
                 case .left:
-                    AttachmentsView(title: "Cards", attachmentsUIMetadata: $attachmentsMetadata, onAddAttachment: { cardCreationIsPresented.toggle() }, onSelectAttachment: { attachmentsUIMetadata in
-                        currentCardID = attachmentsUIMetadata.id
-                        cardCreationIsPresented.toggle()
-                    })
+                    AttachmentsView(title: "Cards",
+                                    attachmentsUIMetadata: attachmentsMetadata,
+                                    onAddAttachment: { isCardCreationPresented.toggle() },
+                                    onSelectAttachment: { attachmentsUIMetadata in
+                                        currentCardID = attachmentsUIMetadata.id
+                                        isCardCreationPresented.toggle()
+                                    })
                 case .right:
-                    AnchorImageTabView(anchorImage: $anchorImage)
+                    AnchorImageTabView(anchorImage: $anchorImage, physicalWidth: $physicalWidth)
                 }
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
@@ -84,7 +86,7 @@ public struct SceneAuthoringView: View {
                              currentCardID: $currentCardID,
                              onDismiss: { self.populateAttachmentView() })
                     .onCardEdit(perform: onCardEdit),
-                isActive: $cardCreationIsPresented,
+                isActive: $isCardCreationPresented,
                 label: { EmptyView() })
         )
         .navigationBarHidden(hideNavBar)
@@ -95,8 +97,7 @@ public struct SceneAuthoringView: View {
         .fullScreenCover(isPresented: $isARExperiencePresented) {
             MarkerPositioningFlowView(arModel: arModel,
                                       cardItems: $cardItems,
-                                      attachments: $attachmentsMetadata,
-                                      onDismiss: { self.populateAttachmentView() },
+                                      attachmentsMetadata: $attachmentsMetadata,
                                       image: Image(uiImage: anchorImage!),
                                       cardAction: { _ in })
         }
@@ -109,10 +110,9 @@ public struct SceneAuthoringView: View {
             if let data = card.detailImage_, let uiImage = UIImage(data: data) {
                 detailImage = Image(uiImage: uiImage)
             }
-            
             let newAttachmentModel = AttachmentUIMetadata(id: UUID(uuidString: card.id) ?? UUID(),
                                                           title: card.title_,
-                                                          subtitle: card.position_ == nil ? "Not Pinned Yet" : "Pinned",
+                                                          subtitle: card.position_ == nil ? PinValue.notPinned.rawValue : PinValue.pinned.rawValue,
                                                           info: nil,
                                                           image: detailImage,
                                                           icon: card.icon_ == nil ? nil : Image(card.icon_!))
@@ -122,7 +122,9 @@ public struct SceneAuthoringView: View {
     
     func startAR() {
         if self.anchorImage != nil || !self.cardItems.isEmpty {
-            let vectorStrategy = VectorLoadingStrategy(cardContents: cardItems, anchorImage: anchorImage!, physicalWidth: physicalWidth!)
+            let vectorStrategy = VectorLoadingStrategy(cardContents: cardItems,
+                                                       anchorImage: anchorImage!,
+                                                       physicalWidth: CGFloat(Double(physicalWidth)! / 100.0))
             arModel.load(loadingStrategy: vectorStrategy)
             self.isARExperiencePresented.toggle()
         }
@@ -162,6 +164,11 @@ private struct TabbedView: View {
         }
         .contentShape(Rectangle())
     }
+}
+
+enum PinValue: String {
+    case pinned = "Pinned"
+    case notPinned = "Not Pinned Yet"
 }
 
 private enum TabSelection {
