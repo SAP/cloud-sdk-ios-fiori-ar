@@ -14,3 +14,7 @@ extension ModelEntity {
         return newEntity
     }
 }
+
+extension AnchorEntity {
+    static let cameraAnchor = "CameraAnchor"
+}
