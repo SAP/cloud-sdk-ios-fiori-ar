@@ -9,8 +9,8 @@ public enum SourceFileType: String, Codable, Equatable, CaseIterable {
 public struct ARScene {
     public var sceneId: String
     public var sourceFile: ARSceneSourceFile?
-    public var annotationAnchorImage: Image
-    public var annotationAnchorImagePysicalWidth: Double
+    public var annotationAnchorImage: UIImage
+    public var annotationAnchorImagePhysicalWidth: Double
     public var cards: [CodableCardItem]
 }
 

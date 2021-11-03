@@ -98,7 +98,7 @@ public struct SceneAuthoringView: View {
             MarkerPositioningFlowView(arModel: arModel,
                                       cardItems: $cardItems,
                                       attachmentsMetadata: $attachmentsMetadata,
-                                      image: Image(uiImage: anchorImage!),
+                                      image: anchorImage!,
                                       cardAction: { _ in })
         }
     }
@@ -120,13 +120,18 @@ public struct SceneAuthoringView: View {
         }
     }
     
+    // TODO: Validate CardContents and AnchorImage. MVP Solution Disable Buttons until required data is available.
     func startAR() {
-        if self.anchorImage != nil || !self.cardItems.isEmpty {
-            let vectorStrategy = VectorLoadingStrategy(cardContents: cardItems,
-                                                       anchorImage: anchorImage!,
-                                                       physicalWidth: CGFloat(Double(physicalWidth)! / 100.0))
-            arModel.load(loadingStrategy: vectorStrategy)
-            self.isARExperiencePresented.toggle()
+        if self.anchorImage != nil, !self.cardItems.isEmpty {
+            let vectorStrategy = VectorStrategy(cardContents: cardItems,
+                                                anchorImage: anchorImage!,
+                                                physicalWidth: CGFloat(Double(physicalWidth)! / 100.0))
+            do {
+                try self.arModel.load(loadingStrategy: vectorStrategy)
+                self.isARExperiencePresented.toggle()
+            } catch {
+                print(error)
+            }
         }
     }
 }
@@ -176,7 +181,7 @@ private enum TabSelection {
     case right
 }
 
-class AnnotationSceneAuthoringModel: ObservableObject {
+public class AnnotationSceneAuthoringModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var networkingAPI: ARCardsNetworkingService!
 

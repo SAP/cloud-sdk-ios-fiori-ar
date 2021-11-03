@@ -12,12 +12,12 @@ struct ARCardsJSONLoadingContentView: View {
     @StateObject var arModel = ARAnnotationViewModel<CodableCardItem>()
     
     var body: some View {
-        SingleImageARCardView(arModel: arModel,
-                              image: Image("qrImage"),
-                              cardAction: { id in
-                                  // set the card action for id corresponding to the CardItemModel
-                                  print(id)
-                              })
+        ARAnnotationsView(arModel: arModel,
+                          guideImage: UIImage(named: "qrImage"),
+                          cardAction: { id in
+                              // set the card action for id corresponding to the CardItemModel
+                              print(id)
+                          })
             .onAppear(perform: loadInitialData)
     }
     
@@ -28,7 +28,7 @@ struct ARCardsJSONLoadingContentView: View {
         do {
             let jsonData = try Data(contentsOf: jsonUrl)
             let strategy = try RealityFileStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, realityFilePath: realityFilePath, rcScene: "ExampleScene")
-            arModel.load(loadingStrategy: strategy)
+            try arModel.load(loadingStrategy: strategy)
         } catch {
             print(error)
         }

@@ -22,6 +22,9 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// The ScreenAnnotation that is focused on in the scene. The CardView and MarkerView will be in their selected states
     @Published public internal(set) var currentAnnotation: ScreenAnnotation<CardItem>?
     
+    /// The guideImage for the scanLabel retrieved from the AnnotationLoadingStrategy
+    @Published internal var guideImage: UIImage?
+    
     /// The position of the ARAnchor thats discovered
     @Published internal var anchorPosition: CGPoint?
     
@@ -81,9 +84,20 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     // MARK: Annotation Management
     
     /// Loads a strategy into the arModel and sets **annotations** member from the returned [ScreenAnnotation]
-    public func load<Strategy: AnnotationLoadingStrategy>(loadingStrategy: Strategy) where CardItem == Strategy.CardItem {
-        do { self.annotations = try loadingStrategy.load(with: self.arManager) } catch { print("Annotation Loading Error: \(error)") }
+    public func load<Strategy: AnnotationLoadingStrategy>(loadingStrategy: Strategy) throws where CardItem == Strategy.CardItem {
+        let sceneData = try loadingStrategy.load(with: self.arManager)
+        self.annotations = sceneData.annotations
+        self.guideImage = sceneData.guideImage ?? UIImage(systemName: "xmark.icloud")
         self.setSelectedAnnotation(for: self.annotations.first)
+    }
+    
+    /// Loads an asynchronous strategy into the arModel and sets **annotations** member from the returned [ScreenAnnotation]
+    public func loadAsync<Strategy: AsyncAnnotationLoadingStrategy>(loadingStrategy: Strategy) throws where CardItem == Strategy.CardItem {
+        try loadingStrategy.load(with: self.arManager, completionHandler: { annotations, guideImage in
+            self.annotations = annotations
+            self.guideImage = guideImage ?? UIImage(systemName: "xmark.icloud")
+            self.setSelectedAnnotation(for: self.annotations.first)
+        })
     }
     
     func updateCardItemPositions() {
@@ -122,7 +136,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     }
     
     func setSelectedAnnotation(for annotation: ScreenAnnotation<CardItem>?) {
-        if let annotation = annotation, let index = annotations.firstIndex(of: annotation) {
+        if let annotation = annotation, let index = annotations.firstIndex(where: { $0.id == annotation.id }) {
             self.annotations
                 .indices
                 .filter { $0 != index }

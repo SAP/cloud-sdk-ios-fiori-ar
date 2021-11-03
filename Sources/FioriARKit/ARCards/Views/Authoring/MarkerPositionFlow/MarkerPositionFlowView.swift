@@ -5,7 +5,6 @@
 //  Created by O'Brien, Patrick on 5/11/21.
 //
 
-import CoreML
 import FioriThemeManager
 import SwiftUI
 
@@ -288,13 +287,13 @@ extension MarkerPositioningFlowView where Scan == ARScanView,
     init(arModel: ARAnnotationViewModel<CardItem>,
          cardItems: Binding<[CardItem]>,
          attachmentsMetadata: Binding<[AttachmentUIMetadata]>,
-         image: Image,
+         image: UIImage,
          cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
                   cardItems: cardItems,
                   attachmentsMetadata: attachmentsMetadata,
-                  scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
+                  scanLabel: { anchorPosition in ARScanView(guideImage: image, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
     }

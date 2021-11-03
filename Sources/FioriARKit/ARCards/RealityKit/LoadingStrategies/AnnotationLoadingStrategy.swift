@@ -12,7 +12,13 @@ import RealityKit
 public protocol AnnotationLoadingStrategy {
     associatedtype CardItem: CardItemModel
     var cardContents: [CardItem] { get }
-    func load(with manager: ARManager) throws -> [ScreenAnnotation<CardItem>]
+    func load(with manager: ARManager) throws -> (annotations: [ScreenAnnotation<CardItem>], guideImage: UIImage?)
+}
+
+/// Protocol which defines the data an asynchronous strategy needs to provide a `[ScreenAnnotation]`
+public protocol AsyncAnnotationLoadingStrategy {
+    associatedtype CardItem: CardItemModel, Codable
+    func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CardItem>], UIImage?) -> Void) throws
 }
 
 internal protocol SceneLoadable where CardItem.ID: LosslessStringConvertible {
@@ -47,4 +53,12 @@ extension SceneLoadable {
 
         return annotations
     }
+}
+
+internal enum LoadingStrategyError: Error {
+    case anchorTypeNotSupportedError
+    case entityNotFoundError(LosslessStringConvertible)
+    case sceneLoadingFailedError
+    case jsonDecodingError
+    case base64DecodingError
 }

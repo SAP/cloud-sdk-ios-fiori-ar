@@ -12,12 +12,12 @@ struct ARCardsUSDZFileLoadingContentView: View {
     @StateObject var arModel = ARAnnotationViewModel<CodableCardItem>()
     
     var body: some View {
-        SingleImageARCardView(arModel: arModel,
-                              image: Image("qrImage"),
-                              cardAction: { id in
-                                  // set the card action for id corresponding to the CardItemModel
-                                  print(id)
-                              })
+        ARAnnotationsView(arModel: arModel,
+                          guideImage: UIImage(named: "qrImage"),
+                          cardAction: { id in
+                              // set the card action for id corresponding to the CardItemModel
+                              print(id)
+                          })
             .onAppear(perform: loadInitialDataFromUSDZFile)
     }
 
@@ -30,7 +30,7 @@ struct ARCardsUSDZFileLoadingContentView: View {
         do {
             let jsonData = try Data(contentsOf: jsonUrl)
             let strategy = try UsdzFileStrategy(jsonData: jsonData, anchorImage: anchorImage, physicalWidth: 0.1, usdzFilePath: absoluteUsdzPath)
-            arModel.load(loadingStrategy: strategy)
+            try arModel.load(loadingStrategy: strategy)
         } catch {
             print(error)
         }

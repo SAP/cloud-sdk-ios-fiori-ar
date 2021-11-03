@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2C27448F2644DBAB0088E5DC /* qrImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C27448E2644DBAB0088E5DC /* qrImage.png */; };
+		2C2C8861272C85F300E68413 /* ARCardsServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2C8860272C85F300E68413 /* ARCardsServiceView.swift */; };
 		2C3C67602674006B00B2B243 /* CarEngineRC1.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */; };
 		2C48248C264DC33300E230E6 /* CarEngineExampleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C48248B264DC33300E230E6 /* CarEngineExampleContentView.swift */; };
 		2C48248F264DC40600E230E6 /* StringIdentifyingCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C48248E264DC40600E230E6 /* StringIdentifyingCardItem.swift */; };
@@ -35,6 +36,7 @@
 
 /* Begin PBXFileReference section */
 		2C27448E2644DBAB0088E5DC /* qrImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qrImage.png; sourceTree = "<group>"; };
+		2C2C8860272C85F300E68413 /* ARCardsServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsServiceView.swift; sourceTree = "<group>"; };
 		2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = CarEngineRC1.rcproject; sourceTree = "<group>"; };
 		2C48248B264DC33300E230E6 /* CarEngineExampleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarEngineExampleContentView.swift; sourceTree = "<group>"; };
 		2C48248E264DC40600E230E6 /* StringIdentifyingCardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringIdentifyingCardItem.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				2CCF965A2682535000566523 /* ARCardsUSDZFileLoadingContentView.swift */,
 				2CC2A027268BFB8F0091C42B /* ARCardListView.swift */,
 				2C4A404526FEA11000D11A8F /* ARCardAuthoringContentView.swift */,
+				2C2C8860272C85F300E68413 /* ARCardsServiceView.swift */,
 			);
 			path = CardContentViews;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				2C48248F264DC40600E230E6 /* StringIdentifyingCardItem.swift in Sources */,
 				2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */,
 				2CDD909B26437E7A0076150D /* Tests.swift in Sources */,
+				2C2C8861272C85F300E68413 /* ARCardsServiceView.swift in Sources */,
 				8A6F605926EFFF6600FA9FD5 /* DemoARService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,12 +12,12 @@ struct CarEngineExampleContentView: View {
     @StateObject var arModel = ARAnnotationViewModel<StringIdentifyingCardItem>()
     
     var body: some View {
-        SingleImageARCardView(arModel: arModel,
-                              image: Image("carSticker"),
-                              cardAction: { id in
-                                  // set the card action for id corresponding to the CardItemModel
-                                  print(id)
-                              })
+        ARAnnotationsView(arModel: arModel,
+                          guideImage: UIImage(named: "qrImage"),
+                          cardAction: { id in
+                              // set the card action for id corresponding to the CardItemModel
+                              print(id)
+                          })
             .onAppear(perform: loadData)
     }
     
@@ -25,6 +25,10 @@ struct CarEngineExampleContentView: View {
         let cardItems = Tests.carEngineCardItems
         guard let anchorImage = UIImage(named: "carSticker") else { return }
         let strategy = RCProjectStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.15, rcFile: "CarEngineRC1", rcScene: "EngineScene")
-        arModel.load(loadingStrategy: strategy)
+        do {
+            try self.arModel.load(loadingStrategy: strategy)
+        } catch {
+            print(error)
+        }
     }
 }

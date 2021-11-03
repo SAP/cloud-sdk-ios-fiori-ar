@@ -12,23 +12,66 @@ import SwiftUI
  Scanning View which displays a collapsable image to display for anchor detection. The anchor is still detectable when uncollapsed and the View will fade out after detection.
  
   - Parameters:
-    - image: The image that is displayed in the View which represents a detectable anchor
+    - guideImage: The image that is displayed in the View which represents a detectable anchor, if the guideImage is nil a progressview will display
     - anchorPosition: The position of the anchor on screen after detection
  */
 
 public struct ARScanView: View {
-    let image: Image
+    @Binding var guideImage: UIImage?
     @Binding var anchorPosition: CGPoint?
+    
+    public init(guideImage: Binding<UIImage?>, anchorPosition: Binding<CGPoint?>) {
+        self._guideImage = guideImage
+        self._anchorPosition = anchorPosition
+    }
+    
+    /// Convenience init for when guideImage is always available at initialization
+    public init(guideImage: UIImage, anchorPosition: Binding<CGPoint?>) {
+        self.init(guideImage: .constant(guideImage), anchorPosition: anchorPosition)
+    }
     
     public var body: some View {
         ZStack {
             if anchorPosition != nil {
                 ImageMatchedView(anchorPosition: $anchorPosition)
+                
             } else {
-                CollapsingView(image: image)
+                if let image = guideImage {
+                    CollapsingView(image: Image(uiImage: image))
+                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 1)))
+                    
+                } else {
+                    VStack(spacing: 30) {
+                        ProgressView()
+                            .progressViewStyle(FioriNextProgressStyle())
+                            .frame(width: 200, height: 200)
+                        Text("Processing... May take a moment")
+                            .font(.system(size: 24))
+                            .foregroundColor(Color.white)
+                    }
+                }
             }
         }
         .animation(.easeInOut(duration: 1.2), value: anchorPosition)
+    }
+}
+
+// Placeholder Design for ProgressView
+struct FioriNextProgressStyle: ProgressViewStyle {
+    var strokeColor = Color.blue
+    var strokeWidth = 5
+    @State private var isAnimating: Bool = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        ZStack {
+            Circle()
+                .trim(from: 0, to: 0.25)
+                .stroke(strokeColor, style: StrokeStyle(lineWidth: CGFloat(strokeWidth), lineCap: .round))
+                .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                .animateOnAppear(animation: Animation.linear.repeatForever(autoreverses: false).speed(0.50)) {
+                    isAnimating.toggle()
+                }
+        }
     }
 }
 
