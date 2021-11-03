@@ -1,5 +1,5 @@
 //
-//  SingleImageARCardView.swift
+//  ARAnnotationsView.swift
 //
 //
 //  Created by O'Brien, Patrick on 5/11/21.
@@ -21,7 +21,7 @@ import SwiftUI
  ## Usage
  ```
  // Constructor for Default ScanningView, CardView, and MarkerView
- SingleImageARCardView(arModel: arModel,
+ ARAnnotationsView(arModel: arModel,
                        image: Image("qrImage"),
                        cardAction: { id in
                              // set the card action for id corresponding to the CardItemModel
@@ -31,7 +31,7 @@ import SwiftUI
  
  // Constructors with viewbuilders for each combination of Views
  // Use the CarouselOptions View Modifier to adjust the behavior of the Carousel
- SingleImageARCardView(arModel: arModel,
+ ARAnnotationsView(arModel: arModel,
                        scanLabel: { anchorPosition in
                            CustomScanView(image: Image("qrImage"), position: anchorPosition)
                        },
@@ -53,12 +53,12 @@ import SwiftUI
  ```
  */
 
-public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardItem>: View where CardItem: CardItemModel {
+public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>: View where CardItem: CardItemModel {
     /// arModel
     @ObservedObject public var arModel: ARAnnotationViewModel<CardItem>
     
     /// View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
-    public let scanLabel: (Binding<CGPoint?>) -> Scan
+    public let scanLabel: (Binding<UIImage?>, Binding<CGPoint?>) -> Scan
     
     /// View Builder for a custom CardView
     public let cardLabel: (CardItem, Bool) -> Card
@@ -66,12 +66,16 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
     /// ViewBuilder for a custom MarkerView
     public let markerLabel: (MarkerControl.State, Image?) -> Marker
     
+    let guideImage: UIImage?
+    
     public init(arModel: ARAnnotationViewModel<CardItem>,
-                @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
+                guideImage: UIImage? = nil,
+                @ViewBuilder scanLabel: @escaping (Binding<UIImage?>, Binding<CGPoint?>) -> Scan,
                 @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
                 @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
     {
         self.arModel = arModel
+        self.guideImage = guideImage
         self.scanLabel = scanLabel
         self.cardLabel = cardLabel
         self.markerLabel = markerLabel
@@ -85,7 +89,7 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
                 ARAnnotationContentView(arModel, cardLabel: cardLabel, markerLabel: markerLabel)
                 
             } else {
-                scanLabel($arModel.anchorPosition)
+                scanLabel(guideImage == nil ? $arModel.guideImage : .constant(guideImage), $arModel.anchorPosition)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -122,7 +126,7 @@ public struct SingleImageARCardView<Scan: View, Card: View, Marker: View, CardIt
     }
 }
 
-public extension SingleImageARCardView where Scan == ARScanView,
+public extension ARAnnotationsView where Scan == ARScanView,
     Card == CardView<Text,
         _ConditionalContent<Text, EmptyView>,
         _ConditionalContent<ImagePreview, DefaultIcon>,
@@ -130,49 +134,52 @@ public extension SingleImageARCardView where Scan == ARScanView,
     Marker == MarkerView
 {
     init(arModel: ARAnnotationViewModel<CardItem>,
-         image: Image,
+         guideImage: UIImage? = nil,
          cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
-                  scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
+                  guideImage: guideImage,
+                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
     }
 }
 
-public extension SingleImageARCardView where Scan == ARScanView,
+public extension ARAnnotationsView where Scan == ARScanView,
     Card == CardView<Text,
         _ConditionalContent<Text, EmptyView>,
         _ConditionalContent<ImagePreview, DefaultIcon>,
         _ConditionalContent<Text, EmptyView>, CardItem>
 {
     init(arModel: ARAnnotationViewModel<CardItem>,
-         image: Image,
+         guideImage: UIImage? = nil,
          @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
          cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
-                  scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
+                  guideImage: guideImage,
+                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: markerLabel)
     }
 }
 
-public extension SingleImageARCardView where Scan == ARScanView,
+public extension ARAnnotationsView where Scan == ARScanView,
     Marker == MarkerView
 {
     init(arModel: ARAnnotationViewModel<CardItem>,
-         image: Image,
+         guideImage: UIImage? = nil,
          @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
     {
         self.init(arModel: arModel,
-                  scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
+                  guideImage: guideImage,
+                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
                   cardLabel: cardLabel,
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
     }
 }
 
-public extension SingleImageARCardView where Card == CardView<Text,
+public extension ARAnnotationsView where Card == CardView<Text,
     _ConditionalContent<Text, EmptyView>,
     _ConditionalContent<ImagePreview, DefaultIcon>,
     _ConditionalContent<Text, EmptyView>,
@@ -180,32 +187,35 @@ public extension SingleImageARCardView where Card == CardView<Text,
     Marker == MarkerView
 {
     init(arModel: ARAnnotationViewModel<CardItem>,
-         @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
+         guideImage: UIImage? = nil,
+         @ViewBuilder scanLabel: @escaping (Binding<UIImage?>, Binding<CGPoint?>) -> Scan,
          cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
+                  guideImage: guideImage,
                   scanLabel: scanLabel,
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
     }
 }
 
-public extension SingleImageARCardView where Scan == ARScanView {
+public extension ARAnnotationsView where Scan == ARScanView {
     init(arModel: ARAnnotationViewModel<CardItem>,
-         image: Image,
+         guideImage: UIImage? = nil,
          @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
          @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
     {
         self.init(arModel: arModel,
-                  scanLabel: { anchorPosition in ARScanView(image: image, anchorPosition: anchorPosition) },
+                  guideImage: guideImage,
+                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
                   cardLabel: cardLabel,
                   markerLabel: markerLabel)
     }
 }
 
-public extension SingleImageARCardView where Marker == MarkerView {
+public extension ARAnnotationsView where Marker == MarkerView {
     init(arModel: ARAnnotationViewModel<CardItem>,
-         @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
+         @ViewBuilder scanLabel: @escaping (Binding<UIImage?>, Binding<CGPoint?>) -> Scan,
          @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
     {
         self.init(arModel: arModel,
@@ -215,14 +225,14 @@ public extension SingleImageARCardView where Marker == MarkerView {
     }
 }
 
-public extension SingleImageARCardView where Card == CardView<Text,
+public extension ARAnnotationsView where Card == CardView<Text,
     _ConditionalContent<Text, EmptyView>,
     _ConditionalContent<ImagePreview, DefaultIcon>,
     _ConditionalContent<Text, EmptyView>,
     CardItem>
 {
     init(arModel: ARAnnotationViewModel<CardItem>,
-         @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
+         @ViewBuilder scanLabel: @escaping (Binding<UIImage?>, Binding<CGPoint?>) -> Scan,
          @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
          cardAction: ((CardItem.ID) -> Void)?)
     {

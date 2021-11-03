@@ -238,8 +238,8 @@ public struct ARCardsNetworkingService {
                 if let f = sourceFile {
                     sourceFileUrl = try! self.save(sourceFile: f)
                 }
-
-                let arScene = ARScene(sceneId: scene.id, sourceFile: sourceFileUrl, annotationAnchorImage: Image("qrImage"), annotationAnchorImagePysicalWidth: scene.referenceAnchor?.physicalWidth ?? 0.1, cards: cards)
+                // TODO: annotation Anchor Image from ARService and changed to UIImage
+                let arScene = ARScene(sceneId: scene.id, sourceFile: sourceFileUrl, annotationAnchorImage: UIImage(named: "qrImage")!, annotationAnchorImagePhysicalWidth: scene.referenceAnchor?.physicalWidth ?? 0.1, cards: cards)
 
                 return Just(arScene)
                     .setFailureType(to: Error.self)

@@ -80,7 +80,7 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
          }
         ]
      */
-    public init(jsonData: Data, anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String, bundle: Bundle = Bundle.main) throws where CardItem == CodableCardItem {
+    public init(jsonData: Data, anchorImage: UIImage, physicalWidth: CGFloat? = nil, rcFile: String, rcScene: String, bundle: Bundle = Bundle.main) throws where CardItem == CodableCardItem {
         self.cardContents = try JSONDecoder().decode([CodableCardItem].self, from: jsonData)
         self.anchorImage = anchorImage
         self.physicalWidth = physicalWidth
@@ -90,18 +90,24 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
     }
     
     /// Loads the Reality Composer Scene and extracts the Entities pairing them with the data that corresponds to their ID into a list of `ScreenAnnotation`
-    public func load(with manager: ARManager) throws -> [ScreenAnnotation<CardItem>] {
+    public func load(with manager: ARManager) throws -> (annotations: [ScreenAnnotation<CardItem>], guideImage: UIImage?) {
         let scene = try RCScanner.loadScene(rcFileName: self.rcFile, sceneName: self.rcScene, bundle: self.bundle)
         let annotations = try syncCardContentsWithScene(manager: manager, anchorImage: anchorImage, physicalWidth: physicalWidth, scene: scene, cardContents: cardContents)
         
-        return annotations
+        return (annotations, self.anchorImage)
     }
 }
 
-internal enum LoadingStrategyError: Error {
-    case anchorTypeNotSupportedError
-    case entityNotFoundError(LosslessStringConvertible)
-    case sceneLoadingFailedError
-    case jsonDecodingError
-    case base64DecodingError
+// Retroactive Modeling Example to simulate delay
+extension RCProjectStrategy: AsyncAnnotationLoadingStrategy where CardItem: Codable {
+    public func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CardItem>], UIImage?) -> Void) throws {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+            do {
+                let sceneData = try load(with: manager)
+                completionHandler(sceneData.annotations, sceneData.guideImage)
+            } catch {
+                print(error)
+            }
+        }
+    }
 }

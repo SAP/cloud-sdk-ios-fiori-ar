@@ -265,18 +265,22 @@ public struct ImagePreview: View {
                     .readSize { size in
                         self.size = size
                     }
+                    .frame(width: geo.size.width, height: geo.size.height)
+                
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .blur(radius: 10)
                     .frame(width: geo.size.width, height: geo.size.height)
-                    
+
                 if size.width < geo.size.width, size.height < geo.size.height {
                     image
+                        .resizable()
+                        .scaledToFit()
                 } else {
                     image
                         .resizable()
-                        .aspectRatio(contentMode: .fit)
+                        .scaledToFill()
                 }
             }
             .frame(width: geo.size.width, height: geo.size.height)

@@ -12,16 +12,16 @@ struct ARCardsViewBuilderContentView: View {
     @StateObject var arModel = ARAnnotationViewModel<StringIdentifyingCardItem>()
     
     var body: some View {
-        SingleImageARCardView(arModel: arModel,
-                              scanLabel: { anchorPosition in
-                                  CustomScanView(image: Image("qrImage"), position: anchorPosition)
-                              },
-                              cardLabel: { cardmodel, isSelected in
-                                  CustomCardView(model: cardmodel, isSelected: isSelected)
-                              },
-                              markerLabel: { state, _ in
-                                  CustomMarkerView(state: state)
-                              })
+        ARAnnotationsView(arModel: arModel,
+                          scanLabel: { guideImage, anchorPosition in
+                              CustomScanView(guideImage: guideImage, position: anchorPosition)
+                          },
+                          cardLabel: { cardmodel, isSelected in
+                              CustomCardView(model: cardmodel, isSelected: isSelected)
+                          },
+                          markerLabel: { state, _ in
+                              CustomMarkerView(state: state)
+                          })
             .carouselOptions(CarouselOptions(itemSpacing: 5, carouselHeight: 200, alignment: .center))
             .onAppear(perform: loadInitialData)
     }
@@ -30,12 +30,16 @@ struct ARCardsViewBuilderContentView: View {
         let cardItems = Tests.carEngineCardItems
         guard let anchorImage = UIImage(named: "qrImage") else { return }
         let strategy = RCProjectStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, rcFile: "ExampleRC", rcScene: "ExampleScene")
-        arModel.load(loadingStrategy: strategy)
+        do {
+            try self.arModel.load(loadingStrategy: strategy)
+        } catch {
+            print(error)
+        }
     }
 }
 
 struct CustomScanView: View {
-    var image: Image
+    @Binding var guideImage: UIImage?
     @Binding var position: CGPoint?
     
     var body: some View {
@@ -53,10 +57,12 @@ struct CustomScanView: View {
             }
             VStack(spacing: 15) {
                 Spacer()
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 150)
+                if let image = guideImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150)
+                }
                 
                 Text("Discover this Image!")
                     .font(.system(size: 19))
@@ -75,7 +81,7 @@ struct CustomCardView<CardItem: CardItemModel>: View {
     var model: CardItem
     var isSelected: Bool
     @State var color: Color = .gray
-
+    
     var body: some View {
         VStack(spacing: 10) {
             Button("Change Color") {

@@ -81,10 +81,10 @@ public struct UsdzFileStrategy<CardItem: CardItemModel>: AnnotationLoadingStrate
     }
     
     /// Loads the USDZ Files Scene and extracts the Entities pairing them with the data that corresponds to their ID into a list of `ScreenAnnotation`
-    public func load(with manager: ARManager) throws -> [ScreenAnnotation<CardItem>] {
+    public func load(with manager: ARManager) throws -> (annotations: [ScreenAnnotation<CardItem>], guideImage: UIImage?) {
         let scene = try RCScanner.loadSceneFromUsdzFile(usdzFileURL: self.usdzFilePath)
         let annotations = try syncCardContentsWithScene(manager: manager, anchorImage: anchorImage, physicalWidth: physicalWidth, scene: scene, cardContents: cardContents)
         
-        return annotations
+        return (annotations, self.anchorImage)
     }
 }
