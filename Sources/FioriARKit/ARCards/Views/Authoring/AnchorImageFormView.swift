@@ -120,6 +120,9 @@ struct AnchorImageFormView: View {
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
         }
+        .onTapGesture(perform: {
+            hideKeyboard()
+        })
         .background(Color.fioriNextPrimaryBackground)
         .edgesIgnoringSafeArea(.all)
         .ignoresSafeArea(.keyboard)
