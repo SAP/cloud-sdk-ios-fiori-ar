@@ -47,7 +47,7 @@ public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAn
         
         self.networkingAPI
             .getScene(for: sceneID!)
-            .receive(on: DispatchQueue.global(qos: .userInitiated))
+            .receive(on: DispatchQueue.main) // initialization of RealityKit' ModelEntity needs to happen on main thread or otherwise the app crashes
             .sink { _ in
 
             } receiveValue: { scene in
