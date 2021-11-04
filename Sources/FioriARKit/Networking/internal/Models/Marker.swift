@@ -12,6 +12,34 @@ internal class Marker: APIModel {
         case document = "Document"
         case link = "Link"
         case info = "Info"
+
+        func sfSymbolName() -> String {
+            switch self {
+            case .play:
+                return "play.fill"
+            case .document:
+                return "book.fill"
+            case .link:
+                return "link"
+            case .info:
+                return "info"
+            }
+        }
+
+        static func create(from sfSymbolName: String) -> Marker.Icon? {
+            switch sfSymbolName {
+            case "play.fill":
+                return Icon.play
+            case "book.fill":
+                return Icon.document
+            case "link":
+                return Icon.link
+            case "info":
+                return Icon.info
+            default:
+                return nil
+            }
+        }
     }
 
     internal var icon: Icon?
