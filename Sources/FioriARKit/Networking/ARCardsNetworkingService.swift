@@ -229,7 +229,8 @@ public struct ARCardsNetworkingService {
                         subtitle_: anchor.card.description ?? "",
                         detailImage_: data,
                         actionText_: anchor.card.actionText,
-                        icon_: nil
+                        icon_: anchor.marker.icon?.sfSymbolName() ?? anchor.marker.iconIos,
+                        position_: ((anchor.relPositionx != nil) && (anchor.relPositiony != nil) && (anchor.relPositionz != nil)) ? SIMD3<Float>(x: Float(anchor.relPositionx!), y: Float(anchor.relPositiony!), z: Float(anchor.relPositionz!)) : nil
                     )
                     cards.append(card)
                 }
@@ -269,7 +270,7 @@ public struct ARCardsNetworkingService {
                     title: card.title_
                 ),
                 id: UUID().uuidString,
-                marker: Marker(icon: nil, iconAndroid: nil, iconIos: nil), // TODO: how to handle?
+                marker: (card.icon_ != nil) ? Marker(icon: Marker.Icon.create(from: card.icon_!), iconAndroid: nil, iconIos: card.icon_) :  Marker(icon: nil, iconAndroid: nil, iconIos: card.icon_),
                 sceneId: sceneId,
                 relPositionx: (card.position_ != nil) ? Double(card.position_!.x) : nil,
                 relPositiony: (card.position_ != nil) ? Double(card.position_!.y) : nil,
@@ -277,7 +278,6 @@ public struct ARCardsNetworkingService {
             )
         }
         let scene = Scene(id: sceneId, alias: nil, annotationAnchors: annotationAnchors, nameInSourceFile: nil, referenceAnchor: refAnchor, sourceFile: nil, sourceFileType: nil)
-        // let scene = ARScene(sceneId: sceneId, annotationAnchorImage: Image(systemName: "pencil"), annotationAnchorImagePysicalWidth: width, cards: cards)
         let jsonDataScene = try! JSONEncoder().encode(scene)
         let jsonStringScene = String(data: jsonDataScene, encoding: .utf8)!
 
