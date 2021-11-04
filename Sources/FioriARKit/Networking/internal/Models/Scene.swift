@@ -13,7 +13,7 @@ internal class Scene: APIModel {
         case usdz = "usdz"
     }
 
-    internal var id: String
+    internal var id: Int
 
     internal var alias: String?
 
@@ -28,7 +28,7 @@ internal class Scene: APIModel {
     /** Source File */
     internal var sourceFileType: SourceFileType?
 
-    internal init(id: String, alias: String? = nil, annotationAnchors: [AnnotationAnchor]? = nil, nameInSourceFile: String? = nil, referenceAnchor: ReferenceAnchor? = nil, sourceFile: String? = nil, sourceFileType: SourceFileType? = nil) {
+    internal init(id: Int, alias: String? = nil, annotationAnchors: [AnnotationAnchor]? = nil, nameInSourceFile: String? = nil, referenceAnchor: ReferenceAnchor? = nil, sourceFile: String? = nil, sourceFileType: SourceFileType? = nil) {
         self.id = id
         self.alias = alias
         self.annotationAnchors = annotationAnchors

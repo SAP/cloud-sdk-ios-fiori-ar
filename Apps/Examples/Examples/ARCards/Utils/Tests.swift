@@ -93,3 +93,15 @@ public enum Tests {
                                                                 actionText_: "Open App",
                                                                 icon_: "link")]
 }
+
+enum IntegrationTest {
+    enum System {
+        static let clientID = "8f444c29-58f1-4ea0-acc6-712479dec898"
+        static let authURL = "https://mobile-tenant3-integration-ins-ar-ios-testing.cfapps.sap.hana.ondemand.com/oauth2/api/v1/authorize"
+        static let redirectURL = "https://mobile-tenant3-integration-ins-ar-ios-testing.cfapps.sap.hana.ondemand.com"
+        static let tokenURL = "https://mobile-tenant3-integration-ins-ar-ios-testing.cfapps.sap.hana.ondemand.com/oauth2/api/v1/token"
+    }
+    enum TestData {
+        static let sceneId = 20201707
+    }
+}

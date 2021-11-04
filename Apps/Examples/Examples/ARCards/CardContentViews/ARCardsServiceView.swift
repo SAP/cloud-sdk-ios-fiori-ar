@@ -11,7 +11,17 @@ import SwiftUI
 
 struct ARCardsServiceView: View {
     @StateObject var arModel = ARAnnotationViewModel<CodableCardItem>()
-    
+    @StateObject var asyncStrategy = ServiceStrategy<CodableCardItem>(
+        serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
+        sapURLSession: SAPURLSession.createOAuthURLSession(
+            clientID: IntegrationTest.System.clientID,
+            authURL:  IntegrationTest.System.authURL,
+            redirectURL: IntegrationTest.System.redirectURL,
+            tokenURL: IntegrationTest.System.tokenURL
+        ),
+        sceneIdentifier: SceneIdentifier.sceneID(id: IntegrationTest.TestData.sceneId)
+    )
+
     var body: some View {
         ARAnnotationsView(arModel: arModel,
                           cardAction: { id in
@@ -22,18 +32,6 @@ struct ARCardsServiceView: View {
     }
     
     func loadInitialData() {
-        let session = SAPURLSession()
-        let sceneIdentifier = SceneIdentifier.sceneID(id: "12345")
-
-        // if user is not yet authenticated then webview will present IdP form
-        session.attachOAuthObserver(
-            clientID: "d7977a0b-c0d3-474c-8d7c-dfd1e3e5245b",
-            authURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/oauth2/api/v1/authorize",
-            redirectURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com",
-            tokenURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/oauth2/api/v1/token"
-        )
-        
-        let asyncStrategy = ServiceStrategy<CodableCardItem>(sapURLSession: session, sceneIdentifier: sceneIdentifier)
         do {
             try self.arModel.loadAsync(loadingStrategy: asyncStrategy)
         } catch {

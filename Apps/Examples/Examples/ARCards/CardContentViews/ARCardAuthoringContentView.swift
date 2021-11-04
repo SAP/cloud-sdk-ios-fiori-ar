@@ -17,19 +17,11 @@ struct ARCardAuthoringContentView: View {
                      CodableCardItem(id: UUID().uuidString, title_: "Gaal Dornick"),
                      CodableCardItem(id: UUID().uuidString, title_: "Hari Seldon")]
 
-    private var sapURLSession: SAPURLSession
-
-    init() {
-        self.sapURLSession = SAPURLSession()
-
-        // if user is not yet authenticated then webview will present IdP form
-        self.sapURLSession.attachOAuthObserver(
-            clientID: "d7977a0b-c0d3-474c-8d7c-dfd1e3e5245b",
-            authURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/oauth2/api/v1/authorize",
-            redirectURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com",
-            tokenURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/oauth2/api/v1/token"
-        )
-    }
+    private var sapURLSession: SAPURLSession = SAPURLSession.createOAuthURLSession(
+        clientID:  IntegrationTest.System.clientID,
+        authURL: IntegrationTest.System.authURL,
+        redirectURL: IntegrationTest.System.redirectURL,
+        tokenURL: IntegrationTest.System.tokenURL)
 
     var body: some View {
         SceneAuthoringView(cardItems, sapURLSession: sapURLSession)

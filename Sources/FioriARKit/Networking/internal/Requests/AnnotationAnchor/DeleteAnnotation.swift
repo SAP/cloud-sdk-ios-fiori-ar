@@ -17,12 +17,12 @@ extension ARService.AnnotationAnchor {
             internal struct Options {
 
                 /** ID of scene */
-                internal var sceneId: String
+                internal var sceneId: Int
 
                 /** ID of annotation anchor */
                 internal var id: String
 
-                internal init(sceneId: String, id: String) {
+                internal init(sceneId: Int, id: String) {
                     self.sceneId = sceneId
                     self.id = id
                 }
@@ -36,7 +36,7 @@ extension ARService.AnnotationAnchor {
             }
 
             /// convenience initialiser so an Option doesn't have to be created
-            internal convenience init(sceneId: String, id: String) {
+            internal convenience init(sceneId: Int, id: String) {
                 let options = Options(sceneId: sceneId, id: id)
                 self.init(options: options)
             }
@@ -47,10 +47,10 @@ extension ARService.AnnotationAnchor {
         }
 
         internal enum Response: APIResponseValue, CustomStringConvertible, CustomDebugStringConvertible {
-            internal typealias SuccessType = String
+            internal typealias SuccessType = Void
 
             /** successful operation */
-            case status204(String)
+            case status204
 
             /** Business user is not authenticated */
             case status401
@@ -67,16 +67,15 @@ extension ARService.AnnotationAnchor {
             /** Server internal error */
             case status500
 
-            internal var success: String? {
+            internal var success: Void? {
                 switch self {
-                case .status204(let response): return response
+                case .status204: return ()
                 default: return nil
                 }
             }
 
             internal var response: Any {
                 switch self {
-                case .status204(let response): return response
                 default: return ()
                 }
             }
@@ -105,7 +104,7 @@ extension ARService.AnnotationAnchor {
 
             internal init(statusCode: Int, data: Data, decoder: ResponseDecoder) throws {
                 switch statusCode {
-                case 204: self = try .status204(decoder.decode(String.self, from: data))
+                case 204: self = .status204
                 case 401: self = .status401
                 case 403: self = .status403
                 case 404: self = .status404

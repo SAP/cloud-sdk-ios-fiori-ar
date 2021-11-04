@@ -21,12 +21,12 @@ extension ARService.Scene {
             internal struct Options {
 
                 /** ID of scene to return */
-                internal var sceneId: String
+                internal var sceneId: Int
 
                 /** Language */
                 internal var language: String?
 
-                internal init(sceneId: String, language: String? = nil) {
+                internal init(sceneId: Int, language: String? = nil) {
                     self.sceneId = sceneId
                     self.language = language
                 }
@@ -40,7 +40,7 @@ extension ARService.Scene {
             }
 
             /// convenience initialiser so an Option doesn't have to be created
-            internal convenience init(sceneId: String, language: String? = nil) {
+            internal convenience init(sceneId: Int, language: String? = nil) {
                 let options = Options(sceneId: sceneId, language: language)
                 self.init(options: options)
             }

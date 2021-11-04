@@ -14,18 +14,20 @@ import SwiftUI
 
 /// Identifier for which scene the ARService fetches
 public enum SceneIdentifier {
-    case sceneID(id: String)
+    case sceneID(id: Int)
     case sceneAlias(alias: String)
 }
 
-public struct ServiceStrategy<CardItem: CardItemModel>: AsyncAnnotationLoadingStrategy where CardItem: Codable {
+public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAnnotationLoadingStrategy where CardItem: Codable {
     public var networkingAPI: ARCardsNetworkingService
     public var sceneIdentifier: SceneIdentifier
     
     var arscene: ARScene?
+
+    private var cancellables = Set<AnyCancellable>()
     
-    public init(sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifier) {
-        self.networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/augmentedreality/v1")
+    public init(serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifier) {
+        self.networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
         self.sceneIdentifier = sceneIdentifier
     }
     
@@ -33,7 +35,7 @@ public struct ServiceStrategy<CardItem: CardItemModel>: AsyncAnnotationLoadingSt
         var annotations = [ScreenAnnotation<CodableCardItem>]()
         
         // Improve logic after ARService refactoring
-        var sceneID: String?
+        var sceneID: Int?
         var sceneAlias: String?
         
         switch self.sceneIdentifier {
@@ -43,7 +45,7 @@ public struct ServiceStrategy<CardItem: CardItemModel>: AsyncAnnotationLoadingSt
             sceneAlias = alias
         }
         
-        _ = self.networkingAPI
+        self.networkingAPI
             .getScene(for: sceneID!)
             .receive(on: DispatchQueue.global(qos: .userInitiated))
             .sink { _ in
@@ -66,5 +68,6 @@ public struct ServiceStrategy<CardItem: CardItemModel>: AsyncAnnotationLoadingSt
                 
                 completionHandler(annotations, scene.annotationAnchorImage)
             }
+            .store(in: &self.cancellables)
     }
 }
