@@ -27,6 +27,6 @@ internal struct ARService {
 
     internal enum Server {
 
-        internal static let main = "/"
+        internal static let main = "/augmentedreality/v1/runtime"
     }
 }

@@ -7,7 +7,7 @@ public enum SourceFileType: String, Codable, Equatable, CaseIterable {
 }
 
 public struct ARScene {
-    public var sceneId: String
+    public var sceneId: Int
     public var sourceFile: ARSceneSourceFile?
     public var annotationAnchorImage: UIImage
     public var annotationAnchorImagePhysicalWidth: Double
@@ -30,6 +30,7 @@ public enum ARCardsNetworkingServiceError: Error {
     case serverError(Error)
     case networkError(Error)
     case unknownError(Error)
+    case sceneCreatedButUnknownId
     case notFound
     case cannotBeSaved
 }

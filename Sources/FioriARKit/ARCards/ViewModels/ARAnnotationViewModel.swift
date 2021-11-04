@@ -94,9 +94,11 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// Loads an asynchronous strategy into the arModel and sets **annotations** member from the returned [ScreenAnnotation]
     public func loadAsync<Strategy: AsyncAnnotationLoadingStrategy>(loadingStrategy: Strategy) throws where CardItem == Strategy.CardItem {
         try loadingStrategy.load(with: self.arManager, completionHandler: { annotations, guideImage in
-            self.annotations = annotations
-            self.guideImage = guideImage ?? UIImage(systemName: "xmark.icloud")
-            self.setSelectedAnnotation(for: self.annotations.first)
+            DispatchQueue.main.async {
+                self.annotations = annotations
+                self.guideImage = guideImage ?? UIImage(systemName: "xmark.icloud")
+                self.setSelectedAnnotation(for: self.annotations.first)
+            }
         })
     }
     

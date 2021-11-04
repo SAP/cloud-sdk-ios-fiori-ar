@@ -31,7 +31,7 @@ public struct SceneAuthoringView: View {
     
     public init(_ cardItems: [CodableCardItem] = [], sapURLSession: SAPURLSession) {
         _cardItems = State(initialValue: cardItems)
-        let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/augmentedreality/v1")
+        let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com")
         // TODO: refactor baseURL out of SDK
         _networkModel = StateObject(wrappedValue: AnnotationSceneAuthoringModel(networkingAPI: networkingAPI))
         _arModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
