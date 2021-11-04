@@ -17,12 +17,12 @@ extension ARService.AnnotationAnchor {
             internal struct Options {
 
                 /** ID of scene */
-                internal var sceneId: String
+                internal var sceneId: Int
 
                 /** ID of annotation anchor */
                 internal var id: String
 
-                internal init(sceneId: String, id: String) {
+                internal init(sceneId: Int, id: String) {
                     self.sceneId = sceneId
                     self.id = id
                 }
@@ -41,7 +41,7 @@ extension ARService.AnnotationAnchor {
             }
 
             /// convenience initialiser so an Option doesn't have to be created
-            internal convenience init(sceneId: String, id: String, body: AnnotationAnchor) {
+            internal convenience init(sceneId: Int, id: String, body: AnnotationAnchor) {
                 let options = Options(sceneId: sceneId, id: id)
                 self.init(body: body, options: options)
             }
@@ -52,10 +52,10 @@ extension ARService.AnnotationAnchor {
         }
 
         internal enum Response: APIResponseValue, CustomStringConvertible, CustomDebugStringConvertible {
-            internal typealias SuccessType = AnnotationAnchor
+            internal typealias SuccessType = String
 
             /** successful operation */
-            case status200(AnnotationAnchor)
+            case status200(String)
 
             /** Invalid input such as: body is invalid json format, body is missing required property or value, sceneId value is not consistent, change or add card language */
             case status400
@@ -72,7 +72,7 @@ extension ARService.AnnotationAnchor {
             /** Server internal error */
             case status500
 
-            internal var success: AnnotationAnchor? {
+            internal var success: String? {
                 switch self {
                 case .status200(let response): return response
                 default: return nil
@@ -110,7 +110,7 @@ extension ARService.AnnotationAnchor {
 
             internal init(statusCode: Int, data: Data, decoder: ResponseDecoder) throws {
                 switch statusCode {
-                case 200: self = try .status200(decoder.decode(AnnotationAnchor.self, from: data))
+                case 200: self = try .status200(decoder.decode(String.self, from: data))
                 case 400: self = .status400
                 case 401: self = .status401
                 case 404: self = .status404

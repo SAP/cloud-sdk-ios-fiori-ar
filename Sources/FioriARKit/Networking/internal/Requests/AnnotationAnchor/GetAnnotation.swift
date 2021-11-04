@@ -17,7 +17,7 @@ extension ARService.AnnotationAnchor {
             internal struct Options {
 
                 /** ID of scene */
-                internal var sceneId: String
+                internal var sceneId: Int
 
                 /** ID of annotation anchor */
                 internal var id: String
@@ -25,7 +25,7 @@ extension ARService.AnnotationAnchor {
                 /** Language */
                 internal var language: String?
 
-                internal init(sceneId: String, id: String, language: String? = nil) {
+                internal init(sceneId: Int, id: String, language: String? = nil) {
                     self.sceneId = sceneId
                     self.id = id
                     self.language = language
@@ -40,7 +40,7 @@ extension ARService.AnnotationAnchor {
             }
 
             /// convenience initialiser so an Option doesn't have to be created
-            internal convenience init(sceneId: String, id: String, language: String? = nil) {
+            internal convenience init(sceneId: Int, id: String, language: String? = nil) {
                 let options = Options(sceneId: sceneId, id: id, language: language)
                 self.init(options: options)
             }

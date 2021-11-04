@@ -231,7 +231,7 @@ internal extension APIClient {
 extension APIRequest {
 
     internal func createURLRequest(baseURL: URL, encoder: RequestEncoder = JSONEncoder()) throws -> URLRequest {
-        var urlRequest = URLRequest(url: baseURL.appendingPathComponent(path))
+        var urlRequest = URLRequest(url: baseURL.appendingPathComponent(ARService.Server.main).appendingPathComponent(path))
         urlRequest.httpMethod = service.method
         urlRequest.allHTTPHeaderFields = headers
 

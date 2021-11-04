@@ -5,22 +5,19 @@ import SwiftUI
 
 struct DemoARService: View {
     @State private var uiImage: UIImage? = nil
-    private var sceneId = "A4A77E02-1C16-434F-AE04-A951EA2C6633"
+    private var sceneId = IntegrationTest.TestData.sceneId
     private var networkingAPI: ARCardsNetworkingService
     @ObservedObject private var model: DemoARServiceModel
     
     init() {
-        let sapURLSession = SAPURLSession()
+        let sapURLSession = SAPURLSession.createOAuthURLSession(
+            clientID:  IntegrationTest.System.clientID,
+            authURL: IntegrationTest.System.authURL,
+            redirectURL: IntegrationTest.System.redirectURL,
+            tokenURL: IntegrationTest.System.tokenURL)
+
         
-        // if user is not yet authenticated then webview will present IdP form
-        sapURLSession.attachOAuthObserver(
-            clientID: "d7977a0b-c0d3-474c-8d7c-dfd1e3e5245b",
-            authURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/oauth2/api/v1/authorize",
-            redirectURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com",
-            tokenURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/oauth2/api/v1/token"
-        )
-        
-        self.networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/augmentedreality/v1")
+        self.networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: IntegrationTest.System.redirectURL)
 
         self.model = DemoARServiceModel(networkingAPI: self.networkingAPI)
     }
@@ -75,6 +72,12 @@ struct DemoARService_Previews: PreviewProvider {
 }
 
 extension SAPURLSession {
+    static func createOAuthURLSession(clientID: String, authURL: String, redirectURL: String, tokenURL: String) -> SAPURLSession {
+        let session = SAPURLSession()
+        session.attachOAuthObserver(clientID: clientID, authURL: authURL, redirectURL: redirectURL, tokenURL: tokenURL)
+        return session
+    }
+
     func attachOAuthObserver(clientID: String, authURL: String, redirectURL: String, tokenURL: String) {
         let secureKeyValueStore = SecureKeyValueStore()
         try! secureKeyValueStore.open(with: "downloadAR_secure_store")
@@ -117,7 +120,7 @@ class DemoARServiceModel: ObservableObject {
         self.networkingAPI = networkingAPI
     }
 
-    func loadData(for sceneId: String) {
+    func loadData(for sceneId: Int) {
         self.loadingStatus = .inProgress
         //        self.networkingAPI.getCards(for: sceneId)
         //            .receive(on: DispatchQueue.main)

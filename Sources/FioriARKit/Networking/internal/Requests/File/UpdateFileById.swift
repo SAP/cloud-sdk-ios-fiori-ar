@@ -14,11 +14,14 @@ extension ARService.File {
     */
     internal enum UpdateFileById {
 
-        internal static let service = APIService<Response>(id: "updateFileById", tag: "file", method: "PUT", path: "/file/{fileId}", hasBody: true, isUpload: true)
+        internal static let service = APIService<Response>(id: "updateFileById", tag: "file", method: "PUT", path: "/scene/{sceneId}/file/{fileId}", hasBody: true, isUpload: true)
 
         internal final class Request: APIRequest<Response> {
 
             internal struct Options {
+
+                /** ID of scene */
+                internal var sceneId: Int
 
                 /** ID of file */
                 internal var fileId: String
@@ -26,7 +29,8 @@ extension ARService.File {
                 /** File to be uploaded for scene */
                 internal var file: File
 
-                internal init(fileId: String, file: File) {
+                internal init(sceneId: Int, fileId: String, file: File) {
+                    self.sceneId = sceneId
                     self.fileId = fileId
                     self.file = file
                 }
@@ -40,13 +44,13 @@ extension ARService.File {
             }
 
             /// convenience initialiser so an Option doesn't have to be created
-            internal convenience init(fileId: String, file: File) {
-                let options = Options(fileId: fileId, file: file)
+            internal convenience init(sceneId: Int, fileId: String, file: File) {
+                let options = Options(sceneId: sceneId, fileId: fileId, file: file)
                 self.init(options: options)
             }
 
             internal override var path: String {
-                return super.path.replacingOccurrences(of: "{" + "fileId" + "}", with: "\(self.options.fileId)")
+                return super.path.replacingOccurrences(of: "{" + "sceneId" + "}", with: "\(self.options.sceneId)").replacingOccurrences(of: "{" + "fileId" + "}", with: "\(self.options.fileId)")
             }
 
             internal override var formParameters: [String: Any] {

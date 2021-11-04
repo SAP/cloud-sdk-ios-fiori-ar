@@ -24,7 +24,7 @@ public struct ARCardsNetworkingService {
 
     // MARK: getCards - CompletionHandler
 
-    internal func getUnresolvedAnnotationAnchors(for sceneId: String, completionHandler: @escaping (Result<[AnnotationAnchor], ARCardsNetworkingServiceError>) -> Void) {
+    internal func getUnresolvedAnnotationAnchors(for sceneId: Int, completionHandler: @escaping (Result<[AnnotationAnchor], ARCardsNetworkingServiceError>) -> Void) {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         api.makeRequest(ARService.Scene.GetSceneById.Request(sceneId: sceneId, language: nil)) { response in
             switch response.result {
@@ -46,9 +46,9 @@ public struct ARCardsNetworkingService {
 
     // MARK: getImage - CompletionHandler
 
-    public func getImage(fileId id: String, completionHandler: @escaping (Result<UIImage?, ARCardsNetworkingServiceError>) -> Void) {
+    public func getImage(fileId id: String, sceneId: Int, completionHandler: @escaping (Result<UIImage?, ARCardsNetworkingServiceError>) -> Void) {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
-        api.makeRequest(ARService.File.GetFileById.Request(fileId: id)) { response in
+        api.makeRequest(ARService.File.GetFileById.Request(sceneId: sceneId, fileId: id)) { response in
             switch response.result {
             case .success(let data):
                 guard data.successful, let imageData = data.success else { return completionHandler(.success(nil)) }
@@ -61,9 +61,9 @@ public struct ARCardsNetworkingService {
 
     // MARK: getImage - Combine
 
-    public func getImage(fileId id: String) -> AnyPublisher<FileImage, Error> {
+    public func getImage(fileId id: String, sceneId: Int) -> AnyPublisher<FileImage, Error> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
-        return api.makeRequest(ARService.File.GetFileById.Request(fileId: id))
+        return api.makeRequest(ARService.File.GetFileById.Request(sceneId: sceneId, fileId: id))
             .tryMap { response in
                 switch response.result {
                 case .success(let data):
@@ -79,9 +79,9 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    internal func getFile(fileId id: String) -> AnyPublisher<FileData, Error> {
+    internal func getFile(fileId id: String, sceneId: Int) -> AnyPublisher<FileData, Error> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
-        return api.makeRequest(ARService.File.GetFileById.Request(fileId: id))
+        return api.makeRequest(ARService.File.GetFileById.Request(sceneId: sceneId, fileId: id))
             .tryMap { response in
                 switch response.result {
                 case .success(let data):
@@ -99,7 +99,7 @@ public struct ARCardsNetworkingService {
 
     internal func getSourceFile(for scene: Scene) -> AnyPublisher<ARSceneSourceFileWithData?, Error> {
         if let fileId = scene.sourceFile {
-            return self.getFile(fileId: fileId)
+            return self.getFile(fileId: fileId, sceneId: scene.id)
                 .map { result in
                     ARSceneSourceFileWithData(id: fileId, type: SourceFileType(rawValue: scene.sourceFileType!.rawValue)!, data: result.data!)
                 }
@@ -121,7 +121,7 @@ public struct ARCardsNetworkingService {
     ///   - sceneId: uautoupdatingCurrent niqiue identifier for a scene describing an argument reality experience with annotations
     ///   - language: for which texts shall be returned (ISO-631-1)
     /// - Returns: AR cards (incl. image data if available)
-    public func getCards(for sceneId: String, language: String = NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en") -> AnyPublisher<[CodableCardItem], Error> {
+    public func getCards(for sceneId: Int, language: String = NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en") -> AnyPublisher<[CodableCardItem], Error> {
         let scenePublisher = self.getUnresolvedScene(for: sceneId, language: language)
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
@@ -139,7 +139,7 @@ public struct ARCardsNetworkingService {
                 anchor.card.image
             }
             .flatMap { fileId -> AnyPublisher<FileImage, Error> in
-                self.getImage(fileId: fileId)
+                self.getImage(fileId: fileId, sceneId: sceneId)
                     .eraseToAnyPublisher()
             }
             .collect()
@@ -158,7 +158,7 @@ public struct ARCardsNetworkingService {
                     }
 
                     let card = CodableCardItem(
-                        id: anchor.id ?? UUID().uuidString,
+                        id: anchor.id,
                         title_: anchor.card.title ?? "",
                         subtitle_: anchor.card.description ?? "",
                         detailImage_: data,
@@ -176,7 +176,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    public func getScene(for sceneId: String, language: String = NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en") -> AnyPublisher<ARScene, Error> {
+    public func getScene(for sceneId: Int, language: String = NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en") -> AnyPublisher<ARScene, Error> {
         let scenePublisher = self.getUnresolvedScene(for: sceneId, language: language)
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
@@ -205,7 +205,7 @@ public struct ARCardsNetworkingService {
                 anchor.card.image
             }
             .flatMap { fileId -> AnyPublisher<FileImage, Error> in
-                self.getImage(fileId: fileId)
+                self.getImage(fileId: fileId, sceneId: sceneId)
                     .eraseToAnyPublisher()
             }
             .collect()
@@ -224,7 +224,7 @@ public struct ARCardsNetworkingService {
                     }
 
                     let card = CodableCardItem(
-                        id: anchor.id ?? UUID().uuidString,
+                        id: anchor.id,
                         title_: anchor.card.title ?? "",
                         subtitle_: anchor.card.description ?? "",
                         detailImage_: data,
@@ -250,8 +250,8 @@ public struct ARCardsNetworkingService {
 
     // MARK: createScene - Combine
 
-    public func createScene(identfiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, cards: [CodableCardItem]) -> AnyPublisher<String, Error> {
-        let sceneId = UUID().uuidString
+    public func createScene(identfiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, cards: [CodableCardItem]) -> AnyPublisher<Int, Error> {
+        let sceneId = 123
         let imageAnchorFormDataName = UUID().uuidString
         let imageAnchorFileName = "qrImage.png"
 
@@ -268,9 +268,9 @@ public struct ARCardsNetworkingService {
                     image: nil,
                     title: card.title_
                 ),
+                id: "123",
                 marker: Marker(icon: nil, iconAndroid: nil, iconIos: nil), // TODO: how to handle?
                 sceneId: sceneId,
-                id: UUID().uuidString,
                 relPositionx: (card.position_ != nil) ? Double(card.position_!.x) : nil,
                 relPositiony: (card.position_ != nil) ? Double(card.position_!.y) : nil,
                 relPositionz: (card.position_ != nil) ? Double(card.position_!.z) : nil
@@ -290,7 +290,7 @@ public struct ARCardsNetworkingService {
             .tryMap { response in
                 switch response.result {
                 case .success(let data):
-                    guard data.successful, let createdScene = data.success else { return "" }
+                    guard data.successful, let createdScene = data.success else { throw ARCardsNetworkingServiceError.sceneCreatedButUnknownId }
                     return createdScene.id
                 case .failure(let apiClientError):
                     throw apiClientError
@@ -321,7 +321,7 @@ public struct ARCardsNetworkingService {
         return ARSceneSourceFile(id: sourceFile.id, type: sourceFile.type, localUrl: localFileURL)
     }
 
-    internal func getUnresolvedScene(for sceneId: String, language: String) -> AnyPublisher<Scene, ARCardsNetworkingServiceError> {
+    internal func getUnresolvedScene(for sceneId: Int, language: String) -> AnyPublisher<Scene, ARCardsNetworkingServiceError> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         return api.makeRequest(ARService.Scene.GetSceneById.Request(sceneId: sceneId, language: language))
             .tryMap { response in
@@ -341,7 +341,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    internal func getUnresolvedAnnotationAnchors(for sceneId: String, language: String) -> AnyPublisher<[AnnotationAnchor], ARCardsNetworkingServiceError> {
+    internal func getUnresolvedAnnotationAnchors(for sceneId: Int, language: String) -> AnyPublisher<[AnnotationAnchor], ARCardsNetworkingServiceError> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         return api.makeRequest(ARService.Scene.GetSceneById.Request(sceneId: sceneId, language: language))
             .tryMap { response in

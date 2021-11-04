@@ -14,16 +14,20 @@ extension ARService.File {
     */
     internal enum GetFileById {
 
-        internal static let service = APIService<Response>(id: "getFileById", tag: "file", method: "GET", path: "/file/{fileId}", hasBody: false)
+        internal static let service = APIService<Response>(id: "getFileById", tag: "file", method: "GET", path: "/scene/{sceneId}/file/{fileId}", hasBody: false)
 
         internal final class Request: APIRequest<Response> {
 
             internal struct Options {
 
+                /** ID of scene */
+                internal var sceneId: Int
+
                 /** ID of file */
                 internal var fileId: String
 
-                internal init(fileId: String) {
+                internal init(sceneId: Int, fileId: String) {
+                    self.sceneId = sceneId
                     self.fileId = fileId
                 }
             }
@@ -36,13 +40,13 @@ extension ARService.File {
             }
 
             /// convenience initialiser so an Option doesn't have to be created
-            internal convenience init(fileId: String) {
-                let options = Options(fileId: fileId)
+            internal convenience init(sceneId: Int, fileId: String) {
+                let options = Options(sceneId: sceneId, fileId: fileId)
                 self.init(options: options)
             }
 
             internal override var path: String {
-                return super.path.replacingOccurrences(of: "{" + "fileId" + "}", with: "\(self.options.fileId)")
+                return super.path.replacingOccurrences(of: "{" + "sceneId" + "}", with: "\(self.options.sceneId)").replacingOccurrences(of: "{" + "fileId" + "}", with: "\(self.options.fileId)")
             }
         }
 
@@ -100,7 +104,7 @@ extension ARService.File {
 
             internal init(statusCode: Int, data: Data, decoder: ResponseDecoder) throws {
                 switch statusCode {
-                case 200: self = try .status200(data)
+                case 200: self = .status200(data)
                 case 401: self = .status401
                 case 404: self = .status404
                 case 405: self = .status405
