@@ -102,6 +102,6 @@ enum IntegrationTest {
         static let tokenURL = "https://mobile-tenant3-integration-ins-ar-ios-testing.cfapps.sap.hana.ondemand.com/oauth2/api/v1/token"
     }
     enum TestData {
-        static let sceneId = 20201709//20201707
+        static let sceneId = 20201712 // also 20201711 (multiple cards) and scene 20201707 (was assembled and posted on desktop (JSON))
     }
 }
