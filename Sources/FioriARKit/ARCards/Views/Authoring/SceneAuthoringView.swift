@@ -29,10 +29,9 @@ public struct SceneAuthoringView: View {
     @State private var attachmentsMetadata: [AttachmentUIMetadata] = []
     @State private var currentCardID: UUID? = nil
     
-    public init(_ cardItems: [CodableCardItem] = [], sapURLSession: SAPURLSession) {
+    public init(_ cardItems: [CodableCardItem] = [], serviceURL: URL, sapURLSession: SAPURLSession) {
         _cardItems = State(initialValue: cardItems)
-        let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com")
-        // TODO: refactor baseURL out of SDK
+        let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
         _networkModel = StateObject(wrappedValue: AnnotationSceneAuthoringModel(networkingAPI: networkingAPI))
         _arModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
     }
