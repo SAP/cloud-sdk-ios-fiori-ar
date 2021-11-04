@@ -24,7 +24,7 @@ struct ARCardAuthoringContentView: View {
         tokenURL: IntegrationTest.System.tokenURL)
 
     var body: some View {
-        SceneAuthoringView(cardItems, sapURLSession: sapURLSession)
+        SceneAuthoringView(cardItems, serviceURL: URL(string: IntegrationTest.System.redirectURL)!, sapURLSession: sapURLSession)
             .onCardEdit { cardEdit in
                 switch cardEdit {
                 case .created(let card):
