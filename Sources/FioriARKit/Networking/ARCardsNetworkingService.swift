@@ -268,7 +268,7 @@ public struct ARCardsNetworkingService {
                     image: nil,
                     title: card.title_
                 ),
-                id: "123",
+                id: UUID().uuidString,
                 marker: Marker(icon: nil, iconAndroid: nil, iconIos: nil), // TODO: how to handle?
                 sceneId: sceneId,
                 relPositionx: (card.position_ != nil) ? Double(card.position_!.x) : nil,
@@ -290,8 +290,11 @@ public struct ARCardsNetworkingService {
             .tryMap { response in
                 switch response.result {
                 case .success(let data):
-                    guard data.successful, let createdScene = data.success else { throw ARCardsNetworkingServiceError.sceneCreatedButUnknownId }
-                    return createdScene.id
+                    if let createdScene = data.success {
+                        return createdScene.id
+                    } else {
+                        throw APIClientError.unexpectedStatusCode(statusCode: data.statusCode)
+                    }
                 case .failure(let apiClientError):
                     throw apiClientError
                 }

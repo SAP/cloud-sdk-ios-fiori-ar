@@ -6,7 +6,7 @@
 import Foundation
 
 internal enum APIClientError: Error {
-    case unexpectedStatusCode(statusCode: Int, data: Data)
+    case unexpectedStatusCode(statusCode: Int, data: Data? = nil)
 	case encodingError(Error)
     case decodingError(DecodingError)
     case requestEncodingError(Error)
