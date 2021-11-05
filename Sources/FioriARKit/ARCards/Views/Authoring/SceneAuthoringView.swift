@@ -199,7 +199,12 @@ public class AnnotationSceneAuthoringModel: ObservableObject {
         )
         .receive(on: DispatchQueue.main)
         .sink { completion in
-            print(completion)
+            switch completion {
+            case .finished:
+                print(completion)
+            case .failure(let error):
+                print("Creating scene failed! \(error.localizedDescription)")
+            }
         } receiveValue: { createdSceneId in
             print("Scene with id \(createdSceneId) created")
         }
