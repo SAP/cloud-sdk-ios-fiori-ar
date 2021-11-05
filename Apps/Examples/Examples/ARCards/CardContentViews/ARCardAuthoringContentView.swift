@@ -17,11 +17,12 @@ struct ARCardAuthoringContentView: View {
                      CodableCardItem(id: UUID().uuidString, title_: "Gaal Dornick"),
                      CodableCardItem(id: UUID().uuidString, title_: "Hari Seldon")]
 
-    private var sapURLSession: SAPURLSession = SAPURLSession.createOAuthURLSession(
-        clientID:  IntegrationTest.System.clientID,
+    private var sapURLSession = SAPURLSession.createOAuthURLSession(
+        clientID: IntegrationTest.System.clientID,
         authURL: IntegrationTest.System.authURL,
         redirectURL: IntegrationTest.System.redirectURL,
-        tokenURL: IntegrationTest.System.tokenURL)
+        tokenURL: IntegrationTest.System.tokenURL
+    )
 
     var body: some View {
         SceneAuthoringView(cardItems, serviceURL: URL(string: IntegrationTest.System.redirectURL)!, sapURLSession: sapURLSession)

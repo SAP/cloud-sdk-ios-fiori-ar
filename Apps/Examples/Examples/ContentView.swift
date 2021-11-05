@@ -22,7 +22,7 @@ struct ContentView: View {
 
                 NavigationLink(destination: DemoARService()) {
                     Text("Demo how to interact with SAP Mobile Services and its AR feature")
-				}
+                }
 
                 NavigationLink(destination: ARCardAuthoringContentView()) {
                     Text("Card Authoring")
