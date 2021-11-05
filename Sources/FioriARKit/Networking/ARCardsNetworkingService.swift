@@ -290,11 +290,8 @@ public struct ARCardsNetworkingService {
             .tryMap { response in
                 switch response.result {
                 case .success(let data):
-                    if let createdScene = data.success {
-                        return createdScene.id
-                    } else {
-                        throw APIClientError.unexpectedStatusCode(statusCode: data.statusCode)
-                    }
+                    guard let createdScene = data.success else { throw APIClientError.failure(HTTPResponseStatus(code: data.statusCode, data: response.data)) }
+                    return createdScene.id
                 case .failure(let apiClientError):
                     throw apiClientError
                 }
@@ -330,9 +327,7 @@ public struct ARCardsNetworkingService {
             .tryMap { response in
                 switch response.result {
                 case .success(let data):
-                    guard data.successful, let scene = data.success else {
-                        throw APIClientError.unknownError(ARCardsNetworkingServiceError.notFound)
-                    }
+                    guard let scene = data.success else { throw APIClientError.failure(HTTPResponseStatus(code: data.statusCode, data: response.data)) }
                     return scene
                 case .failure(let apiClientError):
                     throw apiClientError
@@ -392,6 +387,8 @@ public struct ARCardsNetworkingService {
             return ARCardsNetworkingServiceError.networkError(apiClientError)
         case .unknownError:
             return ARCardsNetworkingServiceError.unknownError(apiClientError)
+        case .failure(let httpResponseStatus):
+            return ARCardsNetworkingServiceError.failure(httpResponseStatus)
         }
     }
 }

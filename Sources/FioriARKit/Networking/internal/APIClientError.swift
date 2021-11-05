@@ -13,6 +13,7 @@ internal enum APIClientError: Error {
     case validationError(Error)
     case networkError(Error)
     case unknownError(Error)
+    case failure(HTTPResponseStatus)
 
     internal var name:String {
         switch self {
@@ -23,6 +24,7 @@ internal enum APIClientError: Error {
         case .requestEncodingError: return "Request encoding failed"
         case .networkError: return "Network error"
         case .unknownError: return "Unknown error"
+        case .failure(let httpResponseStatus): return "Status code \(httpResponseStatus.code)"
         }
     }
 }
@@ -38,6 +40,7 @@ extension APIClientError: CustomStringConvertible {
         case .requestEncodingError(let error): return "\(name): \(error)"
         case .networkError(let error): return "\(name): \(error.localizedDescription)"
         case .unknownError(let error): return "\(name): \(error.localizedDescription)"
+        case .failure(let httpResponseStatus): return "\(name): \(httpResponseStatus.description)"
         }
     }
 }

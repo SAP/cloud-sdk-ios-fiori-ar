@@ -83,6 +83,9 @@ extension APIResponse: CustomStringConvertible, CustomDebugStringConvertible {
             if responseString != "()" {
                 string += ": \(responseString)"
             }
+            if let data = data {
+                string += ": \(String(decoding: data, as: UTF8.self))"
+            }
         case .failure(let error): string += " failed: \(error)"
         }
         return string
