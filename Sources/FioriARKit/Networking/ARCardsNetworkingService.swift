@@ -179,6 +179,7 @@ public struct ARCardsNetworkingService {
     public func getScene(for sceneId: Int, language: String = NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en") -> AnyPublisher<ARScene, Error> {
         let scenePublisher = self.getUnresolvedScene(for: sceneId, language: language)
             .mapError { $0 as Error }
+            .share()
             .eraseToAnyPublisher()
 
         let sourceFilePublisher = scenePublisher
