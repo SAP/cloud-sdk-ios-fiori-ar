@@ -48,8 +48,13 @@ public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAn
         self.networkingAPI
             .getScene(for: sceneID!)
             .receive(on: DispatchQueue.main) // initialization of RealityKit' ModelEntity needs to happen on main thread or otherwise the app crashes
-            .sink { _ in
-
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print(completion)
+                case .failure(let error):
+                    print("Fetching scene failed! \(error.localizedDescription)")
+                }
             } receiveValue: { scene in
                 manager.sceneRoot = Entity()
                 manager.addReferenceImage(for: scene.annotationAnchorImage, with: scene.annotationAnchorImagePhysicalWidth)
