@@ -271,7 +271,7 @@ public struct ARCardsNetworkingService {
                     title: card.title_
                 ),
                 id: UUID().uuidString,
-                marker: (card.icon_ != nil) ? Marker(icon: Marker.Icon.create(from: card.icon_!), iconAndroid: nil, iconIos: card.icon_) :  Marker(icon: nil, iconAndroid: nil, iconIos: card.icon_),
+                marker: (card.icon_ != nil) ? Marker(icon: Marker.Icon.create(from: card.icon_!), iconAndroid: nil, iconIos: card.icon_) : Marker(icon: nil, iconAndroid: nil, iconIos: card.icon_),
                 sceneId: sceneId,
                 relPositionx: (card.position_ != nil) ? Double(card.position_!.x) : nil,
                 relPositiony: (card.position_ != nil) ? Double(card.position_!.y) : nil,
