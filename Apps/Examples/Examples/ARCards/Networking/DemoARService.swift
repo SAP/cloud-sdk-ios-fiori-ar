@@ -11,12 +11,12 @@ struct DemoARService: View {
     
     init() {
         let sapURLSession = SAPURLSession.createOAuthURLSession(
-            clientID:  IntegrationTest.System.clientID,
+            clientID: IntegrationTest.System.clientID,
             authURL: IntegrationTest.System.authURL,
             redirectURL: IntegrationTest.System.redirectURL,
-            tokenURL: IntegrationTest.System.tokenURL)
+            tokenURL: IntegrationTest.System.tokenURL
+        )
 
-        
         self.networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: IntegrationTest.System.redirectURL)
 
         self.model = DemoARServiceModel(networkingAPI: self.networkingAPI)

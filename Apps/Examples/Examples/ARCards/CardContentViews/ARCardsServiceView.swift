@@ -15,7 +15,7 @@ struct ARCardsServiceView: View {
         serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
         sapURLSession: SAPURLSession.createOAuthURLSession(
             clientID: IntegrationTest.System.clientID,
-            authURL:  IntegrationTest.System.authURL,
+            authURL: IntegrationTest.System.authURL,
             redirectURL: IntegrationTest.System.redirectURL,
             tokenURL: IntegrationTest.System.tokenURL
         ),
@@ -33,7 +33,7 @@ struct ARCardsServiceView: View {
     
     func loadInitialData() {
         do {
-            try self.arModel.loadAsync(loadingStrategy: asyncStrategy)
+            try self.arModel.loadAsync(loadingStrategy: self.asyncStrategy)
         } catch {
             print(error)
         }
