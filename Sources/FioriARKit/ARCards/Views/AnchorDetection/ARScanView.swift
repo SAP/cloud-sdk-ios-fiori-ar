@@ -45,7 +45,7 @@ public struct ARScanView: View {
                         ProgressView()
                             .progressViewStyle(FioriNextProgressStyle())
                             .frame(width: 200, height: 200)
-                        Text("Processing... May take a moment")
+                        Text("Loading... May take a moment")
                             .font(.system(size: 24))
                             .foregroundColor(Color.white)
                     }
@@ -68,9 +68,8 @@ struct FioriNextProgressStyle: ProgressViewStyle {
                 .trim(from: 0, to: 0.25)
                 .stroke(strokeColor, style: StrokeStyle(lineWidth: CGFloat(strokeWidth), lineCap: .round))
                 .rotationEffect(.degrees(isAnimating ? 360 : 0))
-                .animateOnAppear(animation: Animation.linear.repeatForever(autoreverses: false).speed(0.50)) {
-                    isAnimating.toggle()
-                }
+                .animation(Animation.linear.repeatForever(autoreverses: false).speed(0.50), value: isAnimating)
+                .onAppear { isAnimating.toggle() }
         }
     }
 }

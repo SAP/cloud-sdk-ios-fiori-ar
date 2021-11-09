@@ -14,26 +14,17 @@ public struct SceneAuthoringView: View {
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onCardEdit) var onCardEdit
 
-    @StateObject private var networkModel: AnnotationSceneAuthoringModel
-    @StateObject private var arModel: ARAnnotationViewModel<CodableCardItem>
-    
-    @State private var currentTab: TabSelection = .left
-    @State private var hideNavBar = true
+    @StateObject private var authoringViewModel: SceneAuthoringModel
+    @StateObject private var arViewModel: ARAnnotationViewModel<CodableCardItem>
 
+    @State private var hideNavBar = true
     @State private var isCardCreationPresented = false
     @State private var isARExperiencePresented = false
     
-    @State private var anchorImage: UIImage? = nil
-    @State private var physicalWidth: String = ""
-    @State private var cardItems: [CodableCardItem]
-    @State private var attachmentsMetadata: [AttachmentUIMetadata] = []
-    @State private var currentCardID: UUID? = nil
-    
-    public init(_ cardItems: [CodableCardItem] = [], serviceURL: URL, sapURLSession: SAPURLSession) {
-        _cardItems = State(initialValue: cardItems)
+    public init(_ cardItems: [CodableCardItem] = [], serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifier? = nil) {
         let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
-        _networkModel = StateObject(wrappedValue: AnnotationSceneAuthoringModel(networkingAPI: networkingAPI))
-        _arModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
+        _authoringViewModel = StateObject(wrappedValue: SceneAuthoringModel(networkingAPI: networkingAPI, sceneIdentifier: sceneIdentifier))
+        _arViewModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
     }
     
     public var body: some View {
@@ -58,21 +49,40 @@ public struct SceneAuthoringView: View {
                          })
                 .background(Color.white)
             
+            Button(action: { authoringViewModel.updateExistingSceneOnServer() }, label: {
+                Text("Update Scene")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundColor(Color.white)
+                    .frame(width: 175, height: 40, alignment: .center)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.fioriNextTint)
+                    )
+            })
+                .padding(.vertical, 5)
+            
             VStack(spacing: 0) {
-                TabbedView(currentTab: $currentTab, leftTabTitle: "Cards", rightTabTitle: "Anchor Image")
+                TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: "Cards", rightTabTitle: "Anchor Image")
                     .padding(.bottom, 16)
                 
-                switch currentTab {
+                switch authoringViewModel.currentTab {
                 case .left:
                     AttachmentsView(title: "Cards",
-                                    attachmentsUIMetadata: attachmentsMetadata,
+                                    attachmentsUIMetadata: authoringViewModel.attachmentsMetadata,
                                     onAddAttachment: { isCardCreationPresented.toggle() },
                                     onSelectAttachment: { attachmentsUIMetadata in
-                                        currentCardID = attachmentsUIMetadata.id
+                                        authoringViewModel.currentCardID = attachmentsUIMetadata.id
                                         isCardCreationPresented.toggle()
                                     })
                 case .right:
-                    AnchorImageTabView(anchorImage: $anchorImage, physicalWidth: $physicalWidth)
+                    AnchorImageTabView(anchorImage: $authoringViewModel.anchorImage, physicalWidth: $authoringViewModel.physicalWidth)
+                case .loading:
+                    ZStack {
+                        Color.clear
+                        if authoringViewModel.requestState == .notStarted || authoringViewModel.requestState == .inProgress {
+                            ProgressView()
+                        }
+                    }
                 }
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
@@ -80,10 +90,10 @@ public struct SceneAuthoringView: View {
         }
         .background(
             NavigationLink(destination:
-                CardFormView(cardItems: $cardItems,
-                             attachmentModels: $attachmentsMetadata,
-                             currentCardID: $currentCardID,
-                             onDismiss: { self.populateAttachmentView() })
+                CardFormView(cardItems: $authoringViewModel.cardItems,
+                             attachmentModels: $authoringViewModel.attachmentsMetadata,
+                             currentCardID: $authoringViewModel.currentCardID,
+                             onDismiss: { authoringViewModel.populateAttachmentView() })
                     .onCardEdit(perform: onCardEdit),
                 isActive: $isCardCreationPresented,
                 label: { EmptyView() })
@@ -92,41 +102,24 @@ public struct SceneAuthoringView: View {
         .preferredColorScheme(.light)
         .navigationBarTitle("")
         .edgesIgnoringSafeArea(.all)
-        .onAppear(perform: populateAttachmentView)
+        .onAppear(perform: authoringViewModel.populateAttachmentView)
         .fullScreenCover(isPresented: $isARExperiencePresented) {
-            MarkerPositioningFlowView(arModel: arModel,
-                                      cardItems: $cardItems,
-                                      attachmentsMetadata: $attachmentsMetadata,
-                                      image: anchorImage!,
+            MarkerPositioningFlowView(arModel: arViewModel,
+                                      cardItems: $authoringViewModel.cardItems,
+                                      attachmentsMetadata: $authoringViewModel.attachmentsMetadata,
+                                      image: authoringViewModel.anchorImage!,
                                       cardAction: { _ in })
-        }
-    }
-    
-    func populateAttachmentView() {
-        self.attachmentsMetadata.removeAll()
-        self.cardItems.forEach { card in
-            var detailImage: Image?
-            if let data = card.detailImage_, let uiImage = UIImage(data: data) {
-                detailImage = Image(uiImage: uiImage)
-            }
-            let newAttachmentModel = AttachmentUIMetadata(id: UUID(uuidString: card.id) ?? UUID(),
-                                                          title: card.title_,
-                                                          subtitle: card.position_ == nil ? PinValue.notPinned.rawValue : PinValue.pinned.rawValue,
-                                                          info: nil,
-                                                          image: detailImage,
-                                                          icon: card.icon_ == nil ? nil : Image(card.icon_!))
-            attachmentsMetadata.append(newAttachmentModel)
         }
     }
     
     // TODO: Validate CardContents and AnchorImage. MVP Solution Disable Buttons until required data is available.
     func startAR() {
-        if self.anchorImage != nil, !self.cardItems.isEmpty {
-            let vectorStrategy = VectorStrategy(cardContents: cardItems,
-                                                anchorImage: anchorImage!,
-                                                physicalWidth: CGFloat(Double(physicalWidth)! / 100.0))
+        if self.authoringViewModel.anchorImage != nil, !self.authoringViewModel.cardItems.isEmpty {
+            let vectorStrategy = VectorStrategy(cardContents: authoringViewModel.cardItems,
+                                                anchorImage: self.authoringViewModel.anchorImage!,
+                                                physicalWidth: CGFloat(Double(self.authoringViewModel.physicalWidth)! / 100.0))
             do {
-                try self.arModel.load(loadingStrategy: vectorStrategy)
+                try self.arViewModel.load(loadingStrategy: vectorStrategy)
                 self.isARExperiencePresented.toggle()
             } catch {
                 print(error)
@@ -170,44 +163,13 @@ private struct TabbedView: View {
     }
 }
 
+enum TabSelection {
+    case left
+    case right
+    case loading
+}
+
 enum PinValue: String {
     case pinned = "Pinned"
     case notPinned = "Not Pinned Yet"
-}
-
-private enum TabSelection {
-    case left
-    case right
-}
-
-public class AnnotationSceneAuthoringModel: ObservableObject {
-    private var cancellables = Set<AnyCancellable>()
-    private var networkingAPI: ARCardsNetworkingService!
-
-    init(networkingAPI: ARCardsNetworkingService) {
-        self.networkingAPI = networkingAPI
-    }
-
-    func createSceneOnServer(anchorImage: UIImage?, cards: [CodableCardItem]) {
-        guard let anchorImage = anchorImage else { return }
-        guard let anchorImageData = anchorImage.pngData() else { return }
-
-        self.networkingAPI.createScene(
-            identfiedBy: anchorImageData,
-            anchorImagePhysicalWidth: 0.1,
-            cards: cards
-        )
-        .receive(on: DispatchQueue.main)
-        .sink { completion in
-            switch completion {
-            case .finished:
-                print(completion)
-            case .failure(let error):
-                print("Creating scene failed! \(error.localizedDescription)")
-            }
-        } receiveValue: { createdSceneId in
-            print("Scene with id \(createdSceneId) created")
-        }
-        .store(in: &self.cancellables)
-    }
 }

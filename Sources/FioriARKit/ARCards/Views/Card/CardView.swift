@@ -70,6 +70,7 @@ public struct CardView<Title: View, Subtitle: View, DetailImage: View, ActionTex
     @Environment(\.subtitleModifier) private var subtitleModifier
     @Environment(\.detailImageModifier) private var detailImageModifer
     @Environment(\.actionTextModifier) private var actionTextModifier
+    @Environment(\.openURL) var openURL
     
     private let _title: Title
     private let _subtitle: Subtitle
@@ -85,6 +86,7 @@ public struct CardView<Title: View, Subtitle: View, DetailImage: View, ActionTex
     private var id: CardItem.ID
     private var isSelected: Bool = false
     private var action: ((CardItem.ID) -> Void)?
+    private var actionContentURL: URL?
     
     public init(
         @ViewBuilder title: @escaping () -> Title,
@@ -172,6 +174,9 @@ public extension CardView {
             .padding(.bottom, 10)
             
             Button(action: {
+                if let link = actionContentURL {
+                    openURL(link)
+                }
                 action?(id)
             }, label: {
                 actionText
@@ -201,6 +206,7 @@ public extension CardView where
                   subtitle: model.subtitle_,
                   detailImage: model.detailImage_,
                   actionText: model.actionText_,
+                  actionContentURL: model.actionContentURL_,
                   icon: model.icon_,
                   action: action,
                   isSelected: isSelected)
@@ -211,6 +217,7 @@ public extension CardView where
          subtitle: String? = nil,
          detailImage: Data? = nil,
          actionText: String? = nil,
+         actionContentURL: URL? = nil,
          icon: String?,
          action: ((CardItem.ID) -> Void)? = nil,
          isSelected: Bool)
@@ -225,6 +232,7 @@ public extension CardView where
         self._subtitle = subtitle != nil ? ViewBuilder.buildEither(first: Text(subtitle!)) : ViewBuilder.buildEither(second: EmptyView())
         self._detailImage = image != nil ? ViewBuilder.buildEither(first: ImagePreview(preview: image!)) : ViewBuilder.buildEither(second: DefaultIcon(iconString: icon))
         self._actionText = actionText != nil ? ViewBuilder.buildEither(first: Text(actionText!)) : ViewBuilder.buildEither(second: EmptyView())
+        self.actionContentURL = actionContentURL
         self.action = action
         self.isSelected = isSelected
 

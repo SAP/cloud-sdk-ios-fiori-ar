@@ -5,6 +5,7 @@
 //  Created by O'Brien, Patrick on 10/25/21.
 //
 
+import ARKit
 import SwiftUI
 
 struct AnchorImageFormView: View {
@@ -21,6 +22,10 @@ struct AnchorImageFormView: View {
     @State private var actionSheetPresented = false
     @State private var pickerPresented = false
     @State private var pickerSource: UIImagePickerController.SourceType = .photoLibrary
+    
+    @State private var physicalWidthValidationText = ""
+    @State private var imageValidationText = ""
+    @State private var validatingAnchorImage = false
     
     var onDismiss: (() -> Void)?
     
@@ -55,16 +60,29 @@ struct AnchorImageFormView: View {
                     .padding(.leading, 8)
                     
                     VStack(spacing: 20) {
-                        Text("Please enter the real-world physical width of anchor image.")
-                            .font(.system(size: 15))
-                            .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                        HStack {
+                            Text("Please enter the real-world physical width of anchor image.")
+                                .font(.system(size: 15))
+                                .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                            Spacer()
+                        }
                         
                         TextDetail(textField: $internalPhysicalWidth, titleText: "Width", placeholder: "0.00 cm")
-                            .foregroundColor(Color.fioriNextPrimaryLabel)
+                            .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
                             .keyboardType(.decimalPad)
+                        
+                        if !physicalWidthValidationText.isEmpty {
+                            HStack {
+                                Text(physicalWidthValidationText)
+                                    .font(.system(size: 15))
+                                    .foregroundColor(.red)
+                                Spacer()
+                            }
+                        }
                     }
                     .padding(16)
-                    .frame(maxWidth: .infinity, maxHeight: 168)
+                    .frame(maxWidth: .infinity, maxHeight: 230)
+                    .animation(.default, value: physicalWidthValidationText)
                     .background(Color.white)
                     .cornerRadius(10)
                 }
@@ -82,28 +100,48 @@ struct AnchorImageFormView: View {
                     .padding(.leading, 8)
                     
                     VStack(spacing: 16) {
-                        Text("Please tap the area below to upload anchor image.")
-                            .font(.system(size: 15))
-                            .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                        HStack {
+                            Text("Please tap the area below to upload anchor image.")
+                                .font(.system(size: 15))
+                                .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                            Spacer()
+                            if validatingAnchorImage {
+                                ProgressView()
+                            }
+                        }
                         
                         ImageSelectionView(detailImage: internalAnchorImage?.pngData(), imageHeight: 145)
                             .onTapGesture {
                                 actionSheetPresented.toggle()
                             }
+                        if !imageValidationText.isEmpty {
+                            HStack {
+                                Text(imageValidationText)
+                                    .font(.system(size: 15))
+                                    .foregroundColor(.red)
+                                Spacer()
+                            }
+                        }
                     }
                     .padding(16)
-                    .frame(maxWidth: .infinity, maxHeight: 233)
+                    .frame(maxWidth: .infinity, maxHeight: 300)
+                    .animation(.default, value: imageValidationText)
                     .background(Color.white)
                     .cornerRadius(10)
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, verticalSizeClass == .compact ? 16 : 106)
+                .padding(.bottom, 32)
                 
                 Button(action: {
-                    anchorImage = internalAnchorImage
-                    physicalWidth = internalPhysicalWidth
-                    imageName = internalImageName
-                    onDismiss?()
+                    // Validate Image is selected and Physical Width is valid
+                    if validateInput() {
+                        validateAnchorImage(completionHandler: {
+                            anchorImage = internalAnchorImage
+                            physicalWidth = internalPhysicalWidth
+                            imageName = internalImageName
+                            onDismiss?()
+                        })
+                    }
                 }, label: {
                     Text("Save")
                         .font(.system(size: 15, weight: .bold))
@@ -116,13 +154,11 @@ struct AnchorImageFormView: View {
                         .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
                         .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
                 })
-                    .padding(.bottom, verticalSizeClass == .compact ? 20 : 0)
+                    .padding(.bottom, 32)
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
         }
-        .onTapGesture(perform: {
-            hideKeyboard()
-        })
+        .onTapGesture(perform: hideKeyboard)
         .background(Color.fioriNextPrimaryBackground)
         .edgesIgnoringSafeArea(.all)
         .ignoresSafeArea(.keyboard)
@@ -140,6 +176,32 @@ struct AnchorImageFormView: View {
         .fullScreenCover(isPresented: $pickerPresented) {
             ImagePickerView(uiImage: $internalAnchorImage, fileName: $internalImageName, sourceType: pickerSource)
                 .edgesIgnoringSafeArea(.all)
+        }
+    }
+    
+    func validateInput() -> Bool {
+        self.imageValidationText = self.internalAnchorImage == nil ? "Please Select Image" : ""
+        self.physicalWidthValidationText = self.internalPhysicalWidth.isEmpty ? "Please input a physical Width" : Double(self.internalPhysicalWidth) == nil ? "Please input a Numeric Value" : ""
+
+        return self.imageValidationText.isEmpty && self.physicalWidthValidationText.isEmpty
+    }
+
+    func validateAnchorImage(completionHandler: @escaping (() -> Void)) {
+        self.validatingAnchorImage = true
+    
+        if let anchorImage = internalAnchorImage,
+           let cgImage = anchorImage.cgImage,
+           let castedWidth = Double(internalPhysicalWidth)
+        {
+            let arImage = ARReferenceImage(cgImage, orientation: .up, physicalWidth: CGFloat(castedWidth) / 100)
+            arImage.validate { error in
+                self.validatingAnchorImage = false
+                if error == nil {
+                    completionHandler()
+                } else {
+                    self.imageValidationText = "Invalid Image"
+                }
+            }
         }
     }
 }
