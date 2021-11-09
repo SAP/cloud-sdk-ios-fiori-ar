@@ -240,7 +240,10 @@ public struct ARCardsNetworkingService {
                 if let f = sourceFile {
                     sourceFileUrl = try! self.save(sourceFile: f)
                 }
-                // TODO: annotation Anchor Image from ARService and changed to UIImage
+                // TODO: scene.referenceAnchor.data is of type String, need a UIImage
+                // What is the referenceAnchors Image File id?
+                // let anchorFile = imageFiles.first(where: { $0.id == ??? })
+                // TODO: Pass in annotationAnchorImage
                 let arScene = ARScene(sceneId: scene.id, sourceFile: sourceFileUrl, annotationAnchorImage: UIImage(named: "qrImage")!, annotationAnchorImagePhysicalWidth: scene.referenceAnchor?.physicalWidth ?? 0.1, cards: cards)
 
                 return Just(arScene)
@@ -251,40 +254,47 @@ public struct ARCardsNetworkingService {
     }
 
     // MARK: createScene - Combine
-
-    public func createScene(identfiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, cards: [CodableCardItem]) -> AnyPublisher<Int, Error> {
-        let sceneId = 123
+    
+    public func createScene(identifiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, cards: [CodableCardItem]) -> AnyPublisher<Int, Error> {
+        let sceneId = 123 // TODO: Generated on Server? What to pass in below?
         let imageAnchorFormDataName = UUID().uuidString
-        let imageAnchorFileName = "qrImage.png"
+        let imageAnchorFileName = "qrImage.png" // TODO: What name should be used for image Anchor?
 
         let refAnchor = ReferenceAnchor(data: imageAnchorFormDataName, name: imageAnchorFileName, physicalWidth: width, type: .image)
-        let annotationAnchors = cards.map { card in
-
-            AnnotationAnchor(
+        let anchorImageUploadFile = UploadFile(type: .data(anchorImage), fileName: imageAnchorFileName, partName: imageAnchorFormDataName, mimeType: "image/png")
+        let files: [UploadFile] = [anchorImageUploadFile]
+        
+        let annotationAnchors: [AnnotationAnchor] = cards.map { card in
+            let annotationAnchor = AnnotationAnchor(
                 card: Card(
                     language: NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en",
-                    actionData: nil, // TODO: how to handle?
+                    actionData: card.actionContentURL_?.absoluteString,
                     actionText: card.actionText_,
-                    actionType: nil, // TODO: how to handle?
+                    actionType: (card.actionContentURL_ != nil) ? .link : nil,
                     description: card.subtitle_,
-                    image: nil,
+                    image: nil, // TODO: Handle image data? Is this the image Name?
                     title: card.title_
                 ),
-                id: UUID().uuidString,
+                id: card.id,
                 marker: (card.icon_ != nil) ? Marker(icon: Marker.Icon.create(from: card.icon_!), iconAndroid: nil, iconIos: card.icon_) : Marker(icon: nil, iconAndroid: nil, iconIos: card.icon_),
                 sceneId: sceneId,
                 relPositionx: (card.position_ != nil) ? Double(card.position_!.x) : nil,
                 relPositiony: (card.position_ != nil) ? Double(card.position_!.y) : nil,
                 relPositionz: (card.position_ != nil) ? Double(card.position_!.z) : nil
             )
+            // TODO: What to pass in for detailImage fileName
+            // TODO: Any issue if the card image is encoded from a jpg?
+            if let cardImageData = card.detailImage_ {
+                // let uploadImage = UploadFile(type: .data(cardImageData), fileName: ???, partName: card.id, mimeType: "image/png")
+                // files.append(uploadImage)
+            }
+            return annotationAnchor
         }
+        
+        // TODO: Alias to be passed in on scene Creation
         let scene = Scene(id: sceneId, alias: nil, annotationAnchors: annotationAnchors, nameInSourceFile: nil, referenceAnchor: refAnchor, sourceFile: nil, sourceFileType: nil)
         let jsonDataScene = try! JSONEncoder().encode(scene)
         let jsonStringScene = String(data: jsonDataScene, encoding: .utf8)!
-
-        // TODO: handle card images
-        let anchorImageUploadFile = UploadFile(type: .data(anchorImage), fileName: imageAnchorFileName, partName: imageAnchorFormDataName, mimeType: "image/png")
-        let files: [UploadFile] = [anchorImageUploadFile]
 
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         return api.makeRequest(ARService.Scene.AddScene.Request(scene: jsonStringScene, files: files))
@@ -302,6 +312,60 @@ public struct ARCardsNetworkingService {
             }
             .eraseToAnyPublisher()
     }
+    
+    public func updateScene(sceneId: Int, identifiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, cards: [CodableCardItem]) -> AnyPublisher<String, Error> {
+        // TODO: Update ReferenceAnchor Image
+        // let refAnchor = ReferenceAnchor(data: imageAnchorFormDataName, name: imageAnchorFileName, physicalWidth: width, type: .image)
+        // let anchorImageUploadFile = UploadFile(type: .data(anchorImage), fileName: imageAnchorFileName, partName: imageAnchorFormDataName, mimeType: "image/png")
+
+        let annotationAnchors = cards.map { card in
+            AnnotationAnchor(
+                card: Card(
+                    language: NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en",
+                    actionData: card.actionContentURL_?.absoluteString,
+                    actionText: card.actionText_,
+                    actionType: (card.actionContentURL_ != nil) ? .link : nil,
+                    description: card.subtitle_,
+                    image: nil, // TODO: Handle image data? Is this the image Name?
+                    title: card.title_
+                ),
+                id: card.id,
+                marker: (card.icon_ != nil) ? Marker(icon: Marker.Icon.create(from: card.icon_!), iconAndroid: nil, iconIos: card.icon_) : Marker(icon: nil, iconAndroid: nil, iconIos: card.icon_),
+                sceneId: sceneId,
+                relPositionx: (card.position_ != nil) ? Double(card.position_!.x) : nil,
+                relPositiony: (card.position_ != nil) ? Double(card.position_!.y) : nil,
+                relPositionz: (card.position_ != nil) ? Double(card.position_!.z) : nil
+            )
+        }
+        let scene = Scene(id: sceneId, alias: nil, annotationAnchors: annotationAnchors, nameInSourceFile: nil, referenceAnchor: nil, sourceFile: nil, sourceFileType: nil)
+        let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
+        
+        // TODO: Request does not accept Files to update card images or refAnchor image
+        // TODO: Creating new card and then updating does not reflect on server. Only updates existing cards when fetched.
+        let request = ARService.Scene.UpdateScene.Request(sceneId: sceneId, body: scene)
+
+        return api.makeRequest(request)
+            .tryMap { response in
+                switch response.result {
+                case .success(let data):
+                    guard let createdScene = data.success else { throw APIClientError.failure(HTTPResponseStatus(code: data.statusCode, data: response.data)) }
+                    return createdScene
+                case .failure(let apiClientError):
+                    print(apiClientError.name)
+                    throw apiClientError
+                }
+            }
+            .mapError { error in
+                print((error as! APIClientError).name)
+                return self.sdkClientError(from: error as! APIClientError)
+            }
+            .eraseToAnyPublisher()
+    }
+
+//    TODO: Method for deleting a scene
+//    public func deleteScene(...) {
+//
+//    }
 
     internal func save(sourceFile: ARSceneSourceFileWithData, into directory: URL = FileManager.default.temporaryDirectory) throws -> ARSceneSourceFile {
         let localFileURL = directory.appendingPathComponent(sourceFile.id)

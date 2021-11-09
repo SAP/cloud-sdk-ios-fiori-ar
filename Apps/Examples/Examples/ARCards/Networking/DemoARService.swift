@@ -149,7 +149,7 @@ class DemoARServiceModel: ObservableObject {
         let dummyCard = CodableCardItem(id: UUID().uuidString, title_: "Hello", subtitle_: "Hello World", detailImage_: nil, actionText_: nil, icon_: nil)
 
         self.networkingAPI.createScene(
-            identfiedBy: anchorImageData,
+            identifiedBy: anchorImageData,
             anchorImagePhysicalWidth: 0.1,
             cards: [dummyCard]
         )
