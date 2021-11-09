@@ -51,7 +51,7 @@ struct CardFormView: View {
         self._title = State(initialValue: currentCard?.title_ ?? "")
         self._subtitle = State(initialValue: currentCard?.subtitle_ ?? "")
         self._actionText = State(initialValue: currentCard?.actionText_ ?? "")
-        self._actionContentText = State(initialValue: "")
+        self._actionContentText = State(initialValue: currentCard?.actionContentURL_?.absoluteString ?? "")
         self._icon = State(initialValue: currentCard?.icon_)
         
         self._hasButton = State(initialValue: currentCard?.actionText_ == nil ? false : true)
@@ -91,7 +91,13 @@ struct CardFormView: View {
                 ZStack {
                     Color
                         .fioriNextPrimaryBackground
-                    CardPreview(detailImage: $detailImage, title: $title, subtitle: $subtitle, actionText: $actionText, icon: $icon, hasButton: $hasButton)
+                    CardPreview(detailImage: $detailImage,
+                                title: $title,
+                                subtitle: $subtitle,
+                                actionText: $actionText,
+                                actionContentText: $actionContentText,
+                                icon: $icon,
+                                hasButton: $hasButton)
                         .offset(y: verticalSizeClass == .compact ? -70 : -10)
                 }
                 .frame(maxHeight: verticalSizeClass == .compact ? .infinity : 246)
@@ -134,7 +140,8 @@ struct CardFormView: View {
                                       subtitle_: self.subtitle,
                                       detailImage_: self.detailImage,
                                       actionText_: self.actionText,
-                                      icon_: nil) // TODO: Fix
+                                      actionContentURL_: URL(string: self.actionContentText),
+                                      icon_: self.actionContentText.isEmpty ? nil : "link")
         
         self.cardItems.append(newCard)
         self.onCardEdit(.created(card: newCard))
@@ -147,7 +154,8 @@ struct CardFormView: View {
                                                 subtitle_: self.subtitle,
                                                 detailImage_: self.detailImage,
                                                 actionText_: self.actionText,
-                                                icon_: nil,
+                                                actionContentURL_: URL(string: self.actionContentText),
+                                                icon_: self.actionContentText.isEmpty ? nil : "link",
                                                 position_: self.cardItems[index].position_)
         
         self.onCardEdit(.updated(card: self.cardItems[index]))
@@ -254,10 +262,13 @@ private struct CardDetailsView: View {
 }
 
 struct CardPreview: View {
+    @Environment(\.openURL) var openURL
+    
     @Binding var detailImage: Data?
     @Binding var title: String
     @Binding var subtitle: String
     @Binding var actionText: String
+    @Binding var actionContentText: String
     @Binding var icon: String?
     @Binding var hasButton: Bool
 
@@ -265,6 +276,7 @@ struct CardPreview: View {
          title: Binding<String>,
          subtitle: Binding<String>,
          actionText: Binding<String>,
+         actionContentText: Binding<String>,
          icon: Binding<String?>,
          hasButton: Binding<Bool>)
     {
@@ -272,6 +284,7 @@ struct CardPreview: View {
         _title = title
         _subtitle = subtitle
         _actionText = actionText
+        _actionContentText = actionContentText
         _icon = icon
         _hasButton = hasButton
     }
@@ -281,6 +294,7 @@ struct CardPreview: View {
         _title = .constant(cardItem?.title_ ?? "")
         _subtitle = .constant(cardItem?.subtitle_ ?? "")
         _actionText = .constant(cardItem?.actionText_ ?? "")
+        _actionContentText = .constant(cardItem?.actionContentURL_?.absoluteString ?? "")
         _icon = .constant(cardItem?.icon_)
         _hasButton = .constant(cardItem?.actionText_ != nil)
     }
@@ -328,7 +342,11 @@ struct CardPreview: View {
             }
             .padding(.bottom, 5)
             
-            Button(action: {}, label: {
+            Button(action: {
+                if let linkURL = URL(string: actionContentText) {
+                    openURL(linkURL)
+                }
+            }, label: {
                 Text(actionText)
             })
                 .font(.system(size: 18))

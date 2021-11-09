@@ -14,6 +14,7 @@ public struct StringIdentifyingCardItem: CardItemModel {
     public var subtitle_: String?
     public var detailImage_: Data?
     public var actionText_: String?
+    public var actionContentURL_: URL?
     public var icon_: String?
     public var position_: SIMD3<Float>?
 }
