@@ -5,7 +5,7 @@
 //  Created by O'Brien, Patrick on 5/13/21.
 //
 
-import FioriARKit
+import FioriAR
 import SwiftUI
 
 struct CarEngineExampleContentView: View {

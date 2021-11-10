@@ -5,7 +5,7 @@
 //  Created by O'Brien, Patrick on 5/5/21.
 //
 
-import FioriARKit
+import FioriAR
 import SwiftUI
 
 public struct ExampleCardItem: CardItemModel {

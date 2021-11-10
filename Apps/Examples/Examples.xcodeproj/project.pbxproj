@@ -23,7 +23,6 @@
 		2C5225B7267CF7980089A062 /* Tests.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C5225B6267CF7980089A062 /* Tests.json */; };
 		2C554AE22681189B007784D6 /* ARCardsRealityFileLoadingContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C554AE12681189B007784D6 /* ARCardsRealityFileLoadingContentView.swift */; };
 		2C554AE4268118E0007784D6 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C554AE3268118E0007784D6 /* FileManager+Extensions.swift */; };
-		2C6DDE5E2644CCD60093AA6B /* FioriARKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2C6DDE5D2644CCD60093AA6B /* FioriARKit */; };
 		2C9371282644D3C3001932D1 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9371272644D3C3001932D1 /* DownloadsView.swift */; };
 		2CC2A028268BFB8F0091C42B /* ARCardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2A027268BFB8F0091C42B /* ARCardListView.swift */; };
 		2CCF965926824D9D00566523 /* ExampleRC.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2CCF965826824D9D00566523 /* ExampleRC.usdz */; };
@@ -31,6 +30,7 @@
 		2CD13EDA2728D717009160C8 /* ExampleRC.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = 2CD13ED92728D717009160C8 /* ExampleRC.rcproject */; };
 		2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909726437D630076150D /* ExampleCardItem.swift */; };
 		2CDD909B26437E7A0076150D /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909A26437E7A0076150D /* Tests.swift */; };
+		8A32BAA6273C0F55002364A2 /* FioriAR in Frameworks */ = {isa = PBXBuildFile; productRef = 8A32BAA5273C0F55002364A2 /* FioriAR */; };
 		8A6F605926EFFF6600FA9FD5 /* DemoARService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6F605826EFFF6600FA9FD5 /* DemoARService.swift */; };
 /* End PBXBuildFile section */
 
@@ -69,7 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C6DDE5E2644CCD60093AA6B /* FioriARKit in Frameworks */,
+				8A32BAA6273C0F55002364A2 /* FioriAR in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +222,7 @@
 			);
 			name = Examples;
 			packageProductDependencies = (
-				2C6DDE5D2644CCD60093AA6B /* FioriARKit */,
+				8A32BAA5273C0F55002364A2 /* FioriAR */,
 			);
 			productName = Examples;
 			productReference = 2C4C719C2643697F00B462A9 /* Examples.app */;
@@ -493,9 +493,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2C6DDE5D2644CCD60093AA6B /* FioriARKit */ = {
+		8A32BAA5273C0F55002364A2 /* FioriAR */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = FioriARKit;
+			productName = FioriAR;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

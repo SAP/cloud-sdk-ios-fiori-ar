@@ -5,7 +5,7 @@
 //  Created by O'Brien, Patrick on 10/29/21.
 //
 
-import FioriARKit
+import FioriAR
 import SAPFoundation
 import SwiftUI
 

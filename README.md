@@ -1,7 +1,7 @@
 
 <p align="center">
   </br>
-  <span><b>SAP Fiori for iOS ARKit</b></span>
+  <span><b>SAP Fiori for iOS AR</b></span>
 </p>
 
 ***
@@ -122,9 +122,9 @@ The scene can be represented in different file types and each strategy requires 
 ## Example Usage: Creating the ContentView and loading the data
 
 ```swift
-import FioriARKit
+import FioriAR
 
-struct FioriARKitCardsExample: View {
+struct FioriARKCardsExample: View {
     @StateObject var arModel = ARAnnotationViewModel<CodableCardItem>()
     
     var body: some View {
@@ -164,18 +164,22 @@ struct FioriARKitCardsExample: View {
 - Reality Composer 1.1 or higher
 - Swift Package Manager
 
+## Dependencies
+
+- [SAPCommon](https://help.sap.com/doc/978e4f6c968c4cc5a30f9d324aa4b1d7/Latest/en-US/Documents/Frameworks/SAPCommon/index.html) for Logging
+- [SAPFoundation](https://help.sap.com/doc/978e4f6c968c4cc5a30f9d324aa4b1d7/Latest/en-US/Documents/Frameworks/SAPFoundation/index.html) for Network Connectivity and Authentication
+- [FioriSwiftUI](https://github.com/SAP/cloud-sdk-ios-fiori) for UI components
+
 ## Installation
 
-The package is intended for consumption via Swift Package Manager.  
+The package is intended for consumption via Swift Package Manager.  To add the package to your application target, navigate to the `Project Settings > Swift Packages` tab, then add the repository URL.
 
- - To add to your application target, navigate to the `Project Settings > Swift Packages` tab, then add the repository URL.
- - To add to your framework target, add the repository URL to your **Package.swift** manifest.
+You can choose one of the following package products to be added to your application/framework target.
 
-In both cases, **xcodebuild** tooling will manage cloning and updating the repository to your app or framework project.
-
-## Configuration
-
-**FioriARKit** as umbrella product currently will contain everything the package has to offer. As the package evolves the package could be split into multiple products for different use cases.
+|Package Product|When to Use
+|---|---|
+|FioriAR|You did not already embed binary frameworks from SAP BTP SDK for iOS|
+|FioriAR-requiresToEmbedXCFrameworks|You already embedded `SAPCommon` and `SAPFoundation` binary frameworks to your target|
 
 ## Limitations
 

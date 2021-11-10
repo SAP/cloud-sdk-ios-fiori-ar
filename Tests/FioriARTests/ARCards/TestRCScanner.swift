@@ -5,7 +5,7 @@
 //  Created by O'Brien, Patrick on 8/2/21.
 //
 
-@testable import FioriARKit
+@testable import FioriAR
 import RealityKit
 import SwiftUI
 import XCTest
