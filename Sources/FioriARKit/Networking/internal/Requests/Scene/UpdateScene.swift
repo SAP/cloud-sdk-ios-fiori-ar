@@ -106,7 +106,7 @@ extension ARService.Scene {
 
             internal init(statusCode: Int, data: Data, decoder: ResponseDecoder) throws {
                 switch statusCode {
-                case 200: self = try .status200(decoder.decode(String.self, from: data))
+                case 200: self = .status200(String(decoding: data, as: UTF8.self)) // Modification: Service returns a simple string and not a JSON and therefore do not use decoder
                 case 400: self = .status400
                 case 401: self = .status401
                 case 404: self = .status404

@@ -7,16 +7,17 @@ public enum SourceFileType: String, Codable, Equatable, CaseIterable {
 }
 
 public struct ARScene {
-    public var sceneId: Int
+    public var sceneId: Int?
+    public var alias: String?
     public var sourceFile: ARSceneSourceFile?
-    public var annotationAnchorImage: UIImage
-    public var annotationAnchorImagePhysicalWidth: Double
+    public var referenceAnchorImage: UIImage
+    public var referenceAnchorImagePhysicalWidth: Double
     public var cards: [CodableCardItem]
 }
 
 internal struct ARSceneSourceFileWithData {
     public var id: String
-    public var type: SourceFileType
+    public var type: SourceFileType?
     public var data: Data
 }
 

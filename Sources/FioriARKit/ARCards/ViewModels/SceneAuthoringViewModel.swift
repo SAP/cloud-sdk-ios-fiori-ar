@@ -26,11 +26,12 @@ class SceneAuthoringModel: ObservableObject {
     
     @Published var requestState: ARCardRequestState = .notStarted
     private var networkingAPI: ARCardsNetworkingService!
-    private var sceneIdentifier: SceneIdentifier?
+    private var sceneIdentifier: SceneIdentifyingAttribute?
+    private var sceneId: Int? // available once scene was fetched from remote service
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(networkingAPI: ARCardsNetworkingService, sceneIdentifier: SceneIdentifier?, completionHandler: (() -> Void)? = nil) {
+    init(networkingAPI: ARCardsNetworkingService, sceneIdentifier: SceneIdentifyingAttribute?, completionHandler: (() -> Void)? = nil) {
         self.networkingAPI = networkingAPI
         self.sceneIdentifier = sceneIdentifier
         self.currentTab = sceneIdentifier == nil ? .left : .loading
@@ -76,27 +77,18 @@ class SceneAuthoringModel: ObservableObject {
                 print("Creating scene failed! \(error.localizedDescription)")
             }
         } receiveValue: { createdSceneId in
+            self.sceneId = createdSceneId
             completionHandler(createdSceneId)
             print("Scene with id \(createdSceneId) created")
         }
         .store(in: &self.cancellables)
     }
     
-    func requestSceneOnServer(sceneIdentifier: SceneIdentifier, completionHandler: (() -> Void)? = nil) {
-        // TODO: Clean up when there's support for sceneAlias
-        var sceneID: Int?
-        var sceneAlias: String?
-        
-        switch sceneIdentifier {
-        case .sceneID(let id):
-            sceneID = id
-        case .sceneAlias(let alias):
-            sceneAlias = alias
-            print(sceneAlias!)
-        }
+    func requestSceneOnServer(sceneIdentifier: SceneIdentifyingAttribute, completionHandler: (() -> Void)? = nil) {
         self.requestState = .inProgress
+
         self.networkingAPI
-            .getScene(for: sceneID!)
+            .getScene(sceneIdentifier)
             .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
@@ -109,9 +101,10 @@ class SceneAuthoringModel: ObservableObject {
                 }
                 self.currentTab = .left
             } receiveValue: { scene in
+                self.sceneId = scene.sceneId
                 self.cardItems = scene.cards
-                self.anchorImage = scene.annotationAnchorImage
-                self.physicalWidth = String(scene.annotationAnchorImagePhysicalWidth)
+                self.anchorImage = scene.referenceAnchorImage
+                self.physicalWidth = String(scene.referenceAnchorImagePhysicalWidth)
                 self.populateAttachmentView()
                 completionHandler?()
             }
@@ -119,25 +112,13 @@ class SceneAuthoringModel: ObservableObject {
     }
     
     func updateExistingSceneOnServer() {
-        var sceneID: Int?
-        var sceneAlias: String?
-        
-        switch self.sceneIdentifier {
-        case .sceneID(let id):
-            sceneID = id
-        case .sceneAlias(let alias):
-            sceneAlias = alias
-            print(sceneAlias!)
-        case .none:
-            print("No Scene")
-        }
-        
-        guard let anchorImage = anchorImage,
+        guard let id = sceneId,
+              let anchorImage = anchorImage,
               let imageData = anchorImage.pngData(),
               let physicalWidth = Double(physicalWidth) else { return }
         
         self.networkingAPI.updateScene(
-            sceneId: sceneID!,
+            id,
             identifiedBy: imageData,
             anchorImagePhysicalWidth: physicalWidth,
             cards: self.cardItems

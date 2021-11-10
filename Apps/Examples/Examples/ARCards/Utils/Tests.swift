@@ -103,6 +103,7 @@ enum IntegrationTest {
     }
 
     enum TestData {
-        static let sceneId = 20201906
+        static let sceneId = 20201923//20201907
+        static let sceneAlias = "myOwnAlias"
     }
 }
