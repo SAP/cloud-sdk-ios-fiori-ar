@@ -27,7 +27,7 @@ struct ARCardAuthoringContentView: View {
     var body: some View {
         SceneAuthoringView(serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
                            sapURLSession: sapURLSession,
-                           sceneIdentifier: SceneIdentifier.sceneID(id: IntegrationTest.TestData.sceneId))
+                           sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId))
             .onCardEdit { cardEdit in
                 switch cardEdit {
                 case .created(let card):

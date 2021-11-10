@@ -29,7 +29,10 @@ struct DemoARService: View {
                     self.model.createNewScene()
                 }
                 if self.model.loadingStatus == .finished, let scene = self.model.scene {
-                    Text("Scene \(scene.sceneId) has \(scene.cards.count) cards and has \(scene.sourceFile == nil ? "no" : scene.sourceFile!.type.rawValue) source file")
+                    Button("Delete scene") {
+                        self.model.deleteScene()
+                    }
+                    Text("Scene \(scene.sceneId!) has \(scene.cards.count) cards and has \(scene.sourceFile == nil ? "no" : scene.sourceFile!.type.rawValue) source file")
                     ForEach(scene.cards, id: \.self) { card in
                         HStack {
                             Text("\(scene.cards.firstIndex(of: card)! + 1). \(card.title_)")
@@ -50,6 +53,14 @@ struct DemoARService: View {
                 self.model.loadData(for: sceneId)
 
             })
+                .alert(item: $model.error, content: { error in
+
+                    Alert(
+                        title: Text(error.title),
+                        message: Text(error.description)
+                    )
+                })
+                .padding()
                 .frame(maxWidth: .infinity)
         }
     }
@@ -70,6 +81,14 @@ struct DemoARService_Previews: PreviewProvider {
         DemoARService()
     }
 }
+
+struct ErrorInfo: Identifiable {
+
+    var id: Int
+    let title: String = "Error"
+    let description: String
+}
+
 
 extension SAPURLSession {
     static func createOAuthURLSession(clientID: String, authURL: String, redirectURL: String, tokenURL: String) -> SAPURLSession {
@@ -113,6 +132,7 @@ class DemoARServiceModel: ObservableObject {
 
     // @Published var cards: [CodableCardItem] = []
     @Published var scene: ARScene? = nil
+    @Published var error: ErrorInfo? = nil
 
     @Published var loadingStatus: DemoARServiceModelDataLoading = .notStarted
 
@@ -122,19 +142,16 @@ class DemoARServiceModel: ObservableObject {
 
     func loadData(for sceneId: Int) {
         self.loadingStatus = .inProgress
-        //        self.networkingAPI.getCards(for: sceneId)
-        //            .receive(on: DispatchQueue.main)
-        //            .sink { completion in
-        //                print(completion)
-        //            } receiveValue: { cards in
-        //                self.cards = cards
-        //                self.loadingStatus = .finished
-        //            }
-        //            .store(in: &self.cancellables)
 
-        self.networkingAPI.getScene(for: sceneId)
+        self.networkingAPI.getScene(SceneIdentifyingAttribute.id(sceneId))
             .receive(on: DispatchQueue.main)
             .sink { completion in
+                switch completion {
+                case .finished:
+                    self.error = nil
+                case .failure(let error):
+                    self.error = ErrorInfo(id: 1, description: error.localizedDescription)
+                }
                 print(completion)
             } receiveValue: { scene in
                 self.scene = scene
@@ -153,15 +170,40 @@ class DemoARServiceModel: ObservableObject {
             anchorImagePhysicalWidth: 0.1,
             cards: [dummyCard]
         )
-        .receive(on: DispatchQueue.main)
-        .map { newSceneId in
-            self.loadData(for: newSceneId)
-        }
-        .sink { completion in
-            print(completion)
-        } receiveValue: { createdSceneId in
-            print("Scene with id \(createdSceneId) created")
-        }
-        .store(in: &self.cancellables)
+            .receive(on: DispatchQueue.main)
+            .map { newSceneId in
+                self.loadData(for: newSceneId)
+            }
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    self.error = nil
+                case .failure(let error):
+                    self.error = ErrorInfo(id: 2, description: error.localizedDescription)
+                }
+                print(completion)
+            } receiveValue: { createdSceneId in
+                print("Scene with id \(createdSceneId) created")
+            }
+            .store(in: &self.cancellables)
+    }
+
+    func deleteScene() {
+        guard let id = self.scene?.sceneId else { return }
+
+        self.networkingAPI.deleteScene(id)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    self.error = nil
+                case .failure(let error):
+                    self.error = ErrorInfo(id: 3, description: error.localizedDescription)
+                }
+                print(completion)
+            } receiveValue: { _ in
+                print("Scene deleted")
+            }
+            .store(in: &self.cancellables)
     }
 }
