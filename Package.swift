@@ -4,14 +4,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "FioriARKit",
+    name: "FioriAR",
     defaultLocalization: "en",
     platforms: [.iOS(.v14)],
     products: [
-        // TODO: offer a library which requiresToEmbedXCFrameworks by app developers
         .library(
-            name: "FioriARKit",
-            targets: ["FioriARKit"]
+            name: "FioriAR",
+            targets: ["FioriAR-withBinaryDependencies"]
+        ),
+        .library(
+            name: "FioriAR-requiresToEmbedXCFrameworks",
+            targets: ["FioriAR-withoutBinaryDependencies"]
         )
     ],
     dependencies: [
@@ -19,23 +22,36 @@ let package = Package(
         .package(name: "cloud-sdk-ios", url: "https://github.com/SAP/cloud-sdk-ios", .exact("6.1.2-xcfrwk"))
     ],
     targets: [
-        // TODO: offer target withoutBinaryDependencies for library product which requiresToEmbedXCFrameworks by app developers
         .target(
-            name: "FioriARKit",
+            name: "FioriAR-withBinaryDependencies",
             dependencies: [
-                "FioriSwiftUI",
+                "FioriAR",
                 .product(name: "SAPFoundation", package: "cloud-sdk-ios"),
                 .product(name: "SAPCommon", package: "cloud-sdk-ios")
-            ],
+            ]
+        ),
+        .target(
+            name: "FioriAR",
+            dependencies: ["FioriSwiftUI"],
             exclude: [
                 "Networking/README.md",
                 "Networking/internal/README.md"
             ],
             resources: [.process("ARCards/Resources")]
         ),
+        .target(
+            name: "FioriAR-withoutBinaryDependencies",
+            dependencies: [
+                "FioriAR"
+            ],
+            linkerSettings: [
+                .linkedFramework("SAPCommon"),
+                .linkedFramework("SAPFoundation")
+            ]
+        ),
         .testTarget(
-            name: "FioriARKitTests",
-            dependencies: ["FioriARKit"],
+            name: "FioriARTests",
+            dependencies: ["FioriAR"],
             resources: [.process("TestResources")]
         )
     ]

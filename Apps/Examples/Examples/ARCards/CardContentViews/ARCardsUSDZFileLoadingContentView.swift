@@ -5,7 +5,7 @@
 //  Created by O'Brien, Patrick on 6/22/21.
 //
 
-import FioriARKit
+import FioriAR
 import SwiftUI
 
 struct ARCardsUSDZFileLoadingContentView: View {
