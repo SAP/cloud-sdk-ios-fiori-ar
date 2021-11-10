@@ -1,5 +1,5 @@
 import Combine
-import FioriARKit
+import FioriAR
 import SAPFoundation
 import SwiftUI
 
