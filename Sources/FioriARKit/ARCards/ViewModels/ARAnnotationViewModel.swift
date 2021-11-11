@@ -68,10 +68,10 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     }
     
     func resetAllAnchors() {
-        guard let _ = try? arManager.configureSession(options: [.removeExistingAnchors]) else { return }
         self.annotations.removeAll()
         self.arManager.removeRoot()
         self.anchorPosition = nil
+        guard let _ = try? arManager.configureSession(options: [.removeExistingAnchors]) else { return }
     }
     
     func stopSession() {

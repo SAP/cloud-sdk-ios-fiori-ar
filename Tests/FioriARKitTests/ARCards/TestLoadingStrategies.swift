@@ -21,10 +21,13 @@ final class TestLoadingStrategies: XCTestCase {
     func testRCProjectStrategyCardItemLoad() throws {
         let manager = self.makeARManagerSUT()
         let realityStrategy = RCProjectStrategy(cardContents: TestsItems.carEngineCardItems, rcFile: "Test", rcScene: "TestScene", bundle: Bundle.module)
-        let annotations = try realityStrategy.load(with: manager)
+        let strategyData = try realityStrategy.load(with: manager)
+        let annotations = strategyData.annotations
+        let guideImage = strategyData.guideImage
 
         let first = try XCTUnwrap(annotations.first)
         
+        XCTAssertNil(guideImage)
         XCTAssertEqual(annotations.count, 6)
         XCTAssertEqual(first.card.id, "WasherFluid")
         XCTAssertEqual(first.card.title_, "Recommended Washer Fluid")
@@ -32,18 +35,20 @@ final class TestLoadingStrategies: XCTestCase {
         XCTAssertNil(first.card.detailImage_)
         XCTAssertNil(first.card.actionText_)
         XCTAssertNil(first.card.icon_)
-        XCTAssertNotNil(first.marker)
-        XCTAssertNotNil(first.marker.internalEnitity)
+        XCTAssertNotNil(first.entity)
     }
     
     func testRealityFileStrategyCardItemLoad() throws {
         let manager = self.makeARManagerSUT()
         let testRealityUrl = try XCTUnwrap(Bundle.module.url(forResource: "Test", withExtension: "reality"))
         let realityStrategy = RealityFileStrategy(cardContents: TestsItems.carEngineCardItems, realityFilePath: testRealityUrl, rcScene: "TestScene")
-        let annotations = try realityStrategy.load(with: manager)
+        let strategyData = try realityStrategy.load(with: manager)
+        let annotations = strategyData.annotations
+        let guideImage = strategyData.guideImage
         
         let first = try XCTUnwrap(annotations.first)
         
+        XCTAssertNil(guideImage)
         XCTAssertEqual(annotations.count, 6)
         XCTAssertEqual(first.card.id, "WasherFluid")
         XCTAssertEqual(first.card.title_, "Recommended Washer Fluid")
@@ -51,8 +56,7 @@ final class TestLoadingStrategies: XCTestCase {
         XCTAssertNil(first.card.detailImage_)
         XCTAssertNil(first.card.actionText_)
         XCTAssertNil(first.card.icon_)
-        XCTAssertNotNil(first.marker)
-        XCTAssertNotNil(first.marker.internalEnitity)
+        XCTAssertNotNil(first.entity)
     }
     
     func testRealityFileStrategyJSONLoad() throws {
@@ -62,10 +66,13 @@ final class TestLoadingStrategies: XCTestCase {
         let jsonData = try Data(contentsOf: jsonUrl)
 
         let realityStrategy = try RealityFileStrategy(jsonData: jsonData, realityFilePath: testRealityUrl, rcScene: "TestScene")
-        let annotations = try realityStrategy.load(with: manager)
+        let strategyData = try realityStrategy.load(with: manager)
+        let annotations = strategyData.annotations
+        let guideImage = strategyData.guideImage
         
         let first = try XCTUnwrap(annotations.first)
         
+        XCTAssertNil(guideImage)
         XCTAssertEqual(annotations.count, 6)
         XCTAssertEqual(first.card.id, "WasherFluid")
         XCTAssertEqual(first.card.title_, "Recommended Washer Fluid")
@@ -73,8 +80,31 @@ final class TestLoadingStrategies: XCTestCase {
         XCTAssertNil(first.card.detailImage_)
         XCTAssertNil(first.card.actionText_)
         XCTAssertNil(first.card.icon_)
-        XCTAssertNotNil(first.marker)
-        XCTAssertNotNil(first.marker.internalEnitity)
+        XCTAssertNotNil(first.entity)
+    }
+    
+    func testVectorStrategyLoad() throws {
+        let manager = self.makeARManagerSUT()
+        let uiImageUrl = try XCTUnwrap(Bundle.module.url(forResource: "qrImage", withExtension: "png"))
+        let absPath = try XCTUnwrap(URL(string: "file://" + uiImageUrl.path))
+        let uiImage = try XCTUnwrap(UIImage(contentsOfFile: absPath.path))
+
+        let vectorStrategy = VectorStrategy(cardContents: TestsItems.carEngineCardItems, anchorImage: uiImage, physicalWidth: 0.1)
+        let strategyData = try vectorStrategy.load(with: manager)
+        let annotations = strategyData.annotations
+        let guideImage = strategyData.guideImage
+        
+        let first = try XCTUnwrap(annotations.first)
+        
+        XCTAssertNotNil(guideImage)
+        XCTAssertEqual(annotations.count, 6)
+        XCTAssertEqual(first.card.id, "WasherFluid")
+        XCTAssertEqual(first.card.title_, "Recommended Washer Fluid")
+        XCTAssertEqual(first.card.subtitle_, "Rain X")
+        XCTAssertNil(first.card.detailImage_)
+        XCTAssertNil(first.card.actionText_)
+        XCTAssertNil(first.card.icon_)
+        XCTAssertNil(first.entity)
     }
     
     static var allTests = [

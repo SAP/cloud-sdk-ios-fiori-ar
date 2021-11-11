@@ -17,20 +17,27 @@ public struct MockLoadingStrategy<CardItem: CardItemModel>: AnnotationLoadingStr
         self.cardContents = cardContents
     }
     
-    public func load(with manager: ARManager) throws -> [ScreenAnnotation<CardItem>] {
+    public func load(with manager: ARManager) throws -> (annotations: [ScreenAnnotation<CardItem>], guideImage: UIImage?) {
         var annotations = [ScreenAnnotation<CardItem>]()
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "Test", withExtension: "usdz"))
-        let anchorEntity = try RCScanner.Scene.loadAnchor(contentsOf: url)
+        let uiImageUrl = try XCTUnwrap(Bundle.module.url(forResource: "qrImage", withExtension: "png"))
+        let absPath = try XCTUnwrap(URL(string: "file://" + uiImageUrl.path))
+        let guideImage = try XCTUnwrap(UIImage(contentsOfFile: absPath.path))
+        let usdzURL = try XCTUnwrap(Bundle.module.url(forResource: "Test", withExtension: "usdz"))
+        let anchorEntity = try RCScanner.Scene.loadAnchor(contentsOf: usdzURL)
+        
+        manager.sceneRoot = Entity()
+        manager.addReferenceImage(for: guideImage, with: 0.1, resetImages: true)
         
         for cardItem in self.cardContents {
             guard let internalEntity = anchorEntity.findEntity(named: String(cardItem.id)) else {
                 throw LoadingStrategyError.entityNotFoundError(cardItem.id)
             }
-            let annotation = ScreenAnnotation(card: cardItem)
-            annotation.setInternalEntity(with: internalEntity)
+            var annotation = ScreenAnnotation(card: cardItem)
+            annotation.setEntity(to: internalEntity)
+            manager.sceneRoot?.addChild(internalEntity)
             annotations.append(annotation)
         }
         
-        return annotations
+        return (annotations, guideImage)
     }
 }
