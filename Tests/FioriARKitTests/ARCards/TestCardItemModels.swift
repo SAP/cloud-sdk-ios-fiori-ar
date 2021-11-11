@@ -16,6 +16,7 @@ final class TestCardItemModels: XCTestCase {
                                      subtitle_: nil,
                                      detailImage_: nil,
                                      actionText_: nil,
+                                     actionContentURL_: nil,
                                      icon_: nil)
         
         let testModelWithoutNil = TestCardItem(id: "2",
@@ -23,6 +24,7 @@ final class TestCardItemModels: XCTestCase {
                                                subtitle_: "Subtitle",
                                                detailImage_: UIImage(systemName: "arkit")?.pngData(),
                                                actionText_: "Tap",
+                                               actionContentURL_: URL(string: "www.google.com"),
                                                icon_: "arkit")
         
         XCTAssertEqual(testModel.id, "1")
@@ -30,6 +32,7 @@ final class TestCardItemModels: XCTestCase {
         XCTAssertNil(testModel.subtitle_)
         XCTAssertNil(testModel.detailImage_)
         XCTAssertNil(testModel.actionText_)
+        XCTAssertNil(testModel.actionContentURL_)
         XCTAssertNil(testModel.icon_)
         
         XCTAssertEqual(testModelWithoutNil.id, "2")
@@ -37,6 +40,7 @@ final class TestCardItemModels: XCTestCase {
         XCTAssertEqual(testModelWithoutNil.subtitle_, "Subtitle")
         XCTAssertNotNil(testModelWithoutNil.detailImage_, "TestTitle2")
         XCTAssertEqual(testModelWithoutNil.actionText_, "Tap")
+        XCTAssertNotNil(testModelWithoutNil.actionContentURL_)
         XCTAssertNotNil(testModelWithoutNil.icon_)
     }
 

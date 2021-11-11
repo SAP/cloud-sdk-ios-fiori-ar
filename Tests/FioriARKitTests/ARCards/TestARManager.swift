@@ -42,7 +42,7 @@ final class TestARManager: XCTestCase {
         let arViewAnchors = try XCTUnwrap(manager.arView?.scene.anchors)
         
         XCTAssertTrue(arViewAnchors.isEmpty)
-        manager.addAnchor(for: AnchorEntity())
+        manager.addAnchor(anchor: AnchorEntity())
         XCTAssertFalse(arViewAnchors.isEmpty)
     }
     

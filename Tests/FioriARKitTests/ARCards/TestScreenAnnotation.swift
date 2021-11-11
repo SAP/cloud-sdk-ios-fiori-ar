@@ -26,39 +26,30 @@ final class TestScreenAnnotation: XCTestCase {
     func testScreenAnnotationInit() {
         let screenAnnotation = self.makeScreenAnnotationSUT()
         XCTAssertEqual(screenAnnotation.id, screenAnnotation.card.id)
-        XCTAssertNil(screenAnnotation.icon)
-        XCTAssertTrue(screenAnnotation.isCardVisible)
-        XCTAssertFalse(screenAnnotation.isMarkerVisible)
+        XCTAssertNil(screenAnnotation.card.icon_)
+        XCTAssertFalse(screenAnnotation.isCardVisible)
+        XCTAssertEqual(screenAnnotation.markerState, .notVisible)
         
         let screenAnnotationTwo = self.makeScreenAnnotationTwoSUT()
-        XCTAssertNotNil(screenAnnotationTwo.icon)
+        XCTAssertNotNil(screenAnnotationTwo.card.icon_)
     }
     
-    func testSetters() {
+    func testSetters() throws {
         var screenAnnotation = self.makeScreenAnnotationSUT()
-        XCTAssertTrue(screenAnnotation.isCardVisible)
-        XCTAssertFalse(screenAnnotation.isMarkerVisible)
         
-        screenAnnotation.setCardVisibility(to: false)
-        XCTAssertFalse(screenAnnotation.isCardVisible)
+        screenAnnotation.setMarkerState(to: .world)
+        XCTAssertEqual(screenAnnotation.markerState, .world)
         
-        screenAnnotation.setCardVisibility(to: true)
-        XCTAssertTrue(screenAnnotation.isCardVisible)
-        
-        screenAnnotation.setMarkerVisibility(to: true)
-        XCTAssertTrue(screenAnnotation.isMarkerVisible)
-        
-        screenAnnotation.setMarkerVisibility(to: false)
-        XCTAssertFalse(screenAnnotation.isMarkerVisible)
-    }
-    
-    func testMarkerAnchor() {
-        let screenAnnotation = self.makeScreenAnnotationSUT()
         let entity = Entity()
         entity.name = "TestEntity"
+        screenAnnotation.setEntity(to: entity)
+        XCTAssertNotNil(screenAnnotation.entity)
+        let unwrappedEntity = try XCTUnwrap(screenAnnotation.entity)
+        XCTAssertEqual(unwrappedEntity.name, "TestEntity")
         
-        screenAnnotation.setInternalEntity(with: entity)
-        XCTAssertEqual(screenAnnotation.marker.internalEnitity.name, "TestEntity")
+        let screenPosition = CGPoint(x: 2, y: 5)
+        screenAnnotation.setScreenPosition(to: screenPosition)
+        XCTAssertEqual(screenAnnotation.screenPosition, screenPosition)
     }
     
     func testEquality() {
@@ -73,7 +64,6 @@ final class TestScreenAnnotation: XCTestCase {
     static var allTests = [
         ("testScreenAnnotationInitializer", testScreenAnnotationInit),
         ("testSetters", testSetters),
-        ("testMarkerAnchor", testMarkerAnchor),
         ("testEquality", testEquality)
     ]
 }
