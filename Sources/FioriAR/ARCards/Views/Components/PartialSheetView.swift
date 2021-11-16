@@ -16,16 +16,22 @@ enum PartialSheetState: CGFloat {
 }
 
 struct PartialSheetView<Content>: View where Content: View {
-    var title: String
     @Binding var sheetState: PartialSheetState
-    
-    let onDismiss: (() -> Void)?
+    var title: String
+    let onLeftAction: (() -> Void)?
+    let onRightAction: (() -> Void)?
     let content: () -> Content
     
-    init(_ sheetState: Binding<PartialSheetState>, title: String, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) {
+    init(_ sheetState: Binding<PartialSheetState>,
+         title: String,
+         onLeftAction: (() -> Void)? = nil,
+         onRightAction: (() -> Void)? = nil,
+         @ViewBuilder content: @escaping () -> Content)
+    {
         _sheetState = sheetState
         self.title = title
-        self.onDismiss = onDismiss
+        self.onLeftAction = onLeftAction
+        self.onRightAction = onRightAction
         self.content = content
     }
     
@@ -37,14 +43,10 @@ struct PartialSheetView<Content>: View where Content: View {
                     Text(title)
                         .foregroundColor(Color.black)
                         .font(.system(size: 17, weight: .bold))
-                    
-                    Spacer()
-                    
-                    DismissView {
-                        onDismiss?()
-                    }
-                    .opacity(sheetState != .closed ? 1 : 0)
                 }
+                .frame(maxWidth: .infinity)
+                .overlay(leftActionButton, alignment: .leading)
+                .overlay(rightActionButton, alignment: .trailing)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 10)
             }
@@ -62,6 +64,23 @@ struct PartialSheetView<Content>: View where Content: View {
         )
         .offset(y: sheetState.rawValue)
         .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0), value: sheetState)
+    }
+    
+    @ViewBuilder
+    var leftActionButton: some View {
+        if let onLeftAction = onLeftAction {
+            ActionView(icon: Image(systemName: "chevron.left")) {
+                onLeftAction()
+            }
+            .opacity(sheetState != .closed ? 1 : 0)
+        }
+    }
+    
+    var rightActionButton: some View {
+        ActionView(icon: Image(systemName: "xmark")) {
+            onRightAction?()
+        }
+        .opacity(sheetState != .closed ? 1 : 0)
     }
     
     private var dragGesture: _EndedGesture<DragGesture> {
@@ -117,14 +136,15 @@ struct SheetHandle: View {
     }
 }
 
-struct DismissView: View {
-    let onDismiss: (() -> Void)?
+struct ActionView: View {
+    let icon: Image
+    let onAction: (() -> Void)?
     
     var body: some View {
         Button(action: {
-            onDismiss?()
+            onAction?()
         }, label: {
-            Image(systemName: "xmark")
+            icon
                 .font(.system(size: 14, weight: .bold, design: .default))
                 .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
                 .background(

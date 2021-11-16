@@ -35,9 +35,9 @@ public extension EnvironmentValues {
         set { self[CarouselOptionsKey.self] = newValue }
     }
     
-    var onCardEdit: (CardEditing) -> Void {
-        get { self[CardEditKey.self] }
-        set { self[CardEditKey.self] = newValue }
+    var onSceneEdit: (SceneEditing) -> Void {
+        get { self[SceneEditKey.self] }
+        set { self[SceneEditKey.self] = newValue }
     }
 }
 
@@ -61,6 +61,6 @@ struct CarouselOptionsKey: EnvironmentKey {
     public static let defaultValue = CarouselOptions(itemSpacing: 36, alignment: .bottom)
 }
 
-struct CardEditKey: EnvironmentKey {
-    public static let defaultValue: (CardEditing) -> Void = { _ in }
+struct SceneEditKey: EnvironmentKey {
+    public static let defaultValue: (SceneEditing) -> Void = { _ in }
 }

@@ -8,33 +8,26 @@
 import Combine
 import SwiftUI
 
-enum ARCardRequestState {
-    case notStarted
-    case inProgress
-    case finished
-    case failure
-}
-
 class SceneAuthoringModel: ObservableObject {
     @Published var cardItems: [CodableCardItem] = []
     @Published var anchorImage: UIImage? = nil
     @Published var physicalWidth: String = ""
     
     @Published var currentCardID: UUID? = nil
-    @Published var currentTab: TabSelection
+    @Published var currentTab: TabSelection = .left
     @Published var attachmentsMetadata: [AttachmentUIMetadata] = []
+    @Published var bannerMessage: BannerMessage? = nil
     
-    @Published var requestState: ARCardRequestState = .notStarted
+    var sceneIdentifier: SceneIdentifyingAttribute?
     private var networkingAPI: ARCardsNetworkingService!
-    private var sceneIdentifier: SceneIdentifyingAttribute?
-    private var sceneId: Int? // available once scene was fetched from remote service
-    
+    private var originalCardItems: [CodableCardItem] = []
     private var cancellables = Set<AnyCancellable>()
     
-    init(networkingAPI: ARCardsNetworkingService, sceneIdentifier: SceneIdentifyingAttribute?, completionHandler: (() -> Void)? = nil) {
+    init(_ cardItems: [CodableCardItem] = [], networkingAPI: ARCardsNetworkingService, sceneIdentifier: SceneIdentifyingAttribute?, completionHandler: (() -> Void)? = nil) {
+        self.cardItems = cardItems
+        self.originalCardItems = cardItems
         self.networkingAPI = networkingAPI
         self.sceneIdentifier = sceneIdentifier
-        self.currentTab = sceneIdentifier == nil ? .left : .loading
         
         if let sceneIdentifier = sceneIdentifier {
             self.requestSceneOnServer(sceneIdentifier: sceneIdentifier)
@@ -50,12 +43,23 @@ class SceneAuthoringModel: ObservableObject {
             }
             let newAttachmentModel = AttachmentUIMetadata(id: UUID(uuidString: card.id) ?? UUID(),
                                                           title: card.title_,
-                                                          subtitle: card.position_ == nil ? PinValue.notPinned.rawValue : PinValue.pinned.rawValue,
+                                                          subtitle: card.position_ == nil ? AttachValue.notAttached.rawValue : AttachValue.Attached.rawValue,
                                                           info: nil,
                                                           image: detailImage,
                                                           icon: card.icon_ == nil ? nil : Image(systemName: card.icon_!))
             attachmentsMetadata.append(newAttachmentModel)
         }
+    }
+    
+    func hasDifference() -> Bool {
+        if self.cardItems.count != self.originalCardItems.count { return true }
+        let currentSorted = self.cardItems.sorted { $0.id < $1.id }
+        let ogSorted = self.originalCardItems.sorted { $0.id < $1.id }
+        return !currentSorted.difference(from: ogSorted).isEmpty
+    }
+    
+    func allAnnotationsPinned() -> Bool {
+        self.cardItems.allSatisfy { $0.position_ != nil }
     }
     
     func createSceneOnServer(completionHandler: @escaping (Int) -> Void) {
@@ -77,15 +81,15 @@ class SceneAuthoringModel: ObservableObject {
                 print("Creating scene failed! \(error.localizedDescription)")
             }
         } receiveValue: { createdSceneId in
-            self.sceneId = createdSceneId
+            self.sceneIdentifier = .id(createdSceneId)
             completionHandler(createdSceneId)
             print("Scene with id \(createdSceneId) created")
         }
         .store(in: &self.cancellables)
     }
     
-    func requestSceneOnServer(sceneIdentifier: SceneIdentifyingAttribute, completionHandler: (() -> Void)? = nil) {
-        self.requestState = .inProgress
+    func requestSceneOnServer(sceneIdentifier: SceneIdentifyingAttribute) {
+        self.bannerMessage = .loading
 
         self.networkingAPI
             .getScene(sceneIdentifier)
@@ -93,32 +97,31 @@ class SceneAuthoringModel: ObservableObject {
             .sink { completion in
                 switch completion {
                 case .finished:
-                    self.requestState = .finished
+                    self.bannerMessage = .completed
                     print(completion)
                 case .failure(let error):
-                    self.requestState = .failure // User Experience of Failed Fetch?
+                    self.bannerMessage = .failure
                     print("Fetching scene failed! \(error.localizedDescription)")
                 }
-                self.currentTab = .left
             } receiveValue: { scene in
-                self.sceneId = scene.sceneId
+                self.sceneIdentifier = .id(scene.sceneId!) // TODO: two ids?
                 self.cardItems = scene.cards
+                self.originalCardItems = scene.cards
                 self.anchorImage = scene.referenceAnchorImage
                 self.physicalWidth = String(scene.referenceAnchorImagePhysicalWidth)
                 self.populateAttachmentView()
-                completionHandler?()
             }
             .store(in: &self.cancellables)
     }
     
     func updateExistingSceneOnServer() {
-        guard let id = sceneId,
+        guard case .id(let sceneID) = self.sceneIdentifier,
               let anchorImage = anchorImage,
               let imageData = anchorImage.pngData(),
               let physicalWidth = Double(physicalWidth) else { return }
         
         self.networkingAPI.updateScene(
-            id,
+            sceneID,
             identifiedBy: imageData,
             anchorImagePhysicalWidth: physicalWidth,
             cards: self.cardItems
@@ -128,16 +131,29 @@ class SceneAuthoringModel: ObservableObject {
             switch completion {
             case .finished:
                 print(completion)
+                self.originalCardItems = self.cardItems
+                self.bannerMessage = .sceneUpdated
             case .failure(let error):
                 print("API Error: \(error.localizedDescription)")
             }
-            // User Experience of Failed Update?
         } receiveValue: { success in
             print("Updated scene with Status: \(success)")
-            // User Experience of Successful Update?
         }
         .store(in: &self.cancellables)
     }
     
-    func deleteSceneOnServer(completionHandler: @escaping (Int) -> Void) {}
+    func deleteSceneOnServer() {
+        guard case .id(let sceneId) = self.sceneIdentifier else { return }
+        self.networkingAPI.deleteScene(sceneId)
+            .receive(on: DispatchQueue.main)
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print(completion)
+                case .failure:
+                    print(completion)
+                }
+            } receiveValue: { _ in }
+            .store(in: &self.cancellables)
+    }
 }
