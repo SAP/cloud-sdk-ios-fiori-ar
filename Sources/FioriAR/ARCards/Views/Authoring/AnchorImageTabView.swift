@@ -20,6 +20,9 @@ struct AnchorImageTabView: View {
         VStack {
             if let _ = anchorImage {
                 ImageAnchorView(anchorImage: $anchorImage, imageName: imageName ?? "")
+                    .onTapGesture {
+                        anchorImageFormPresented.toggle()
+                    }
             } else {
                 VStack(spacing: 46) {
                     Text("The anchor is an image that the software can recognize to successfully place the markers in relation to the anchor. Make sure that the anchor image is scannable on the site of the experience.")
@@ -66,45 +69,30 @@ struct ImageAnchorView: View {
     }
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 0) {
             HStack {
-                Text("Image Anchor")
+                Text("Anchor Image")
                     .font(.system(size: 15, weight: .bold))
                     .foregroundColor(Color.black)
                 Spacer()
             }
-            ZStack {
-                Color.fioriNextSecondaryFill.opacity(0.24)
-                VStack {
-                    if let anchorImage = anchorImage {
-                        Image(uiImage: anchorImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(height: 196)
-                            .clipped()
-                            .contentShape(Rectangle())
-                            .padding(.top, verticalSizeClass == .compact ? 0 : 60)
-                            .padding(.horizontal, verticalSizeClass == .compact ? 180 : 0)
-                    }
-                    
-                    Spacer()
-                        
-                    HStack {
-                        Text(imageName)
-                        Spacer()
-                        Button("Delete") {
-                            anchorImage = nil
-                        }
-                    }
-                    .foregroundColor(Color.black)
-                    .font(.system(size: 13, weight: .bold))
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, verticalSizeClass == .compact ? 13 : 21)
-                }
+            .padding(.bottom, 16)
+            if let anchorImage = anchorImage {
+                Image(uiImage: anchorImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: 343)
+                    .cornerRadius(16)
+                    .padding(.bottom, 8)
             }
-            .frame(maxHeight: verticalSizeClass == .compact ? .infinity : 357)
-            .cornerRadius(10, corners: verticalSizeClass == .compact ? [.topLeft, .topRight] : .allCorners)
+            HStack {
+                Text("Tab the image to edit")
+                    .font(.system(size: 13))
+                    .foregroundColor(Color.gray)
+                Spacer()
+            }
         }
+        .frame(width: 343)
         .padding(.horizontal, verticalSizeClass == .compact ? 0 : 16)
     }
 }

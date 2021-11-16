@@ -77,20 +77,20 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                     }
                 })
                 
-                PartialSheetView($sheetState, title: sheetTitle, onDismiss: { flowState = .editMarker }) {
+                PartialSheetView($sheetState,
+                                 title: sheetTitle,
+                                 onLeftAction: flowState == .confirmCard ? onPageBack : nil,
+                                 onRightAction: { flowState = .editMarker }) {
                     if displayPagingView {
                         PagingView(firstPage: $firstPage, left: {
-                            AttachmentsView(attachmentsUIMetadata: attachmentsMetadata.filter { $0.subtitle == PinValue.notPinned.rawValue },
+                            AttachmentsView(attachmentsUIMetadata: attachmentsMetadata.filter { $0.subtitle == AttachValue.notAttached.rawValue },
                                             onSelectAttachment: { attachment in
                                                 cardItem = cardItems.first(where: { attachment.id.uuidString == $0.id })
                                                 firstPage = false
                                                 flowState = .confirmCard
                                             })
                         }, right: {
-                            CardSelectionView(cardItem: cardItem, onBack: {
-                                firstPage = true
-                                flowState = .selectCard
-                            }, onSelect: {
+                            CardSelectionView(cardItem: cardItem, onSelect: {
                                 flowState = .beforeDrop
                             })
                         })
@@ -112,6 +112,13 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                     EditButton(flowState: flowState, onAction: onEdit)
                 }
             }, alignment: .topTrailing
+        )
+        .overlay(
+            Group {
+                if flowState == .editMarker {
+                    PublishBarView(onReset: nil, onPublish: nil)
+                }
+            }, alignment: .bottom
         )
         .onTapGesture {
             if flowState == .editMarker || flowState == .selectMarker {
@@ -144,7 +151,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 sheetState = .open
             case .beforeDrop:
                 arModel.removeEntitiesFromScene()
-                setPinValue(cardItem: cardItem, pinValue: .pinned)
+                setPinValue(cardItem: cardItem, pinValue: .Attached)
                 arModel.addNewEntity(to: cardItem)
                 arModel.setMarkerState(for: cardItem, to: .world)
                 sheetTitle = "View Annotation"
@@ -158,6 +165,11 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 arModel.setMarkerState(for: cardItem, to: .selected)
             }
         }
+    }
+    
+    func onPageBack() {
+        self.firstPage = true
+        self.flowState = .selectCard
     }
     
     func dismiss() {
@@ -179,12 +191,12 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         case .editMarker, .beforeDrop:
             self.flowState = .selectCard
         case .selectMarker:
-            self.setPinValue(cardItem: self.cardItem, pinValue: .notPinned)
+            self.setPinValue(cardItem: self.cardItem, pinValue: .notAttached)
             self.arModel.deleteEntity(for: self.cardItem)
             self.cardItem = nil
             self.flowState = .editMarker
         case .dropped:
-            self.setPinValue(cardItem: self.cardItem, pinValue: .notPinned)
+            self.setPinValue(cardItem: self.cardItem, pinValue: .notAttached)
             self.arModel.deleteEntity(for: self.cardItem)
             self.arModel.deleteCameraAnchor()
             self.flowState = .selectCard
@@ -193,10 +205,52 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         }
     }
     
-    func setPinValue(cardItem: CardItem?, pinValue: PinValue) {
+    func setPinValue(cardItem: CardItem?, pinValue: AttachValue) {
         guard let cardItem = cardItem,
               let index = attachmentsMetadata.firstIndex(where: { $0.id.uuidString == cardItem.id }) else { return }
         self.attachmentsMetadata[index].subtitle = pinValue.rawValue
+    }
+}
+
+private struct PublishBarView: View {
+    var onReset: (() -> Void)? = nil
+    var onPublish: (() -> Void)? = nil
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            Button(action: { onReset?() }, label: {
+                Text("Reset")
+                    .font(.system(size: 15, weight: .bold))
+                    .frame(width: 103, height: 38)
+                    .foregroundColor(.white)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.fioriNextTint)
+                    )
+                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
+                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
+            })
+            
+            Button(action: { onPublish?() }, label: {
+                Text("Publish")
+                    .font(.system(size: 15, weight: .bold))
+                    .frame(width: 216, height: 38)
+                    .foregroundColor(.white)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.fioriNextTint)
+                    )
+                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
+                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
+            })
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.fioriNextPrimaryLabel.opacity(0.25))
+        )
+        .padding(.bottom, 77)
     }
 }
 

@@ -8,16 +8,17 @@
 import Combine
 import SwiftUI
 
-public enum CardEditing {
+public enum SceneEditing {
     case created(card: CodableCardItem)
     case updated(card: CodableCardItem)
     case deleted(card: CodableCardItem)
+    case published(sceneID: Int)
 }
 
 struct CardFormView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
-    @Environment(\.onCardEdit) var onCardEdit
+    @Environment(\.onSceneEdit) var onSceneEdit
     
     @Binding var cardItems: [CodableCardItem]
     @Binding var attachmentModels: [AttachmentUIMetadata]
@@ -137,35 +138,35 @@ struct CardFormView: View {
     func createCard() {
         let newCard = CodableCardItem(id: UUID().uuidString,
                                       title_: self.title,
-                                      subtitle_: self.subtitle,
+                                      subtitle_: self.subtitle.isEmpty ? nil : self.subtitle,
                                       detailImage_: self.detailImage,
-                                      actionText_: self.actionText,
+                                      actionText_: self.actionText.isEmpty ? nil : self.actionText,
                                       actionContentURL_: URL(string: self.actionContentText),
                                       icon_: self.actionContentText.isEmpty ? nil : "link")
         
         self.cardItems.append(newCard)
-        self.onCardEdit(.created(card: newCard))
+        self.onSceneEdit(.created(card: newCard))
     }
     
     func updateCard(for currentID: UUID) {
         guard let index = cardItems.firstIndex(where: { $0.id == currentCardID?.uuidString }) else { return }
         self.cardItems[index] = CodableCardItem(id: currentID.uuidString,
                                                 title_: self.title,
-                                                subtitle_: self.subtitle,
+                                                subtitle_: self.subtitle.isEmpty ? nil : self.subtitle,
                                                 detailImage_: self.detailImage,
-                                                actionText_: self.actionText,
+                                                actionText_: self.actionText.isEmpty ? nil : self.actionText,
                                                 actionContentURL_: URL(string: self.actionContentText),
                                                 icon_: self.actionContentText.isEmpty ? nil : "link",
                                                 position_: self.cardItems[index].position_)
         
-        self.onCardEdit(.updated(card: self.cardItems[index]))
+        self.onSceneEdit(.updated(card: self.cardItems[index]))
     }
     
     func deleteCard(for currentID: UUID) {
         guard let cardToDelete = cardItems.first(where: { $0.id == currentID.uuidString }) else { return }
         
         self.cardItems.removeAll(where: { $0.id == cardToDelete.id })
-        self.onCardEdit(.deleted(card: cardToDelete))
+        self.onSceneEdit(.deleted(card: cardToDelete))
     }
 }
 
@@ -201,16 +202,17 @@ private struct CardDetailsView: View {
             ScrollView {
                 ZStack {
                     VStack(spacing: 14) {
-                        TextDetail(textField: $title, titleText: "Title")
+                        TextDetail(textField: $title, titleText: "*Title")
                             .foregroundColor(Color.black)
                         
                         TextDetail(textField: $subtitle, titleText: "Subtitle (Optional)")
                             .foregroundColor(Color.black)
                         
-                        TextDetail(textField: $actionContentText, titleText: "Content", placeholder: "URL")
+                        ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
                             .foregroundColor(Color.black)
                         
-                        ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
+                        TextDetail(textField: $actionContentText, toggle: $actionButtonToggle, titleText: "Content (Optional)", placeholder: "URL")
+                            .foregroundColor(Color.black)
                             .zIndex(1)
                         
                         CoverImageDetail(titleText: "Custom Cover Image (Optional)",
@@ -227,11 +229,12 @@ private struct CardDetailsView: View {
                                 .foregroundColor(.white)
                                 .background(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.fioriNextTint)
+                                        .fill(title.isEmpty ? Color.fioriNextTint.opacity(0.5) : Color.fioriNextTint)
                                 )
                                 .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
                                 .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
                         })
+                            .disabled(title.isEmpty)
                             .padding(.bottom, 54)
                     }
                     .padding(.top, 9.5)
@@ -363,15 +366,28 @@ struct CardPreview: View {
 
 struct TextDetail: View {
     @Binding var textField: String
+    @Binding var toggle: Bool
     
     var titleText: String
     var placeholder: String?
+    
+    internal init(textField: Binding<String>, toggle: Binding<Bool> = .constant(true), titleText: String, placeholder: String? = nil) {
+        _textField = textField
+        _toggle = toggle
+        self.titleText = titleText
+        self.placeholder = placeholder
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(titleText)
                 .font(.system(size: 15, weight: .bold))
             FioriNextTextField(text: $textField, placeHolder: placeholder ?? titleText)
+                .onChange(of: toggle) { newValue in
+                    if !newValue {
+                        textField = ""
+                    }
+                }
         }
     }
 }
@@ -444,13 +460,14 @@ struct ImageSelectionView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     var detailImage: Data?
     var imageHeight: CGFloat
+    var contentMode: ContentMode = .fill
 
     var body: some View {
         VStack {
             if let data = detailImage, let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .aspectRatio(contentMode: contentMode)
                     .frame(height: imageHeight)
                     .clipped()
             } else {
@@ -464,7 +481,7 @@ struct ImageSelectionView: View {
         .contentShape(RoundedRectangle(cornerRadius: 10))
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(detailImage == nil ? Color.fioriNextSecondaryFill.opacity(0.83) : Color.clear, lineWidth: 0.33)
+                .strokeBorder(Color.fioriNextSecondaryFill.opacity(0.83), lineWidth: 0.33)
                 .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color.fioriNextSecondaryFill.opacity(0.06)))
         )
     }

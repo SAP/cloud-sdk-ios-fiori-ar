@@ -13,4 +13,6 @@ extension Color {
     static let fioriNextSecondaryFill = Color(red: 91 / 255, green: 115 / 255, blue: 139 / 255)
     static let fioriNextPrimaryLabel = Color(red: 34 / 255, green: 53 / 255, blue: 72 / 255)
     static let fioriNextTertiaryLabel = Color(red: 71 / 255, green: 94 / 255, blue: 117 / 255)
+    static let fioriNextCritical = Color(red: 169 / 255, green: 62 / 255, blue: 0 / 255)
+    static let fioriNextNegativeLabel = Color(red: 210 / 255, green: 10 / 255, blue: 10 / 255)
 }

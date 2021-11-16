@@ -93,7 +93,7 @@ public struct ARCardsNetworkingService {
                     let card = CodableCardItem(
                         id: anchor.id,
                         title_: anchor.card.title ?? "",
-                        subtitle_: anchor.card.description ?? "",
+                        subtitle_: anchor.card.description,
                         detailImage_: data,
                         actionText_: anchor.card.actionText,
                         icon_: anchor.marker.icon?.sfSymbolName() ?? anchor.marker.iconIos,
@@ -110,7 +110,7 @@ public struct ARCardsNetworkingService {
                 guard let referenceAnchorFile = referenceAnchorFile,
                       let referenceAnchorImage = UIImage(data: referenceAnchorFile.data) else { fatalError() }
 
-                let arScene = ARScene(sceneId: scene.id, alias: scene.alias,sourceFile: sourceFileUrl, referenceAnchorImage: referenceAnchorImage, referenceAnchorImagePhysicalWidth: scene.referenceAnchor?.physicalWidth ?? 0.1, cards: cards)
+                let arScene = ARScene(sceneId: scene.id, alias: scene.alias, sourceFile: sourceFileUrl, referenceAnchorImage: referenceAnchorImage, referenceAnchorImagePhysicalWidth: scene.referenceAnchor?.physicalWidth ?? 0.1, cards: cards)
 
                 return Just(arScene)
                     .setFailureType(to: Error.self)
@@ -130,7 +130,7 @@ public struct ARCardsNetworkingService {
 
         let annotationAnchors: [AnnotationAnchor] = cards.map { card in
 
-            var imageUploadName: String? = nil
+            var imageUploadName: String?
             if let imageData = card.detailImage_ {
                 imageUploadName = UUID().uuidString
                 files.append(UploadFile(type: .data(imageData), fileName: imageUploadName!, partName: imageUploadName!, mimeType: "image/png")) // a mime type is needed for multi-form request but it does not matter if it's png or jpeg
@@ -233,7 +233,7 @@ public struct ARCardsNetworkingService {
             .tryMap { response in
                 switch response.result {
                 case .success(let data):
-                    guard (data.success != nil) else { throw APIClientError.failure(HTTPResponseStatus(code: data.statusCode, data: response.data)) }
+                    guard data.success != nil else { throw APIClientError.failure(HTTPResponseStatus(code: data.statusCode, data: response.data)) }
                 case .failure(let apiClientError):
                     print(apiClientError.name)
                     throw apiClientError
@@ -255,7 +255,6 @@ public struct ARCardsNetworkingService {
         case .alias(alias: let alias):
             return self.getUnresolvedScene(for: alias, language: language)
         }
-
     }
 
     internal func getImage(fileId id: String, sceneId: Int) -> AnyPublisher<FileImage, Error> {

@@ -12,7 +12,7 @@ import SwiftUI
 public struct SceneAuthoringView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
-    @Environment(\.onCardEdit) var onCardEdit
+    @Environment(\.onSceneEdit) var onSceneEdit
 
     @StateObject private var authoringViewModel: SceneAuthoringModel
     @StateObject private var arViewModel: ARAnnotationViewModel<CodableCardItem>
@@ -23,19 +23,21 @@ public struct SceneAuthoringView: View {
     
     public init(_ cardItems: [CodableCardItem] = [], serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
         let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
-        _authoringViewModel = StateObject(wrappedValue: SceneAuthoringModel(networkingAPI: networkingAPI, sceneIdentifier: sceneIdentifier))
+        _authoringViewModel = StateObject(wrappedValue: SceneAuthoringModel(cardItems, networkingAPI: networkingAPI, sceneIdentifier: sceneIdentifier))
         _arViewModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
     }
     
     public var body: some View {
         VStack(spacing: 0) {
-            TitleBarView(title: "Title",
+            TitleBarView(title: "Annotations",
                          onLeftAction: {
                              hideNavBar = false
                              presentationMode.wrappedValue.dismiss()
                          },
                          onRightAction: {
-                             startAR()
+                             if validatedSync() {
+                                 // syncWithService()
+                             }
                          },
                          leftBarLabel: {
                              Image(systemName: "xmark")
@@ -43,23 +45,16 @@ public struct SceneAuthoringView: View {
                                  .foregroundColor(Color.black)
                          },
                          rightBarLabel: {
-                             Image(systemName: "arkit")
-                                 .font(.system(size: 22))
+                             Text("Publish")
+                                 .font(.system(size: 17, weight: .bold))
                                  .foregroundColor(Color.black)
                          })
                 .background(Color.white)
             
-            Button(action: { authoringViewModel.updateExistingSceneOnServer() }, label: {
-                Text("Update Scene")
-                    .font(.system(size: 17, weight: .bold))
-                    .foregroundColor(Color.white)
-                    .frame(width: 175, height: 40, alignment: .center)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.fioriNextTint)
-                    )
-            })
-                .padding(.vertical, 5)
+            if let _ = authoringViewModel.bannerMessage {
+                BannerView(message: $authoringViewModel.bannerMessage)
+                    .padding([.horizontal, .bottom], 16)
+            }
             
             VStack(spacing: 0) {
                 TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: "Cards", rightTabTitle: "Anchor Image")
@@ -76,13 +71,6 @@ public struct SceneAuthoringView: View {
                                     })
                 case .right:
                     AnchorImageTabView(anchorImage: $authoringViewModel.anchorImage, physicalWidth: $authoringViewModel.physicalWidth)
-                case .loading:
-                    ZStack {
-                        Color.clear
-                        if authoringViewModel.requestState == .notStarted || authoringViewModel.requestState == .inProgress {
-                            ProgressView()
-                        }
-                    }
                 }
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
@@ -94,13 +82,14 @@ public struct SceneAuthoringView: View {
                              attachmentModels: $authoringViewModel.attachmentsMetadata,
                              currentCardID: $authoringViewModel.currentCardID,
                              onDismiss: { authoringViewModel.populateAttachmentView() })
-                    .onCardEdit(perform: onCardEdit),
+                    .onSceneEdit(perform: onSceneEdit),
                 isActive: $isCardCreationPresented,
                 label: { EmptyView() })
         )
         .navigationBarHidden(hideNavBar)
         .preferredColorScheme(.light)
         .navigationBarTitle("")
+        .overlay(startARButton, alignment: .bottom)
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: authoringViewModel.populateAttachmentView)
         .fullScreenCover(isPresented: $isARExperiencePresented) {
@@ -112,17 +101,81 @@ public struct SceneAuthoringView: View {
         }
     }
     
-    // TODO: Validate CardContents and AnchorImage. MVP Solution Disable Buttons until required data is available.
+    var startARButton: some View {
+        Button(action: {
+            if validatedAR() {
+                startAR()
+            }
+        }, label: {
+            Text("Go to AR Scene")
+                .font(.system(size: 17, weight: .bold))
+                .foregroundColor(Color.white)
+                .frame(width: 351, height: 54)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.white)
+                        .shadow(color: Color.fioriNextSecondaryFill.opacity(0.24), radius: 2)
+                        .shadow(color: Color.fioriNextSecondaryFill.opacity(0.08), radius: 8, y: 16)
+                        .shadow(color: Color.fioriNextSecondaryFill.opacity(0.08), radius: 16, y: 32)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.fioriNextTint)
+                                .padding(.vertical, 8)
+                                .padding(.horizontal, 12)
+                        )
+                )
+        })
+            .padding(.bottom, 50)
+    }
+    
+    func validatedAR() -> Bool {
+        if self.authoringViewModel.anchorImage == nil {
+            withAnimation {
+                authoringViewModel.bannerMessage = .anchorImageNotSelected
+            }
+            return false
+        }
+        if self.authoringViewModel.cardItems.isEmpty {
+            withAnimation {
+                authoringViewModel.bannerMessage = .noCardsCreated
+            }
+            return false
+        }
+        return true
+    }
+    
     func startAR() {
-        if self.authoringViewModel.anchorImage != nil, !self.authoringViewModel.cardItems.isEmpty {
-            let vectorStrategy = VectorStrategy(cardContents: authoringViewModel.cardItems,
-                                                anchorImage: self.authoringViewModel.anchorImage!,
-                                                physicalWidth: CGFloat(Double(self.authoringViewModel.physicalWidth)! / 100.0))
-            do {
-                try self.arViewModel.load(loadingStrategy: vectorStrategy)
-                self.isARExperiencePresented.toggle()
-            } catch {
-                print(error)
+        guard let anchorImage = self.authoringViewModel.anchorImage,
+              let physicalWidth = Double(self.authoringViewModel.physicalWidth) else { return }
+        
+        let vectorStrategy = VectorStrategy(cardContents: authoringViewModel.cardItems,
+                                            anchorImage: anchorImage,
+                                            physicalWidth: CGFloat(physicalWidth / 100.0))
+        
+        do {
+            try self.arViewModel.load(loadingStrategy: vectorStrategy)
+            self.isARExperiencePresented.toggle()
+        } catch {
+            print(error)
+        }
+    }
+    
+    func validatedSync() -> Bool {
+        if !self.authoringViewModel.allAnnotationsPinned() {
+            withAnimation {
+                authoringViewModel.bannerMessage = .pinAnnotationsFirst
+            }
+            return false
+        }
+        return self.validatedAR() && self.authoringViewModel.hasDifference()
+    }
+    
+    func syncWithService() {
+        if let _ = authoringViewModel.sceneIdentifier {
+            self.authoringViewModel.updateExistingSceneOnServer()
+        } else {
+            self.authoringViewModel.createSceneOnServer { sceneId in
+                self.onSceneEdit(.published(sceneID: sceneId))
             }
         }
     }
@@ -138,11 +191,11 @@ private struct TabbedView: View {
         HStack(spacing: 0) {
             tab(title: leftTabTitle, isSelected: currentTab == .left)
                 .onTapGesture {
-                    currentTab = .left
+                    withAnimation { currentTab = .left }
                 }
             tab(title: rightTabTitle, isSelected: currentTab == .right)
                 .onTapGesture {
-                    currentTab = .right
+                    withAnimation { currentTab = .right }
                 }
         }
         .font(.system(size: 14, weight: .bold))
@@ -166,10 +219,9 @@ private struct TabbedView: View {
 enum TabSelection {
     case left
     case right
-    case loading
 }
 
-enum PinValue: String {
-    case pinned = "Pinned"
-    case notPinned = "Not Pinned Yet"
+enum AttachValue: String {
+    case Attached
+    case notAttached = "Not Attached Yet"
 }
