@@ -108,7 +108,7 @@ private struct AttachmentCardView: View {
                         .truncationMode(.middle)
                     if let subtitle = item.subtitle {
                         Text(subtitle)
-                            .foregroundColor(.gray)
+                            .foregroundColor(subtitle == AttachValue.Attached.rawValue ? Color.gray : Color.fioriNextCritical)
                     }
                     if let info = item.info {
                         Text(info)

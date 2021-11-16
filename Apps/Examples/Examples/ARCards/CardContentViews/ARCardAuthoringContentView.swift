@@ -10,7 +10,7 @@ import SAPFoundation
 import SwiftUI
 
 struct ARCardAuthoringContentView: View {
-    let cardItems = [CodableCardItem(id: UUID().uuidString, title_: "Dune", subtitle_: "Arrakis", actionText_: "Watch Video", actionContentURL_: URL(string: "https://www.youtube.com/watch?v=8g18jFHCLXk")!, position_: SIMD3<Float>(x: -0.1, y: 0, z: 0)),
+    let cardItems = [CodableCardItem(id: UUID().uuidString, title_: "Dune", subtitle_: "Arrakis", actionText_: "Watch Video", actionContentURL_: URL(string: "https://www.youtube.com/watch?v=8g18jFHCLXk")!, icon_: "link", position_: SIMD3<Float>(x: -0.1, y: 0, z: 0)),
                      CodableCardItem(id: UUID().uuidString, title_: "Harkonnen", position_: SIMD3<Float>(x: 0, y: 0, z: 0)),
                      CodableCardItem(id: UUID().uuidString, title_: "Atreides", position_: SIMD3<Float>(x: 0.1, y: 0, z: 0)),
                      CodableCardItem(id: UUID().uuidString, title_: "Foundation"),
@@ -25,17 +25,20 @@ struct ARCardAuthoringContentView: View {
     )
 
     var body: some View {
-        SceneAuthoringView(serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
+        SceneAuthoringView(cardItems,
+                           serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
                            sapURLSession: sapURLSession,
-                           sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId))
-            .onCardEdit { cardEdit in
-                switch cardEdit {
-                case .created(let card):
+                           sceneIdentifier: nil) // SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId))
+            .onSceneEdit { sceneEdit in
+                switch sceneEdit {
+                case .created(card: let card):
                     print("Created: \(card.title_)")
-                case .updated(let card):
+                case .updated(card: let card):
                     print("Updated: \(card.title_)")
                 case .deleted(card: let card):
                     print("Deleted: \(card.title_)")
+                case .published(sceneID: let sceneID):
+                    print(sceneID)
                 }
             }
     }

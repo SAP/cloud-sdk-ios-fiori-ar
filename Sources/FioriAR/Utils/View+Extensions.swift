@@ -45,6 +45,14 @@ internal extension View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
+    
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners))
+    }
+    
+    func adaptsToKeyboard() -> some View {
+        modifier(AdaptsToKeyboard())
+    }
 }
 
 public extension View {
@@ -60,15 +68,7 @@ public extension View {
     ///
     /// - Parameters:
     ///     - perform: Returns a CardEditing with an associated value `CodableCardItem` that has been created, updated, or deleted
-    func onCardEdit(perform action: @escaping (CardEditing) -> Void) -> some View {
-        environment(\.onCardEdit, action)
-    }
-    
-    internal func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-    
-    internal func adaptsToKeyboard() -> some View {
-        modifier(AdaptsToKeyboard())
+    func onSceneEdit(perform action: @escaping (SceneEditing) -> Void) -> some View {
+        environment(\.onSceneEdit, action)
     }
 }

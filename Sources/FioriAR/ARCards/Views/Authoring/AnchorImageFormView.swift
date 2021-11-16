@@ -27,7 +27,17 @@ struct AnchorImageFormView: View {
     @State private var imageValidationText = ""
     @State private var validatingAnchorImage = false
     
-    var onDismiss: (() -> Void)?
+    var _onDismiss: (() -> Void)?
+    
+    init(anchorImage: Binding<UIImage?>, physicalWidth: Binding<String>, imageName: Binding<String?>, onDismiss: (() -> Void)? = nil) {
+        _anchorImage = anchorImage
+        _physicalWidth = physicalWidth
+        _imageName = imageName
+        _internalAnchorImage = State(initialValue: anchorImage.wrappedValue)
+        _internalPhysicalWidth = State(initialValue: physicalWidth.wrappedValue)
+        _internalImageName = State(initialValue: imageName.wrappedValue)
+        self._onDismiss = onDismiss
+    }
     
     var body: some View {
         ScrollView {
@@ -41,8 +51,8 @@ struct AnchorImageFormView: View {
                     
                     Spacer()
                     
-                    DismissView {
-                        onDismiss?()
+                    ActionView(icon: Image(systemName: "xmark")) {
+                        _onDismiss?()
                     }
                 }
                 .padding(.top, 11)
@@ -59,25 +69,29 @@ struct AnchorImageFormView: View {
                     }
                     .padding(.leading, 8)
                     
-                    VStack(spacing: 20) {
+                    VStack(spacing: 0) {
                         HStack {
                             Text("Please enter the real-world physical width of anchor image.")
                                 .font(.system(size: 15))
                                 .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
                             Spacer()
                         }
+                        .padding(.bottom, 16)
                         
                         TextDetail(textField: $internalPhysicalWidth, titleText: "Width", placeholder: "0.00 cm")
                             .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
                             .keyboardType(.decimalPad)
                         
                         if !physicalWidthValidationText.isEmpty {
-                            HStack {
+                            HStack(spacing: 4) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(Color.fioriNextNegativeLabel)
                                 Text(physicalWidthValidationText)
-                                    .font(.system(size: 15))
-                                    .foregroundColor(.red)
+                                    .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
                                 Spacer()
                             }
+                            .font(.system(size: 13))
+                            .padding(.top, 8)
                         }
                     }
                     .padding(16)
@@ -99,7 +113,7 @@ struct AnchorImageFormView: View {
                     }
                     .padding(.leading, 8)
                     
-                    VStack(spacing: 16) {
+                    VStack(spacing: 0) {
                         HStack {
                             Text("Please tap the area below to upload anchor image.")
                                 .font(.system(size: 15))
@@ -109,19 +123,35 @@ struct AnchorImageFormView: View {
                                 ProgressView()
                             }
                         }
+                        .padding(.bottom, 16)
                         
-                        ImageSelectionView(detailImage: internalAnchorImage?.pngData(), imageHeight: 145)
+                        ImageSelectionView(detailImage: internalAnchorImage?.pngData(), imageHeight: 145, contentMode: .fit)
                             .onTapGesture {
                                 actionSheetPresented.toggle()
                             }
-                        if !imageValidationText.isEmpty {
-                            HStack {
-                                Text(imageValidationText)
-                                    .font(.system(size: 15))
-                                    .foregroundColor(.red)
-                                Spacer()
+                            
+                        HStack {
+                            if !imageValidationText.isEmpty {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .foregroundColor(Color.fioriNextNegativeLabel)
+                                    Text(imageValidationText)
+                                        .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                                }
+                                .font(.system(size: 13))
+                            }
+                            Spacer()
+                            if internalAnchorImage != nil {
+                                Button("Delete") {
+                                    withAnimation {
+                                        internalAnchorImage = nil
+                                    }
+                                }
+                                .font(.system(size: 13, weight: .bold))
+                                .foregroundColor(Color.black)
                             }
                         }
+                        .padding(.top, 8)
                     }
                     .padding(16)
                     .frame(maxWidth: .infinity, maxHeight: 300)
@@ -133,13 +163,12 @@ struct AnchorImageFormView: View {
                 .padding(.bottom, 32)
                 
                 Button(action: {
-                    // Validate Image is selected and Physical Width is valid
                     if validateInput() {
                         validateAnchorImage(completionHandler: {
                             anchorImage = internalAnchorImage
                             physicalWidth = internalPhysicalWidth
                             imageName = internalImageName
-                            onDismiss?()
+                            _onDismiss?()
                         })
                     }
                 }, label: {

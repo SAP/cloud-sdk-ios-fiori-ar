@@ -87,7 +87,6 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
             
             if arModel.discoveryFlowHasFinished {
                 ARAnnotationContentView(arModel, cardLabel: cardLabel, markerLabel: markerLabel)
-                
             } else {
                 scanLabel(guideImage == nil ? $arModel.guideImage : .constant(guideImage), $arModel.anchorPosition)
             }
