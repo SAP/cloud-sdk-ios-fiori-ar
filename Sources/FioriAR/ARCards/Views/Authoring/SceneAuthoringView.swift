@@ -20,6 +20,7 @@ public struct SceneAuthoringView: View {
     @State private var hideNavBar = true
     @State private var isCardCreationPresented = false
     @State private var isARExperiencePresented = false
+    @State private var isAlertPresented = false
     
     public init(_ cardItems: [CodableCardItem] = [], serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
         let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
@@ -31,14 +32,12 @@ public struct SceneAuthoringView: View {
         VStack(spacing: 0) {
             TitleBarView(title: "Annotations",
                          onLeftAction: {
-                             hideNavBar = false
-                             presentationMode.wrappedValue.dismiss()
+                             isAlertPresented = true
                          },
                          onRightAction: {
-                             if validatedSync() {
-                                 // syncWithService()
-                             }
+                             syncWithService()
                          },
+                         rightDisabled: !authoringViewModel.validatedSync,
                          leftBarLabel: {
                              Image(systemName: "xmark")
                                  .font(.system(size: 22))
@@ -47,7 +46,7 @@ public struct SceneAuthoringView: View {
                          rightBarLabel: {
                              Text("Publish")
                                  .font(.system(size: 17, weight: .bold))
-                                 .foregroundColor(Color.black)
+                                 .foregroundColor(authoringViewModel.validatedSync ? Color.black : Color.gray)
                          })
                 .background(Color.white)
             
@@ -81,7 +80,10 @@ public struct SceneAuthoringView: View {
                 CardFormView(cardItems: $authoringViewModel.cardItems,
                              attachmentModels: $authoringViewModel.attachmentsMetadata,
                              currentCardID: $authoringViewModel.currentCardID,
-                             onDismiss: { authoringViewModel.populateAttachmentView() })
+                             onDismiss: {
+                                 authoringViewModel.validateSync()
+                                 authoringViewModel.populateAttachmentView()
+                             })
                     .onSceneEdit(perform: onSceneEdit),
                 isActive: $isCardCreationPresented,
                 label: { EmptyView() })
@@ -96,16 +98,24 @@ public struct SceneAuthoringView: View {
             MarkerPositioningFlowView(arModel: arViewModel,
                                       cardItems: $authoringViewModel.cardItems,
                                       attachmentsMetadata: $authoringViewModel.attachmentsMetadata,
-                                      image: authoringViewModel.anchorImage!,
+                                      onDismiss: { authoringViewModel.validateSync() },
+                                      image: authoringViewModel.anchorImage,
                                       cardAction: { _ in })
+        }
+        .alert(isPresented: $isAlertPresented) {
+            Alert(title: Text("Alert"),
+                  message: Text("There maybe changes that haven’t been published yet. Are you sure you want to leave the scene?"),
+                  primaryButton: .destructive(Text("Continue"), action: {
+                      hideNavBar = false
+                      presentationMode.wrappedValue.dismiss()
+                  }),
+                  secondaryButton: .cancel())
         }
     }
     
     var startARButton: some View {
         Button(action: {
-            if validatedAR() {
-                startAR()
-            }
+            startAR()
         }, label: {
             Text("Go to AR Scene")
                 .font(.system(size: 17, weight: .bold))
@@ -119,29 +129,14 @@ public struct SceneAuthoringView: View {
                         .shadow(color: Color.fioriNextSecondaryFill.opacity(0.08), radius: 16, y: 32)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.fioriNextTint)
+                                .fill(authoringViewModel.validatedAR() ? Color.fioriNextTint : Color.gray)
                                 .padding(.vertical, 8)
                                 .padding(.horizontal, 12)
                         )
                 )
         })
+            .disabled(!authoringViewModel.validatedAR())
             .padding(.bottom, 50)
-    }
-    
-    func validatedAR() -> Bool {
-        if self.authoringViewModel.anchorImage == nil {
-            withAnimation {
-                authoringViewModel.bannerMessage = .anchorImageNotSelected
-            }
-            return false
-        }
-        if self.authoringViewModel.cardItems.isEmpty {
-            withAnimation {
-                authoringViewModel.bannerMessage = .noCardsCreated
-            }
-            return false
-        }
-        return true
     }
     
     func startAR() {
@@ -158,16 +153,6 @@ public struct SceneAuthoringView: View {
         } catch {
             print(error)
         }
-    }
-    
-    func validatedSync() -> Bool {
-        if !self.authoringViewModel.allAnnotationsPinned() {
-            withAnimation {
-                authoringViewModel.bannerMessage = .pinAnnotationsFirst
-            }
-            return false
-        }
-        return self.validatedAR() && self.authoringViewModel.hasDifference()
     }
     
     func syncWithService() {
@@ -222,6 +207,6 @@ enum TabSelection {
 }
 
 enum AttachValue: String {
-    case Attached
+    case attached = "Attached"
     case notAttached = "Not Attached Yet"
 }

@@ -9,14 +9,19 @@ import SwiftUI
 
 struct FlowButtonsView<CardItem>: View where CardItem: CardItemModel {
     @Binding var flowState: MarkerFlowState
+    
     var cardItem: CardItem?
     var onPublish: (() -> Void)?
-
+    
     var body: some View {
         ZStack(alignment: .bottom) {
-            if flowState == .beforeDrop {
+            if flowState == .beforeDrop || flowState == .dropped {
                 Button(action: {
-                    flowState = .dropped
+                    if flowState == .beforeDrop {
+                        flowState = .dropped
+                    } else if flowState == .dropped {
+                        flowState = .preview
+                    }
                 }, label: {
                     Text("Drop Marker")
                         .font(.system(size: 15, weight: .bold))
@@ -28,33 +33,6 @@ struct FlowButtonsView<CardItem>: View where CardItem: CardItemModel {
                         )
                 })
                     .padding(.bottom, 100)
-            }
-            
-            if flowState == .dropped {
-                HStack(spacing: 8) {
-                    Button(action: { flowState = .selectCard }, label: {
-                        Text("Add Another")
-                            .font(.system(size: 15, weight: .bold))
-                            .frame(width: 122, height: 40)
-                            .foregroundColor(.black)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.white)
-                            )
-                    })
-                    
-                    Button(action: { flowState = .preview }, label: {
-                        Text("Go To Preview")
-                            .font(.system(size: 15, weight: .bold))
-                            .frame(width: 213, height: 40)
-                            .foregroundColor(.white)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.fioriNextTint)
-                            )
-                    })
-                }
-                .padding(.bottom, 100)
             }
             
             if flowState == .preview {

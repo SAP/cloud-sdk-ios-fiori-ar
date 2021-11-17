@@ -22,33 +22,36 @@ enum MarkerFlowState {
 struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>: View where CardItem: CardItemModel, CardItem.ID: StringProtocol {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @ObservedObject public var arModel: ARAnnotationViewModel<CardItem>
+    @ObservedObject var arModel: ARAnnotationViewModel<CardItem>
+    
     @Binding var cardItems: [CardItem]
     @Binding var attachmentsMetadata: [AttachmentUIMetadata]
     
     @State private var cardItem: CardItem? = nil
     @State private var flowState: MarkerFlowState = .arscene
-    
     @State private var sheetState: PartialSheetState = .notVisible
     @State private var sheetTitle = "Add Annotation"
     @State private var firstPage = true
     @State private var displayPagingView = true
     @State private var carouselVisible = true
     
-    let scanLabel: (Binding<CGPoint?>) -> Scan
+    let onDismiss: (() -> Void)?
+    let scanLabel: (CGPoint?) -> Scan
     let cardLabel: (CardItem, Bool) -> Card
     let markerLabel: (MarkerControl.State, Image?) -> Marker
     
     public init(arModel: ARAnnotationViewModel<CardItem>,
                 cardItems: Binding<[CardItem]>,
                 attachmentsMetadata: Binding<[AttachmentUIMetadata]>,
-                @ViewBuilder scanLabel: @escaping (Binding<CGPoint?>) -> Scan,
+                onDismiss: (() -> Void)? = nil,
+                @ViewBuilder scanLabel: @escaping (CGPoint?) -> Scan,
                 @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
                 @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
     {
         self.arModel = arModel
         _cardItems = cardItems
         _attachmentsMetadata = attachmentsMetadata
+        self.onDismiss = onDismiss
         self.scanLabel = scanLabel
         self.cardLabel = cardLabel
         self.markerLabel = markerLabel
@@ -99,7 +102,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                     }
                 }
             } else {
-                scanLabel($arModel.anchorPosition)
+                scanLabel(arModel.anchorPosition)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -112,13 +115,6 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                     EditButton(flowState: flowState, onAction: onEdit)
                 }
             }, alignment: .topTrailing
-        )
-        .overlay(
-            Group {
-                if flowState == .editMarker {
-                    PublishBarView(onReset: nil, onPublish: nil)
-                }
-            }, alignment: .bottom
         )
         .onTapGesture {
             if flowState == .editMarker || flowState == .selectMarker {
@@ -151,7 +147,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 sheetState = .open
             case .beforeDrop:
                 arModel.removeEntitiesFromScene()
-                setPinValue(cardItem: cardItem, pinValue: .Attached)
+                setPinValue(cardItem: cardItem, pinValue: .attached)
                 arModel.addNewEntity(to: cardItem)
                 arModel.setMarkerState(for: cardItem, to: .world)
                 sheetTitle = "View Annotation"
@@ -180,6 +176,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
             self.arModel.updateCardItemPositions()
             self.cardItems = self.arModel.annotations.map(\.card)
             self.arModel.resetAllAnchors()
+            self.onDismiss?()
             self.presentationMode.wrappedValue.dismiss()
         }
     }
@@ -209,48 +206,6 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         guard let cardItem = cardItem,
               let index = attachmentsMetadata.firstIndex(where: { $0.id.uuidString == cardItem.id }) else { return }
         self.attachmentsMetadata[index].subtitle = pinValue.rawValue
-    }
-}
-
-private struct PublishBarView: View {
-    var onReset: (() -> Void)? = nil
-    var onPublish: (() -> Void)? = nil
-    
-    var body: some View {
-        HStack(spacing: 8) {
-            Button(action: { onReset?() }, label: {
-                Text("Reset")
-                    .font(.system(size: 15, weight: .bold))
-                    .frame(width: 103, height: 38)
-                    .foregroundColor(.white)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.fioriNextTint)
-                    )
-                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
-                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
-            })
-            
-            Button(action: { onPublish?() }, label: {
-                Text("Publish")
-                    .font(.system(size: 15, weight: .bold))
-                    .frame(width: 216, height: 38)
-                    .foregroundColor(.white)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.fioriNextTint)
-                    )
-                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
-                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
-            })
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.fioriNextPrimaryLabel.opacity(0.25))
-        )
-        .padding(.bottom, 77)
     }
 }
 
@@ -341,12 +296,14 @@ extension MarkerPositioningFlowView where Scan == ARScanView,
     init(arModel: ARAnnotationViewModel<CardItem>,
          cardItems: Binding<[CardItem]>,
          attachmentsMetadata: Binding<[AttachmentUIMetadata]>,
-         image: UIImage,
+         onDismiss: (() -> Void)?,
+         image: UIImage?,
          cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
                   cardItems: cardItems,
                   attachmentsMetadata: attachmentsMetadata,
+                  onDismiss: onDismiss,
                   scanLabel: { anchorPosition in ARScanView(guideImage: image, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
