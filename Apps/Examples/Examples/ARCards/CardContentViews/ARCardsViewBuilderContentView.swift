@@ -39,8 +39,8 @@ struct ARCardsViewBuilderContentView: View {
 }
 
 struct CustomScanView: View {
-    @Binding var guideImage: UIImage?
-    @Binding var position: CGPoint?
+    var guideImage: UIImage?
+    var position: CGPoint?
     
     var body: some View {
         ZStack {

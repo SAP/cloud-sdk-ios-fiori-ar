@@ -14,6 +14,7 @@ struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View,
     
     var onLeftAction: (() -> Void)?
     var onRightAction: (() -> Void)?
+    var rightDisabled: Bool
     
     var leftBarLabel: () -> LeftBarLabel
     var rightBarLabel: () -> RightBarLabel
@@ -21,12 +22,14 @@ struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View,
     init(title: String,
          onLeftAction: (() -> Void)? = nil,
          onRightAction: (() -> Void)? = nil,
+         rightDisabled: Bool = false,
          @ViewBuilder leftBarLabel: @escaping () -> LeftBarLabel,
          @ViewBuilder rightBarLabel: @escaping () -> RightBarLabel)
     {
         self.title = title
         self.onLeftAction = onLeftAction
         self.onRightAction = onRightAction
+        self.rightDisabled = rightDisabled
         self.leftBarLabel = leftBarLabel
         self.rightBarLabel = rightBarLabel
     }
@@ -51,6 +54,7 @@ struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View,
                 Button(action: { onRightAction?() }, label: {
                     rightBarLabel()
                 })
+                    .disabled(rightDisabled)
             }
         }
         .padding(.horizontal, 16)

@@ -34,8 +34,6 @@ struct BannerView: View {
 }
 
 enum BannerMessage: String {
-    case anchorImageNotSelected = "Anchor Image not selected"
-    case noCardsCreated = "No cards created"
     case sceneUpdated = "Scene Updated"
     case pinAnnotationsFirst = "Pin all Annotations First"
     case failure = "Oops, something went wrong..."
