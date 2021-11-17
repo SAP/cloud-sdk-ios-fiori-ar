@@ -58,7 +58,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
     @ObservedObject public var arModel: ARAnnotationViewModel<CardItem>
     
     /// View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
-    public let scanLabel: (Binding<UIImage?>, Binding<CGPoint?>) -> Scan
+    public let scanLabel: (UIImage?, CGPoint?) -> Scan
     
     /// View Builder for a custom CardView
     public let cardLabel: (CardItem, Bool) -> Card
@@ -70,7 +70,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
     
     public init(arModel: ARAnnotationViewModel<CardItem>,
                 guideImage: UIImage? = nil,
-                @ViewBuilder scanLabel: @escaping (Binding<UIImage?>, Binding<CGPoint?>) -> Scan,
+                @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
                 @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
                 @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
     {
@@ -88,7 +88,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
             if arModel.discoveryFlowHasFinished {
                 ARAnnotationContentView(arModel, cardLabel: cardLabel, markerLabel: markerLabel)
             } else {
-                scanLabel(guideImage == nil ? $arModel.guideImage : .constant(guideImage), $arModel.anchorPosition)
+                scanLabel(guideImage == nil ? arModel.guideImage : guideImage, arModel.anchorPosition)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -187,7 +187,7 @@ public extension ARAnnotationsView where Card == CardView<Text,
 {
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
-         @ViewBuilder scanLabel: @escaping (Binding<UIImage?>, Binding<CGPoint?>) -> Scan,
+         @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
          cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
@@ -214,7 +214,7 @@ public extension ARAnnotationsView where Scan == ARScanView {
 
 public extension ARAnnotationsView where Marker == MarkerView {
     init(arModel: ARAnnotationViewModel<CardItem>,
-         @ViewBuilder scanLabel: @escaping (Binding<UIImage?>, Binding<CGPoint?>) -> Scan,
+         @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
          @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
     {
         self.init(arModel: arModel,
@@ -231,7 +231,7 @@ public extension ARAnnotationsView where Card == CardView<Text,
     CardItem>
 {
     init(arModel: ARAnnotationViewModel<CardItem>,
-         @ViewBuilder scanLabel: @escaping (Binding<UIImage?>, Binding<CGPoint?>) -> Scan,
+         @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
          @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
          cardAction: ((CardItem.ID) -> Void)?)
     {

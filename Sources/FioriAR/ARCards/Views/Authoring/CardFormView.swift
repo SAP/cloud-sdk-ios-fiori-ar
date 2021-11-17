@@ -30,7 +30,6 @@ struct CardFormView: View {
     @State var actionText: String
     @State var actionContentText: String
     @State var icon: String?
-    
     @State var hasButton = false
     @State var hasCoverImage = false
     
@@ -103,14 +102,14 @@ struct CardFormView: View {
                 }
                 .frame(maxHeight: verticalSizeClass == .compact ? .infinity : 246)
                 
-                CardDetailsView(isUpdate: isUpdate,
-                                detailImage: $detailImage,
-                                title: $title,
+                CardDetailsView(title: $title,
                                 subtitle: $subtitle,
+                                detailImage: $detailImage,
                                 actionText: $actionText,
                                 actionContentText: $actionContentText,
                                 actionButtonToggle: $hasButton,
                                 coverImageToggle: $hasCoverImage,
+                                isUpdate: isUpdate,
                                 editCardAction: {
                                     if let currentID = currentCardID {
                                         updateCard(for: currentID)
@@ -171,22 +170,20 @@ struct CardFormView: View {
 }
 
 private struct CardDetailsView: View {
-    var isUpdate: Bool
-    
-    @Binding var detailImage: Data?
     @Binding var title: String
     @Binding var subtitle: String
+    @Binding var detailImage: Data?
     @Binding var actionText: String
     @Binding var actionContentText: String
-    
     @Binding var actionButtonToggle: Bool
     @Binding var coverImageToggle: Bool
     
     @State var actionSheetPresented = false
-    var editCardAction: (() -> Void)?
-    
     @State var pickerPresented = false
     @State var pickerSource: UIImagePickerController.SourceType = .photoLibrary
+    
+    var isUpdate: Bool
+    var editCardAction: (() -> Void)?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -394,6 +391,7 @@ struct TextDetail: View {
 
 private struct ToggleDetail: View {
     var titleText: String
+    
     @Binding var textField: String
     @Binding var isOn: Bool
     
@@ -458,6 +456,7 @@ private struct CoverImageDetail: View {
 
 struct ImageSelectionView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
     var detailImage: Data?
     var imageHeight: CGFloat
     var contentMode: ContentMode = .fill

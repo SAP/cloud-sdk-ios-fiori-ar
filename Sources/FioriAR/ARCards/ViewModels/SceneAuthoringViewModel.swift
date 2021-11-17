@@ -17,10 +17,12 @@ class SceneAuthoringModel: ObservableObject {
     @Published var currentTab: TabSelection = .left
     @Published var attachmentsMetadata: [AttachmentUIMetadata] = []
     @Published var bannerMessage: BannerMessage? = nil
+    @Published var validatedSync = false
     
     var sceneIdentifier: SceneIdentifyingAttribute?
     private var networkingAPI: ARCardsNetworkingService!
     private var originalCardItems: [CodableCardItem] = []
+    private var originalAnchorImage: UIImage?
     private var cancellables = Set<AnyCancellable>()
     
     init(_ cardItems: [CodableCardItem] = [], networkingAPI: ARCardsNetworkingService, sceneIdentifier: SceneIdentifyingAttribute?, completionHandler: (() -> Void)? = nil) {
@@ -43,7 +45,7 @@ class SceneAuthoringModel: ObservableObject {
             }
             let newAttachmentModel = AttachmentUIMetadata(id: UUID(uuidString: card.id) ?? UUID(),
                                                           title: card.title_,
-                                                          subtitle: card.position_ == nil ? AttachValue.notAttached.rawValue : AttachValue.Attached.rawValue,
+                                                          subtitle: card.position_ == nil ? AttachValue.notAttached.rawValue : AttachValue.attached.rawValue,
                                                           info: nil,
                                                           image: detailImage,
                                                           icon: card.icon_ == nil ? nil : Image(systemName: card.icon_!))
@@ -55,11 +57,19 @@ class SceneAuthoringModel: ObservableObject {
         if self.cardItems.count != self.originalCardItems.count { return true }
         let currentSorted = self.cardItems.sorted { $0.id < $1.id }
         let ogSorted = self.originalCardItems.sorted { $0.id < $1.id }
-        return !currentSorted.difference(from: ogSorted).isEmpty
+        return !currentSorted.difference(from: ogSorted).isEmpty || self.originalAnchorImage?.pngData() != self.anchorImage?.pngData()
     }
     
     func allAnnotationsPinned() -> Bool {
         self.cardItems.allSatisfy { $0.position_ != nil }
+    }
+    
+    func validatedAR() -> Bool {
+        self.anchorImage != nil && !self.cardItems.isEmpty
+    }
+    
+    func validateSync() {
+        self.validatedSync = self.hasDifference() && self.allAnnotationsPinned() && self.validatedAR()
     }
     
     func createSceneOnServer(completionHandler: @escaping (Int) -> Void) {
@@ -108,8 +118,10 @@ class SceneAuthoringModel: ObservableObject {
                 self.cardItems = scene.cards
                 self.originalCardItems = scene.cards
                 self.anchorImage = scene.referenceAnchorImage
+                self.originalAnchorImage = scene.referenceAnchorImage
                 self.physicalWidth = String(scene.referenceAnchorImagePhysicalWidth)
                 self.populateAttachmentView()
+                self.validateSync()
             }
             .store(in: &self.cancellables)
     }
@@ -132,6 +144,7 @@ class SceneAuthoringModel: ObservableObject {
             case .finished:
                 print(completion)
                 self.originalCardItems = self.cardItems
+                self.originalAnchorImage = self.anchorImage
                 self.bannerMessage = .sceneUpdated
             case .failure(let error):
                 print("API Error: \(error.localizedDescription)")

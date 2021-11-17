@@ -17,39 +17,20 @@ import SwiftUI
  */
 
 public struct ARScanView: View {
-    @Binding var guideImage: UIImage?
-    @Binding var anchorPosition: CGPoint?
+    var guideImage: UIImage?
+    var anchorPosition: CGPoint?
     
-    public init(guideImage: Binding<UIImage?>, anchorPosition: Binding<CGPoint?>) {
-        self._guideImage = guideImage
-        self._anchorPosition = anchorPosition
-    }
-    
-    /// Convenience init for when guideImage is always available at initialization
-    public init(guideImage: UIImage, anchorPosition: Binding<CGPoint?>) {
-        self.init(guideImage: .constant(guideImage), anchorPosition: anchorPosition)
+    public init(guideImage: UIImage?, anchorPosition: CGPoint?) {
+        self.guideImage = guideImage
+        self.anchorPosition = anchorPosition
     }
     
     public var body: some View {
         ZStack {
             if anchorPosition != nil {
-                ImageMatchedView(anchorPosition: $anchorPosition)
-                
+                ImageMatchedView(anchorPosition: anchorPosition)
             } else {
-                if let image = guideImage {
-                    CollapsingView(image: Image(uiImage: image))
-                        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 1)))
-                    
-                } else {
-                    VStack(spacing: 30) {
-                        ProgressView()
-                            .progressViewStyle(FioriNextProgressStyle())
-                            .frame(width: 200, height: 200)
-                        Text("Loading... May take a moment")
-                            .font(.system(size: 24))
-                            .foregroundColor(Color.white)
-                    }
-                }
+                CollapsingView(image: guideImage)
             }
         }
         .animation(.easeInOut(duration: 1.2), value: anchorPosition)
@@ -75,7 +56,7 @@ struct FioriNextProgressStyle: ProgressViewStyle {
 }
 
 private struct CollapsingView: View {
-    let image: Image
+    let image: UIImage?
     let screen = UIScreen.main.bounds
     
     @State var isScanning = false
@@ -98,42 +79,55 @@ private struct CollapsingView: View {
                 .cornerRadius(isScanning ? 8 : 0)
                 .matchedGeometryEffect(id: isScanning ? "image" : "background", in: nameSpace, isSource: false)
             
-            VStack {
-                image
-                    .resizable()
-                    .cornerRadius(8)
-                    .padding(.all, 8)
-                    .scaledToFit()
-                    .background(
-                        ScanGuideCorners()
-                            .stroke(isScanning ? Color.clear : Color.white, lineWidth: 2)
-                    )
-                    .matchedGeometryEffect(id: isScanning ? "image" : "background", in: nameSpace, isSource: false)
-                    .padding(.horizontal, 56)
-                    .padding(.top, verticalSizeClass == .compact ? 80 : 216)
-                    .onTapGesture(perform: buttonAction)
-                    .allowsHitTesting(isScanning)
-                
-                Text("Point your camera at this image to start augmented reality experience")
-                    .font(.system(size: 17))
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 24)
-                    .padding(.top, 24)
-                    .padding(.bottom, verticalSizeClass == .compact ? 44 : 80)
-                    .opacity(isScanning ? 0 : 1)
-                
-                Button(action: { buttonAction() }, label: {
-                    Text("Begin Scan")
-                        .frame(width: 201, height: 40)
-                        .foregroundColor(.white)
+            if let image = image {
+                VStack {
+                    Image(uiImage: image)
+                        .resizable()
+                        .cornerRadius(8)
+                        .padding(.all, 8)
+                        .scaledToFit()
                         .background(
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(Color.preferredColor(.tintColor, background: .lightConstant))
+                            ScanGuideCorners()
+                                .stroke(isScanning ? Color.clear : Color.white, lineWidth: 2)
                         )
-                })
-                    .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
-                    .opacity(isScanning ? 0 : 1)
+                        .matchedGeometryEffect(id: isScanning ? "image" : "background", in: nameSpace, isSource: false)
+                        .padding(.horizontal, 56)
+                        .padding(.top, verticalSizeClass == .compact ? 80 : 216)
+                        .onTapGesture(perform: buttonAction)
+                        .allowsHitTesting(isScanning)
+                    
+                    Text("Point your camera at this image to start augmented reality experience")
+                        .font(.system(size: 17))
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 24)
+                        .padding(.bottom, verticalSizeClass == .compact ? 44 : 80)
+                        .opacity(isScanning ? 0 : 1)
+                    
+                    Button(action: { buttonAction() }, label: {
+                        Text("Begin Scan")
+                            .frame(width: 201, height: 40)
+                            .foregroundColor(.white)
+                            .background(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .fill(Color.preferredColor(.tintColor, background: .lightConstant))
+                            )
+                    })
+                        .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
+                        .opacity(isScanning ? 0 : 1)
+                }
+                .transition(AnyTransition.opacity.animation(.easeInOut(duration: 1)))
+                
+            } else {
+                VStack(spacing: 30) {
+                    ProgressView()
+                        .progressViewStyle(FioriNextProgressStyle())
+                        .frame(width: 200, height: 200)
+                    Text("Loading... May take a moment")
+                        .font(.system(size: 24))
+                        .foregroundColor(Color.white)
+                }
             }
             
             if isScanning {
@@ -142,15 +136,17 @@ private struct CollapsingView: View {
             
             VStack {
                 Spacer()
-                image
-                    .resizable()
-                    .cornerRadius(8)
-                    .scaledToFit()
-                    .matchedGeometryEffect(id: "image", in: nameSpace)
-                    .frame(width: collapsedRatio)
-                    .padding(.bottom, 34)
-                    .offset(x: verticalSizeClass == .compact ? screen.width * 0.33 : 0)
-                    .opacity(0)
+                if let image = image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .cornerRadius(8)
+                        .scaledToFit()
+                        .matchedGeometryEffect(id: "image", in: nameSpace)
+                        .frame(width: collapsedRatio)
+                        .padding(.bottom, 34)
+                        .offset(x: verticalSizeClass == .compact ? screen.width * 0.33 : 0)
+                        .opacity(0)
+                }
             }
         }
     }
@@ -187,7 +183,7 @@ private struct ScanGuide: View {
 }
 
 private struct ImageMatchedView: View {
-    @Binding var anchorPosition: CGPoint?
+    var anchorPosition: CGPoint?
     @State var opacity: Double = 0
     
     var body: some View {
@@ -205,7 +201,7 @@ private struct ImageMatchedView: View {
                     )
             )
             .position(anchorPosition!)
-            .animation(nil, value: anchorPosition!)
+            .animation(nil, value: anchorPosition)
             .opacity(opacity)
             .animateOnAppear(animation: Animation.easeInOut(duration: 1)) {
                 opacity = 1
