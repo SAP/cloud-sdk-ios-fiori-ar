@@ -10,7 +10,7 @@ import SwiftUI
 
 enum MarkerFlowState {
     case arscene
-    case editMarker
+    case editMode
     case selectMarker
     case selectCard
     case confirmCard
@@ -32,7 +32,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
     @State private var sheetState: PartialSheetState = .notVisible
     @State private var sheetTitle = "Add Annotation"
     @State private var firstPage = true
-    @State private var displayPagingView = true
+    @State private var displayPagingView = false
     @State private var carouselVisible = true
     
     let onDismiss: (() -> Void)?
@@ -66,7 +66,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                                         carouselIsVisible: $carouselVisible,
                                         cardLabel: cardLabel,
                                         markerLabel: markerLabel) { cardItem in
-                    guard flowState == .editMarker || flowState == .selectMarker else { return }
+                    guard flowState == .editMode || flowState == .selectMarker else { return }
                     self.cardItem = cardItem
                     flowState = .selectMarker
                     arModel.onlyShowEntity(for: cardItem)
@@ -74,31 +74,32 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 }
                 .zIndex(2)
                 
-                FlowButtonsView(flowState: $flowState, cardItem: cardItem, onPublish: {
-                    if let cardItem = cardItem {
-                        arModel.reAddEntitiesToScene(exclude: [cardItem])
-                    }
-                })
+                FlowButtonsView(flowState: $flowState, cardItem: cardItem)
                 
                 PartialSheetView($sheetState,
                                  title: sheetTitle,
                                  onLeftAction: flowState == .confirmCard ? onPageBack : nil,
-                                 onRightAction: { flowState = .editMarker }) {
+                                 onRightAction: flowState == .selectCard || flowState == .confirmCard ? onDismissDrawer : nil) {
                     if displayPagingView {
-                        PagingView(firstPage: $firstPage, left: {
-                            AttachmentsView(attachmentsUIMetadata: attachmentsMetadata.filter { $0.subtitle == AttachValue.notAttached.rawValue },
-                                            onSelectAttachment: { attachment in
-                                                cardItem = cardItems.first(where: { attachment.id.uuidString == $0.id })
-                                                firstPage = false
-                                                flowState = .confirmCard
-                                            })
-                        }, right: {
-                            CardSelectionView(cardItem: cardItem, onSelect: {
-                                flowState = .beforeDrop
-                            })
-                        })
+                        PagingView(firstPage: $firstPage,
+                                   left: {
+                                       AttachmentsView(attachmentsUIMetadata: attachmentsMetadata.filter { $0.subtitle == AttachValue.notAttached.rawValue },
+                                                       onSelectAttachment: { attachment in
+                                                           cardItem = cardItems.first(where: { attachment.id.uuidString == $0.id })
+                                                           firstPage = false
+                                                           flowState = .confirmCard
+                                                       })
+                                   },
+                                   right: {
+                                       CardSelectionView(cardItem: cardItem, onSelect: {
+                                           flowState = .beforeDrop
+                                       })
+                                   })
                     } else {
-                        CardPreview(cardItem: cardItem)
+                        ZStack {
+                            Color.clear
+                            CardPreview(cardItem: cardItem)
+                        }
                     }
                 }
             } else {
@@ -109,33 +110,28 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         .navigationBarTitle("")
         .navigationBarHidden(true)
         .overlay(BackButton(flowState: flowState, onAction: dismiss), alignment: .topLeading)
-        .overlay(
-            Group {
-                if arModel.discoveryFlowHasFinished {
-                    EditButton(flowState: flowState, onAction: onEdit)
-                }
-            }, alignment: .topTrailing
-        )
+        .overlay(EditRow(flowState: flowState, isActive: arModel.discoveryFlowHasFinished, largButtonAction: onlargeEditAction, smallButtonAction: onSmallEditAction), alignment: .topTrailing)
+        .overlay(Text(String(reflecting: flowState)).font(.system(size: 20)).foregroundColor(.white), alignment: .topLeading)
         .onTapGesture {
-            if flowState == .editMarker || flowState == .selectMarker {
+            if flowState == .editMode || flowState == .selectMarker {
                 arModel.setAllMarkerState(to: .ghost)
                 sheetState = .notVisible
-                flowState = .editMarker
+                flowState = .editMode
             }
         }
         .onChange(of: flowState) { newValue in
             switch newValue {
             case .arscene:
+                firstPage = true
                 arModel.setSelectedAnnotation(for: arModel.annotations.first)
                 sheetState = .notVisible
                 withAnimation { carouselVisible = true }
-            case .editMarker:
+            case .editMode:
                 sheetTitle = "View Annotation"
                 arModel.setAllMarkerState(to: .ghost)
                 sheetState = .notVisible
                 withAnimation { carouselVisible = false }
             case .selectMarker:
-                displayPagingView = false
                 sheetState = .closed
             case .selectCard:
                 sheetTitle = "Add Annotation"
@@ -146,8 +142,9 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 sheetTitle = "Preview Annotation"
                 sheetState = .open
             case .beforeDrop:
+                displayPagingView = false
                 arModel.removeEntitiesFromScene()
-                setPinValue(cardItem: cardItem, pinValue: .attached)
+                setPinValue(cardItem: cardItem, attachValue: .attached)
                 arModel.addNewEntity(to: cardItem)
                 arModel.setMarkerState(for: cardItem, to: .world)
                 sheetTitle = "View Annotation"
@@ -155,7 +152,6 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
             case .dropped:
                 arModel.dropEntity(for: cardItem)
                 sheetState = .closed
-                firstPage = true
             case .preview:
                 sheetState = .notVisible
                 arModel.setMarkerState(for: cardItem, to: .selected)
@@ -168,11 +164,21 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         self.flowState = .selectCard
     }
     
+    func onDismissDrawer() {
+        self.flowState = .editMode
+    }
+    
     func dismiss() {
         switch self.flowState {
         case .preview:
+            self.arModel.setMarkerState(for: self.cardItem, to: .world)
             self.flowState = .dropped
         default:
+            if self.flowState == .beforeDrop {
+                self.setPinValue(cardItem: self.cardItem, attachValue: .notAttached)
+                self.arModel.deleteEntity(for: self.cardItem)
+                self.arModel.deleteCameraAnchor()
+            }
             self.arModel.updateCardItemPositions()
             self.cardItems = self.arModel.annotations.map(\.card)
             self.arModel.resetAllAnchors()
@@ -181,31 +187,52 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         }
     }
     
-    func onEdit() {
+    func onlargeEditAction() {
+        print("large")
         switch self.flowState {
         case .arscene:
-            self.flowState = .editMarker
-        case .editMarker, .beforeDrop:
-            self.flowState = .selectCard
-        case .selectMarker:
-            self.setPinValue(cardItem: self.cardItem, pinValue: .notAttached)
-            self.arModel.deleteEntity(for: self.cardItem)
-            self.cardItem = nil
-            self.flowState = .editMarker
-        case .dropped:
-            self.setPinValue(cardItem: self.cardItem, pinValue: .notAttached)
-            self.arModel.deleteEntity(for: self.cardItem)
-            self.arModel.deleteCameraAnchor()
-            self.flowState = .selectCard
-        case .selectCard, .confirmCard, .preview:
+            self.flowState = .editMode
+        case .editMode:
+            self.flowState = .arscene
+        case .preview:
+            if let cardItem = cardItem {
+                self.arModel.reAddEntitiesToScene(exclude: [cardItem])
+            }
+            self.flowState = .arscene
+        default:
             break
         }
     }
     
-    func setPinValue(cardItem: CardItem?, pinValue: AttachValue) {
+    func onSmallEditAction() {
+        switch self.flowState {
+        case .arscene:
+            self.flowState = .editMode
+        case .editMode, .beforeDrop:
+            self.flowState = .selectCard
+        case .selectMarker:
+            self.setPinValue(cardItem: self.cardItem, attachValue: .notAttached)
+            self.arModel.deleteEntity(for: self.cardItem)
+            self.cardItem = nil
+            self.flowState = .editMode
+        case .dropped:
+            self.firstPage = true
+            self.setPinValue(cardItem: self.cardItem, attachValue: .notAttached)
+            self.arModel.deleteEntity(for: self.cardItem)
+            self.arModel.deleteCameraAnchor()
+            if let cardItem = cardItem {
+                self.arModel.reAddEntitiesToScene(exclude: [cardItem])
+            }
+            self.flowState = .arscene
+        default:
+            break
+        }
+    }
+    
+    func setPinValue(cardItem: CardItem?, attachValue: AttachValue) {
         guard let cardItem = cardItem,
               let index = attachmentsMetadata.firstIndex(where: { $0.id.uuidString == cardItem.id }) else { return }
-        self.attachmentsMetadata[index].subtitle = pinValue.rawValue
+        self.attachmentsMetadata[index].subtitle = attachValue.rawValue
     }
 }
 
@@ -231,23 +258,27 @@ private struct BackButton: View {
                     .font(.system(size: 19))
                     .frame(width: 44, height: 44)
                     .foregroundColor(Color.fioriNextPrimaryBackground)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.fioriNextPrimaryLabel.opacity(0.25))
-                    )
+                    .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
+                    .cornerRadius(10)
             })
                 .padding([.leading, .top], 16)
         }
     }
 }
 
-private struct EditButton: View {
+private struct EditRow: View {
     var flowState: MarkerFlowState
-    var onAction: (() -> Void)?
+    var isActive: Bool
+    var largButtonAction: (() -> Void)?
+    var smallButtonAction: (() -> Void)?
     
-    var isActive: Bool {
+    var isLargeButtonActive: Bool {
+        self.flowState == .arscene || self.flowState == .editMode || self.flowState == .preview
+    }
+    
+    var isSmallButtonActive: Bool {
         switch self.flowState {
-        case .selectCard, .confirmCard, .preview:
+        case .arscene, .selectCard, .confirmCard, .preview:
             return false
         default:
             return true
@@ -256,32 +287,55 @@ private struct EditButton: View {
     
     var body: some View {
         if isActive {
-            Button(action: {
-                onAction?()
-            }, label: {
-                Image(systemName: icon())
-                    .font(.system(size: 19))
-                    .frame(width: 44, height: 44)
-                    .foregroundColor(Color.fioriNextPrimaryBackground)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.fioriNextPrimaryLabel.opacity(0.25))
-                    )
-            })
-                .padding([.top, .trailing], 16)
+            HStack {
+                if isLargeButtonActive {
+                    Button(action: {
+                        largButtonAction?()
+                    }, label: {
+                        Text(text())
+                            .font(.system(size: 17))
+                            .frame(width: 114, height: 44)
+                            .foregroundColor(Color.fioriNextPrimaryBackground)
+                            .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
+                            .cornerRadius(10)
+                    })
+                }
+                if isSmallButtonActive {
+                    Button(action: {
+                        smallButtonAction?()
+                    }, label: {
+                        Image(systemName: icon())
+                            .font(.system(size: 19))
+                            .frame(width: 44, height: 44)
+                            .foregroundColor(Color.fioriNextPrimaryBackground)
+                            .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
+                            .cornerRadius(10)
+                    })
+                }
+            }
+            .padding([.top, .trailing], 16)
+        }
+    }
+    
+    func text() -> String {
+        switch self.flowState {
+        case .arscene:
+            return "Edit Mode"
+        case .editMode, .preview:
+            return "Done"
+        default:
+            return ""
         }
     }
     
     func icon() -> String {
         switch self.flowState {
-        case .arscene:
-            return "pencil"
-        case .editMarker:
+        case .editMode:
             return "plus"
         case .selectMarker, .beforeDrop, .dropped:
             return "trash"
         default:
-            return "info"
+            return ""
         }
     }
 }

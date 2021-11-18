@@ -119,8 +119,8 @@ public struct SceneAuthoringView: View {
         }, label: {
             Text("Go to AR Scene")
                 .font(.system(size: 17, weight: .bold))
-                .foregroundColor(Color.white)
-                .frame(width: 351, height: 54)
+                .foregroundColor(authoringViewModel.validatedAR() ? Color.white : Color.fioriNextSecondaryFill.opacity(0.37))
+                .frame(width: verticalSizeClass == .compact ? 702 : 351, height: 54)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Color.white)
@@ -129,14 +129,14 @@ public struct SceneAuthoringView: View {
                         .shadow(color: Color.fioriNextSecondaryFill.opacity(0.08), radius: 16, y: 32)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(authoringViewModel.validatedAR() ? Color.fioriNextTint : Color.gray)
+                                .fill(authoringViewModel.validatedAR() ? Color.fioriNextTint : Color.fioriNextSecondaryFill.opacity(0.06))
                                 .padding(.vertical, 8)
                                 .padding(.horizontal, 12)
                         )
                 )
         })
             .disabled(!authoringViewModel.validatedAR())
-            .padding(.bottom, 50)
+            .padding(.bottom, verticalSizeClass == .compact ? 29 : 50)
     }
     
     func startAR() {
