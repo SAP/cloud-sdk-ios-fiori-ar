@@ -107,11 +107,12 @@ private struct CollapsingView: View {
                     
                     Button(action: { buttonAction() }, label: {
                         Text("Begin Scan")
-                            .frame(width: 201, height: 40)
+                            .font(.system(size: 15, weight: .bold))
+                            .frame(width: 343, height: 40)
                             .foregroundColor(.white)
                             .background(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill(Color.preferredColor(.tintColor, background: .lightConstant))
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.fioriNextTint)
                             )
                     })
                         .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
