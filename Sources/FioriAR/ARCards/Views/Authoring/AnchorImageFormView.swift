@@ -226,7 +226,9 @@ struct AnchorImageFormView: View {
             arImage.validate { error in
                 self.validatingAnchorImage = false
                 if error == nil {
-                    completionHandler()
+                    DispatchQueue.main.async {
+                        completionHandler()
+                    }
                 } else {
                     self.imageValidationText = "Invalid Image"
                 }

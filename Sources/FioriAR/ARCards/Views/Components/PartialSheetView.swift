@@ -55,7 +55,7 @@ struct PartialSheetView<Content>: View where Content: View {
             
             content()
             
-            Spacer()
+            // Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: 395)
         .background(
@@ -76,11 +76,14 @@ struct PartialSheetView<Content>: View where Content: View {
         }
     }
     
+    @ViewBuilder
     var rightActionButton: some View {
-        ActionView(icon: Image(systemName: "xmark")) {
-            onRightAction?()
+        if let onRightAction = onRightAction {
+            ActionView(icon: Image(systemName: "xmark")) {
+                onRightAction()
+            }
+            .opacity(sheetState != .closed ? 1 : 0)
         }
-        .opacity(sheetState != .closed ? 1 : 0)
     }
     
     private var dragGesture: _EndedGesture<DragGesture> {

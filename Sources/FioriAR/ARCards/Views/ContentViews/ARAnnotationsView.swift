@@ -110,15 +110,12 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
                 onDismiss?()
                 self.presentationMode.wrappedValue.dismiss()
             }, label: {
-                Text(Image(systemName: "xmark"))
-                    .fontWeight(.light)
+                Image(systemName: "xmark")
                     .font(.system(size: 19))
                     .frame(width: 44, height: 44)
-                    .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant))
-                    .background(
-                        RoundedRectangle(cornerRadius: 13)
-                            .fill(Color.black.opacity(0.6))
-                    )
+                    .foregroundColor(Color.fioriNextPrimaryBackground)
+                    .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
+                    .cornerRadius(10)
             })
                 .padding([.leading, .top], 16)
         }
