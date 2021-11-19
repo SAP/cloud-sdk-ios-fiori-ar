@@ -22,7 +22,10 @@ public struct SceneAuthoringView: View {
     @State private var isARExperiencePresented = false
     @State private var isAlertPresented = false
     
-    public init(_ cardItems: [CodableCardItem] = [], serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
+    let title: String
+    
+    public init(title: String, _ cardItems: [CodableCardItem] = [], serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
+        self.title = title
         let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
         _authoringViewModel = StateObject(wrappedValue: SceneAuthoringModel(cardItems, networkingAPI: networkingAPI, sceneIdentifier: sceneIdentifier))
         _arViewModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
@@ -30,7 +33,7 @@ public struct SceneAuthoringView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            TitleBarView(title: "Annotations",
+            TitleBarView(title: title,
                          onLeftAction: {
                              isAlertPresented = true
                          },

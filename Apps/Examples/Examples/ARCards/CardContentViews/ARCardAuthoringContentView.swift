@@ -25,7 +25,8 @@ struct ARCardAuthoringContentView: View {
     )
 
     var body: some View {
-        SceneAuthoringView(cardItems,
+        SceneAuthoringView(title: "Annotations",
+                           cardItems,
                            serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
                            sapURLSession: sapURLSession,
                            sceneIdentifier: nil) // SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId))

@@ -70,7 +70,7 @@ struct AttachmentsView: View {
     
     private var AddAttachmentView: some View {
         RoundedRectangle(cornerRadius: 16)
-            .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
+            .stroke(Color.preferredColor(.separator, background: .lightConstant), style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
             .overlay(Image(systemName: "plus").font(.system(size: 28)).foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant)))
             .frame(width: 110, height: 110)
     }
@@ -96,7 +96,7 @@ private struct AttachmentCardView: View {
             .cornerRadius(16)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.gray, lineWidth: 1)
+                    .stroke(Color.preferredColor(.separator, background: .lightConstant), lineWidth: 1)
             )
             
             HStack {
