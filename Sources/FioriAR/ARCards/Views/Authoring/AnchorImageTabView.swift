@@ -27,13 +27,13 @@ struct AnchorImageTabView: View {
                 VStack(spacing: 46) {
                     Text("The anchor is an image that the software can recognize to successfully place the markers in relation to the anchor. Make sure that the anchor image is scannable on the site of the experience.")
                         .multilineTextAlignment(.center)
-                        .foregroundColor(Color.black)
-                        .font(.system(size: 17))
+                        .font(.fiori(forTextStyle: .body).weight(.bold))
+                        .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                     Button(action: { anchorImageFormPresented.toggle() }, label: {
                         Text("Upload Anchor Image")
-                            .font(.system(size: 15, weight: .bold))
+                            .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                            .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                             .frame(width: 187, height: 40)
-                            .foregroundColor(.white)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color.preferredColor(.tintColor, background: .lightConstant))
@@ -72,8 +72,8 @@ struct ImageAnchorView: View {
         VStack(spacing: 0) {
             HStack {
                 Text("Anchor Image")
-                    .font(.system(size: 15, weight: .bold))
-                    .foregroundColor(Color.black)
+                    .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                    .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                 Spacer()
             }
             .padding(.bottom, 16)
@@ -87,8 +87,8 @@ struct ImageAnchorView: View {
             }
             HStack {
                 Text("Tab the image to edit")
-                    .font(.system(size: 13))
-                    .foregroundColor(Color.gray)
+                    .font(.fiori(forTextStyle: .footnote).weight(.bold))
+                    .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                 Spacer()
             }
         }

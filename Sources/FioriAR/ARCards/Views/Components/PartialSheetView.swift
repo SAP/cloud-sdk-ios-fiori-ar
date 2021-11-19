@@ -146,11 +146,11 @@ struct ActionView: View {
             onAction?()
         }, label: {
             icon
-                .font(.system(size: 13))
-                .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                 .background(
                     Circle()
-                        .fill(Color.preferredColor(.secondaryFill, background: .lightConstant))
+                        .fill(Color.preferredColor(.tertiaryFill, background: .lightConstant))
                         .frame(width: 28, height: 28)
                 )
         })
