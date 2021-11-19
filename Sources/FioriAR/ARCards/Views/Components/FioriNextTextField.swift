@@ -16,8 +16,8 @@ struct FioriNextTextField: View {
     var body: some View {
         TextField("", text: $text, onEditingChanged: { editingText = $0 }, onCommit: {})
             .textFieldStyle(FioriNextTextFieldStyle(editingText: $editingText, placeholder: placeHolder, text: text))
-            .foregroundColor(Color.black)
-            .font(.system(size: 17))
+            .font(.fiori(forTextStyle: .body))
+            .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
     }
 }
 
@@ -35,13 +35,12 @@ struct FioriNextTextFieldStyle: TextFieldStyle {
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .strokeBorder(editingText ? Color.fioriNextTint : Color.fioriNextSecondaryFill.opacity(0.83), lineWidth: editingText ? 2 : 0.33)
-                        .background(Color.fioriNextPrimaryBackground.cornerRadius(10))
+                        .strokeBorder(Color.preferredColor(editingText ? .tintColor : .separatorOpaque, background: .lightConstant), lineWidth: editingText ? 2 : text.isEmpty ? 0.33 : 1)
+                        .background(Color.preferredColor(editingText ? .primaryFill : .secondaryFill).cornerRadius(10))
                     HStack {
                         Text(text.isEmpty ? placeholder : "")
-                            .font(.system(size: 17))
-                            .italic()
-                            .foregroundColor(Color.fioriNextSecondaryFill.opacity(0.83))
+                            .font(.fiori(forTextStyle: .body).italic())
+                            .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                             .padding(.leading, 12)
                         Spacer()
                     }

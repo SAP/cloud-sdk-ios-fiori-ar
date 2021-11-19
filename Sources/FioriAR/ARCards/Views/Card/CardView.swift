@@ -9,6 +9,8 @@ import FioriSwiftUICore
 import FioriThemeManager
 import SwiftUI
 
+// TODO: Update Card Text and Colors
+
 extension Fiori {
     enum CardItem {
         struct DetailImage: ViewModifier {

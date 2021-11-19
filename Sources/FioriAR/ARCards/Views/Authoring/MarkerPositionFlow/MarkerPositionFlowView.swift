@@ -99,6 +99,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                         ZStack {
                             Color.clear
                             CardPreview(cardItem: cardItem)
+                                .offset(y: -20)
                         }
                     }
                 }
@@ -111,7 +112,6 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         .navigationBarHidden(true)
         .overlay(BackButton(flowState: flowState, onAction: dismiss), alignment: .topLeading)
         .overlay(EditRow(flowState: flowState, isActive: arModel.discoveryFlowHasFinished, largButtonAction: onlargeEditAction, smallButtonAction: onSmallEditAction), alignment: .topTrailing)
-        .overlay(Text(String(reflecting: flowState)).font(.system(size: 20)).foregroundColor(.white), alignment: .topLeading)
         .onTapGesture {
             if flowState == .editMode || flowState == .selectMarker {
                 arModel.setAllMarkerState(to: .ghost)
@@ -257,7 +257,7 @@ private struct BackButton: View {
                 Image(systemName: flowState == .preview ? "chevron.left" : "xmark")
                     .font(.system(size: 19))
                     .frame(width: 44, height: 44)
-                    .foregroundColor(Color.fioriNextPrimaryBackground)
+                    .foregroundColor(Color.preferredColor(.primaryBackground, background: .lightConstant))
                     .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                     .cornerRadius(10)
             })
@@ -293,9 +293,8 @@ private struct EditRow: View {
                         largButtonAction?()
                     }, label: {
                         Text(text())
-                            .font(.system(size: 17))
-                            .frame(width: 114, height: 44)
-                            .foregroundColor(Color.fioriNextPrimaryBackground)
+                            .font(.fiori(forTextStyle: .body).weight(.bold))
+                            .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                             .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                             .cornerRadius(10)
                     })
@@ -307,7 +306,7 @@ private struct EditRow: View {
                         Image(systemName: icon())
                             .font(.system(size: 19))
                             .frame(width: 44, height: 44)
-                            .foregroundColor(Color.fioriNextPrimaryBackground)
+                            .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                             .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                             .cornerRadius(10)
                     })

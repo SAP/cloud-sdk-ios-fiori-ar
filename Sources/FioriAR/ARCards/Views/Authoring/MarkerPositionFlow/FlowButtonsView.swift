@@ -23,12 +23,12 @@ struct FlowButtonsView<CardItem>: View where CardItem: CardItemModel {
                     }
                 }, label: {
                     Text(flowState == .beforeDrop ? "Drop Marker" : "Preview")
-                        .font(.system(size: 15, weight: .bold))
+                        .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                        .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                         .frame(width: 343, height: 40)
-                        .foregroundColor(.white)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.fioriNextTint)
+                                .fill(Color.preferredColor(.tintColor, background: .lightConstant))
                         )
                 })
                     .padding(.bottom, 100)

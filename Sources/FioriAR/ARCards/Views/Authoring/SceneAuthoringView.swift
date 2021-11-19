@@ -41,14 +41,15 @@ public struct SceneAuthoringView: View {
                          leftBarLabel: {
                              Image(systemName: "xmark")
                                  .font(.system(size: 22))
-                                 .foregroundColor(Color.black)
+                                 .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                          },
                          rightBarLabel: {
                              Text("Publish")
-                                 .font(.system(size: 17, weight: .bold))
-                                 .foregroundColor(authoringViewModel.validatedSync ? Color.black : Color.gray)
+                                 .font(.fiori(forTextStyle: .body).weight(.bold))
+                                 .foregroundColor(Color.preferredColor(authoringViewModel.validatedSync ? .tintColor : .separator, background: .lightConstant))
                          })
                 .background(Color.white)
+                .padding(.bottom, 6)
             
             if let _ = authoringViewModel.bannerMessage {
                 BannerView(message: $authoringViewModel.bannerMessage)
@@ -118,18 +119,18 @@ public struct SceneAuthoringView: View {
             startAR()
         }, label: {
             Text("Go to AR Scene")
-                .font(.system(size: 17, weight: .bold))
-                .foregroundColor(authoringViewModel.validatedAR() ? Color.white : Color.fioriNextSecondaryFill.opacity(0.37))
+                .font(.fiori(forTextStyle: .body).weight(.bold))
+                .foregroundColor(Color.preferredColor(authoringViewModel.validatedAR() ? .secondaryGroupedBackground : .separator, background: .lightConstant))
                 .frame(width: verticalSizeClass == .compact ? 702 : 351, height: 54)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Color.white)
-                        .shadow(color: Color.fioriNextSecondaryFill.opacity(0.24), radius: 2)
-                        .shadow(color: Color.fioriNextSecondaryFill.opacity(0.08), radius: 8, y: 16)
-                        .shadow(color: Color.fioriNextSecondaryFill.opacity(0.08), radius: 16, y: 32)
+                        .shadow(color: Color.preferredColor(.sectionShadow, background: .lightConstant), radius: 2)
+                        .shadow(color: Color.preferredColor(.cardShadow, background: .lightConstant), radius: 8, y: 16)
+                        .shadow(color: Color.preferredColor(.cardShadow, background: .lightConstant), radius: 16, y: 32)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(authoringViewModel.validatedAR() ? Color.fioriNextTint : Color.fioriNextSecondaryFill.opacity(0.06))
+                                .fill(Color.preferredColor(authoringViewModel.validatedAR() ? .tintColor : .secondaryFill, background: .lightConstant))
                                 .padding(.vertical, 8)
                                 .padding(.horizontal, 12)
                         )
@@ -190,9 +191,10 @@ private struct TabbedView: View {
     func tab(title: String, isSelected: Bool) -> some View {
         VStack(spacing: 6) {
             Text(title)
-                .foregroundColor(isSelected ? Color.fioriNextTint : Color.black)
+                .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                .foregroundColor(Color.preferredColor(isSelected ? .tintColor : .secondaryLabel))
             if isSelected {
-                Color.fioriNextTint.frame(height: 2)
+                Color.preferredColor(.tintColor).frame(height: 2)
             } else {
                 Color.clear.frame(height: 2)
             }
