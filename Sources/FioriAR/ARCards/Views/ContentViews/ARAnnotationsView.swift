@@ -113,7 +113,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
                 Image(systemName: "xmark")
                     .font(.system(size: 19))
                     .frame(width: 44, height: 44)
-                    .foregroundColor(Color.fioriNextPrimaryBackground)
+                    .foregroundColor(Color.preferredColor(.primaryBackground, background: .lightConstant))
                     .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                     .cornerRadius(10)
             })

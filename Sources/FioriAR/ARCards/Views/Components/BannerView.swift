@@ -15,13 +15,14 @@ struct BannerView: View {
             if let message = message {
                 HStack {
                     Text(message.rawValue)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color.preferredColor(.tertiaryBackground, background: .darkConstant, interface: .elevatedConstant))
                     Spacer()
                     Button("Close") {
                         withAnimation { self.message = nil }
                     }
+                    .foregroundColor(Color.preferredColor(.tintColor, background: .darkConstant))
                 }
-                .font(.system(size: 15))
+                .font(.fiori(forTextStyle: .subheadline))
                 .padding(16)
             }
         }

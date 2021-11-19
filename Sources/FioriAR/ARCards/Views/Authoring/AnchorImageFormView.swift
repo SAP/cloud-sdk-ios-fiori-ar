@@ -46,8 +46,8 @@ struct AnchorImageFormView: View {
                 
                 HStack {
                     Text("Upload Image Anchor")
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundColor(.black)
+                        .font(.fiori(forTextStyle: .headline).weight(.bold))
+                        .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                     
                     Spacer()
                     
@@ -62,8 +62,8 @@ struct AnchorImageFormView: View {
                 VStack(spacing: 8) {
                     HStack {
                         Text("Dimension")
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                            .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                            .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                         
                         Spacer()
                     }
@@ -72,25 +72,25 @@ struct AnchorImageFormView: View {
                     VStack(spacing: 0) {
                         HStack {
                             Text("Please enter the real-world physical width of anchor image.")
-                                .font(.system(size: 15))
-                                .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                                .font(.fiori(forTextStyle: .subheadline))
+                                .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                             Spacer()
                         }
                         .padding(.bottom, 16)
                         
-                        TextDetail(textField: $internalPhysicalWidth, titleText: "Width", placeholder: "0.00 cm")
-                            .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                        TextDetail(textField: $internalPhysicalWidth, titleText: "Width", placeholder: "0.00 cm", fontWeight: .regular)
                             .keyboardType(.decimalPad)
                         
                         if !physicalWidthValidationText.isEmpty {
                             HStack(spacing: 4) {
                                 Image(systemName: "exclamationmark.triangle.fill")
-                                    .foregroundColor(Color.fioriNextNegativeLabel)
+                                    .font(.system(size: 13))
+                                    .foregroundColor(Color.preferredColor(.negativeLabel, background: .lightConstant))
                                 Text(physicalWidthValidationText)
-                                    .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                                    .font(.fiori(forTextStyle: .footnote))
+                                    .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                                 Spacer()
                             }
-                            .font(.system(size: 13))
                             .padding(.top, 8)
                         }
                     }
@@ -106,8 +106,8 @@ struct AnchorImageFormView: View {
                 VStack(spacing: 8) {
                     HStack {
                         Text("Anchor Image")
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                            .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                            .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                         
                         Spacer()
                     }
@@ -116,8 +116,8 @@ struct AnchorImageFormView: View {
                     VStack(spacing: 0) {
                         HStack {
                             Text("Please tap the area below to upload anchor image.")
-                                .font(.system(size: 15))
-                                .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                                .font(.fiori(forTextStyle: .subheadline))
+                                .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                             Spacer()
                             if validatingAnchorImage {
                                 ProgressView()
@@ -134,11 +134,12 @@ struct AnchorImageFormView: View {
                             if !imageValidationText.isEmpty {
                                 HStack(spacing: 4) {
                                     Image(systemName: "exclamationmark.triangle.fill")
-                                        .foregroundColor(Color.fioriNextNegativeLabel)
+                                        .font(.system(size: 13))
+                                        .foregroundColor(Color.preferredColor(.negativeLabel))
                                     Text(imageValidationText)
-                                        .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                                        .font(.fiori(forTextStyle: .footnote))
+                                        .foregroundColor(Color.preferredColor(.tertiaryLabel))
                                 }
-                                .font(.system(size: 13))
                             }
                             Spacer()
                             if internalAnchorImage != nil {
@@ -147,8 +148,8 @@ struct AnchorImageFormView: View {
                                         internalAnchorImage = nil
                                     }
                                 }
-                                .font(.system(size: 13, weight: .bold))
-                                .foregroundColor(Color.black)
+                                .font(.fiori(forTextStyle: .footnote).weight(.bold))
+                                .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                             }
                         }
                         .padding(.top, 8)
@@ -173,22 +174,22 @@ struct AnchorImageFormView: View {
                     }
                 }, label: {
                     Text("Save")
-                        .font(.system(size: 15, weight: .bold))
+                        .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                        .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                         .frame(width: 343, height: 40)
-                        .foregroundColor(.white)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.fioriNextTint)
+                                .fill(Color.preferredColor(.tintColor, background: .lightConstant))
                         )
-                        .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
-                        .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
+                        .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 4, y: 2)
+                        .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 2)
                 })
                     .padding(.bottom, 32)
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
         }
         .onTapGesture(perform: hideKeyboard)
-        .background(Color.fioriNextPrimaryBackground)
+        .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
         .edgesIgnoringSafeArea(.all)
         .ignoresSafeArea(.keyboard)
         .actionSheet(isPresented: $actionSheetPresented) {
@@ -211,7 +212,6 @@ struct AnchorImageFormView: View {
     func validateInput() -> Bool {
         self.imageValidationText = self.internalAnchorImage == nil ? "Please Select Image" : ""
         self.physicalWidthValidationText = self.internalPhysicalWidth.isEmpty ? "Please input a physical Width" : Double(self.internalPhysicalWidth) == nil ? "Please input a Numeric Value" : ""
-
         return self.imageValidationText.isEmpty && self.physicalWidthValidationText.isEmpty
     }
 

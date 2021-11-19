@@ -18,7 +18,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(name: "FioriSwiftUI", url: "https://github.com/SAP/cloud-sdk-ios-fiori.git", .upToNextMinor(from: "1.0.1")),
+        .package(name: "FioriSwiftUI", url: "https://github.com/SAP/cloud-sdk-ios-fiori.git", .branch("main")),
         .package(name: "cloud-sdk-ios", url: "https://github.com/SAP/cloud-sdk-ios", .exact("6.1.2-xcfrwk"))
     ],
     targets: [

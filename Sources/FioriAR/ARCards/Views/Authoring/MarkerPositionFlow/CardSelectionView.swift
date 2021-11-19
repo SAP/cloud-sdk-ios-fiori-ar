@@ -14,21 +14,21 @@ struct CardSelectionView<CardItem: CardItemModel>: View {
     var body: some View {
         VStack {
             ZStack {
-                Color.fioriNextPrimaryBackground
+                Color.preferredColor(.primaryBackground, background: .lightConstant)
                 CardPreview(cardItem: cardItem)
             }
             Spacer()
             Button(action: { onSelect?() }, label: {
                 Text("Next")
-                    .font(.system(size: 15, weight: .bold))
+                    .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                    .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                     .frame(width: 343, height: 40)
-                    .foregroundColor(.white)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.fioriNextTint)
+                            .fill(Color.preferredColor(.tintColor, background: .lightConstant))
                     )
-                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
-                    .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
+                    .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 4, y: 2)
+                    .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 2)
             })
                 .padding(.bottom, 46)
         }

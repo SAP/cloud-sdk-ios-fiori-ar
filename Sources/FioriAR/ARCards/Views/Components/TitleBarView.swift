@@ -44,8 +44,8 @@ struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View,
             }
             
             Text(title)
-                .font(.system(size: 17, weight: .bold))
-                .foregroundColor(Color.black)
+                .font(.fiori(forTextStyle: .body).weight(.black))
+                .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                 .lineLimit(1)
                 .layoutPriority(1)
             

@@ -85,12 +85,11 @@ struct CardFormView: View {
                                      .foregroundColor(.black)
                              }
                          })
-                .background(Color.fioriNextPrimaryBackground)
+                .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
             
             AdaptiveStack {
                 ZStack {
-                    Color
-                        .fioriNextPrimaryBackground
+                    Color.preferredColor(.primaryBackground, background: .lightConstant)
                     CardPreview(detailImage: $detailImage,
                                 title: $title,
                                 subtitle: $subtitle,
@@ -119,7 +118,7 @@ struct CardFormView: View {
                                     presentationMode.wrappedValue.dismiss()
                                 })
             }
-            .background(Color.fioriNextPrimaryBackground)
+            .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
         }
         .onChange(of: actionContentText) { newValue in
             icon = newValue.isEmpty ? nil : "link"
@@ -189,7 +188,8 @@ private struct CardDetailsView: View {
         VStack(spacing: 0) {
             HStack {
                 Text("Card Details")
-                    .font(.system(size: 15, weight: .bold))
+                    .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                    .foregroundColor(Color.preferredColor(.secondaryLabel, background: .lightConstant))
                     .padding(16)
                 Spacer()
             }
@@ -200,16 +200,12 @@ private struct CardDetailsView: View {
                 ZStack {
                     VStack(spacing: 14) {
                         TextDetail(textField: $title, titleText: "*Title")
-                            .foregroundColor(Color.black)
                         
                         TextDetail(textField: $subtitle, titleText: "Subtitle (Optional)")
-                            .foregroundColor(Color.black)
                         
                         ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
-                            .foregroundColor(Color.black)
                         
                         TextDetail(textField: $actionContentText, toggle: $actionButtonToggle, titleText: "Content (Optional)", placeholder: "URL")
-                            .foregroundColor(Color.black)
                             .zIndex(1)
                         
                         CoverImageDetail(titleText: "Custom Cover Image (Optional)",
@@ -221,15 +217,15 @@ private struct CardDetailsView: View {
                             editCardAction?()
                         }, label: {
                             Text(isUpdate ? "Update" : "Create")
-                                .font(.system(size: 15, weight: .bold))
+                                .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                                .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                                 .frame(width: 343, height: 40)
-                                .foregroundColor(.white)
                                 .background(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(title.isEmpty ? Color.fioriNextTint.opacity(0.5) : Color.fioriNextTint)
+                                        .fill(Color.preferredColor(.tintColor, background: .lightConstant).opacity(title.isEmpty ? 0.5 : 1))
                                 )
-                                .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 4, y: 2)
-                                .shadow(color: Color.fioriNextTint.opacity(0.16), radius: 2)
+                                .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 4, y: 2)
+                                .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 2)
                         })
                             .disabled(title.isEmpty)
                             .padding(.bottom, 54)
@@ -325,15 +321,15 @@ struct CardPreview: View {
             
             VStack(spacing: 4) {
                 Text(title)
-                    .font(.headline)
-                    .foregroundColor(Color.preferredColor(.header, background: .lightConstant))
+                    .font(.fiori(forTextStyle: .headline).weight(.bold)) // TODO: Update
+                    .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                     .lineLimit(2)
                     .truncationMode(.tail)
                     .frame(width: 198, alignment: .leading)
                 
                 if !subtitle.isEmpty {
                     Text(subtitle)
-                        .font(.subheadline)
+                        .font(.fiori(forTextStyle: .subheadline).weight(.bold)) // TODO: Update
                         .foregroundColor(Color.preferredColor(.secondaryLabel, background: .lightConstant))
                         .lineLimit(1)
                         .truncationMode(.tail)
@@ -347,7 +343,7 @@ struct CardPreview: View {
                     openURL(linkURL)
                 }
             }, label: {
-                Text(actionText)
+                Text(actionText) // TODO: Update
             })
                 .font(.system(size: 18))
                 .lineLimit(1)
@@ -367,18 +363,21 @@ struct TextDetail: View {
     
     var titleText: String
     var placeholder: String?
+    var fontWeight: Font.Weight
     
-    internal init(textField: Binding<String>, toggle: Binding<Bool> = .constant(true), titleText: String, placeholder: String? = nil) {
+    internal init(textField: Binding<String>, toggle: Binding<Bool> = .constant(true), titleText: String, placeholder: String? = nil, fontWeight: Font.Weight = .bold) {
         _textField = textField
         _toggle = toggle
         self.titleText = titleText
         self.placeholder = placeholder
+        self.fontWeight = fontWeight
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(titleText)
-                .font(.system(size: 15, weight: .bold))
+                .font(Font.fiori(forTextStyle: .subheadline).weight(fontWeight))
+                .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
             FioriNextTextField(text: $textField, placeHolder: placeholder ?? titleText)
                 .onChange(of: toggle) { newValue in
                     if !newValue {
@@ -399,10 +398,10 @@ private struct ToggleDetail: View {
         VStack(alignment: .leading, spacing: 8) {
             Toggle(isOn: $isOn) {
                 Text(titleText)
-                    .foregroundColor(Color.black)
-                    .font(.system(size: 15, weight: .bold))
+                    .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                    .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
             }
-            .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextTint))
+            .toggleStyle(SwitchToggleStyle(tint: Color.preferredColor(.tintColor, background: .lightConstant)))
             .onChange(of: isOn) { newValue in
                 if !newValue {
                     textField = ""
@@ -428,10 +427,10 @@ private struct CoverImageDetail: View {
         VStack(spacing: 8) {
             Toggle(isOn: $isOn) {
                 Text(titleText)
-                    .foregroundColor(Color.black)
-                    .font(.system(size: 15, weight: .bold))
+                    .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                    .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
             }
-            .toggleStyle(SwitchToggleStyle(tint: Color.fioriNextTint))
+            .toggleStyle(SwitchToggleStyle(tint: Color.preferredColor(.tintColor, background: .lightConstant)))
             .padding(.vertical, 5)
             .onChange(of: isOn) { newValue in
                 if newValue {
@@ -471,7 +470,7 @@ struct ImageSelectionView: View {
                     .clipped()
             } else {
                 Image(systemName: "photo")
-                    .foregroundColor(Color.fioriNextSecondaryFill.opacity(0.24))
+                    .foregroundColor(Color.preferredColor(.tertiaryFill, background: .lightConstant))
                     .font(.system(size: 40))
             }
         }
@@ -480,8 +479,8 @@ struct ImageSelectionView: View {
         .contentShape(RoundedRectangle(cornerRadius: 10))
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(Color.fioriNextSecondaryFill.opacity(0.83), lineWidth: 0.33)
-                .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color.fioriNextSecondaryFill.opacity(0.06)))
+                .strokeBorder(Color.preferredColor(.separatorOpaque, background: .lightConstant), lineWidth: 0.33)
+                .background(RoundedRectangle(cornerRadius: 10).foregroundColor(Color.preferredColor(.secondaryFill)))
         )
     }
 }

@@ -29,7 +29,10 @@ public class ARManager {
     var referenceImages: Set<ARReferenceImage> = []
     var detectionObjects: Set<ARReferenceObject> = []
     
-    var subscription: Cancellable!
+    private var draggedEntityLatestPosition: CGPoint?
+    private var draggedEntity: Entity?
+    
+    private var subscription: Cancellable!
 
     public init() {
         self.setup(canBeFatal: true)
@@ -54,6 +57,7 @@ public class ARManager {
         self.subscription = self.arView?.scene.subscribe(to: SceneEvents.Update.self) { [unowned self] in
             onSceneUpate?($0)
         }
+        self.addDepthDragGesture()
     }
     
     /// Cleans up the arView which is necessary for SwiftUI navigation
@@ -183,6 +187,39 @@ public class ARManager {
         guard let ciImage = CIImage(image: uiImage) else { return nil }
         let context = CIContext(options: nil)
         return context.createCGImage(ciImage, from: ciImage.extent)
+    }
+}
+
+private extension ARManager {
+    @objc func calculateEntityDepthOnDrag(_ gesture: UIPanGestureRecognizer) {
+        let location = gesture.location(in: self.arView)
+        if gesture.state == .failed || gesture.state == .cancelled {
+            return
+        }
+        if gesture.state == .began {
+            if let rayResult = arView?.ray(through: location) {
+                let results = self.arView?.scene.raycast(origin: rayResult.origin, direction: rayResult.direction)
+                if let firstResult = results?.first {
+                    self.draggedEntity = firstResult.entity
+                    self.draggedEntityLatestPosition = location
+                }
+            }
+        } else if let draggedEntity = draggedEntity, let draggedEntityLatestPosition = draggedEntityLatestPosition {
+            let deltaY = Float(location.y - draggedEntityLatestPosition.y) / 700
+            draggedEntity.position.y -= deltaY
+            self.draggedEntityLatestPosition = location
+
+            if gesture.state == .ended {
+                self.draggedEntity = nil
+                self.draggedEntityLatestPosition = nil
+            }
+        }
+    }
+    
+    func addDepthDragGesture() {
+        let pr = UIPanGestureRecognizer(target: self, action: #selector(self.calculateEntityDepthOnDrag))
+        pr.minimumNumberOfTouches = 2
+        self.arView?.addGestureRecognizer(pr)
     }
 }
 
