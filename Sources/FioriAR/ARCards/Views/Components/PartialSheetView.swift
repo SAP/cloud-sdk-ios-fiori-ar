@@ -41,8 +41,8 @@ struct PartialSheetView<Content>: View where Content: View {
                 SheetHandle()
                 HStack {
                     Text(title)
-                        .foregroundColor(Color.black)
-                        .font(.system(size: 17, weight: .bold))
+                        .font(.fiori(forTextStyle: .headline).weight(.bold))
+                        .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                 }
                 .frame(maxWidth: .infinity)
                 .overlay(leftActionButton, alignment: .leading)
@@ -54,13 +54,11 @@ struct PartialSheetView<Content>: View where Content: View {
             .gesture(dragGesture)
             
             content()
-            
-            // Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: 395)
         .background(
             RoundedCorner(radius: 16, corners: [.topLeft, .topRight])
-                .fill(Color.fioriNextPrimaryBackground)
+                .fill(Color.preferredColor(.primaryBackground, background: .lightConstant))
         )
         .offset(y: sheetState.rawValue)
         .animation(.interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0), value: sheetState)
@@ -133,7 +131,7 @@ struct PartialSheetView<Content>: View where Content: View {
 struct SheetHandle: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 4)
-            .fill(Color(red: 137 / 255, green: 145 / 255, blue: 154 / 255, opacity: 0.41))
+            .fill(Color.preferredColor(.separator, background: .lightConstant))
             .frame(width: 36, height: 5)
             .padding(.vertical, 6)
     }
@@ -148,11 +146,11 @@ struct ActionView: View {
             onAction?()
         }, label: {
             icon
-                .font(.system(size: 14, weight: .bold, design: .default))
-                .foregroundColor(Color.fioriNextTertiaryLabel.opacity(0.9))
+                .font(.system(size: 13))
+                .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                 .background(
                     Circle()
-                        .fill(Color.fioriNextSecondaryFill.opacity(0.16))
+                        .fill(Color.preferredColor(.secondaryFill, background: .lightConstant))
                         .frame(width: 28, height: 28)
                 )
         })

@@ -17,9 +17,8 @@ public struct AttachmentUIMetadata: Identifiable, Equatable {
 }
 
 struct AttachmentsView: View {
-    var attachmentsUIMetadata: [AttachmentUIMetadata]
-    
     let title: String?
+    let attachmentsUIMetadata: [AttachmentUIMetadata]
     let onAddAttachment: (() -> Void)?
     let onSelectAttachment: ((AttachmentUIMetadata) -> Void)?
     
@@ -41,8 +40,8 @@ struct AttachmentsView: View {
                     Text(title) + Text(" (\(attachmentsUIMetadata.count))")
                     Spacer()
                 }
-                .foregroundColor(Color.black)
-                .font(.system(size: 15, weight: .bold))
+                .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
             }
             
             ScrollView(.vertical, showsIndicators: false) {
@@ -72,7 +71,7 @@ struct AttachmentsView: View {
     private var AddAttachmentView: some View {
         RoundedRectangle(cornerRadius: 16)
             .stroke(Color.gray, style: StrokeStyle(lineWidth: 1, lineCap: .round, lineJoin: .round, dash: [7]))
-            .overlay(Image(systemName: "plus").font(.system(size: 22)).foregroundColor(Color.fioriNextTint))
+            .overlay(Image(systemName: "plus").font(.system(size: 28)).foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant)))
             .frame(width: 110, height: 110)
     }
 }
@@ -85,7 +84,7 @@ private struct AttachmentCardView: View {
             ZStack {
                 (item.icon ?? Image(systemName: "info"))
                     .font(.system(size: 28))
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                 
                 if let image = item.image {
                     image
@@ -103,16 +102,19 @@ private struct AttachmentCardView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(item.title)
-                        .bold()
+                        .font(.fiori(forTextStyle: .caption2).weight(.bold))
+                        .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                         .lineLimit(2)
                         .truncationMode(.middle)
                     if let subtitle = item.subtitle {
                         Text(subtitle)
-                            .foregroundColor(subtitle == AttachValue.attached.rawValue ? Color.gray : Color.fioriNextCritical)
+                            .font(.fiori(forTextStyle: .caption2))
+                            .foregroundColor(Color.preferredColor(subtitle == AttachValue.attached.rawValue ? .tertiaryLabel : .criticalLabel, background: .lightConstant))
                     }
                     if let info = item.info {
                         Text(info)
-                            .foregroundColor(.gray)
+                            .font(.fiori(forTextStyle: .caption2))
+                            .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                     }
                 }
                 .lineLimit(1)

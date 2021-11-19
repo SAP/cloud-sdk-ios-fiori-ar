@@ -37,24 +37,6 @@ public struct ARScanView: View {
     }
 }
 
-// Placeholder Design for ProgressView
-struct FioriNextProgressStyle: ProgressViewStyle {
-    var strokeColor = Color.blue
-    var strokeWidth = 5
-    @State private var isAnimating: Bool = false
-
-    func makeBody(configuration: Configuration) -> some View {
-        ZStack {
-            Circle()
-                .trim(from: 0, to: 0.25)
-                .stroke(strokeColor, style: StrokeStyle(lineWidth: CGFloat(strokeWidth), lineCap: .round))
-                .rotationEffect(.degrees(isAnimating ? 360 : 0))
-                .animation(Animation.linear.repeatForever(autoreverses: false).speed(0.50), value: isAnimating)
-                .onAppear { isAnimating.toggle() }
-        }
-    }
-}
-
 private struct CollapsingView: View {
     let image: UIImage?
     let screen = UIScreen.main.bounds
@@ -97,8 +79,8 @@ private struct CollapsingView: View {
                         .allowsHitTesting(isScanning)
                     
                     Text("Point your camera at this image to start augmented reality experience")
-                        .font(.system(size: 17))
-                        .foregroundColor(.white)
+                        .font(.fiori(forTextStyle: .body))
+                        .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 24)
                         .padding(.top, 24)
@@ -107,12 +89,11 @@ private struct CollapsingView: View {
                     
                     Button(action: { buttonAction() }, label: {
                         Text("Begin Scan")
-                            .font(.system(size: 15, weight: .bold))
-                            .frame(width: 343, height: 40)
-                            .foregroundColor(.white)
+                            .font(.fiori(forTextStyle: .subheadline).weight(.bold))
+                            .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.fioriNextTint)
+                                    .fill(Color.preferredColor(.tintColor, background: .lightConstant))
                             )
                     })
                         .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
@@ -123,9 +104,9 @@ private struct CollapsingView: View {
             } else {
                 VStack(spacing: 30) {
                     ProgressView()
-                        .progressViewStyle(FioriNextProgressStyle())
+                        .progressViewStyle(ScanningViewProgressStyle())
                         .frame(width: 200, height: 200)
-                    Text("Loading... May take a moment")
+                    Text("Loading... May take a moment") // TODO: Update
                         .font(.system(size: 24))
                         .foregroundColor(Color.white)
                 }
@@ -212,6 +193,23 @@ private struct ImageMatchedView: View {
                     }
                 }
             }
+    }
+}
+
+private struct ScanningViewProgressStyle: ProgressViewStyle {
+    var strokeColor = Color.blue
+    var strokeWidth = 5
+    @State private var isAnimating: Bool = false
+
+    func makeBody(configuration: Configuration) -> some View {
+        ZStack {
+            Circle()
+                .trim(from: 0, to: 0.25)
+                .stroke(strokeColor, style: StrokeStyle(lineWidth: CGFloat(strokeWidth), lineCap: .round))
+                .rotationEffect(.degrees(isAnimating ? 360 : 0))
+                .animation(Animation.linear.repeatForever(autoreverses: false).speed(0.50), value: isAnimating)
+                .onAppear { isAnimating.toggle() }
+        }
     }
 }
 

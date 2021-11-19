@@ -21,6 +21,9 @@ struct ExamplesApp: App {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        // Register FioriNext Fonts
+        Font.registerFioriFonts()
+        
         // Create Directories to store RealityFiles and USDZ Files in Documents Directory
         let realityDir = FileManager.default.makeDirectoryInDocumentsDirectory(FileManager.realityFiles)
         let usdzDir = FileManager.default.makeDirectoryInDocumentsDirectory(FileManager.usdzFiles)
