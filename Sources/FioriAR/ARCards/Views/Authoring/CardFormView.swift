@@ -76,20 +76,20 @@ struct CardFormView: View {
                          leftBarLabel: {
                              Image(systemName: "xmark")
                                  .font(.system(size: 22))
-                                 .foregroundColor(.black)
+                                 .foregroundColor(Color.preferredColor(.primaryLabel))
                          },
                          rightBarLabel: {
                              if let _ = currentCardID {
                                  Image(systemName: "trash")
                                      .font(.system(size: 22))
-                                     .foregroundColor(.black)
+                                     .foregroundColor(Color.preferredColor(.primaryLabel))
                              }
                          })
-                .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
+                .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
             
             AdaptiveStack {
                 ZStack {
-                    Color.preferredColor(.primaryBackground, background: .lightConstant)
+                    Color.preferredColor(.primaryGroupedBackground, background: .lightConstant)
                     CardPreview(detailImage: $detailImage,
                                 title: $title,
                                 subtitle: $subtitle,
@@ -118,7 +118,6 @@ struct CardFormView: View {
                                     presentationMode.wrappedValue.dismiss()
                                 })
             }
-            .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
         }
         .onChange(of: actionContentText) { newValue in
             icon = newValue.isEmpty ? nil : "link"
@@ -129,6 +128,7 @@ struct CardFormView: View {
         }
         .navigationBarHidden(true)
         .navigationBarTitle("")
+        .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
         .edgesIgnoringSafeArea(verticalSizeClass == .compact ? [.horizontal, .bottom] : .vertical)
         .ignoresSafeArea(.keyboard)
     }
@@ -235,7 +235,7 @@ private struct CardDetailsView: View {
                 }
             }
         }
-        .background(Color.white)
+        .background(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
         .adaptsToKeyboard()
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
