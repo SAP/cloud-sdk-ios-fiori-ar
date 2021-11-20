@@ -96,8 +96,8 @@ private struct CollapsingView: View {
                                     .fill(Color.preferredColor(.tintColor, background: .lightConstant))
                             )
                     })
-                        .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
-                        .opacity(isScanning ? 0 : 1)
+                    .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
+                    .opacity(isScanning ? 0 : 1)
                 }
                 .transition(AnyTransition.opacity.animation(.easeInOut(duration: 1)))
                 

@@ -117,7 +117,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
                     .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                     .cornerRadius(10)
             })
-                .padding([.leading, .top], 16)
+            .padding([.leading, .top], 16)
         }
     }
 }
