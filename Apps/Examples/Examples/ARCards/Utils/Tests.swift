@@ -96,14 +96,14 @@ public enum Tests {
 
 enum IntegrationTest {
     enum System {
-        static let clientID = "208858a7-bfc6-482f-b752-a78726a0aea1"
-        static let authURL = "https://mobile-tenant3-integration-ins-ar-ios-testing.cfapps.sap.hana.ondemand.com/oauth2/api/v1/authorize"
-        static let redirectURL = "https://mobile-tenant3-integration-ins-ar-ios-testing.cfapps.sap.hana.ondemand.com"
-        static let tokenURL = "https://mobile-tenant3-integration-ins-ar-ios-testing.cfapps.sap.hana.ondemand.com/oauth2/api/v1/token"
+        static let clientID = "0fc7acab-6e00-4374-b056-5ea2bb11e270"
+        static let authURL = "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/oauth2/api/v1/authorize"
+        static let redirectURL = "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com"
+        static let tokenURL = "https://mobile-tenant1-xudong-iosarcards.cfapps.sap.hana.ondemand.com/oauth2/api/v1/token"
     }
 
     enum TestData {
-        static let sceneId = 20201923//20201907
+        static let sceneId = 20110991
         static let sceneAlias = "myOwnAlias"
     }
 }
