@@ -26,7 +26,8 @@ internal class Marker: APIModel {
             }
         }
 
-        static func create(from sfSymbolName: String) -> Marker.Icon? {
+        static func create(from sfSymbolName: String?) -> Marker.Icon? {
+            guard let sfSymbolName = sfSymbolName else { return nil }
             switch sfSymbolName {
             case "play":
                 return Icon.play

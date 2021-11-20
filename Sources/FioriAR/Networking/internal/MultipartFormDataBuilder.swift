@@ -47,7 +47,6 @@ struct MultipartFormDataBuilder {
     func applyFormFields(to urlRequest: URLRequest) -> URLRequest {
 		var request = urlRequest
 
-        request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         httpBody.append("--\(boundary)--")

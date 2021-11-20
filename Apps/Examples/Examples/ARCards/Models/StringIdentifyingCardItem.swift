@@ -13,6 +13,7 @@ public struct StringIdentifyingCardItem: CardItemModel {
     public var title_: String
     public var subtitle_: String?
     public var detailImage_: Data?
+    public var image_: CardImage?
     public var actionText_: String?
     public var actionContentURL_: URL?
     public var icon_: String?
