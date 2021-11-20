@@ -23,8 +23,7 @@ struct CardFormView: View {
     @Binding var cardItems: [CodableCardItem]
     @Binding var attachmentModels: [AttachmentUIMetadata]
     @Binding var currentCardID: UUID?
-    
-    @State var detailImage: Data?
+    @State var detailImage: CardImage?
     @State var title: String
     @State var subtitle: String
     @State var actionText: String
@@ -44,23 +43,23 @@ struct CardFormView: View {
         self._cardItems = cardItems
         self._attachmentModels = attachmentModels
         self._currentCardID = currentCardID
-        
+
         let currentCard = cardItems.wrappedValue.first(where: { $0.id == currentCardID.wrappedValue?.uuidString })
-        
-        self._detailImage = State(initialValue: currentCard?.detailImage_)
+
+        self._detailImage = State(initialValue: currentCard?.image_ ?? CardImage.new)
         self._title = State(initialValue: currentCard?.title_ ?? "")
         self._subtitle = State(initialValue: currentCard?.subtitle_ ?? "")
         self._actionText = State(initialValue: currentCard?.actionText_ ?? "")
         self._actionContentText = State(initialValue: currentCard?.actionContentURL_?.absoluteString ?? "")
         self._icon = State(initialValue: currentCard?.icon_)
-        
+
         self._hasButton = State(initialValue: currentCard?.actionText_ == nil ? false : true)
-        self._hasCoverImage = State(initialValue: currentCard?.detailImage_ == nil ? false : true)
-        
+        self._hasCoverImage = State(initialValue: currentCard?.image_?.data == nil ? false : true)
+
         self.isUpdate = currentCardID.wrappedValue == nil ? false : true
         self.onDismiss = onDismiss
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             TitleBarView(title: isUpdate ? title : "New Annotation",
@@ -86,11 +85,11 @@ struct CardFormView: View {
                              }
                          })
                 .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
-            
+
             AdaptiveStack {
                 ZStack {
                     Color.preferredColor(.primaryGroupedBackground, background: .lightConstant)
-                    CardPreview(detailImage: $detailImage,
+                    CardPreview(detailImage: .constant(detailImage?.data),
                                 title: $title,
                                 subtitle: $subtitle,
                                 actionText: $actionText,
@@ -132,37 +131,37 @@ struct CardFormView: View {
         .edgesIgnoringSafeArea(verticalSizeClass == .compact ? [.horizontal, .bottom] : .vertical)
         .ignoresSafeArea(.keyboard)
     }
-    
+
     func createCard() {
         let newCard = CodableCardItem(id: UUID().uuidString,
                                       title_: self.title,
                                       subtitle_: self.subtitle.isEmpty ? nil : self.subtitle,
-                                      detailImage_: self.detailImage,
+                                      image: self.detailImage,
                                       actionText_: self.actionText.isEmpty ? nil : self.actionText,
                                       actionContentURL_: URL(string: self.actionContentText),
                                       icon_: self.actionContentText.isEmpty ? nil : "link")
-        
+
         self.cardItems.append(newCard)
         self.onSceneEdit(.created(card: newCard))
     }
-    
+
     func updateCard(for currentID: UUID) {
         guard let index = cardItems.firstIndex(where: { $0.id == currentCardID?.uuidString }) else { return }
         self.cardItems[index] = CodableCardItem(id: currentID.uuidString,
                                                 title_: self.title,
                                                 subtitle_: self.subtitle.isEmpty ? nil : self.subtitle,
-                                                detailImage_: self.detailImage,
+                                                image: self.detailImage,
                                                 actionText_: self.actionText.isEmpty ? nil : self.actionText,
                                                 actionContentURL_: URL(string: self.actionContentText),
                                                 icon_: self.actionContentText.isEmpty ? nil : "link",
                                                 position_: self.cardItems[index].position_)
-        
+
         self.onSceneEdit(.updated(card: self.cardItems[index]))
     }
-    
+
     func deleteCard(for currentID: UUID) {
         guard let cardToDelete = cardItems.first(where: { $0.id == currentID.uuidString }) else { return }
-        
+
         self.cardItems.removeAll(where: { $0.id == cardToDelete.id })
         self.onSceneEdit(.deleted(card: cardToDelete))
     }
@@ -171,19 +170,21 @@ struct CardFormView: View {
 private struct CardDetailsView: View {
     @Binding var title: String
     @Binding var subtitle: String
-    @Binding var detailImage: Data?
+    @Binding var detailImage: CardImage?
     @Binding var actionText: String
     @Binding var actionContentText: String
     @Binding var actionButtonToggle: Bool
     @Binding var coverImageToggle: Bool
-    
+
     @State var actionSheetPresented = false
     @State var pickerPresented = false
     @State var pickerSource: UIImagePickerController.SourceType = .photoLibrary
-    
+
+    @State var imagePickerData: Data? = nil
+
     var isUpdate: Bool
     var editCardAction: (() -> Void)?
-    
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -251,15 +252,23 @@ private struct CardDetailsView: View {
                         }), .cancel()])
         }
         .fullScreenCover(isPresented: $pickerPresented) {
-            ImagePickerView(imageData: $detailImage, sourceType: pickerSource)
+            ImagePickerView(imageData: $imagePickerData, sourceType: pickerSource)
                 .edgesIgnoringSafeArea(.all)
+        }
+        .onChange(of: imagePickerData) { newValue in
+            guard let imageData = newValue else { return }
+            if self.detailImage == nil {
+                self.detailImage = CardImage(data: imageData)
+            } else {
+                self.detailImage?.data = imageData
+            }
         }
     }
 }
 
 struct CardPreview: View {
     @Environment(\.openURL) var openURL
-    
+
     @Binding var detailImage: Data?
     @Binding var title: String
     @Binding var subtitle: String
@@ -418,11 +427,11 @@ private struct ToggleDetail: View {
 
 private struct CoverImageDetail: View {
     var titleText: String = ""
-    
+
     @Binding var isOn: Bool
     @Binding var presentActionSheet: Bool
-    @Binding var detailImage: Data?
-    
+    @Binding var detailImage: CardImage?
+
     var body: some View {
         VStack(spacing: 8) {
             Toggle(isOn: $isOn) {
@@ -436,15 +445,15 @@ private struct CoverImageDetail: View {
                 if newValue {
                     presentActionSheet.toggle()
                 } else {
-                    detailImage = nil
+                    detailImage?.data = nil
                 }
             }
             .zIndex(0)
-            
+
             ImageSelectionView(detailImage: detailImage, imageHeight: 145)
                 .zIndex(-1)
                 .onChange(of: detailImage) { newValue in
-                    isOn = newValue == nil ? false : true
+                    isOn = newValue?.data == nil ? false : true
                 }
                 .onTapGesture {
                     presentActionSheet.toggle()
@@ -455,14 +464,14 @@ private struct CoverImageDetail: View {
 
 struct ImageSelectionView: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    var detailImage: Data?
+
+    var detailImage: CardImage?
     var imageHeight: CGFloat
     var contentMode: ContentMode = .fill
 
     var body: some View {
         VStack {
-            if let data = detailImage, let uiImage = UIImage(data: data) {
+            if let data = detailImage?.data, let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .aspectRatio(contentMode: contentMode)

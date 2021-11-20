@@ -6,6 +6,7 @@
 //
 
 import Combine
+import SAPCommon
 import SwiftUI
 
 class SceneAuthoringModel: ObservableObject {
@@ -23,7 +24,10 @@ class SceneAuthoringModel: ObservableObject {
     private var networkingAPI: ARCardsNetworkingService!
     private var originalCardItems: [CodableCardItem] = []
     private var originalAnchorImage: UIImage?
+    private var originalAnchorImagePhysicalWidth: String?
     private var cancellables = Set<AnyCancellable>()
+
+    private var logger = Logger.shared(named: "FioriAR")
     
     init(_ cardItems: [CodableCardItem] = [], networkingAPI: ARCardsNetworkingService, sceneIdentifier: SceneIdentifyingAttribute?, completionHandler: (() -> Void)? = nil) {
         self.cardItems = cardItems
@@ -40,7 +44,7 @@ class SceneAuthoringModel: ObservableObject {
         self.attachmentsMetadata.removeAll()
         self.cardItems.forEach { card in
             var detailImage: Image?
-            if let data = card.detailImage_, let uiImage = UIImage(data: data) {
+            if let data = card.image_?.data, let uiImage = UIImage(data: data) {
                 detailImage = Image(uiImage: uiImage)
             }
             let newAttachmentModel = AttachmentUIMetadata(id: UUID(uuidString: card.id) ?? UUID(),
@@ -57,7 +61,7 @@ class SceneAuthoringModel: ObservableObject {
         if self.cardItems.count != self.originalCardItems.count { return true }
         let currentSorted = self.cardItems.sorted { $0.id < $1.id }
         let ogSorted = self.originalCardItems.sorted { $0.id < $1.id }
-        return !currentSorted.difference(from: ogSorted).isEmpty || self.originalAnchorImage?.pngData() != self.anchorImage?.pngData()
+        return !currentSorted.difference(from: ogSorted).isEmpty || self.originalAnchorImage?.pngData() != self.anchorImage?.pngData() || self.originalAnchorImagePhysicalWidth != self.physicalWidth
     }
     
     func allAnnotationsPinned() -> Bool {
@@ -86,14 +90,14 @@ class SceneAuthoringModel: ObservableObject {
         .sink { completion in
             switch completion {
             case .finished:
-                print(completion)
+                self.logger.debug("createScene publisher finished")
             case .failure(let error):
-                print("Creating scene failed! \(error.localizedDescription)")
+                self.logger.error("Creating scene failed! \(error.localizedDescription)")
             }
         } receiveValue: { createdSceneId in
             self.sceneIdentifier = .id(createdSceneId)
             completionHandler(createdSceneId)
-            print("Scene with id \(createdSceneId) created")
+            self.logger.debug("Scene with id \(createdSceneId) created")
         }
         .store(in: &self.cancellables)
     }
@@ -108,17 +112,18 @@ class SceneAuthoringModel: ObservableObject {
                 switch completion {
                 case .finished:
                     self.bannerMessage = .completed
-                    print(completion)
+                    self.logger.debug("getScene publisher finished")
                 case .failure(let error):
                     self.bannerMessage = .failure
-                    print("Fetching scene failed! \(error.localizedDescription)")
+                    self.logger.error("Fetching scene failed! \(error.localizedDescription)")
                 }
             } receiveValue: { scene in
-                self.sceneIdentifier = .id(scene.sceneId!) // TODO: two ids?
+                self.sceneIdentifier = .id(scene.sceneId)
                 self.cardItems = scene.cards
                 self.originalCardItems = scene.cards
                 self.anchorImage = scene.referenceAnchorImage
                 self.originalAnchorImage = scene.referenceAnchorImage
+                self.originalAnchorImagePhysicalWidth = String(scene.referenceAnchorImagePhysicalWidth)
                 self.physicalWidth = String(scene.referenceAnchorImagePhysicalWidth)
                 self.populateAttachmentView()
                 self.validateSync()
@@ -131,26 +136,34 @@ class SceneAuthoringModel: ObservableObject {
               let anchorImage = anchorImage,
               let imageData = anchorImage.pngData(),
               let physicalWidth = Double(physicalWidth) else { return }
-        
+
+        let updatedAnchorImage: Data? = (self.originalAnchorImage?.pngData() != imageData) ? imageData : nil
+        let updatedPhysicalWidth: Double? = (self.originalAnchorImagePhysicalWidth != self.physicalWidth) ? physicalWidth : nil
+
+        let cardsToDelete = Array(originalCardItems.asIdSet.subtracting(self.cardItems.asIdSet))
+
         self.networkingAPI.updateScene(
             sceneID,
-            identifiedBy: imageData,
-            anchorImagePhysicalWidth: physicalWidth,
-            cards: self.cardItems
+            identifiedBy: updatedAnchorImage,
+            anchorImagePhysicalWidth: updatedPhysicalWidth,
+            updateCards: self.cardItems,
+            deleteCards: cardsToDelete
         )
         .receive(on: DispatchQueue.main)
+        .timeout(.seconds(10), scheduler: DispatchQueue.main, options: nil, customError: nil) // TODO: remove once bug is fixed of never completed publisher if more than two network requests are ongoing. This workaround will ensure that completion of this subscription is called (in which we have to assume everything went fine ^～^) but nto receiveValue.
         .sink { completion in
             switch completion {
             case .finished:
-                print(completion)
+                self.logger.debug("updateScene publisher finished")
                 self.originalCardItems = self.cardItems
                 self.originalAnchorImage = self.anchorImage
+                self.originalAnchorImagePhysicalWidth = self.physicalWidth
                 self.bannerMessage = .sceneUpdated
             case .failure(let error):
-                print("API Error: \(error.localizedDescription)")
+                self.logger.error("Not possible to update scene: \(error.localizedDescription)")
             }
         } receiveValue: { success in
-            print("Updated scene with Status: \(success)")
+            self.logger.debug("Updated scene with Status: \(success)")
         }
         .store(in: &self.cancellables)
     }
@@ -162,9 +175,9 @@ class SceneAuthoringModel: ObservableObject {
             .sink { completion in
                 switch completion {
                 case .finished:
-                    print(completion)
+                    self.logger.debug("deleteScene publishe finished")
                 case .failure:
-                    print(completion)
+                    self.logger.error("deleteScene publishe failed")
                 }
             } receiveValue: { _ in }
             .store(in: &self.cancellables)

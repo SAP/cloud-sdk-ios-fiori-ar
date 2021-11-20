@@ -32,11 +32,11 @@ struct DemoARService: View {
                     Button("Delete scene") {
                         self.model.deleteScene()
                     }
-                    Text("Scene \(scene.sceneId!) has \(scene.cards.count) cards and has \(scene.sourceFile == nil ? "no" : scene.sourceFile!.type.rawValue) source file")
+                    Text("Scene \(scene.sceneId) has \(scene.cards.count) cards and has \(scene.sourceFile == nil ? "no" : scene.sourceFile!.type.rawValue) source file")
                     ForEach(scene.cards, id: \.self) { card in
                         HStack {
                             Text("\(scene.cards.firstIndex(of: card)! + 1). \(card.title_)")
-                            if let data = card.detailImage_, let uiImage = UIImage(data: data) {
+                            if let data = card.image_?.data, let uiImage = UIImage(data: data) {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFit()
@@ -53,15 +53,15 @@ struct DemoARService: View {
                 self.model.loadData(for: sceneId)
 
             })
-                .alert(item: $model.error, content: { error in
+            .alert(item: $model.error, content: { error in
 
-                    Alert(
-                        title: Text(error.title),
-                        message: Text(error.description)
-                    )
-                })
-                .padding()
-                .frame(maxWidth: .infinity)
+                Alert(
+                    title: Text(error.title),
+                    message: Text(error.description)
+                )
+            })
+            .padding()
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -83,12 +83,10 @@ struct DemoARService_Previews: PreviewProvider {
 }
 
 struct ErrorInfo: Identifiable {
-
     var id: Int
     let title: String = "Error"
     let description: String
 }
-
 
 extension SAPURLSession {
     static func createOAuthURLSession(clientID: String, authURL: String, redirectURL: String, tokenURL: String) -> SAPURLSession {
@@ -170,22 +168,21 @@ class DemoARServiceModel: ObservableObject {
             anchorImagePhysicalWidth: 0.1,
             cards: [dummyCard]
         )
-            .receive(on: DispatchQueue.main)
-            .map { newSceneId in
-                self.loadData(for: newSceneId)
+        .receive(on: DispatchQueue.main)
+        .map { newSceneId in
+            print("Scene with id \(newSceneId) created")
+            self.loadData(for: newSceneId)
+        }
+        .sink { completion in
+            switch completion {
+            case .finished:
+                self.error = nil
+            case .failure(let error):
+                self.error = ErrorInfo(id: 2, description: error.localizedDescription)
             }
-            .sink { completion in
-                switch completion {
-                case .finished:
-                    self.error = nil
-                case .failure(let error):
-                    self.error = ErrorInfo(id: 2, description: error.localizedDescription)
-                }
-                print(completion)
-            } receiveValue: { createdSceneId in
-                print("Scene with id \(createdSceneId) created")
-            }
-            .store(in: &self.cancellables)
+            print(completion)
+        } receiveValue: { _ in }
+        .store(in: &self.cancellables)
     }
 
     func deleteScene() {
