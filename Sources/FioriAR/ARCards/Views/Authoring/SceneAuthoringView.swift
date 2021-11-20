@@ -35,7 +35,7 @@ public struct SceneAuthoringView: View {
         VStack(spacing: 0) {
             TitleBarView(title: title,
                          onLeftAction: {
-                             isAlertPresented = true
+                             authoringViewModel.hasDifference() ? isAlertPresented = true : dismiss()
                          },
                          onRightAction: {
                              syncWithService()
@@ -110,8 +110,7 @@ public struct SceneAuthoringView: View {
             Alert(title: Text("Alert"),
                   message: Text("There maybe changes that haven’t been published yet. Are you sure you want to leave the scene?"),
                   primaryButton: .destructive(Text("Continue"), action: {
-                      hideNavBar = false
-                      presentationMode.wrappedValue.dismiss()
+                      dismiss()
                   }),
                   secondaryButton: .cancel())
         }
@@ -167,6 +166,11 @@ public struct SceneAuthoringView: View {
                 self.onSceneEdit(.published(sceneID: sceneId))
             }
         }
+    }
+
+    func dismiss() {
+        self.hideNavBar = false
+        self.presentationMode.wrappedValue.dismiss()
     }
 }
 
