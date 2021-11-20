@@ -6,6 +6,7 @@
 //
 
 import FioriAR
+import SAPCommon
 import SwiftUI
 
 @main
@@ -41,7 +42,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             
         FileManager.default.saveDataToDirectory(saveExampleRealityURL, saveData: exampleRCRealityData)
         FileManager.default.saveDataToDirectory(saveExampleUsdzURL, saveData: exampleRCUsdzData)
-        
+
+        // activate logging either for FioriAR specific logger or for all loggers (incl. SAPFoundation)
+        // Logger.shared(named: "FioriAR").logLevel = .debug
+        // Logger.root.logLevel = .debug // all loggers, incl. SAPFoundation
+
         return true
     }
 }
