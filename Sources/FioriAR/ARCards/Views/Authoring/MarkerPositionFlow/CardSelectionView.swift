@@ -30,7 +30,7 @@ struct CardSelectionView<CardItem: CardItemModel>: View {
                     .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 4, y: 2)
                     .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 2)
             })
-                .padding(.bottom, 46)
+            .padding(.bottom, 46)
         }
     }
 }

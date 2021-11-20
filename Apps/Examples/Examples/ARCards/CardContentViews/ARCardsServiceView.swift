@@ -20,7 +20,7 @@ struct ARCardsServiceView: View {
             tokenURL: IntegrationTest.System.tokenURL
         ),
         sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId)
-        //sceneIdentifier: SceneIdentifier.sceneAlias(alias:  IntegrationTest.TestData.sceneAlias)
+        // sceneIdentifier: SceneIdentifier.sceneAlias(alias:  IntegrationTest.TestData.sceneAlias)
     )
 
     var body: some View {
@@ -29,7 +29,7 @@ struct ARCardsServiceView: View {
                               // set the card action for id corresponding to the CardItemModel
                               print(id)
                           })
-            .onAppear(perform: loadInitialData)
+                          .onAppear(perform: loadInitialData)
     }
     
     func loadInitialData() {

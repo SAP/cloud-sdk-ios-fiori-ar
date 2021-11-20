@@ -18,7 +18,7 @@ struct ARCardsRealityFileLoadingContentView: View {
                               // set the card action for id corresponding to the CardItemModel
                               print(id)
                           })
-            .onAppear(perform: loadInitialDataFromRealityFile)
+                          .onAppear(perform: loadInitialDataFromRealityFile)
     }
 
     func loadInitialDataFromRealityFile() {

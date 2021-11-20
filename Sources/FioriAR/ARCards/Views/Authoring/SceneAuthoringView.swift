@@ -51,8 +51,8 @@ public struct SceneAuthoringView: View {
                                  .font(.fiori(forTextStyle: .body).weight(.bold))
                                  .foregroundColor(Color.preferredColor(authoringViewModel.validatedSync ? .tintColor : .separator, background: .lightConstant))
                          })
-                .background(Color.white)
-                .padding(.bottom, 6)
+                         .background(Color.white)
+                         .padding(.bottom, 6)
             
             if let _ = authoringViewModel.bannerMessage {
                 BannerView(message: $authoringViewModel.bannerMessage)
@@ -88,7 +88,7 @@ public struct SceneAuthoringView: View {
                                  authoringViewModel.validateSync()
                                  authoringViewModel.populateAttachmentView()
                              })
-                    .onSceneEdit(perform: onSceneEdit),
+                             .onSceneEdit(perform: onSceneEdit),
                 isActive: $isCardCreationPresented,
                 label: { EmptyView() })
         )
@@ -138,8 +138,8 @@ public struct SceneAuthoringView: View {
                         )
                 )
         })
-            .disabled(!authoringViewModel.validatedAR())
-            .padding(.bottom, verticalSizeClass == .compact ? 29 : 50)
+        .disabled(!authoringViewModel.validatedAR())
+        .padding(.bottom, verticalSizeClass == .compact ? 29 : 50)
     }
     
     func startAR() {
