@@ -37,20 +37,48 @@ public protocol PositionComponent {
     var position_: SIMD3<Float>? { get set }
 }
 
+/// A concrete type of `CardItemModel` which conforms to `Codable`. Used for card authoring scena
 public struct CodableCardItem: CardItemModel, Codable {
+    /// Identifier
     public var id: String
+    /// Titile
     public var title_: String
+    /// Subtitle
     public var subtitle_: String?
-    public var detailImage_: Data?
+    /// Detail / Cover image (read-only)
+    public var detailImage_: Data? {
+        self.image_?.data
+    }
+
+    /// Detail / Cover image (writable)
+    /// Note: prefer this property over `detailImage_`
+    public var image_: CardImage?
+    /// Action text to be displayed for a card
     public var actionText_: String?
+    /// URL to be invoked when action gets triggered
     public var actionContentURL_: URL?
+    /// Icon used for the marker/card
     public var icon_: String?
+    /// Position of the annotation anchor on the x, y and z axis
     public var position_: SIMD3<Float>?
-    
+
+    /// Initializer
+    ///
+    /// - Parameters:
+    ///   - id: Card's title
+    ///   - title_: Card's title
+    ///   - subtitle_: Card's subtitle
+    ///   - detailImage_: Card's image (read-only) **Legacy. Use `image` instead**
+    ///   - image: Cards's image
+    ///   - actionText_: Card's action
+    ///   - actionContentURL_: URL to be invoked card's when action gets triggered
+    ///   - icon_: Cards's icon
+    ///   - position_: Position of the marker on the x, y and z axis
     public init(id: String,
                 title_: String,
                 subtitle_: String? = nil,
                 detailImage_: Data? = nil,
+                image: CardImage? = nil,
                 actionText_: String? = nil,
                 actionContentURL_: URL? = nil,
                 icon_: String? = nil,
@@ -59,10 +87,21 @@ public struct CodableCardItem: CardItemModel, Codable {
         self.id = id
         self.title_ = title_
         self.subtitle_ = subtitle_
-        self.detailImage_ = detailImage_
+        if detailImage_ != nil {
+            self.image_ = CardImage(data: detailImage_)
+        } else {
+            self.image_ = image
+        }
         self.actionText_ = actionText_
         self.actionContentURL_ = actionContentURL_
         self.icon_ = icon_
         self.position_ = position_
+    }
+}
+
+extension Array where Element == CodableCardItem {
+    var asIdSet: Set<String> {
+        let ids = self.map(\.id)
+        return Set(ids)
     }
 }

@@ -7,7 +7,7 @@ public enum SourceFileType: String, Codable, Equatable, CaseIterable {
 }
 
 public struct ARScene {
-    public var sceneId: Int?
+    public var sceneId: Int
     public var alias: String?
     public var sourceFile: ARSceneSourceFile?
     public var referenceAnchorImage: UIImage

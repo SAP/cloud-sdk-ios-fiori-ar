@@ -125,7 +125,7 @@ struct AnchorImageFormView: View {
                         }
                         .padding(.bottom, 16)
                         
-                        ImageSelectionView(detailImage: internalAnchorImage?.pngData(), imageHeight: 145, contentMode: .fit)
+                        ImageSelectionView(detailImage: CardImage(data: internalAnchorImage?.pngData()), imageHeight: 145, contentMode: .fit)
                             .onTapGesture {
                                 actionSheetPresented.toggle()
                             }
