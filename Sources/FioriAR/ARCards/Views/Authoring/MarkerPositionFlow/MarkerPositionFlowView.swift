@@ -261,7 +261,7 @@ private struct BackButton: View {
                     .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                     .cornerRadius(10)
             })
-                .padding([.leading, .top], 16)
+            .padding([.leading, .top], 16)
         }
     }
 }

@@ -183,7 +183,7 @@ public extension CardView {
             }, label: {
                 actionText
             })
-                .frame(width: 198, height: isSelected && !isActionTextNil ? 44 : 0)
+            .frame(width: 198, height: isSelected && !isActionTextNil ? 44 : 0)
         }
         .frame(width: 230)
         .background(Color.preferredColor(.primaryBackground, background: .lightConstant))

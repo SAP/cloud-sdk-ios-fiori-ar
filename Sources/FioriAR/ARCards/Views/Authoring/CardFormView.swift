@@ -19,7 +19,7 @@ struct CardFormView: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onSceneEdit) var onSceneEdit
-    
+
     @Binding var cardItems: [CodableCardItem]
     @Binding var attachmentModels: [AttachmentUIMetadata]
     @Binding var currentCardID: UUID?
@@ -31,10 +31,10 @@ struct CardFormView: View {
     @State var icon: String?
     @State var hasButton = false
     @State var hasCoverImage = false
-    
+
     var isUpdate: Bool = false
     var onDismiss: (() -> Void)?
-    
+
     init(cardItems: Binding<[CodableCardItem]>,
          attachmentModels: Binding<[AttachmentUIMetadata]>,
          currentCardID: Binding<UUID?>,
@@ -84,7 +84,7 @@ struct CardFormView: View {
                                      .foregroundColor(Color.preferredColor(.primaryLabel))
                              }
                          })
-                .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
+                         .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
 
             AdaptiveStack {
                 ZStack {
@@ -99,7 +99,7 @@ struct CardFormView: View {
                         .offset(y: verticalSizeClass == .compact ? -70 : -10)
                 }
                 .frame(maxHeight: verticalSizeClass == .compact ? .infinity : 246)
-                
+
                 CardDetailsView(title: $title,
                                 subtitle: $subtitle,
                                 detailImage: $detailImage,
@@ -194,26 +194,26 @@ private struct CardDetailsView: View {
                     .padding(16)
                 Spacer()
             }
-            
+
             Divider()
-            
+
             ScrollView {
                 ZStack {
                     VStack(spacing: 14) {
                         TextDetail(textField: $title, titleText: "*Title")
-                        
+
                         TextDetail(textField: $subtitle, titleText: "Subtitle (Optional)")
-                        
+
                         ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
-                        
+
                         TextDetail(textField: $actionContentText, toggle: $actionButtonToggle, titleText: "Content (Optional)", placeholder: "URL")
                             .zIndex(1)
-                        
+
                         CoverImageDetail(titleText: "Custom Cover Image (Optional)",
                                          isOn: $coverImageToggle,
                                          presentActionSheet: $actionSheetPresented,
                                          detailImage: $detailImage)
-                        
+
                         Button(action: {
                             editCardAction?()
                         }, label: {
@@ -228,8 +228,8 @@ private struct CardDetailsView: View {
                                 .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 4, y: 2)
                                 .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 2)
                         })
-                            .disabled(title.isEmpty)
-                            .padding(.bottom, 54)
+                        .disabled(title.isEmpty)
+                        .padding(.bottom, 54)
                     }
                     .padding(.top, 9.5)
                     .padding(.horizontal, 16)
@@ -293,7 +293,7 @@ struct CardPreview: View {
         _icon = icon
         _hasButton = hasButton
     }
-    
+
     init<CardItem>(cardItem: CardItem?) where CardItem: CardItemModel {
         _detailImage = .constant(cardItem?.detailImage_)
         _title = .constant(cardItem?.title_ ?? "")
@@ -303,7 +303,7 @@ struct CardPreview: View {
         _icon = .constant(cardItem?.icon_)
         _hasButton = .constant(cardItem?.actionText_ != nil)
     }
-    
+
     var body: some View {
         VStack(spacing: 10) {
             VStack {
@@ -327,7 +327,7 @@ struct CardPreview: View {
             .background(Color.preferredColor(.tertiaryFill))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .padding(.top, 8)
-            
+
             VStack(spacing: 4) {
                 Text(title)
                     .font(.fiori(forTextStyle: .headline).weight(.bold)) // TODO: Update
@@ -335,7 +335,7 @@ struct CardPreview: View {
                     .lineLimit(2)
                     .truncationMode(.tail)
                     .frame(width: 198, alignment: .leading)
-                
+
                 if !subtitle.isEmpty {
                     Text(subtitle)
                         .font(.fiori(forTextStyle: .subheadline).weight(.bold)) // TODO: Update
@@ -346,7 +346,7 @@ struct CardPreview: View {
                 }
             }
             .padding(.bottom, 5)
-            
+
             Button(action: {
                 if let linkURL = URL(string: actionContentText) {
                     openURL(linkURL)
@@ -354,10 +354,10 @@ struct CardPreview: View {
             }, label: {
                 Text(actionText) // TODO: Update
             })
-                .font(.system(size: 18))
-                .lineLimit(1)
-                .foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant))
-                .frame(width: 198, height: hasButton && !actionText.isEmpty ? 44 : 0)
+            .font(.system(size: 18))
+            .lineLimit(1)
+            .foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant))
+            .frame(width: 198, height: hasButton && !actionText.isEmpty ? 44 : 0)
         }
         .frame(width: 230)
         .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
@@ -369,11 +369,11 @@ struct CardPreview: View {
 struct TextDetail: View {
     @Binding var textField: String
     @Binding var toggle: Bool
-    
+
     var titleText: String
     var placeholder: String?
     var fontWeight: Font.Weight
-    
+
     internal init(textField: Binding<String>, toggle: Binding<Bool> = .constant(true), titleText: String, placeholder: String? = nil, fontWeight: Font.Weight = .bold) {
         _textField = textField
         _toggle = toggle
@@ -381,7 +381,7 @@ struct TextDetail: View {
         self.placeholder = placeholder
         self.fontWeight = fontWeight
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(titleText)
@@ -399,10 +399,10 @@ struct TextDetail: View {
 
 private struct ToggleDetail: View {
     var titleText: String
-    
+
     @Binding var textField: String
     @Binding var isOn: Bool
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Toggle(isOn: $isOn) {
@@ -416,7 +416,7 @@ private struct ToggleDetail: View {
                     textField = ""
                 }
             }
-            
+
             FioriNextTextField(text: $textField, placeHolder: titleText)
                 .onChange(of: textField) { newValue in
                     isOn = newValue.isEmpty ? false : true
@@ -496,13 +496,13 @@ struct ImageSelectionView: View {
 
 private struct AdaptiveStack<Content>: View where Content: View {
     @Environment(\.verticalSizeClass) var verticalSizeClass
-    
+
     var content: Content
-    
+
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
-    
+
     var body: some View {
         if verticalSizeClass == .compact {
             HStack {

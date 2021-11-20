@@ -19,7 +19,7 @@ internal struct ARAnnotationContentView<Card: View, Marker: View, CardItem>: Vie
     @State private var displayLine = false
     
     private var visibleAnnotations: [ScreenAnnotation<CardItem>] {
-        self.arModel.annotations.filter { $0.isCardVisible }
+        self.arModel.annotations.filter(\.isCardVisible)
     }
     
     internal init(_ arModel: ARAnnotationViewModel<CardItem>,

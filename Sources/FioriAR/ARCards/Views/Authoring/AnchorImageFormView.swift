@@ -184,7 +184,7 @@ struct AnchorImageFormView: View {
                         .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 4, y: 2)
                         .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 2)
                 })
-                    .padding(.bottom, 32)
+                .padding(.bottom, 32)
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
         }

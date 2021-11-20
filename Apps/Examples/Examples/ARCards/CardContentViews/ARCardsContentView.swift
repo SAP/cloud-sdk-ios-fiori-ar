@@ -17,7 +17,7 @@ struct ARCardsDefaultContentView: View {
                               // set the card action for id corresponding to the CardItemModel
                               print(id)
                           })
-            .onAppear(perform: loadSimulatedAsyncExampleData) // loadSimulatedAsyncExampleData
+                          .onAppear(perform: loadSimulatedAsyncExampleData) // loadSimulatedAsyncExampleData
     }
     
 //    func loadInitialData() {

@@ -22,8 +22,8 @@ struct ARCardsViewBuilderContentView: View {
                           markerLabel: { state, _ in
                               CustomMarkerView(state: state)
                           })
-            .carouselOptions(CarouselOptions(itemSpacing: 5, carouselHeight: 200, alignment: .center))
-            .onAppear(perform: loadInitialData)
+                          .carouselOptions(CarouselOptions(itemSpacing: 5, carouselHeight: 200, alignment: .center))
+                          .onAppear(perform: loadInitialData)
     }
     
     func loadInitialData() {
