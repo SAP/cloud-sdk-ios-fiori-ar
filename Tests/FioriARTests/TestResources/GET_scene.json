@@ -1,0 +1,24 @@
+{
+    "id": 20110991,
+    "referenceAnchor": {
+        "data": "6A576556-3B04-472E-AA91-712DC63DF508",
+        "physicalWidth": 10,
+        "name": "anchorImage.png",
+        "type": "image"
+    },
+    "alias": "myOwnAlias",
+    "annotationAnchors": [
+        {
+            "marker": {},
+            "id": "DB935A5E-B47A-4B9B-9F5E-389DD61BC66A",
+            "card": {
+                "title": "My first card",
+                "language": "en"
+            },
+            "relPosition-x": -0.07013013958930969,
+            "relPosition-y": 0.04068279266357422,
+            "sceneId": 20110991,
+            "relPosition-z": -0.031390827149152756
+        }
+    ]
+}
