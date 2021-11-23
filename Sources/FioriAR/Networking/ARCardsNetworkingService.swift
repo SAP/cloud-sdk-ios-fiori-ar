@@ -279,6 +279,7 @@ public struct ARCardsNetworkingService {
                 self.deleteCard(annotationAnchorId: cardId, inScene: sceneId)
                     .eraseToAnyPublisher()
             }
+            .collect()
             .eraseToAnyPublisher()
 
         return Publishers.Zip3(

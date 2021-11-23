@@ -166,7 +166,6 @@ class SceneAuthoringModel: ObservableObject {
             deleteCards: cardsToDelete
         )
         .receive(on: DispatchQueue.main)
-        .timeout(.seconds(10), scheduler: DispatchQueue.main, options: nil, customError: nil) // TODO: remove once bug is fixed of never completed publisher if more than two network requests are ongoing. This workaround will ensure that completion of this subscription is called (in which we have to assume everything went fine ^～^) but nto receiveValue.
         .sink { completion in
             switch completion {
             case .finished:
@@ -177,6 +176,7 @@ class SceneAuthoringModel: ObservableObject {
                 self.bannerMessage = .sceneUpdated
             case .failure(let error):
                 self.logger.error("Not possible to update scene: \(error.localizedDescription)")
+                self.bannerMessage = .failure
             }
         } receiveValue: { success in
             self.logger.debug("Updated scene with Status: \(success)")
@@ -199,3 +199,7 @@ class SceneAuthoringModel: ObservableObject {
             .store(in: &self.cancellables)
     }
 }
+
+// extension String: LocalizedError {
+//    public var errorDescription: String? { return self }
+// }
