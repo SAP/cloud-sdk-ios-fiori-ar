@@ -32,7 +32,7 @@ public class ARManager {
     private var draggedEntityLatestPosition: CGPoint?
     private var draggedEntity: Entity?
     
-    private var subscription: Cancellable!
+    internal var subscription: Cancellable!
 
     public init() {
         self.setup(canBeFatal: true)
