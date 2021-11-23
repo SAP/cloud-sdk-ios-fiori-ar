@@ -12,7 +12,7 @@ typealias FileData = (id: String, data: Data?)
 
  - Depends on SAPFoundations `SAPURLSession`
  */
-public struct ARCardsNetworkingService {
+struct ARCardsNetworkingService {
     private var sapURLSession: SAPURLSession
     private var baseURL: String
 
@@ -32,7 +32,7 @@ public struct ARCardsNetworkingService {
     ///   - sceneIdentifying: id or alias which uniquely identifies the scene
     ///   - language: for which texts shall be returned (ISO-631-1)
     /// - Returns: Scene
-    public func getScene(_ sceneIdentifying: SceneIdentifyingAttribute, language: String = NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en") -> AnyPublisher<ARScene, Error> {
+    func getScene(_ sceneIdentifying: SceneIdentifyingAttribute, language: String = NSLocale.autoupdatingCurrent.languageCode ?? NSLocale.preferredLanguages.first ?? "en") -> AnyPublisher<ARScene, Error> {
         var sceneId: Int!
         let scenePublisher = scenePublisher(for: sceneIdentifying, language: language)
             .mapError { $0 as Error }
@@ -81,22 +81,6 @@ public struct ARCardsNetworkingService {
             .collect()
             .eraseToAnyPublisher()
 
-//        let imagesFilesPublisher = scenePublisher
-//            .mapError { $0 as Error }
-//            .map { scene -> [AnnotationAnchor] in
-//                sceneId = scene.id
-//                return scene.annotationAnchors ?? []
-//            }
-//            .flatMap { cards -> Publishers.MergeMany<AnyPublisher<FileImage, Error>> in
-//                let fileIds: [String] = cards.compactMap({ $0.card.image })
-//                let arrayOfPublishers = fileIds.map({ fileId in
-//                    self.getImage(fileId: fileId, sceneId: sceneId)
-//                })
-//                return Publishers.MergeMany(arrayOfPublishers)
-//            }
-//            .collect()
-//            .eraseToAnyPublisher()
-
         return Publishers.Zip4(scenePublisher, referenceAnchorImagePublisher, imagesFilesPublisher, sourceFilePublisher)
             .flatMap { scene, referenceAnchorFile, imageFiles, sourceFile -> AnyPublisher<ARScene, Error> in
 
@@ -140,7 +124,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
     
-    public func createScene(identifiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, anchorImageFileName: String = "anchorImage.png", cards: [CodableCardItem], sceneAlias: String? = nil) -> AnyPublisher<Int, Error> {
+    func createScene(identifiedBy anchorImage: Data, anchorImagePhysicalWidth width: Double, anchorImageFileName: String = "anchorImage.png", cards: [CodableCardItem], sceneAlias: String? = nil) -> AnyPublisher<Int, Error> {
         let sceneId = 3537 // server ignores sceneId for POST and will generate sceneId. As we don't want to make sceneId optional for the model let's pass a dummy value
         let imageAnchorFormDataName = UUID().uuidString
         let imageAnchorFileName = anchorImageFileName // name is only shown in Mobile Service cockpit as of now
@@ -199,7 +183,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    public func updateScene(_ sceneId: Int, identifiedBy anchorImage: Data? = nil, anchorImagePhysicalWidth width: Double? = nil, updateCards: [CodableCardItem], deleteCards: [String] = []) -> AnyPublisher<String, Error> {
+    func updateScene(_ sceneId: Int, identifiedBy anchorImage: Data? = nil, anchorImagePhysicalWidth width: Double? = nil, updateCards: [CodableCardItem], deleteCards: [String] = []) -> AnyPublisher<String, Error> {
         var filesToDelete: [String] = []
         var filesToUpload: [UploadFile] = []
         var refAnchor: ReferenceAnchor?
@@ -297,7 +281,7 @@ public struct ARCardsNetworkingService {
         .eraseToAnyPublisher()
     }
 
-    public func deleteScene(_ sceneId: Int) -> AnyPublisher<Void, Error> {
+    func deleteScene(_ sceneId: Int) -> AnyPublisher<Void, Error> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         let request = ARService.Scene.DeleteScene.Request(sceneId: sceneId)
 
@@ -318,7 +302,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    public func deleteCard(annotationAnchorId: String, inScene sceneId: Int) -> AnyPublisher<Void, Error> {
+    func deleteCard(annotationAnchorId: String, inScene sceneId: Int) -> AnyPublisher<Void, Error> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         let request = ARService.AnnotationAnchor.DeleteAnnotation.Request(sceneId: sceneId, id: annotationAnchorId)
 
@@ -371,7 +355,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    internal func getImage(fileId id: String, sceneId: Int) -> AnyPublisher<FileImage, Error> {
+    private func getImage(fileId id: String, sceneId: Int) -> AnyPublisher<FileImage, Error> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         return api.makeRequest(ARService.File.GetFileById.Request(sceneId: sceneId, fileId: id))
             .tryMap { response in
@@ -390,7 +374,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    internal func getFile(fileId id: String, sceneId: Int) -> AnyPublisher<FileData, Error> {
+    private func getFile(fileId id: String, sceneId: Int) -> AnyPublisher<FileData, Error> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         return api.makeRequest(ARService.File.GetFileById.Request(sceneId: sceneId, fileId: id))
             .tryMap { response in
@@ -409,7 +393,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    internal func deleteFile(fileId id: String, sceneId: Int) -> AnyPublisher<String, Error> {
+    private func deleteFile(fileId id: String, sceneId: Int) -> AnyPublisher<String, Error> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         return api.makeRequest(ARService.File.DeleteFileById.Request(sceneId: sceneId, fileId: id))
             .tryMap { response in
@@ -427,7 +411,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    internal func getSourceFile(for scene: Scene) -> AnyPublisher<ARSceneSourceFileWithData?, Error> {
+    private func getSourceFile(for scene: Scene) -> AnyPublisher<ARSceneSourceFileWithData?, Error> {
         if let fileId = scene.sourceFile {
             return self.getFile(fileId: fileId, sceneId: scene.id)
                 .map { result in
@@ -446,7 +430,7 @@ public struct ARCardsNetworkingService {
         }
     }
 
-    internal func getReferenceAnchorFile(for scene: Scene) -> AnyPublisher<ARSceneSourceFileWithData?, Error> {
+    private func getReferenceAnchorFile(for scene: Scene) -> AnyPublisher<ARSceneSourceFileWithData?, Error> {
         if let fileId = scene.referenceAnchor?.data {
             return self.getFile(fileId: fileId, sceneId: scene.id)
                 .tryMap { result in
@@ -465,7 +449,7 @@ public struct ARCardsNetworkingService {
         }
     }
 
-    internal func save(sourceFile: ARSceneSourceFileWithData, into directory: URL = FileManager.default.temporaryDirectory) throws -> ARSceneSourceFile {
+    private func save(sourceFile: ARSceneSourceFileWithData, into directory: URL = FileManager.default.temporaryDirectory) throws -> ARSceneSourceFile {
         let localFileURL = directory.appendingPathComponent(sourceFile.id)
         guard let absoluteDirectory = URL(string: "file://" + localFileURL.path) else {
             throw ARCardsNetworkingServiceError.cannotBeSaved
@@ -484,7 +468,7 @@ public struct ARCardsNetworkingService {
         return ARSceneSourceFile(id: sourceFile.id, type: sourceFile.type!, localUrl: localFileURL)
     }
 
-    internal func getUnresolvedScene(for sceneId: Int, language: String) -> AnyPublisher<Scene, ARCardsNetworkingServiceError> {
+    private func getUnresolvedScene(for sceneId: Int, language: String) -> AnyPublisher<Scene, ARCardsNetworkingServiceError> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         return api.makeRequest(ARService.Scene.GetSceneById.Request(sceneId: sceneId, language: language))
             .tryMap { response in
@@ -503,7 +487,7 @@ public struct ARCardsNetworkingService {
             .eraseToAnyPublisher()
     }
 
-    internal func getUnresolvedScene(for sceneAlias: String, language: String) -> AnyPublisher<Scene, ARCardsNetworkingServiceError> {
+    private func getUnresolvedScene(for sceneAlias: String, language: String) -> AnyPublisher<Scene, ARCardsNetworkingServiceError> {
         let api = APIClient(baseURL: self.baseURL, sapURLSession: self.sapURLSession)
         return api.makeRequest(ARService.Scene.GetScenesByAliases.Request(sceneAlias: sceneAlias, language: language))
             .tryMap { response in

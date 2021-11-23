@@ -19,7 +19,7 @@ public enum SceneIdentifyingAttribute {
 }
 
 public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAnnotationLoadingStrategy where CardItem: Codable {
-    public var networkingAPI: ARCardsNetworkingService
+    private var networkingAPI: ARCardsNetworkingService
     public var sceneIdentifier: SceneIdentifyingAttribute
     
     var arscene: ARScene?
