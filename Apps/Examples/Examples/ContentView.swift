@@ -20,10 +20,6 @@ struct ContentView: View {
                     Text("Download Image Anchors")
                 }
 
-                NavigationLink(destination: DemoARService()) {
-                    Text("Demo how to interact with SAP Mobile Services and its AR feature")
-                }
-
                 NavigationLink(destination: ARCardAuthoringContentView()) {
                     Text("Card Authoring")
                 }
