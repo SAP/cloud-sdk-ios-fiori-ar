@@ -97,7 +97,7 @@ struct AnchorImageFormView: View {
                     .padding(16)
                     .frame(maxWidth: .infinity, maxHeight: 230)
                     .animation(.default, value: physicalWidthValidationText)
-                    .background(Color.white)
+                    .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
                     .cornerRadius(10)
                 }
                 .padding(.horizontal, 16)
@@ -157,7 +157,7 @@ struct AnchorImageFormView: View {
                     .padding(16)
                     .frame(maxWidth: .infinity, maxHeight: 300)
                     .animation(.default, value: imageValidationText)
-                    .background(Color.white)
+                    .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
                     .cornerRadius(10)
                 }
                 .padding(.horizontal, 16)
@@ -184,17 +184,17 @@ struct AnchorImageFormView: View {
                         .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 4, y: 2)
                         .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 2)
                 })
-                .padding(.bottom, 32)
+                    .padding(.bottom, 32)
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
         }
         .onTapGesture(perform: hideKeyboard)
-        .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
+        .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
         .edgesIgnoringSafeArea(.all)
         .ignoresSafeArea(.keyboard)
         .actionSheet(isPresented: $actionSheetPresented) {
-            ActionSheet(title: Text("Choose an option..."),
-                        message: Text("Selection for Anchor Image"),
+            ActionSheet(title: Text(""),
+                        message: Text(""),
                         buttons: [.default(Text("Camera"), action: {
                             pickerSource = .camera
                             pickerPresented.toggle()
