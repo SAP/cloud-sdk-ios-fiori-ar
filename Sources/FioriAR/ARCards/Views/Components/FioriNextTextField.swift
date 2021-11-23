@@ -36,7 +36,7 @@ struct FioriNextTextFieldStyle: TextFieldStyle {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
                         .strokeBorder(Color.preferredColor(editingText ? .tintColor : .separatorOpaque, background: .lightConstant), lineWidth: editingText ? 2 : text.isEmpty ? 0.33 : 1)
-                        .background(Color.preferredColor(editingText ? .primaryFill : .secondaryFill).cornerRadius(10))
+                        .background(Color.preferredColor(editingText ? .primaryFill : .secondaryFill, background: .lightConstant).cornerRadius(10))
                     HStack {
                         Text(text.isEmpty ? placeholder : "")
                             .font(.fiori(forTextStyle: .body).italic())

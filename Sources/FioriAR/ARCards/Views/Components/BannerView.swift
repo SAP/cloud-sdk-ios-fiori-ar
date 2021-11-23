@@ -15,7 +15,7 @@ struct BannerView: View {
             if let message = message {
                 HStack {
                     Text(message.rawValue)
-                        .foregroundColor(Color.preferredColor(.tertiaryBackground, background: .darkConstant, interface: .elevatedConstant))
+                        .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant, interface: .elevatedConstant))
                     Spacer()
                     Button("Close") {
                         withAnimation { self.message = nil }
@@ -35,9 +35,9 @@ struct BannerView: View {
 }
 
 enum BannerMessage: String {
-    case sceneUpdated = "Scene Updated"
-    case pinAnnotationsFirst = "Pin all Annotations First"
-    case failure = "Oops, something went wrong..."
+    case cardCreated = "A new annotation card is created."
+    case sceneUpdated = "Scene update is successfully published."
     case loading = "Loading..."
-    case completed = "Sync Finished"
+    case syncFinished = "Sync finished"
+    case failure = "Something went wrong."
 }
