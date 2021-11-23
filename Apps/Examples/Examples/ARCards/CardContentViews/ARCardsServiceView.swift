@@ -19,7 +19,7 @@ struct ARCardsServiceView: View {
             redirectURL: IntegrationTest.System.redirectURL,
             tokenURL: IntegrationTest.System.tokenURL
         ),
-        sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId)
+        sceneIdentifier: SceneIdentifyingAttribute.id(20110993)
         // sceneIdentifier: SceneIdentifier.sceneAlias(alias:  IntegrationTest.TestData.sceneAlias)
     )
 
@@ -29,7 +29,7 @@ struct ARCardsServiceView: View {
                               // set the card action for id corresponding to the CardItemModel
                               print(id)
                           })
-                          .onAppear(perform: loadInitialData)
+            .onAppear(perform: loadInitialData)
     }
     
     func loadInitialData() {

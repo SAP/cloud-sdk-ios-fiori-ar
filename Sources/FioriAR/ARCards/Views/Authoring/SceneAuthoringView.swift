@@ -23,7 +23,7 @@ public struct SceneAuthoringView: View {
     @State private var isAlertPresented = false
     
     let title: String
-    
+    // TODO: Remove cardItems
     public init(title: String, _ cardItems: [CodableCardItem] = [], serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
         self.title = title
         let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
@@ -35,12 +35,16 @@ public struct SceneAuthoringView: View {
         VStack(spacing: 0) {
             TitleBarView(title: title,
                          onLeftAction: {
-                             authoringViewModel.hasDifference() ? isAlertPresented = true : dismiss()
+                             if authoringViewModel.validatedExit() {
+                                 dismiss()
+                             } else {
+                                 isAlertPresented = true
+                             }
                          },
                          onRightAction: {
                              syncWithService()
                          },
-                         rightDisabled: !authoringViewModel.validatedSync,
+                         rightDisabled: !authoringViewModel.isSyncValidated,
                          leftBarLabel: {
                              Image(systemName: "xmark")
                                  .font(.system(size: 22))
@@ -49,10 +53,10 @@ public struct SceneAuthoringView: View {
                          rightBarLabel: {
                              Text("Publish")
                                  .font(.fiori(forTextStyle: .body).weight(.bold))
-                                 .foregroundColor(Color.preferredColor(authoringViewModel.validatedSync ? .tintColor : .separator, background: .lightConstant))
+                                 .foregroundColor(Color.preferredColor(authoringViewModel.isSyncValidated ? .tintColor : .separator, background: .lightConstant))
                          })
-                         .background(Color.white)
-                         .padding(.bottom, 6)
+                .background(Color.white)
+                .padding(.bottom, 6)
             
             if let _ = authoringViewModel.bannerMessage {
                 BannerView(message: $authoringViewModel.bannerMessage)
@@ -73,7 +77,7 @@ public struct SceneAuthoringView: View {
                                         isCardCreationPresented.toggle()
                                     })
                 case .right:
-                    AnchorImageTabView(anchorImage: $authoringViewModel.anchorImage, physicalWidth: $authoringViewModel.physicalWidth)
+                    AnchorImageTabView(anchorImage: $authoringViewModel.anchorImage, physicalWidth: $authoringViewModel.physicalWidth, onDismiss: { authoringViewModel.validateSync() })
                 }
             }
             .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
@@ -84,11 +88,12 @@ public struct SceneAuthoringView: View {
                 CardFormView(cardItems: $authoringViewModel.cardItems,
                              attachmentModels: $authoringViewModel.attachmentsMetadata,
                              currentCardID: $authoringViewModel.currentCardID,
+                             bannerMessage: $authoringViewModel.bannerMessage,
                              onDismiss: {
                                  authoringViewModel.validateSync()
                                  authoringViewModel.populateAttachmentView()
                              })
-                             .onSceneEdit(perform: onSceneEdit),
+                    .onSceneEdit(perform: onSceneEdit),
                 isActive: $isCardCreationPresented,
                 label: { EmptyView() })
         )
@@ -107,8 +112,8 @@ public struct SceneAuthoringView: View {
                                       cardAction: { _ in })
         }
         .alert(isPresented: $isAlertPresented) {
-            Alert(title: Text("Alert"),
-                  message: Text("There maybe changes that haven’t been published yet. Are you sure you want to leave the scene?"),
+            Alert(title: Text("Leave Page"),
+                  message: Text(authoringViewModel.exitMessage.rawValue),
                   primaryButton: .destructive(Text("Continue"), action: {
                       dismiss()
                   }),
@@ -138,8 +143,8 @@ public struct SceneAuthoringView: View {
                         )
                 )
         })
-        .disabled(!authoringViewModel.validatedAR())
-        .padding(.bottom, verticalSizeClass == .compact ? 29 : 50)
+            .disabled(!authoringViewModel.validatedAR())
+            .padding(.bottom, verticalSizeClass == .compact ? 29 : 50)
     }
     
     func startAR() {
@@ -199,9 +204,9 @@ private struct TabbedView: View {
         VStack(spacing: 6) {
             Text(title)
                 .font(.fiori(forTextStyle: .subheadline).weight(.bold))
-                .foregroundColor(Color.preferredColor(isSelected ? .tintColor : .secondaryLabel))
+                .foregroundColor(Color.preferredColor(isSelected ? .tintColor : .secondaryLabel, background: .lightConstant))
             if isSelected {
-                Color.preferredColor(.tintColor).frame(height: 2)
+                Color.preferredColor(.tintColor, background: .lightConstant).frame(height: 2)
             } else {
                 Color.clear.frame(height: 2)
             }
@@ -218,4 +223,10 @@ enum TabSelection {
 enum AttachValue: String {
     case attached = "Attached"
     case notAttached = "Not Attached Yet"
+}
+
+enum ExitMessage: String {
+    case beforeCreation = "Are you sure you want to leave the page? Your changes will be lost."
+    case hasRemainingAnnotations = "There are annotations that haven’t been attached yet. Are you sure you want to leave the app?"
+    case lostChanges = "There are changes that haven’t been published yet. Are you sure you want to leave the app?"
 }

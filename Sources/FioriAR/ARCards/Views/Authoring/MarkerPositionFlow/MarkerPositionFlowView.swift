@@ -144,7 +144,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
             case .beforeDrop:
                 displayPagingView = false
                 arModel.removeEntitiesFromScene()
-                setPinValue(cardItem: cardItem, attachValue: .attached)
+                setAttachValue(cardItem: cardItem, attachValue: .attached)
                 arModel.addNewEntity(to: cardItem)
                 arModel.setMarkerState(for: cardItem, to: .world)
                 sheetTitle = "View Annotation"
@@ -175,7 +175,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
             self.flowState = .dropped
         default:
             if self.flowState == .beforeDrop {
-                self.setPinValue(cardItem: self.cardItem, attachValue: .notAttached)
+                self.setAttachValue(cardItem: self.cardItem, attachValue: .notAttached)
                 self.arModel.deleteEntity(for: self.cardItem)
                 self.arModel.deleteCameraAnchor()
             }
@@ -211,13 +211,13 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         case .editMode, .beforeDrop:
             self.flowState = .selectCard
         case .selectMarker:
-            self.setPinValue(cardItem: self.cardItem, attachValue: .notAttached)
+            self.setAttachValue(cardItem: self.cardItem, attachValue: .notAttached)
             self.arModel.deleteEntity(for: self.cardItem)
             self.cardItem = nil
             self.flowState = .editMode
         case .dropped:
             self.firstPage = true
-            self.setPinValue(cardItem: self.cardItem, attachValue: .notAttached)
+            self.setAttachValue(cardItem: self.cardItem, attachValue: .notAttached)
             self.arModel.deleteEntity(for: self.cardItem)
             self.arModel.deleteCameraAnchor()
             if let cardItem = cardItem {
@@ -229,7 +229,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
         }
     }
     
-    func setPinValue(cardItem: CardItem?, attachValue: AttachValue) {
+    func setAttachValue(cardItem: CardItem?, attachValue: AttachValue) {
         guard let cardItem = cardItem,
               let index = attachmentsMetadata.firstIndex(where: { $0.id.uuidString == cardItem.id }) else { return }
         self.attachmentsMetadata[index].subtitle = attachValue.rawValue
@@ -261,7 +261,7 @@ private struct BackButton: View {
                     .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                     .cornerRadius(10)
             })
-            .padding([.leading, .top], 16)
+                .padding([.leading, .top], 16)
         }
     }
 }
@@ -295,6 +295,7 @@ private struct EditRow: View {
                         Text(text())
                             .font(.fiori(forTextStyle: .body).weight(.bold))
                             .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
+                            .frame(width: 114, height: 44)
                             .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                             .cornerRadius(10)
                     })
@@ -305,8 +306,8 @@ private struct EditRow: View {
                     }, label: {
                         Image(systemName: icon())
                             .font(.system(size: 19))
-                            .frame(width: 44, height: 44)
                             .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
+                            .frame(width: 44, height: 44)
                             .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                             .cornerRadius(10)
                     })

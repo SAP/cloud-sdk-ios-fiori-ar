@@ -35,8 +35,7 @@ public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAn
         var annotations = [ScreenAnnotation<CodableCardItem>]()
 
         self.networkingAPI.getScene(self.sceneIdentifier)
-//        self.scenePublisher(identifier: self.sceneIdentifier)
-            .receive(on: DispatchQueue.main) // initialization of RealityKit' ModelEntity needs to happen on main thread or otherwise the app crashes
+            .receive(on: DispatchQueue.main)
             .sink { completion in
                 switch completion {
                 case .finished:
@@ -46,7 +45,7 @@ public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAn
                 }
             } receiveValue: { scene in
                 manager.sceneRoot = Entity()
-                manager.addReferenceImage(for: scene.referenceAnchorImage, with: scene.referenceAnchorImagePhysicalWidth)
+                manager.addReferenceImage(for: scene.referenceAnchorImage, with: CGFloat(scene.referenceAnchorImagePhysicalWidth / 100.0))
 
                 for cardItem in scene.cards {
                     var annotation = ScreenAnnotation(card: cardItem)

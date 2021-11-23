@@ -9,8 +9,6 @@ import FioriSwiftUICore
 import FioriThemeManager
 import SwiftUI
 
-// TODO: Update Card Text and Colors
-
 extension Fiori {
     enum CardItem {
         struct DetailImage: ViewModifier {
@@ -22,8 +20,8 @@ extension Fiori {
         struct Title: ViewModifier {
             func body(content: Content) -> some View {
                 content
-                    .font(.headline)
-                    .foregroundColor(Color.preferredColor(.header, background: .lightConstant))
+                    .font(.fiori(forTextStyle: .headline).weight(.bold))
+                    .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                     .lineLimit(2)
                     .truncationMode(.tail)
                     .frame(width: 198, alignment: .leading)
@@ -33,7 +31,7 @@ extension Fiori {
         struct Subtitle: ViewModifier {
             func body(content: Content) -> some View {
                 content
-                    .font(.subheadline)
+                    .font(.fiori(forTextStyle: .subheadline))
                     .foregroundColor(Color.preferredColor(.secondaryLabel, background: .lightConstant))
                     .lineLimit(1)
                     .truncationMode(.tail)
@@ -46,9 +44,9 @@ extension Fiori {
             
             func body(content: Content) -> some View {
                 content
-                    .font(.system(size: 18))
-                    .lineLimit(1)
+                    .font(.body)
                     .foregroundColor(self.isSelected ? Color.preferredColor(.tintColor, background: .lightConstant) : .clear)
+                    .lineLimit(1)
             }
         }
         
@@ -164,7 +162,7 @@ public extension CardView {
                 detailImage
             }
             .frame(width: 214, height: 93)
-            .background(Color.preferredColor(.tertiaryFill))
+            .background(Color.preferredColor(.tertiaryFill, background: .lightConstant))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .opacity(isSelected ? 1 : 0.8)
             .padding(.top, 8)
@@ -183,10 +181,10 @@ public extension CardView {
             }, label: {
                 actionText
             })
-            .frame(width: 198, height: isSelected && !isActionTextNil ? 44 : 0)
+                .frame(width: 198, height: isSelected && !isActionTextNil ? 44 : 0)
         }
         .frame(width: 230)
-        .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
+        .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
         .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
         .opacity(isSelected ? 1 : 0.8)
@@ -256,7 +254,7 @@ public struct DefaultIcon: View {
     public var body: some View {
         icon
             .font(.system(size: 37))
-            .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
+            .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
     }
 }
 
