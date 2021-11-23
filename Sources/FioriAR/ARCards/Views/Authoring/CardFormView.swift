@@ -247,8 +247,8 @@ private struct CardDetailsView: View {
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
         .actionSheet(isPresented: $actionSheetPresented) {
-            ActionSheet(title: Text("Choose an option..."),
-                        message: Text("Selection for Card Cover Image"),
+            ActionSheet(title: Text(""),
+                        message: Text(""),
                         buttons: [.default(Text("Camera"), action: {
                             pickerSource = .camera
                             pickerPresented.toggle()
