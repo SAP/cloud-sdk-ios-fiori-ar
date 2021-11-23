@@ -31,7 +31,7 @@
 		2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909726437D630076150D /* ExampleCardItem.swift */; };
 		2CDD909B26437E7A0076150D /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CDD909A26437E7A0076150D /* Tests.swift */; };
 		8A32BAA6273C0F55002364A2 /* FioriAR in Frameworks */ = {isa = PBXBuildFile; productRef = 8A32BAA5273C0F55002364A2 /* FioriAR */; };
-		8A6F605926EFFF6600FA9FD5 /* DemoARService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6F605826EFFF6600FA9FD5 /* DemoARService.swift */; };
+		8ABF02C6274D351200D99971 /* SAPURLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABF02C5274D351200D99971 /* SAPURLSession+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,7 +61,7 @@
 		2CD13ED92728D717009160C8 /* ExampleRC.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = ExampleRC.rcproject; sourceTree = "<group>"; };
 		2CDD909726437D630076150D /* ExampleCardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleCardItem.swift; sourceTree = "<group>"; };
 		2CDD909A26437E7A0076150D /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		8A6F605826EFFF6600FA9FD5 /* DemoARService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoARService.swift; sourceTree = "<group>"; };
+		8ABF02C5274D351200D99971 /* SAPURLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SAPURLSession+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +125,7 @@
 				2CDD909A26437E7A0076150D /* Tests.swift */,
 				2C9371272644D3C3001932D1 /* DownloadsView.swift */,
 				2C554AE3268118E0007784D6 /* FileManager+Extensions.swift */,
+				8ABF02C5274D351200D99971 /* SAPURLSession+Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -170,7 +171,6 @@
 		2C4C71AF26436A4500B462A9 /* ARCards */ = {
 			isa = PBXGroup;
 			children = (
-				8A6F605726EFFF3F00FA9FD5 /* Networking */,
 				2C2D2BCA2645BF5000A1E1B1 /* Utils */,
 				2C2744942644DE210088E5DC /* Models */,
 				2C2744932644DE040088E5DC /* CardContentViews */,
@@ -195,14 +195,6 @@
 				2C3C675F2674006B00B2B243 /* CarEngineRC1.rcproject */,
 			);
 			path = RealityComposer;
-			sourceTree = "<group>";
-		};
-		8A6F605726EFFF3F00FA9FD5 /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-				8A6F605826EFFF6600FA9FD5 /* DemoARService.swift */,
-			);
-			path = Networking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,10 +287,10 @@
 				2C4C71A02643697F00B462A9 /* ExamplesApp.swift in Sources */,
 				2C9371282644D3C3001932D1 /* DownloadsView.swift in Sources */,
 				2C48248F264DC40600E230E6 /* StringIdentifyingCardItem.swift in Sources */,
+				8ABF02C6274D351200D99971 /* SAPURLSession+Extension.swift in Sources */,
 				2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */,
 				2CDD909B26437E7A0076150D /* Tests.swift in Sources */,
 				2C2C8861272C85F300E68413 /* ARCardsServiceView.swift in Sources */,
-				8A6F605926EFFF6600FA9FD5 /* DemoARService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
