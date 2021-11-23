@@ -169,9 +169,10 @@ internal class APIClient {
             urlRequest = builder.applyFormFields(to: urlRequest)
         }
 
-        return self.sapURLSession.dataTaskPublisher(for: urlRequest)
-            .flatMap { yoo in
-                self.handleResponse(request: request, urlRequest: urlRequest, data: yoo.data, urlResponse: yoo.response, error: nil)
+
+        return self.sapURLSession._dataTaskPublisher(for: urlRequest)
+            .flatMap { element in
+                self.handleResponse(request: request, urlRequest: urlRequest, data: element.data, urlResponse: element.response, error: nil)
             }
             .catch { err in
                 Just(APIResponse<T>(request: request, result: .failure(APIClientError.unknownError(err)), urlRequest: urlRequest, urlResponse: nil, data: nil))
