@@ -26,10 +26,9 @@ struct ARCardAuthoringContentView: View {
 
     var body: some View {
         SceneAuthoringView(title: "Annotations",
-                           cardItems,
                            serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
                            sapURLSession: sapURLSession,
-                           sceneIdentifier: nil) // SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId))
+                           sceneIdentifier: .id(20110993)) // SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId)) // 20110993
             .onSceneEdit { sceneEdit in
                 switch sceneEdit {
                 case .created(card: let card):
@@ -39,7 +38,7 @@ struct ARCardAuthoringContentView: View {
                 case .deleted(card: let card):
                     print("Deleted: \(card.title_)")
                 case .published(sceneID: let sceneID):
-                    print(sceneID)
+                    print("From SceneEdit:", sceneID)
                 }
             }
     }

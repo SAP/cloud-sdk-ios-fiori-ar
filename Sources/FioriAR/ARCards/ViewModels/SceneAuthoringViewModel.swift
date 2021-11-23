@@ -18,7 +18,8 @@ class SceneAuthoringModel: ObservableObject {
     @Published var currentTab: TabSelection = .left
     @Published var attachmentsMetadata: [AttachmentUIMetadata] = []
     @Published var bannerMessage: BannerMessage? = nil
-    @Published var validatedSync = false
+    @Published var exitMessage: ExitMessage = .beforeCreation
+    @Published var isSyncValidated = false
     
     var sceneIdentifier: SceneIdentifyingAttribute?
     private var networkingAPI: ARCardsNetworkingService!
@@ -73,7 +74,20 @@ class SceneAuthoringModel: ObservableObject {
     }
     
     func validateSync() {
-        self.validatedSync = self.hasDifference() && self.allAnnotationsPinned() && self.validatedAR()
+        self.isSyncValidated = self.hasDifference() && self.allAnnotationsPinned() && self.validatedAR()
+    }
+    
+    func validatedExit() -> Bool {
+        if self.sceneIdentifier == nil {
+            self.exitMessage = .beforeCreation
+        } else if !self.allAnnotationsPinned() {
+            self.exitMessage = .hasRemainingAnnotations
+        } else if self.hasDifference() {
+            self.exitMessage = .lostChanges
+        } else {
+            return true
+        }
+        return false
     }
     
     func createSceneOnServer(completionHandler: @escaping (Int) -> Void) {
@@ -90,8 +104,10 @@ class SceneAuthoringModel: ObservableObject {
         .sink { completion in
             switch completion {
             case .finished:
+                self.bannerMessage = .sceneUpdated
                 self.logger.debug("createScene publisher finished")
             case .failure(let error):
+                self.bannerMessage = .failure
                 self.logger.error("Creating scene failed! \(error.localizedDescription)")
             }
         } receiveValue: { createdSceneId in
@@ -111,7 +127,7 @@ class SceneAuthoringModel: ObservableObject {
             .sink { completion in
                 switch completion {
                 case .finished:
-                    self.bannerMessage = .completed
+                    self.bannerMessage = .syncFinished
                     self.logger.debug("getScene publisher finished")
                 case .failure(let error):
                     self.bannerMessage = .failure

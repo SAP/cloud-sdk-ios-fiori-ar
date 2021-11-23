@@ -6,6 +6,7 @@
 //
 
 import Combine
+import FioriCharts
 import SwiftUI
 
 public enum SceneEditing {
@@ -23,6 +24,8 @@ struct CardFormView: View {
     @Binding var cardItems: [CodableCardItem]
     @Binding var attachmentModels: [AttachmentUIMetadata]
     @Binding var currentCardID: UUID?
+    @Binding var bannerMessage: BannerMessage?
+    
     @State var detailImage: CardImage?
     @State var title: String
     @State var subtitle: String
@@ -38,11 +41,13 @@ struct CardFormView: View {
     init(cardItems: Binding<[CodableCardItem]>,
          attachmentModels: Binding<[AttachmentUIMetadata]>,
          currentCardID: Binding<UUID?>,
+         bannerMessage: Binding<BannerMessage?>,
          onDismiss: (() -> Void)?)
     {
         self._cardItems = cardItems
         self._attachmentModels = attachmentModels
         self._currentCardID = currentCardID
+        self._bannerMessage = bannerMessage
 
         let currentCard = cardItems.wrappedValue.first(where: { $0.id == currentCardID.wrappedValue?.uuidString })
 
@@ -84,7 +89,7 @@ struct CardFormView: View {
                                      .foregroundColor(Color.preferredColor(.primaryLabel))
                              }
                          })
-                         .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
+                .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
 
             AdaptiveStack {
                 ZStack {
@@ -143,6 +148,7 @@ struct CardFormView: View {
 
         self.cardItems.append(newCard)
         self.onSceneEdit(.created(card: newCard))
+        self.bannerMessage = .cardCreated
     }
 
     func updateCard(for currentID: UUID) {
@@ -204,9 +210,9 @@ private struct CardDetailsView: View {
 
                         TextDetail(textField: $subtitle, titleText: "Subtitle (Optional)")
 
-                        ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
-
                         TextDetail(textField: $actionContentText, toggle: $actionButtonToggle, titleText: "Content (Optional)", placeholder: "URL")
+                        
+                        ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
                             .zIndex(1)
 
                         CoverImageDetail(titleText: "Custom Cover Image (Optional)",
@@ -228,8 +234,8 @@ private struct CardDetailsView: View {
                                 .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 4, y: 2)
                                 .shadow(color: Color.preferredColor(.tintColor, background: .lightConstant).opacity(0.16), radius: 2)
                         })
-                        .disabled(title.isEmpty)
-                        .padding(.bottom, 54)
+                            .disabled(title.isEmpty)
+                            .padding(.bottom, 54)
                     }
                     .padding(.top, 9.5)
                     .padding(.horizontal, 16)
@@ -315,22 +321,22 @@ struct CardPreview: View {
                     if let icon = icon {
                         Image(systemName: icon)
                             .font(.system(size: 30))
-                            .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
+                            .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                     } else {
                         Image(systemName: "info")
                             .font(.system(size: 30))
-                            .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
+                            .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                     }
                 }
             }
             .frame(width: 214, height: 93)
-            .background(Color.preferredColor(.tertiaryFill))
+            .background(Color.preferredColor(.tertiaryFill, background: .lightConstant))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .padding(.top, 8)
 
             VStack(spacing: 4) {
                 Text(title)
-                    .font(.fiori(forTextStyle: .headline).weight(.bold)) // TODO: Update
+                    .font(.fiori(forTextStyle: .headline).weight(.bold))
                     .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                     .lineLimit(2)
                     .truncationMode(.tail)
@@ -338,7 +344,7 @@ struct CardPreview: View {
 
                 if !subtitle.isEmpty {
                     Text(subtitle)
-                        .font(.fiori(forTextStyle: .subheadline).weight(.bold)) // TODO: Update
+                        .font(.fiori(forTextStyle: .subheadline))
                         .foregroundColor(Color.preferredColor(.secondaryLabel, background: .lightConstant))
                         .lineLimit(1)
                         .truncationMode(.tail)
@@ -352,12 +358,12 @@ struct CardPreview: View {
                     openURL(linkURL)
                 }
             }, label: {
-                Text(actionText) // TODO: Update
+                Text(actionText)
             })
-            .font(.system(size: 18))
-            .lineLimit(1)
-            .foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant))
-            .frame(width: 198, height: hasButton && !actionText.isEmpty ? 44 : 0)
+                .font(.system(size: 18))
+                .lineLimit(1)
+                .foregroundColor(Color.preferredColor(.tintColor, background: .lightConstant))
+                .frame(width: 198, height: hasButton && !actionText.isEmpty ? 44 : 0)
         }
         .frame(width: 230)
         .background(Color.preferredColor(.primaryBackground, background: .lightConstant))

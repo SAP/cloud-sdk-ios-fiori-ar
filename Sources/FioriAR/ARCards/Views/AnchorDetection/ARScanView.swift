@@ -6,6 +6,7 @@
 //
 
 import FioriThemeManager
+import RealityKit
 import SwiftUI
 
 /**
@@ -91,13 +92,14 @@ private struct CollapsingView: View {
                         Text("Begin Scan")
                             .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                             .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
+                            .frame(width: 343, height: 40)
                             .background(
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color.preferredColor(.tintColor, background: .lightConstant))
                             )
                     })
-                    .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
-                    .opacity(isScanning ? 0 : 1)
+                        .padding(.bottom, verticalSizeClass == .compact ? 48 : 216)
+                        .opacity(isScanning ? 0 : 1)
                 }
                 .transition(AnyTransition.opacity.animation(.easeInOut(duration: 1)))
                 
@@ -105,10 +107,10 @@ private struct CollapsingView: View {
                 VStack(spacing: 30) {
                     ProgressView()
                         .progressViewStyle(ScanningViewProgressStyle())
-                        .frame(width: 200, height: 200)
-                    Text("Loading... May take a moment") // TODO: Update
-                        .font(.system(size: 24))
-                        .foregroundColor(Color.white)
+                        .frame(width: 144, height: 144)
+                    Text("Loading...")
+                        .font(.fiori(forTextStyle: .callout))
+                        .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant))
                 }
             }
             
@@ -197,15 +199,13 @@ private struct ImageMatchedView: View {
 }
 
 private struct ScanningViewProgressStyle: ProgressViewStyle {
-    var strokeColor = Color.blue
-    var strokeWidth = 5
     @State private var isAnimating: Bool = false
 
     func makeBody(configuration: Configuration) -> some View {
         ZStack {
             Circle()
-                .trim(from: 0, to: 0.25)
-                .stroke(strokeColor, style: StrokeStyle(lineWidth: CGFloat(strokeWidth), lineCap: .round))
+                .trim(from: 0, to: 0.75)
+                .stroke(Color.preferredColor(.primaryFill, background: .lightConstant), style: StrokeStyle(lineWidth: 2, lineCap: .round))
                 .rotationEffect(.degrees(isAnimating ? 360 : 0))
                 .animation(Animation.linear.repeatForever(autoreverses: false).speed(0.50), value: isAnimating)
                 .onAppear { isAnimating.toggle() }

@@ -16,6 +16,8 @@ struct AnchorImageTabView: View {
     @State private var imageName: String?
     @State private var anchorImageFormPresented = false
     
+    let onDismiss: (() -> Void)?
+    
     var body: some View {
         VStack {
             if let _ = anchorImage {
@@ -48,7 +50,7 @@ struct AnchorImageTabView: View {
             Spacer()
         }
         .background(Color.white)
-        .sheet(isPresented: $anchorImageFormPresented) {
+        .sheet(isPresented: $anchorImageFormPresented, onDismiss: onDismiss) {
             AnchorImageFormView(anchorImage: $anchorImage,
                                 physicalWidth: $physicalWidth,
                                 imageName: $imageName) {
