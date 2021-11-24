@@ -1,40 +1,40 @@
 import Foundation
 import SwiftUI
 
-public enum SourceFileType: String, Codable, Equatable, CaseIterable {
+enum SourceFileType: String, Codable, Equatable, CaseIterable {
     case reality
     case usdz
 }
 
-public struct ARScene {
-    public var sceneId: Int
-    public var alias: String?
-    public var sourceFile: ARSceneSourceFile?
-    public var referenceAnchorImage: UIImage
-    public var referenceAnchorImagePhysicalWidth: Double
-    public var cards: [CodableCardItem]
+struct ARScene {
+    var sceneId: Int
+    var alias: String?
+    var sourceFile: ARSceneSourceFile?
+    var referenceAnchorImage: UIImage
+    var referenceAnchorImagePhysicalWidth: Double
+    var cards: [CodableCardItem]
 }
 
-internal struct ARSceneSourceFileWithData {
-    public var id: String
-    public var type: SourceFileType?
-    public var data: Data
+struct ARSceneSourceFileWithData {
+    var id: String
+    var type: SourceFileType?
+    var data: Data
 }
 
-public struct ARSceneSourceFile {
-    public var id: String
-    public var type: SourceFileType
-    public var localUrl: URL
+struct ARSceneSourceFile {
+    var id: String
+    var type: SourceFileType
+    var localUrl: URL
 }
 
-public enum ARCardsNetworkingServiceError: Error, CustomStringConvertible, LocalizedError {
+enum ARCardsNetworkingServiceError: Error, CustomStringConvertible, LocalizedError {
     case serverError(Error)
     case networkError(Error)
     case unknownError(Error)
     case cannotBeSaved
     case failure(HTTPResponseStatus)
 
-    public var description: String {
+    var description: String {
         switch self {
         case .serverError(let error):
             return error.localizedDescription
@@ -49,18 +49,18 @@ public enum ARCardsNetworkingServiceError: Error, CustomStringConvertible, Local
         }
     }
 
-    public var errorDescription: String? {
+    var errorDescription: String? {
         self.description
     }
 }
 
-public struct HTTPResponseStatus: Error {
-    public init(code: Int, description: String) {
+struct HTTPResponseStatus: Error {
+    init(code: Int, description: String) {
         self.code = code
         self.description = description
     }
 
-    internal init(code: Int, data: Data?) {
+    init(code: Int, data: Data?) {
         self.code = code
         if let data = data {
             self.description = String(decoding: data, as: UTF8.self)
@@ -69,11 +69,11 @@ public struct HTTPResponseStatus: Error {
         }
     }
 
-    public var code: Int
-    public var description: String
-    public var localizedDescription: String {
+    var code: Int
+    var description: String
+    var localizedDescription: String {
         self.description
     }
 }
 
-public typealias FileImage = (id: String, image: UIImage?)
+typealias FileImage = (id: String, image: UIImage?)
