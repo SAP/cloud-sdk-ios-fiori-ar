@@ -27,9 +27,9 @@ struct AnchorImageTabView: View {
                     }
             } else {
                 VStack(spacing: 46) {
-                    Text("The anchor is an image that the software can recognize to successfully place the markers in relation to the anchor. Make sure that the anchor image is scannable on the site of the experience.")
+                    Text("The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software.")
                         .multilineTextAlignment(.center)
-                        .font(.fiori(forTextStyle: .body).weight(.bold))
+                        .font(.fiori(forTextStyle: .body))
                         .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                     Button(action: { anchorImageFormPresented.toggle() }, label: {
                         Text("Upload Anchor Image")
@@ -88,7 +88,7 @@ struct ImageAnchorView: View {
                     .padding(.bottom, 8)
             }
             HStack {
-                Text("Tab the image to edit")
+                Text("Tap the image to edit it.")
                     .font(.fiori(forTextStyle: .footnote).weight(.bold))
                     .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                 Spacer()

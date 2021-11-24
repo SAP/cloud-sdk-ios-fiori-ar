@@ -30,7 +30,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
     @State private var cardItem: CardItem? = nil
     @State private var flowState: MarkerFlowState = .arscene
     @State private var sheetState: PartialSheetState = .notVisible
-    @State private var sheetTitle = "Add Annotation"
+    @State private var sheetTitle = "Select Annotation"
     @State private var firstPage = true
     @State private var displayPagingView = false
     @State private var carouselVisible = true
@@ -134,7 +134,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
             case .selectMarker:
                 sheetState = .closed
             case .selectCard:
-                sheetTitle = "Add Annotation"
+                sheetTitle = "Select Annotation"
                 displayPagingView = true
                 arModel.setAllMarkerState(to: .notVisible)
                 sheetState = .open

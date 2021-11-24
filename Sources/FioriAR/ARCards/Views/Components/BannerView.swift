@@ -16,6 +16,7 @@ struct BannerView: View {
                 HStack {
                     Text(message.rawValue)
                         .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant, interface: .elevatedConstant))
+                        .lineLimit(2)
                     Spacer()
                     Button("Close") {
                         withAnimation { self.message = nil }
@@ -30,7 +31,7 @@ struct BannerView: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.black)
         )
-        .frame(width: 351, height: 52)
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -38,6 +39,6 @@ enum BannerMessage: String {
     case cardCreated = "A new annotation card is created."
     case sceneUpdated = "Scene update is successfully published."
     case loading = "Loading..."
-    case syncFinished = "Sync finished"
+    case syncFinished = "Sync finished."
     case failure = "Something went wrong."
 }
