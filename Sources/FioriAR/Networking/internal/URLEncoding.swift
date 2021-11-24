@@ -25,10 +25,10 @@
 import Foundation
 
 /// A dictionary of parameters to apply to a `URLRequest`.
-public typealias Parameters = [String: Any]
+internal typealias Parameters = [String: Any]
 
 /// A type used to define how a set of parameters are applied to a `URLRequest`.
-public protocol ParameterEncoding {
+internal protocol ParameterEncoding {
     /// Creates a `URLRequest` by encoding parameters and applying them on the passed request.
     ///
     /// - Parameters:
@@ -56,12 +56,12 @@ public protocol ParameterEncoding {
 ///
 /// `BoolEncoding` can be used to configure how boolean values are encoded. The default behavior is to encode
 /// `true` as 1 and `false` as 0.
-public struct URLEncoding: ParameterEncoding {
+internal struct URLEncoding: ParameterEncoding {
     // MARK: Helper Types
 
     /// Defines whether the url-encoded query string is applied to the existing query string or HTTP body of the
     /// resulting URL request.
-    public enum Destination {
+    internal enum Destination {
         /// Applies encoded query string result to existing query string for `GET`, `HEAD` and `DELETE` requests and
         /// sets as the HTTP body for requests with any other HTTP method.
         case methodDependent
@@ -80,7 +80,7 @@ public struct URLEncoding: ParameterEncoding {
     }
 
     /// Configures how `Array` parameters are encoded.
-    public enum ArrayEncoding {
+    internal enum ArrayEncoding {
         /// An empty set of square brackets is appended to the key for every value. This is the default behavior.
         case brackets
         /// No brackets are appended. The key is encoded as is.
@@ -97,7 +97,7 @@ public struct URLEncoding: ParameterEncoding {
     }
 
     /// Configures how `Bool` parameters are encoded.
-    public enum BoolEncoding {
+    internal enum BoolEncoding {
         /// Encode `true` as `1` and `false` as `0`. This is the default behavior.
         case numeric
         /// Encode `true` and `false` as string literals.
@@ -116,22 +116,22 @@ public struct URLEncoding: ParameterEncoding {
     // MARK: Properties
 
     /// Returns a default `URLEncoding` instance with a `.methodDependent` destination.
-    public static var `default`: URLEncoding { URLEncoding() }
+    internal static var `default`: URLEncoding { URLEncoding() }
 
     /// Returns a `URLEncoding` instance with a `.queryString` destination.
-    public static var queryString: URLEncoding { URLEncoding(destination: .queryString) }
+    internal static var queryString: URLEncoding { URLEncoding(destination: .queryString) }
 
     /// Returns a `URLEncoding` instance with an `.httpBody` destination.
-    public static var httpBody: URLEncoding { URLEncoding(destination: .httpBody) }
+    internal static var httpBody: URLEncoding { URLEncoding(destination: .httpBody) }
 
     /// The destination defining where the encoded query string is to be applied to the URL request.
-    public let destination: Destination
+    internal let destination: Destination
 
     /// The encoding to use for `Array` parameters.
-    public let arrayEncoding: ArrayEncoding
+    internal let arrayEncoding: ArrayEncoding
 
     /// The encoding to use for `Bool` parameters.
-    public let boolEncoding: BoolEncoding
+    internal let boolEncoding: BoolEncoding
 
     // MARK: Initialization
 
@@ -142,7 +142,7 @@ public struct URLEncoding: ParameterEncoding {
     ///                    default.
     ///   - arrayEncoding: `ArrayEncoding` to use. `.brackets` by default.
     ///   - boolEncoding:  `BoolEncoding` to use. `.numeric` by default.
-    public init(destination: Destination = .methodDependent,
+    internal init(destination: Destination = .methodDependent,
                 arrayEncoding: ArrayEncoding = .brackets,
                 boolEncoding: BoolEncoding = .numeric) {
         self.destination = destination
@@ -152,7 +152,7 @@ public struct URLEncoding: ParameterEncoding {
 
     // MARK: Encoding
 
-    public func encode(_ urlRequest: URLRequest, with parameters: Parameters?) throws -> URLRequest {
+    internal func encode(_ urlRequest: URLRequest, with parameters: Parameters?) throws -> URLRequest {
         var urlRequest = urlRequest
         guard let parameters = parameters else { return urlRequest }
 
@@ -186,7 +186,7 @@ public struct URLEncoding: ParameterEncoding {
     ///   - value: Value of the query component.
     ///
     /// - Returns: The percent-escaped, URL encoded query string components.
-    public func queryComponents(fromKey key: String, value: Any) -> [(String, String)] {
+    internal func queryComponents(fromKey key: String, value: Any) -> [(String, String)] {
         var components: [(String, String)] = []
         switch value {
         case let dictionary as [String: Any]:
@@ -216,7 +216,7 @@ public struct URLEncoding: ParameterEncoding {
     /// - Parameter string: `String` to be percent-escaped.
     ///
     /// - Returns:          The percent-escaped `String`.
-    public func escape(_ string: String) -> String {
+    internal func escape(_ string: String) -> String {
         string.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowedRFC3986) ?? string
     }
 
@@ -235,30 +235,30 @@ public struct URLEncoding: ParameterEncoding {
 
 /// Uses `JSONSerialization` to create a JSON representation of the parameters object, which is set as the body of the
 /// request. The `Content-Type` HTTP header field of an encoded request is set to `application/json`.
-public struct JSONEncoding: ParameterEncoding {
+internal struct JSONEncoding: ParameterEncoding {
     // MARK: Properties
 
     /// Returns a `JSONEncoding` instance with default writing options.
-    public static var `default`: JSONEncoding { JSONEncoding() }
+    internal static var `default`: JSONEncoding { JSONEncoding() }
 
     /// Returns a `JSONEncoding` instance with `.prettyPrinted` writing options.
-    public static var prettyPrinted: JSONEncoding { JSONEncoding(options: .prettyPrinted) }
+    internal static var prettyPrinted: JSONEncoding { JSONEncoding(options: .prettyPrinted) }
 
     /// The options for writing the parameters as JSON data.
-    public let options: JSONSerialization.WritingOptions
+    internal let options: JSONSerialization.WritingOptions
 
     // MARK: Initialization
 
     /// Creates an instance using the specified `WritingOptions`.
     ///
     /// - Parameter options: `JSONSerialization.WritingOptions` to use.
-    public init(options: JSONSerialization.WritingOptions = []) {
+    internal init(options: JSONSerialization.WritingOptions = []) {
         self.options = options
     }
 
     // MARK: Encoding
 
-    public func encode(_ urlRequest: URLRequest, with parameters: Parameters?) throws -> URLRequest {
+    internal func encode(_ urlRequest: URLRequest, with parameters: Parameters?) throws -> URLRequest {
         var urlRequest = urlRequest
         guard let parameters = parameters else { return urlRequest }
 
@@ -285,7 +285,7 @@ public struct JSONEncoding: ParameterEncoding {
     ///
     /// - Returns:      The encoded `URLRequest`.
     /// - Throws:       Any `Error` produced during encoding.
-    public func encode(_ urlRequest: URLRequest, withJSONObject jsonObject: Any? = nil) throws -> URLRequest {
+    internal func encode(_ urlRequest: URLRequest, withJSONObject jsonObject: Any? = nil) throws -> URLRequest {
         var urlRequest = urlRequest
         guard let jsonObject = jsonObject else { return urlRequest }
 
@@ -326,7 +326,7 @@ extension CharacterSet {
     /// In RFC 3986 - Section 3.4, it states that the "?" and "/" characters should not be escaped to allow
     /// query strings to include a URL. Therefore, all "reserved" characters with the exception of "?" and "/"
     /// should be percent-escaped in the query string.
-    public static let urlQueryAllowedRFC3986: CharacterSet = {
+    internal static let urlQueryAllowedRFC3986: CharacterSet = {
         let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
         let subDelimitersToEncode = "!$&'()*+,;="
         let encodableDelimiters = CharacterSet(charactersIn: "\(generalDelimitersToEncode)\(subDelimitersToEncode)")
@@ -339,29 +339,29 @@ extension CharacterSet {
 /// `HTTPMethod.get != HTTPMethod(rawValue: "get")`.
 ///
 /// See https://tools.ietf.org/html/rfc7231#section-4.3
-public struct HTTPMethod: RawRepresentable, Equatable, Hashable {
+internal struct HTTPMethod: RawRepresentable, Equatable, Hashable {
     /// `CONNECT` method.
-    public static let connect = HTTPMethod(rawValue: "CONNECT")
+    internal static let connect = HTTPMethod(rawValue: "CONNECT")
     /// `DELETE` method.
-    public static let delete = HTTPMethod(rawValue: "DELETE")
+    internal static let delete = HTTPMethod(rawValue: "DELETE")
     /// `GET` method.
-    public static let get = HTTPMethod(rawValue: "GET")
+    internal static let get = HTTPMethod(rawValue: "GET")
     /// `HEAD` method.
-    public static let head = HTTPMethod(rawValue: "HEAD")
+    internal static let head = HTTPMethod(rawValue: "HEAD")
     /// `OPTIONS` method.
-    public static let options = HTTPMethod(rawValue: "OPTIONS")
+    internal static let options = HTTPMethod(rawValue: "OPTIONS")
     /// `PATCH` method.
-    public static let patch = HTTPMethod(rawValue: "PATCH")
+    internal static let patch = HTTPMethod(rawValue: "PATCH")
     /// `POST` method.
-    public static let post = HTTPMethod(rawValue: "POST")
+    internal static let post = HTTPMethod(rawValue: "POST")
     /// `PUT` method.
-    public static let put = HTTPMethod(rawValue: "PUT")
+    internal static let put = HTTPMethod(rawValue: "PUT")
     /// `TRACE` method.
-    public static let trace = HTTPMethod(rawValue: "TRACE")
+    internal static let trace = HTTPMethod(rawValue: "TRACE")
 
-    public let rawValue: String
+    internal let rawValue: String
 
-    public init(rawValue: String) {
+    internal init(rawValue: String) {
         self.rawValue = rawValue
     }
 }
