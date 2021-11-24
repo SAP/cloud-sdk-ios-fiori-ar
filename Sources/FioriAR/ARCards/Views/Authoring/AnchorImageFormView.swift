@@ -194,7 +194,7 @@ struct AnchorImageFormView: View {
         .ignoresSafeArea(.keyboard)
         .actionSheet(isPresented: $actionSheetPresented) {
             ActionSheet(title: Text("Choose an Option"),
-                        message: Text(""),
+                        message: nil,
                         buttons: [.default(Text("Camera"), action: {
                             pickerSource = .camera
                             pickerPresented.toggle()

@@ -248,7 +248,7 @@ private struct CardDetailsView: View {
         .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
         .actionSheet(isPresented: $actionSheetPresented) {
             ActionSheet(title: Text("Choose an Option"),
-                        message: Text(""),
+                        message: nil,
                         buttons: [.default(Text("Camera"), action: {
                             pickerSource = .camera
                             pickerPresented.toggle()
