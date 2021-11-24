@@ -58,14 +58,18 @@ public struct SceneAuthoringView: View {
                 .background(Color.white)
                 .padding(.bottom, 6)
             
-            if let _ = authoringViewModel.bannerMessage {
-                BannerView(message: $authoringViewModel.bannerMessage)
-                    .padding([.horizontal, .bottom], 16)
-            }
-            
             VStack(spacing: 0) {
                 TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: "Cards", rightTabTitle: "Anchor Image")
                     .padding(.bottom, 16)
+                    .overlay(
+                        Group {
+                            if let _ = authoringViewModel.bannerMessage {
+                                BannerView(message: $authoringViewModel.bannerMessage)
+                                    .padding(.horizontal, 16)
+                                    .offset(y: -5)
+                            }
+                        }
+                    )
                 
                 switch authoringViewModel.currentTab {
                 case .left:
@@ -114,7 +118,7 @@ public struct SceneAuthoringView: View {
         .alert(isPresented: $isAlertPresented) {
             Alert(title: Text("Leave Page"),
                   message: Text(authoringViewModel.exitMessage.rawValue),
-                  primaryButton: .destructive(Text("Continue"), action: {
+                  primaryButton: .destructive(Text("Confirm"), action: {
                       dismiss()
                   }),
                   secondaryButton: .cancel())
@@ -222,7 +226,7 @@ enum TabSelection {
 
 enum AttachValue: String {
     case attached = "Attached"
-    case notAttached = "Not Attached Yet"
+    case notAttached = "Not Attached"
 }
 
 enum ExitMessage: String {

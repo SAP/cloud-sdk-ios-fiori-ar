@@ -1,4 +1,64 @@
-"Begin Scan" = "Begin Scan";
+"Scan" = "Scan";
+"Point your camera at this image to start the AR experience" = "Point your camera at this image to start the AR experience";
+"Loading..." = "Loading...";
 
-"Point your camera at this image to start augmented reality experience" = "Point your camera at this image to start augmented reality experience";
+"Publish" = "Publish";
+"Cards" = "Cards";
+"Anchor Image" = "Anchor Image";
+"Attached" = "Attached";
+"Not Attached" = "Not Attached";
+"Go to AR Scene" = "Go to AR Scene";
 
+"Card Details" = "Card Details"
+"New Annotation" = "New Annotation";
+"Title *" = "Title *";
+"Subtitle" = "Subtitle";
+"Content" = "Content";
+"Action Button" = "Action Button";
+"Custom Cover Image" = "Custom Cover Image";
+"URL" = "URL";
+"Label" = "Label";
+"Update" = "Update";
+"Create" = "Create";
+"Save" = "Save";
+"Leave Page" = "Leave Page";
+"Confirm" = "Confirm"
+
+"Tap the image to edit it." = "Tap the image to edit it.";
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software.";
+"Upload Image Anchor" = "Upload Image Anchor";
+"Dimensions" = "Dimensions"
+"Enter the width of the real-world image." = "Enter the width of the real-world image.";
+"Width" = "Width";
+"Tap the area below to upload the anchor image." = "Tap the area below to upload the anchor image.";
+"Delete" = "Delete"
+"Upload higher-quality image." = "Upload higher-quality image.";
+"Please select image." = "Please select image.";
+"Please input a physical width." = "Please input a physical width.";
+"Please input a numeric value." = "Please input a numeric value.";
+
+"Edit Mode" = "Edit Mode";
+"Done" = "Done";
+
+"Next" = "Next";
+"Drop Marker" = "Drop Marker";
+"Preview" = "Preview";
+
+"Select Annotation" = "Select Annotation";
+"Preview Annotation" = "Preview Annotation";
+"View Annotation" = "View Annotation";
+"Attach Annotation" = "Attach Annotation";
+
+"Choose an Option" = "Choose an Option";
+"Camera" = "Camera";
+"Photos" = "Photos";
+
+"Are you sure you want to leave the page? Your changes will be lost." = "Are you sure you want to leave the page? Your changes will be lost.";
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "There are annotations that haven’t been attached yet. Are you sure you want to leave the app?";
+"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "There are changes that haven’t been published yet. Are you sure you want to leave the app?";
+
+"Sync finished." = "Sync finished.";
+"Something went wrong." = "Something went wrong.";
+"Scene update is successfully published." = "Scene update is successfully published.";
+"A new annotation card is created." = "A new annotation card is created.";
+"Close" = "Close";
