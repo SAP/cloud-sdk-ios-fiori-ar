@@ -79,7 +79,7 @@ private struct CollapsingView: View {
                         .onTapGesture(perform: buttonAction)
                         .allowsHitTesting(isScanning)
                     
-                    Text("Point your camera at this image to start augmented reality experience")
+                    Text("Point your camera at this image to start the AR experience")
                         .font(.fiori(forTextStyle: .body))
                         .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                         .multilineTextAlignment(.center)
@@ -89,7 +89,7 @@ private struct CollapsingView: View {
                         .opacity(isScanning ? 0 : 1)
                     
                     Button(action: { buttonAction() }, label: {
-                        Text("Begin Scan")
+                        Text("Scan")
                             .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                             .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                             .frame(width: 343, height: 40)

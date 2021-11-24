@@ -71,7 +71,7 @@ struct AnchorImageFormView: View {
                     
                     VStack(spacing: 0) {
                         HStack {
-                            Text("Please enter the real-world physical width of anchor image.")
+                            Text("Enter the width of the real-world image.")
                                 .font(.fiori(forTextStyle: .subheadline))
                                 .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                             Spacer()
@@ -115,7 +115,7 @@ struct AnchorImageFormView: View {
                     
                     VStack(spacing: 0) {
                         HStack {
-                            Text("Please tap the area below to upload anchor image.")
+                            Text("Tap the area below to upload the anchor image.")
                                 .font(.fiori(forTextStyle: .subheadline))
                                 .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                             Spacer()
@@ -193,7 +193,7 @@ struct AnchorImageFormView: View {
         .edgesIgnoringSafeArea(.all)
         .ignoresSafeArea(.keyboard)
         .actionSheet(isPresented: $actionSheetPresented) {
-            ActionSheet(title: Text(""),
+            ActionSheet(title: Text("Choose an Option"),
                         message: Text(""),
                         buttons: [.default(Text("Camera"), action: {
                             pickerSource = .camera
@@ -210,8 +210,8 @@ struct AnchorImageFormView: View {
     }
     
     func validateInput() -> Bool {
-        self.imageValidationText = self.internalAnchorImage == nil ? "Please Select Image" : ""
-        self.physicalWidthValidationText = self.internalPhysicalWidth.isEmpty ? "Please input a physical Width" : Double(self.internalPhysicalWidth) == nil ? "Please input a Numeric Value" : ""
+        self.imageValidationText = self.internalAnchorImage == nil ? "Please select image." : ""
+        self.physicalWidthValidationText = self.internalPhysicalWidth.isEmpty ? "Please input a physical width." : Double(self.internalPhysicalWidth) == nil ? "Please input a numeric value." : ""
         return self.imageValidationText.isEmpty && self.physicalWidthValidationText.isEmpty
     }
 
@@ -230,7 +230,7 @@ struct AnchorImageFormView: View {
                         completionHandler()
                     }
                 } else {
-                    self.imageValidationText = "Invalid Image"
+                    self.imageValidationText = "Upload higher-quality image."
                 }
             }
         }

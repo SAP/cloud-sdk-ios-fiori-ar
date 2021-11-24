@@ -206,16 +206,16 @@ private struct CardDetailsView: View {
             ScrollView {
                 ZStack {
                     VStack(spacing: 14) {
-                        TextDetail(textField: $title, titleText: "*Title")
+                        TextDetail(textField: $title, titleText: "Title *")
 
-                        TextDetail(textField: $subtitle, titleText: "Subtitle (Optional)")
+                        TextDetail(textField: $subtitle, titleText: "Subtitle")
 
-                        TextDetail(textField: $actionContentText, toggle: $actionButtonToggle, titleText: "Content (Optional)", placeholder: "URL")
+                        TextDetail(textField: $actionContentText, toggle: $actionButtonToggle, titleText: "Content", placeholder: "URL")
                         
-                        ToggleDetail(titleText: "Action Button (Optional)", textField: $actionText, isOn: $actionButtonToggle)
+                        ToggleDetail(titleText: "Action Button", placeholder: "Label", textField: $actionText, isOn: $actionButtonToggle)
                             .zIndex(1)
 
-                        CoverImageDetail(titleText: "Custom Cover Image (Optional)",
+                        CoverImageDetail(titleText: "Custom Cover Image",
                                          isOn: $coverImageToggle,
                                          presentActionSheet: $actionSheetPresented,
                                          detailImage: $detailImage)
@@ -247,7 +247,7 @@ private struct CardDetailsView: View {
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
         .actionSheet(isPresented: $actionSheetPresented) {
-            ActionSheet(title: Text(""),
+            ActionSheet(title: Text("Choose an Option"),
                         message: Text(""),
                         buttons: [.default(Text("Camera"), action: {
                             pickerSource = .camera
@@ -405,6 +405,7 @@ struct TextDetail: View {
 
 private struct ToggleDetail: View {
     var titleText: String
+    var placeholder: String? = nil
 
     @Binding var textField: String
     @Binding var isOn: Bool
@@ -423,7 +424,7 @@ private struct ToggleDetail: View {
                 }
             }
 
-            FioriNextTextField(text: $textField, placeHolder: titleText)
+            FioriNextTextField(text: $textField, placeHolder: placeholder ?? titleText)
                 .onChange(of: textField) { newValue in
                     isOn = newValue.isEmpty ? false : true
                 }
