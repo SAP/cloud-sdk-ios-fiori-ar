@@ -8,16 +8,21 @@ import XCTest
 final class ARCardsNetworkingServiceTests: XCTestCase {
     var cancellables: Set<AnyCancellable>!
     var urlSessionConfiguration: URLSessionConfiguration!
+    var sut: ARCardsNetworkingService!
+    var testExpectation: XCTestExpectation!
 
     override func setUp() {
         self.cancellables = []
-        self.urlSessionConfiguration = URLSessionConfiguration.ephemeral
         NetworkingServiceURLProtocolMock.reset()
+        self.urlSessionConfiguration = URLSessionConfiguration.ephemeral
+        self.urlSessionConfiguration.protocolClasses = [NetworkingServiceURLProtocolMock.self]
+        self.sut = ARCardsNetworkingService(sapURLSession: SAPURLSession(configuration: self.urlSessionConfiguration), baseURL: "Test")
+        self.testExpectation = expectation(description: "testExpectation")
     }
 
     func testGetSceneById() throws {
-        // Mocking logic
-        self.urlSessionConfiguration.protocolClasses = [NetworkingServiceURLProtocolMock.self]
+        var loadedScene: ARScene?
+
         NetworkingServiceURLProtocolMock.requestHandler = { request in
             guard let url = request.url else { fatalError() }
             switch url.absoluteString {
@@ -26,23 +31,16 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
             case _ where url.absoluteString.contains("/augmentedreality/v1/runtime/scene/20110991/file"):
                 return (HTTPURLResponse(url: url, statusCode: 200), try XCTUnwrap(Bundle.module.getBinaryContent(of: "qrImage")))
             default:
-                fatalError()
+                return nil
             }
         }
 
-        let networkingService = ARCardsNetworkingService(sapURLSession: SAPURLSession(configuration: self.urlSessionConfiguration), baseURL: "Test")
-        let sceneLoaded = expectation(description: "sceneLoaded")
-
-        var loadedScene: ARScene?
-
-        // CUT
-        networkingService.getScene(.id(20110991))
+        sut.getScene(.id(20110991))
             .sink { completion in
                 switch completion {
                 case .finished:
-                    XCTAssertEqual(loadedScene?.sceneId, 20110991)
-                    XCTAssertEqual(NetworkingServiceURLProtocolMock.receivedRequests.count, 2)
-                    sceneLoaded.fulfill()
+
+                    self.testExpectation.fulfill()
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -51,37 +49,32 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
             }
             .store(in: &self.cancellables)
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 0.1, handler: nil)
+
+        XCTAssertEqual(loadedScene?.sceneId, 20110991)
+        XCTAssertEqual(NetworkingServiceURLProtocolMock.receivedRequests.count, 2)
     }
 
     func testGetSceneByAlias() throws {
-        // Mocking logic
-        self.urlSessionConfiguration.protocolClasses = [NetworkingServiceURLProtocolMock.self]
+        var loadedScene: ARScene?
+
         NetworkingServiceURLProtocolMock.requestHandler = { request in
-            guard let url = request.url else { fatalError() }
+            guard let url = request.url else { return nil }
             switch url.absoluteString {
             case _ where url.absoluteString.contains("/augmentedreality/v1/runtime/scene/findByAlias?language=en&sceneAlias=myOwnAlias"):
                 return (HTTPURLResponse(url: url, statusCode: 200), try XCTUnwrap(Bundle.module.getTextContent(forResource: "GET_scene_findById")))
             case _ where url.absoluteString.contains("/augmentedreality/v1/runtime/scene/20110991/file"):
                 return (HTTPURLResponse(url: url, statusCode: 200), try XCTUnwrap(Bundle.module.getBinaryContent(of: "qrImage")))
             default:
-                fatalError()
+                return nil
             }
         }
 
-        let networkingService = ARCardsNetworkingService(sapURLSession: SAPURLSession(configuration: self.urlSessionConfiguration), baseURL: "Test")
-        let sceneLoaded = expectation(description: "sceneLoaded")
-
-        var loadedScene: ARScene?
-
-        // CUT
-        networkingService.getScene(.alias("myOwnAlias"))
+        sut.getScene(.alias("myOwnAlias"))
             .sink { completion in
                 switch completion {
                 case .finished:
-                    XCTAssertEqual(loadedScene?.sceneId, 20110991)
-                    XCTAssertEqual(NetworkingServiceURLProtocolMock.receivedRequests.count, 2)
-                    sceneLoaded.fulfill()
+                    self.testExpectation.fulfill()
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -90,53 +83,122 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
             }
             .store(in: &self.cancellables)
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 0.5, handler: nil)
+
+        XCTAssertEqual(loadedScene?.sceneId, 20110991)
+        XCTAssertEqual(NetworkingServiceURLProtocolMock.receivedRequests.count, 2)
     }
 
     func testCreateScene() throws {
-        // Mocking logic
-        self.urlSessionConfiguration.protocolClasses = [NetworkingServiceURLProtocolMock.self]
+        var createdSceneId: Int?
+        let imageData = try XCTUnwrap(Bundle.module.getBinaryContent(of: "qrImage"))
+        let cardToBeCreated = CodableCardItem(id: "123", title_: "MyCardTitle", subtitle_: "MyCardSubtitle", detailImage_: nil, image: .init(id: "MyCardImage", data: imageData), actionText_: nil, actionContentURL_: nil, icon_: nil, position_: SIMD3<Float>.optional(x: 1, y: 1, z: 1))
+        let cardsToBeCreated: [CodableCardItem] = [cardToBeCreated]
+
         NetworkingServiceURLProtocolMock.requestHandler = { request in
-            if request.httpMethod == "POST", let url = request.url, url.absoluteString.hasSuffix("/augmentedreality/v1/runtime/scene") {
-                return (HTTPURLResponse(url: url, statusCode: 201), try XCTUnwrap(Bundle.module.getTextContent(forResource: "GET_scene")))
-            } else {
-                fatalError()
-            }
+            guard let url = request.url, url.absoluteString.hasSuffix("/augmentedreality/v1/runtime/scene") else { return nil }
+            return (HTTPURLResponse(url: url, statusCode: 201), try XCTUnwrap(Bundle.module.getTextContent(forResource: "GET_scene")))
         }
 
-        let networkingService = ARCardsNetworkingService(sapURLSession: SAPURLSession(configuration: self.urlSessionConfiguration), baseURL: "Test")
-        let sceneCreated = expectation(description: "sceneCreated")
-
-        var createdSceneId: Int?
-
-        let imageData = try XCTUnwrap(Bundle.module.getBinaryContent(of: "qrImage"))
-        let card = CodableCardItem(id: "123", title_: "MyCardTitle", subtitle_: "MyCardSubtitle", detailImage_: nil, image: .init(id: "MyCardImage", data: imageData), actionText_: nil, actionContentURL_: nil, icon_: nil, position_: SIMD3<Float>.optional(x: 1, y: 1, z: 1))
-        let cards: [CodableCardItem] = [card]
-
-        // CUT
-        networkingService.createScene(identifiedBy: imageData, anchorImagePhysicalWidth: 3.0, anchorImageFileName: "myImageAnchor", cards: cards, sceneAlias: "customAlias")
+        sut.createScene(identifiedBy: imageData, anchorImagePhysicalWidth: 3.0, anchorImageFileName: "myImageAnchor", cards: cardsToBeCreated, sceneAlias: "customAlias")
             .sink { completion in
-                switch completion {
-                case .finished:
-                    XCTAssertNotNil(createdSceneId)
-                    XCTAssertEqual(NetworkingServiceURLProtocolMock.receivedRequests.count, 1)
-                    sceneCreated.fulfill()
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
+                guard case .finished = completion else { return }
+                self.testExpectation.fulfill()
             } receiveValue: { sceneId in
                 createdSceneId = sceneId
             }
             .store(in: &self.cancellables)
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 0.1, handler: nil)
+
+        XCTAssertNotNil(createdSceneId)
+        XCTAssertEqual(NetworkingServiceURLProtocolMock.receivedRequests.count, 1)
+    }
+
+    func testUpdateScene() throws {
+        var receivedValue: String? = nil
+
+        NetworkingServiceURLProtocolMock.requestHandler = { request in
+            return (HTTPURLResponse(url: request.url!, statusCode: 200), "Update success.".data(using: .utf8)!)
+        }
+
+        sut.updateScene(123, identifiedBy: nil, anchorImagePhysicalWidth: 2.0, updateCards: [], deleteCards: [])
+            .sink { completion in
+                guard case .finished = completion else { return }
+                self.testExpectation.fulfill()
+            } receiveValue: { resultString in
+                receivedValue = resultString
+            }
+            .store(in: &self.cancellables)
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+
+        XCTAssertEqual(receivedValue, "Update success.")
+        XCTAssertEqual(NetworkingServiceURLProtocolMock.receivedRequests.count, 1)
+    }
+
+    func testUpdateScene404Error() throws {
+        var receivedError: Error? = nil
+
+        NetworkingServiceURLProtocolMock.requestHandler = { request in
+            return (HTTPURLResponse(url: request.url!, statusCode: 404), "Not found".data(using: .utf8)!)
+        }
+
+        sut.updateScene(123, identifiedBy: nil, anchorImagePhysicalWidth: 2.0, updateCards: [], deleteCards: [])
+            .sink { completion in
+                guard case .failure(let error) = completion else { return }
+                receivedError = error
+                self.testExpectation.fulfill()
+            } receiveValue: { _ in
+                ()
+            }
+            .store(in: &self.cancellables)
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+
+        let error = try XCTUnwrap(receivedError)
+        XCTAssertEqual(error.localizedDescription, "Not found")
+        guard case let .failure(httpError) = error as? ARCardsNetworkingServiceError else {
+            XCTFail("Expected failure, but was \(error)")
+            return
+        }
+        XCTAssertEqual(httpError.code, 404)
+        XCTAssertEqual(httpError.description, "Not found")
+    }
+
+
+    func testUpdateSceneDeleteCard() throws {
+        var receivedValue: String? = nil
+
+        NetworkingServiceURLProtocolMock.requestHandler = { request in
+            guard let url = request.url else { return nil}
+            if url.absoluteString.hasSuffix("/augmentedreality/v1/runtime/scene/123/annotationAnchor/cardIdToDelete") {
+                return (HTTPURLResponse(url: url, statusCode: 204), "".data(using: .utf8)!)
+            } else {
+                return (HTTPURLResponse(url: url, statusCode: 200), "Update success.".data(using: .utf8)!)
+            }
+        }
+
+        sut.updateScene(123, identifiedBy: nil, anchorImagePhysicalWidth: nil, updateCards: [], deleteCards: ["cardIdToDelete"])
+            .sink { completion in
+                guard case .finished = completion else { return }
+                self.testExpectation.fulfill()
+            } receiveValue: { resultString in
+                receivedValue = resultString
+            }
+            .store(in: &self.cancellables)
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+
+        XCTAssertEqual(receivedValue, "Update success.")
+        XCTAssertEqual(NetworkingServiceURLProtocolMock.receivedRequests.count, 2)
     }
 }
 
 // MARK: Utilities
 
 class NetworkingServiceURLProtocolMock: URLProtocol {
-    static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data))?
+    static var requestHandler: ((URLRequest) throws -> (HTTPURLResponse, Data)?)?
 
     static var receivedRequests: [URLRequest] = []
 
@@ -159,7 +221,10 @@ class NetworkingServiceURLProtocolMock: URLProtocol {
             return
         }
         do {
-            let (response, data) = try handler(request)
+            guard let (response, data) = try handler(request) else {
+                client?.urlProtocolDidFinishLoading(self)
+                return
+            }
             client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
             client?.urlProtocol(self, didLoad: data)
             client?.urlProtocolDidFinishLoading(self)
