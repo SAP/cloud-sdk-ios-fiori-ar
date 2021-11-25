@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  CardView.swift
 //
 //
 //  Created by O'Brien, Patrick on 4/17/21.
@@ -65,6 +65,14 @@ extension Fiori {
     }
 }
 
+/**
+ A CardView to display data which maps to an annotation represent in the real world.
+ 
+  ## Code usage:
+  ```
+  CardView(model: cardItem, isSelected: isSelected, action: cardAction)
+  ```
+ */
 public struct CardView<Title: View, Subtitle: View, DetailImage: View, ActionText: View, CardItem>: View where CardItem: CardItemModel {
     @Environment(\.titleModifier) private var titleModifier
     @Environment(\.subtitleModifier) private var subtitleModifier

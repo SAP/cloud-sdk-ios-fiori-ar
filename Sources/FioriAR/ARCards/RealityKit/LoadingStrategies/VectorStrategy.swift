@@ -10,6 +10,22 @@ import Foundation
 import RealityKit
 import SwiftUI
 
+/// A loading strategy that uses the Vectors provided by the `CardItemModel`s  `PositionComponent` to position the Entities relative to the anchor Image.
+/// This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
+/// Loading the data into the ARAnnotationViewModel should be done in the onAppear method.
+///
+/// - Parameters:
+///  - cardContents: An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
+///  - anchorImage: Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
+///  - physicalWidth: The width of the image in meters
+///
+/// ## Usage
+/// ```
+/// let cardItems = [ExampleCardItem(id: 0, title_: "Hello"), ExampleCardItem(id: 1, title_: "World")]
+/// guard let anchorImage = UIImage(named: "qrImage") else { return }
+/// let strategy = VectorStrategy(cardContents: cardItems, anchorImage: anchorImage, physicalWidth: 0.1, realityFilePath: realityFilePath)
+/// arModel.load(loadingStrategy: strategy)
+/// ```
 public struct VectorStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy {
     public var cardContents: [CardItem]
     public var anchorImage: UIImage

@@ -15,8 +15,9 @@ class SceneAuthoringModel: ObservableObject {
     @Published var physicalWidth: String = ""
     
     @Published var currentCardID: UUID? = nil
-    @Published var currentTab: TabSelection = .left
     @Published var attachmentsMetadata: [AttachmentUIMetadata] = []
+    
+    @Published var currentTab: TabSelection = .left
     @Published var bannerMessage: BannerMessage? = nil
     @Published var exitMessage: ExitMessage = .beforeCreation
     @Published var isSyncValidated = false
@@ -30,9 +31,7 @@ class SceneAuthoringModel: ObservableObject {
 
     private var logger = Logger.shared(named: "FioriAR")
     
-    init(_ cardItems: [CodableCardItem] = [], networkingAPI: ARCardsNetworkingService, sceneIdentifier: SceneIdentifyingAttribute?, completionHandler: (() -> Void)? = nil) {
-        self.cardItems = cardItems
-        self.originalCardItems = cardItems
+    init(networkingAPI: ARCardsNetworkingService, sceneIdentifier: SceneIdentifyingAttribute?, completionHandler: (() -> Void)? = nil) {
         self.networkingAPI = networkingAPI
         self.sceneIdentifier = sceneIdentifier
         
@@ -199,7 +198,3 @@ class SceneAuthoringModel: ObservableObject {
             .store(in: &self.cancellables)
     }
 }
-
-// extension String: LocalizedError {
-//    public var errorDescription: String? { return self }
-// }

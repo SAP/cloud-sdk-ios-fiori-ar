@@ -5,24 +5,21 @@
 //  Created by O'Brien, Patrick on 3/16/21.
 //
 
-import CoreGraphics
 import RealityKit
 import SwiftUI
 
-/// Wrapper struct for the **CardItem : CardItemModel**  and the real world anchoring position. Used to set the internal entity.
+/// Wrapper struct for the CardItem : `CardItemModel`, MarkerState, and the entity which backs real world position of the marker.
 
 public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable {
     public var id: CardItem.ID {
         self.card.id
     }
-    
+
     public var card: CardItem
-    
     public internal(set) var markerState: MarkerControl.State
     
     internal var entity: Entity?
     internal var screenPosition: CGPoint?
-    
     internal var isCardVisible: Bool {
         self.entity != nil
     }

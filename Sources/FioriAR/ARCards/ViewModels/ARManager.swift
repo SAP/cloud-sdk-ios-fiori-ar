@@ -11,28 +11,20 @@ import RealityKit
 import SwiftUI
 
 /// Stores and manages common functional for the ARView
-///
-/// - Parameters:
-///  - arView: The RealityKit ARView which provides the scene and ARSession for the AR Experience
-///  - sceneRoot: The root for a strategy which uses a single Anchor
-///  - onSceneUpate: Closure which is called on every frame update
-///  - worldMap: Optional stored reference for a ARWorldMap
-///  - referenceImages: List of current ARReferenceImages which have been loaded into the configuration
-///  - detectionObjects: List of current ARReferenceImages which have been loaded into the configuration
-/// ```
 public class ARManager {
     internal var arView: ARView?
+    
+    /// The Root Entity with the entities that back the real world positions of the Annotations as children
     public var sceneRoot: Entity?
-    public var onSceneUpate: ((SceneEvents.Update) -> Void)?
     
     var worldMap: ARWorldMap?
     var referenceImages: Set<ARReferenceImage> = []
     var detectionObjects: Set<ARReferenceObject> = []
+    var onSceneUpate: ((SceneEvents.Update) -> Void)?
+    var subscription: Cancellable!
     
     private var draggedEntityLatestPosition: CGPoint?
     private var draggedEntity: Entity?
-    
-    internal var subscription: Cancellable!
 
     public init() {
         self.setup(canBeFatal: true)
@@ -130,20 +122,13 @@ public class ARManager {
         #endif
     }
     
+    /// Adds the given entity which conforms to `HasCollision` as a child of the sceneRoot
+    /// HasCollision is internally required for entities to have a touch gesture applied for interaction
     public func addChild(for entity: HasCollision, preservingWorldTransform: Bool = false) {
         self.arView?.installGestures([.scale, .translation], for: entity)
         self.sceneRoot?.addChild(entity, preservingWorldTransform: preservingWorldTransform)
     }
-    
-    public func removeEntityGestures() {
-        self.arView?
-            .gestureRecognizers?
-            .filter { $0 is EntityGestureRecognizer }
-            .forEach {
-                arView?.removeGestureRecognizer($0)
-            }
-    }
-    
+
     /// Adds a Entity which conforms to HasAnchoring to the arView.scene
     public func addAnchor(anchor: HasAnchoring) {
         self.arView?.scene.addAnchor(anchor)
@@ -157,6 +142,15 @@ public class ARManager {
     /// Finds Entity in the scene from the given name, returns nil if the entity does not exist in the scene
     public func findEntity(named: String) -> Entity? {
         self.arView?.scene.findEntity(named: named)
+    }
+    
+    internal func removeEntityGestures() {
+        self.arView?
+            .gestureRecognizers?
+            .filter { $0 is EntityGestureRecognizer }
+            .forEach {
+                arView?.removeGestureRecognizer($0)
+            }
     }
 
     /// Adds an ARReferenceImage to the configuration for the session to discover
