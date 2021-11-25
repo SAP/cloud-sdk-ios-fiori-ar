@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-internal struct CarouselScrollView<Data: RandomAccessCollection, Content: View>: View where Data.Element: Identifiable, Data.Index == Int, Data: Equatable {
+struct CarouselScrollView<Data: RandomAccessCollection, Content: View>: View where Data.Element: Identifiable, Data.Index == Int, Data: Equatable {
     @Environment(\.carouselOptions) var options
     
     private let data: Data

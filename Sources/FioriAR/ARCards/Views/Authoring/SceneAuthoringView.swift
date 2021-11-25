@@ -1,5 +1,5 @@
 //
-//  AnnotationSceneAuthoringView.swift
+//  SceneAuthoringView.swift
 //
 //
 //  Created by O'Brien, Patrick on 9/13/21.
@@ -9,13 +9,43 @@ import Combine
 import SAPFoundation
 import SwiftUI
 
+/**
+ Provides he flow for authoring an AR Annotation Scene. Used to create the content for the cards, select an anchor Image, and position the entities in their real world locations. Publishing the scene using Mobile Services with an SAPURLSession.
+ The onSceneEdit modifier provides a callback on editing events. When a new scene is published the .published(sceneID) returns the id of the newly created scene.
+ 
+  - Parameters:
+    - title: Title of the Scene
+    - serviceURL: Service URL
+    - sapURLSession: SAPURLSession to provide credentials to Mobile Services
+    - sceneIdentifier: If nil then a new scene is created. Otherwise a `SceneIdentifyingAttribute` for which scene to fetch either by id `Int` or alias `String` to edit.
+ 
+ ## Usage
+ ```
+ SceneAuthoringView(title: "Car Engine",
+                    serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
+                    sapURLSession: sapURLSession,
+                    sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId)) // Alternative Scene: 20110993
+     .onSceneEdit { sceneEdit in
+         switch sceneEdit {
+         case .created(card: let card):
+             print("Created: \(card.title_)")
+         case .updated(card: let card):
+             print("Updated: \(card.title_)")
+         case .deleted(card: let card):
+             print("Deleted: \(card.title_)")
+         case .published(sceneID: let sceneID):
+             print("From SceneEdit:", sceneID)
+         }
+     }
+ ```
+ */
 public struct SceneAuthoringView: View {
+    @StateObject private var authoringViewModel: SceneAuthoringModel
+    @StateObject private var arViewModel: ARAnnotationViewModel<CodableCardItem>
+    
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onSceneEdit) var onSceneEdit
-
-    @StateObject private var authoringViewModel: SceneAuthoringModel
-    @StateObject private var arViewModel: ARAnnotationViewModel<CodableCardItem>
 
     @State private var hideNavBar = true
     @State private var isCardCreationPresented = false
@@ -23,11 +53,11 @@ public struct SceneAuthoringView: View {
     @State private var isAlertPresented = false
     
     let title: String
-    // TODO: Remove cardItems
-    public init(title: String, _ cardItems: [CodableCardItem] = [], serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
+   
+    public init(title: String, serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
         self.title = title
         let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
-        _authoringViewModel = StateObject(wrappedValue: SceneAuthoringModel(cardItems, networkingAPI: networkingAPI, sceneIdentifier: sceneIdentifier))
+        _authoringViewModel = StateObject(wrappedValue: SceneAuthoringModel(networkingAPI: networkingAPI, sceneIdentifier: sceneIdentifier))
         _arViewModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
     }
     

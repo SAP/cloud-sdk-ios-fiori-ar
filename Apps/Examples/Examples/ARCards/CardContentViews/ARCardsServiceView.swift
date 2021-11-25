@@ -19,8 +19,7 @@ struct ARCardsServiceView: View {
             redirectURL: IntegrationTest.System.redirectURL,
             tokenURL: IntegrationTest.System.tokenURL
         ),
-        sceneIdentifier: SceneIdentifyingAttribute.id(20110993)
-        // sceneIdentifier: SceneIdentifier.sceneAlias(alias:  IntegrationTest.TestData.sceneAlias)
+        sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId)
     )
 
     var body: some View {

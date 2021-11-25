@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  MarkerView.swift
 //
 //
 //  Created by O'Brien, Patrick on 4/17/21.
@@ -8,6 +8,14 @@
 import FioriThemeManager
 import SwiftUI
 
+/**
+ A MarkerView to display the location of an Annotation backed by a real world location
+ 
+  ## Code usage:
+  ```
+  MarkerView(state: state, icon: icon)
+  ```
+ */
 public struct MarkerView: View {
     var state: MarkerControl.State
     var icon: Image

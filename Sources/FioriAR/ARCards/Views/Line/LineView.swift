@@ -8,7 +8,7 @@
 import FioriThemeManager
 import SwiftUI
 
-internal struct LineView: View {
+struct LineView: View {
     @State private var opacity: Double = 0
     
     @Binding var displayLine: Bool
