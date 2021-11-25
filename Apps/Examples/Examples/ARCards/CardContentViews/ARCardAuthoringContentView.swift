@@ -28,7 +28,7 @@ struct ARCardAuthoringContentView: View {
         SceneAuthoringView(title: "Annotations",
                            serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
                            sapURLSession: sapURLSession,
-                           sceneIdentifier: .id(20110993)) // SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId)) // 20110993
+                           sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId)) // Alternative Scene: 20110993
             .onSceneEdit { sceneEdit in
                 switch sceneEdit {
                 case .created(card: let card):

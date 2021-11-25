@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  AnchorImageTabView.swift
 //
 //
 //  Created by Diaz, Ernesto on 9/17/21.

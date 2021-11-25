@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-internal struct SizePreferenceKey: PreferenceKey {
+struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
 }
 
-internal extension View {
+extension View {
     func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
         background(
             GeometryReader { geometryProxy in

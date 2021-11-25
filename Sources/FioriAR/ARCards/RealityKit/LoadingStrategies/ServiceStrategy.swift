@@ -17,7 +17,30 @@ public enum SceneIdentifyingAttribute {
     case id(Int)
     case alias(String)
 }
-
+    
+/// A loading strategy that makes a network fetch request to Mobile Services to return the data necessary to display an AR Annotation Scene.
+/// This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
+/// Loading the data into the ARAnnotationViewModel should be done in the onAppear method.
+///
+/// - Parameters:
+///  - serviceURL: serviceURL
+///  - sapURLSession: SAPURLSession to provide credentials to Mobile Services
+///  - sceneIdentifier: `SceneIdentifyingAttribute` for which scene to fetch either by id `Int` or alias `String`
+///
+/// ## Usage
+/// ```
+/// @StateObject var serviceStrategy = ServiceStrategy<CodableCardItem>(
+///     serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
+///     sapURLSession: SAPURLSession.createOAuthURLSession(
+///         clientID: IntegrationTest.System.clientID,
+///         authURL: IntegrationTest.System.authURL,
+///         redirectURL: IntegrationTest.System.redirectURL,
+///         tokenURL: IntegrationTest.System.tokenURL
+///     ),
+///     sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId)
+///
+///  arModel.loadAsync(loadingStrategy: serviceStrategy)
+/// ```
 public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAnnotationLoadingStrategy where CardItem: Codable {
     private var networkingAPI: ARCardsNetworkingService
     public var sceneIdentifier: SceneIdentifyingAttribute

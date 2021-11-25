@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  MarkerContainer.swift
 //
 //
 //  Created by O'Brien, Patrick on 2/4/21.
@@ -7,21 +7,21 @@
 
 import SwiftUI
 
-internal struct MarkerContainer<Label: View>: View {
+struct MarkerContainer<Label: View>: View {
     var _state: MarkerControl.State
     var _icon: Image?
     var _screenPosition: CGPoint?
     
     let _label: (MarkerControl.State, Image?) -> Label
     
-    internal init(state: MarkerControl.State, icon: String?, screenPosition: CGPoint?, @ViewBuilder label: @escaping (MarkerControl.State, Image?) -> Label) {
+    init(state: MarkerControl.State, icon: String?, screenPosition: CGPoint?, @ViewBuilder label: @escaping (MarkerControl.State, Image?) -> Label) {
         self._state = state
         self._icon = icon == nil ? nil : Image(systemName: icon!)
         self._screenPosition = screenPosition
         self._label = label
     }
     
-    internal var label_: some View {
+    var label_: some View {
         _label(_state, _icon)
     }
 }
