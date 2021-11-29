@@ -4,3 +4,41 @@ author_url: https://www.sap.com
 theme: jony
 copyright: '© 2020 [https://github.com/SAP/cloud-sdk-ios-fioriarkit](https://github.com/SAP/cloud-sdk-ios-fioriarkit) under Apache-2.0.'
 hide_documentation_coverage: true
+
+custom_categories:
+
+  - name: Annotation Viewing
+    children:
+    - ARAnnotationsView
+    - ARScanView
+    - MarkerView
+    - CardView
+
+  - name: Scene Authoring
+    children:
+    - SceneAuthoringView
+    - SceneEditing
+    - SceneIdentifyingAttribute
+
+  - name: Annotation Management
+    children:
+    - ARAnnotationViewModel
+    - ARManager
+
+  - name: Annotation Data Loading
+    children:
+    - AnnotationLoadingStrategy
+    - AsyncAnnotationLoadingStrategy
+    - RCProjectStrategy
+    - RealityFileStrategy
+    - ServiceStrategy
+    - UsdzFileStrategy
+    - VectorStrategy
+
+  - name: Models
+    children:
+    - CardItemModel
+    - CodableCardItem
+    - ScreenAnnotation
+    - MarkerControl
+    - CardImage
