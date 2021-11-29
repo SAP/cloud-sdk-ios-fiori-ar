@@ -10,7 +10,7 @@ import SAPFoundation
 import SwiftUI
 
 /**
- Provides he flow for authoring an AR Annotation Scene. Used to create the content for the cards, select an anchor Image, and position the entities in their real world locations. Publishing the scene using Mobile Services with an SAPURLSession.
+ Provides the flow for authoring an AR Annotation Scene. Used to create the content for the cards, select an anchor Image, and position the entities in their real world locations. Publishing the scene using Mobile Services with an SAPURLSession.
  The onSceneEdit modifier provides a callback on editing events. When a new scene is published the .published(sceneID) returns the id of the newly created scene.
  
   - Parameters:

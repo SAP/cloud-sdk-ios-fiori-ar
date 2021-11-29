@@ -63,6 +63,10 @@ Depending on how the scene is stored (`.rcproject`, `.reality` or `.usdz` files)
 
 Cards and Markers support SwiftUI [ViewBuilder](https://developer.apple.com/documentation/swiftui/viewbuilder) to allow custom design.
 
+## Scene Authoring
+
+FioriAR provides a flow for authoring and editing an annotation scene in app. Filling card content using the provided forms and entering AR to position the associated markers. Published scene data is stored and retrieved using SAP BTP Mobile Services.
+
 ## Reality Composer
 
 ### Composing the scene
@@ -184,8 +188,6 @@ You can choose one of the following package products to be added to your applica
 ## Limitations
 
 Key gaps which are present at time of open-source project launch:
-- An authoring flow for pinning/editing an annotation in app
-- An Annotation Loading Strategy which loads an array of positions for annotations relative to the detected image/object
 - While Reality Composer is useful for scene creation, editing the scene programmatically is possible, but those changes cannot be saved to the file
 
 ## Known Issues
