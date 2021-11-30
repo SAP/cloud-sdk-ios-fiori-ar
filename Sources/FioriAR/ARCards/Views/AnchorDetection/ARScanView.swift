@@ -11,21 +11,21 @@ import SwiftUI
 
 /**
  Scanning View which displays a collapsable image to display for anchor detection. The anchor is still detectable when uncollapsed and the View will fade out after detection.
- 
-  - Parameters:
-    - guideImage: The image that is displayed in the View which represents a detectable anchor, if the guideImage is nil a progressview will display
-    - anchorPosition: The position of the anchor on screen after detection
  */
-
 public struct ARScanView: View {
     var guideImage: UIImage?
     var anchorPosition: CGPoint?
-    
+
+    /// Initializer
+    /// - Parameters:
+    ///   - guideImage: The image that is displayed in the View which represents a detectable anchor, if the guideImage is nil a progressview will display
+    ///   - anchorPosition: The position of the anchor on screen after detection
     public init(guideImage: UIImage?, anchorPosition: CGPoint?) {
         self.guideImage = guideImage
         self.anchorPosition = anchorPosition
     }
-    
+
+    /// SwiftUI’s view body
     public var body: some View {
         ZStack {
             if anchorPosition != nil {

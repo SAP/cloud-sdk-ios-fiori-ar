@@ -1,5 +1,12 @@
 import Foundation
 
+/**
+ A type-erased `Codable` value.
+
+ You can encode or decode mixed-type or unknown values in dictionaries
+ and other collections that require `Encodable` or `Decodable` conformance
+ by declaring their contained type to be `AnyCodable`.
+ */
 public struct AnyCodable {
     let value: Any
 

@@ -10,11 +10,6 @@ import SwiftUI
 
 /**
  A MarkerView to display the location of an Annotation backed by a real world location
- 
-  ## Code usage:
-  ```
-  MarkerView(state: state, icon: icon)
-  ```
  */
 public struct MarkerView: View {
     var state: MarkerControl.State
@@ -24,7 +19,11 @@ public struct MarkerView: View {
     @State private var unselectedScale: CGFloat = 1.75
     @State private var pulseScale: CGFloat = 0.5
     @State private var pulseOpacity: Double = 0.15
-    
+
+    /// Initializer
+    /// - Parameters:
+    ///   - state: Marker Control State
+    ///   - icon: Image of Marker
     public init(state: MarkerControl.State, icon: Image?) {
         self.state = state
         self.icon = icon ?? Image(systemName: "info")
@@ -114,7 +113,8 @@ public struct MarkerView: View {
     var notVisible: some View {
         EmptyView()
     }
-    
+
+    /// SwiftUI’s view body
     public var body: some View {
         switch state {
         case .normal:

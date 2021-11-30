@@ -26,6 +26,7 @@ public class ARManager {
     private var draggedEntityLatestPosition: CGPoint?
     private var draggedEntity: Entity?
 
+    /// Initializer
     public init() {
         self.setup(canBeFatal: true)
     }
