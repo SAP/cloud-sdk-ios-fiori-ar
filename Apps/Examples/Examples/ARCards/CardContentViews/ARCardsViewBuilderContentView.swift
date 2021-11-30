@@ -13,8 +13,8 @@ struct ARCardsViewBuilderContentView: View {
     
     var body: some View {
         ARAnnotationsView(arModel: arModel,
-                          scanLabel: { guideImage, anchorPosition in
-                              CustomScanView(guideImage: guideImage, position: anchorPosition)
+                          scanLabel: { guideImageState, anchorPosition in
+                              CustomScanView(guideImageState: guideImageState, position: anchorPosition)
                           },
                           cardLabel: { cardmodel, isSelected in
                               CustomCardView(model: cardmodel, isSelected: isSelected)
@@ -22,8 +22,8 @@ struct ARCardsViewBuilderContentView: View {
                           markerLabel: { state, _ in
                               CustomMarkerView(state: state)
                           })
-                          .carouselOptions(CarouselOptions(itemSpacing: 5, carouselHeight: 200, alignment: .center))
-                          .onAppear(perform: loadInitialData)
+            .carouselOptions(CarouselOptions(itemSpacing: 5, carouselHeight: 200, alignment: .center))
+            .onAppear(perform: loadInitialData)
     }
     
     func loadInitialData() {
@@ -39,7 +39,7 @@ struct ARCardsViewBuilderContentView: View {
 }
 
 struct CustomScanView: View {
-    var guideImage: UIImage?
+    var guideImageState: GuideImageState
     var position: CGPoint?
     
     var body: some View {
@@ -57,8 +57,8 @@ struct CustomScanView: View {
             }
             VStack(spacing: 15) {
                 Spacer()
-                if let image = guideImage {
-                    Image(uiImage: image)
+                if case .finished(let guideImage) = guideImageState {
+                    Image(uiImage: guideImage)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 150)

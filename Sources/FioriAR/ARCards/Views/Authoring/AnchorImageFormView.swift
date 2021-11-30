@@ -16,7 +16,7 @@ struct AnchorImageFormView: View {
     @Binding var imageName: String?
     
     @State private var internalAnchorImage: UIImage?
-    @State private var internalPhysicalWidth: String = ""
+    @State private var internalPhysicalWidth: String
     @State private var internalImageName: String?
     
     @State private var actionSheetPresented = false
@@ -34,7 +34,7 @@ struct AnchorImageFormView: View {
         _physicalWidth = physicalWidth
         _imageName = imageName
         _internalAnchorImage = State(initialValue: anchorImage.wrappedValue)
-        _internalPhysicalWidth = State(initialValue: physicalWidth.wrappedValue)
+        _internalPhysicalWidth = State(initialValue: physicalWidth.wrappedValue.isEmpty ? "" : String(format: "%.2f", (Double(physicalWidth.wrappedValue) ?? 0.1) * 100))
         _internalImageName = State(initialValue: imageName.wrappedValue)
         self._onDismiss = onDismiss
     }
@@ -167,7 +167,7 @@ struct AnchorImageFormView: View {
                     if validateInput() {
                         validateAnchorImage(completionHandler: {
                             anchorImage = internalAnchorImage
-                            physicalWidth = internalPhysicalWidth
+                            physicalWidth = String(format: "%.4f", (Double(internalPhysicalWidth) ?? 0.1) / 100)
                             imageName = internalImageName
                             _onDismiss?()
                         })

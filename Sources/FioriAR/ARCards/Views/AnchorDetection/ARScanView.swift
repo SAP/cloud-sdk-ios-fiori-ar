@@ -9,19 +9,31 @@ import FioriThemeManager
 import RealityKit
 import SwiftUI
 
+public enum GuideImageState {
+    case notStarted
+    case loading
+    case finished(UIImage)
+    case failure
+}
+
 /**
  Scanning View which displays a collapsable image to display for anchor detection. The anchor is still detectable when uncollapsed and the View will fade out after detection.
  */
 public struct ARScanView: View {
-    var guideImage: UIImage?
+    var guideImageState: GuideImageState
     var anchorPosition: CGPoint?
-
+    
     /// Initializer
     /// - Parameters:
     ///   - guideImage: The image that is displayed in the View which represents a detectable anchor, if the guideImage is nil a progressview will display
     ///   - anchorPosition: The position of the anchor on screen after detection
-    public init(guideImage: UIImage?, anchorPosition: CGPoint?) {
-        self.guideImage = guideImage
+    public init(guideImage: UIImage, anchorPosition: CGPoint?) {
+        self.guideImageState = .finished(guideImage)
+        self.anchorPosition = anchorPosition
+    }
+    
+    public init(guideImageState: GuideImageState, anchorPosition: CGPoint?) {
+        self.guideImageState = guideImageState
         self.anchorPosition = anchorPosition
     }
 
@@ -31,7 +43,7 @@ public struct ARScanView: View {
             if anchorPosition != nil {
                 ImageMatchedView(anchorPosition: anchorPosition)
             } else {
-                CollapsingView(image: guideImage)
+                CollapsingView(guideImageState: guideImageState)
             }
         }
         .animation(.easeInOut(duration: 1.2), value: anchorPosition)
@@ -39,7 +51,7 @@ public struct ARScanView: View {
 }
 
 private struct CollapsingView: View {
-    let image: UIImage?
+    let guideImageState: GuideImageState
     let screen = UIScreen.main.bounds
     
     @State var isScanning = false
@@ -62,9 +74,9 @@ private struct CollapsingView: View {
                 .cornerRadius(isScanning ? 8 : 0)
                 .matchedGeometryEffect(id: isScanning ? "image" : "background", in: nameSpace, isSource: false)
             
-            if let image = image {
+            if case .finished(let guideImage) = guideImageState {
                 VStack {
-                    Image(uiImage: image)
+                    Image(uiImage: guideImage)
                         .resizable()
                         .cornerRadius(8)
                         .padding(.all, 8)
@@ -120,8 +132,8 @@ private struct CollapsingView: View {
             
             VStack {
                 Spacer()
-                if let image = image {
-                    Image(uiImage: image)
+                if case .finished(let guideImage) = guideImageState {
+                    Image(uiImage: guideImage)
                         .resizable()
                         .cornerRadius(8)
                         .scaledToFit()

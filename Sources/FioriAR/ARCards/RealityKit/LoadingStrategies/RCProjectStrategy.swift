@@ -105,11 +105,11 @@ public struct RCProjectStrategy<CardItem: CardItemModel>: AnnotationLoadingStrat
 
 // Retroactive Modeling Example to simulate delay
 extension RCProjectStrategy: AsyncAnnotationLoadingStrategy where CardItem: Codable {
-    public func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CardItem>], UIImage?) -> Void) throws {
+    public func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CardItem>], GuideImageState) -> Void) throws {
         DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
             do {
                 let sceneData = try load(with: manager)
-                completionHandler(sceneData.annotations, sceneData.guideImage)
+                completionHandler(sceneData.annotations, .finished(sceneData.guideImage!))
             } catch {
                 print(error)
             }
