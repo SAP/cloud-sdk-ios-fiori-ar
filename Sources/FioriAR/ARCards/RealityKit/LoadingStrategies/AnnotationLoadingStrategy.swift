@@ -10,14 +10,19 @@ import RealityKit
 
 /// Protocol which defines the data a strategy needs to provide a `[ScreenAnnotation]`
 public protocol AnnotationLoadingStrategy {
+    ///  associated type of this protocol needs to conform to `CardItemModel`
     associatedtype CardItem: CardItemModel
+    /// cards content to be populated
     var cardContents: [CardItem] { get }
+    /// load screen annotations and guideImage synchronously
     func load(with manager: ARManager) throws -> (annotations: [ScreenAnnotation<CardItem>], guideImage: UIImage?)
 }
 
 /// Protocol which defines the data an asynchronous strategy needs to provide a `[ScreenAnnotation]`
 public protocol AsyncAnnotationLoadingStrategy {
+    ///  associated type of this protocol needs to conform to `CardItemModel` and `Codable`
     associatedtype CardItem: CardItemModel, Codable
+    /// load screen annotations and guideImage asynchronously
     func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CardItem>], UIImage?) -> Void) throws
 }
 

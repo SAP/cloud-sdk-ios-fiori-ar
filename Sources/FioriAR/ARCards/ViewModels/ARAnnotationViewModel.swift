@@ -35,7 +35,8 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     /// The ARImageAnchor or ARPlaneAnchor that is supplied by the ARSessionDelegate upon discovery of image or object in the physical world
     /// Stores useful information such as anchor position and image/object data. In the case of image anchor it is also used to instantiate an AnchorEntity
     private var arkitAnchor: ARAnchor?
-    
+
+    /// Initializer
     override public init() {
         super.init()
         self.arManager = ARManager()

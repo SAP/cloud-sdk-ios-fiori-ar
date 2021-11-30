@@ -13,7 +13,7 @@ import SwiftUI
  
   - Parameters:
     - arModel: The ViewModel which managers the AR Experience
-    - image: The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the User
+    - guideImage: The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user
     - scanLabel: View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
     - cardLabel: View Builder for a custom CardView
     - markerLabel: View Builder for a custom MarkerView
@@ -67,7 +67,14 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
     public let markerLabel: (MarkerControl.State, Image?) -> Marker
     
     let guideImage: UIImage?
-    
+
+    /// Initializer (View Builder based)
+    /// - Parameters:
+    ///   - arModel: The ViewModel which managers the AR Experience
+    ///   - guideImage: The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user
+    ///   - scanLabel: View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
+    ///   - cardLabel: View Builder for a custom CardView
+    ///   - markerLabel: View Builder for a custom MarkerView
     public init(arModel: ARAnnotationViewModel<CardItem>,
                 guideImage: UIImage? = nil,
                 @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
@@ -80,7 +87,8 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
         self.cardLabel = cardLabel
         self.markerLabel = markerLabel
     }
-    
+
+    /// SwiftUI’s view body
     public var body: some View {
         ZStack {
             ARContainer(arStorage: arModel.arManager)
@@ -129,6 +137,11 @@ public extension ARAnnotationsView where Scan == ARScanView,
         _ConditionalContent<Text, EmptyView>, CardItem>,
     Marker == MarkerView
 {
+    /// Initializer
+    /// - Parameters:
+    ///   - arModel: The ViewModel which managers the AR Experience
+    ///   - guideImage: The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user
+    ///   - cardAction: Closure to handle a card action when tapped by the user
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
          cardAction: ((CardItem.ID) -> Void)?)
@@ -147,6 +160,12 @@ public extension ARAnnotationsView where Scan == ARScanView,
         _ConditionalContent<ImagePreview, DefaultIcon>,
         _ConditionalContent<Text, EmptyView>, CardItem>
 {
+    /// Initializer
+    /// - Parameters:
+    ///   - arModel: The ViewModel which managers the AR Experience
+    ///   - guideImage: The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user
+    ///   - markerLabel: View Builder for a custom MarkerView
+    ///   - cardAction: Closure to handle a card action when tapped by the user
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
          @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
@@ -163,6 +182,11 @@ public extension ARAnnotationsView where Scan == ARScanView,
 public extension ARAnnotationsView where Scan == ARScanView,
     Marker == MarkerView
 {
+    /// Initializer
+    /// - Parameters:
+    ///   - arModel: The ViewModel which managers the AR Experience
+    ///   - guideImage: The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user
+    ///   - cardLabel: View Builder for a custom CardView
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
          @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
@@ -182,6 +206,12 @@ public extension ARAnnotationsView where Card == CardView<Text,
     CardItem>,
     Marker == MarkerView
 {
+    /// Initializer
+    /// - Parameters:
+    ///   - arModel: The ViewModel which managers the AR Experience
+    ///   - guideImage: The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user
+    ///   - scanLabel: View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
+    ///   - cardAction: Closure to handle a card action when tapped by the user
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
          @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
@@ -196,6 +226,12 @@ public extension ARAnnotationsView where Card == CardView<Text,
 }
 
 public extension ARAnnotationsView where Scan == ARScanView {
+    /// Initializer
+    /// - Parameters:
+    ///   - arModel: The ViewModel which managers the AR Experience
+    ///   - guideImage: The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user
+    ///   - cardLabel: View Builder for a custom CardView
+    ///   - markerLabel: View Builder for a custom MarkerView
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
          @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
@@ -210,6 +246,11 @@ public extension ARAnnotationsView where Scan == ARScanView {
 }
 
 public extension ARAnnotationsView where Marker == MarkerView {
+    /// Initializer
+    /// - Parameters:
+    ///   - arModel: The ViewModel which managers the AR Experience
+    ///   - scanLabel: View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
+    ///   - cardLabel: View Builder for a custom CardView
     init(arModel: ARAnnotationViewModel<CardItem>,
          @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
          @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
@@ -227,6 +268,12 @@ public extension ARAnnotationsView where Card == CardView<Text,
     _ConditionalContent<Text, EmptyView>,
     CardItem>
 {
+    /// Initializer
+    /// - Parameters:
+    ///   - arModel: The ViewModel which managers the AR Experience
+    ///   - scanLabel: View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
+    ///   - markerLabel: View Builder for a custom MarkerView
+    ///   - cardAction: Closure to handle a card action when tapped by the user
     init(arModel: ARAnnotationViewModel<CardItem>,
          @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
          @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,

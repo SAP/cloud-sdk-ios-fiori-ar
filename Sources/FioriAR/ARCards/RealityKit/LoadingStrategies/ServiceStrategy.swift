@@ -12,9 +12,11 @@ import RealityKit
 import SAPFoundation
 import SwiftUI
 
-/// Identifier for which scene the ARService fetches
+/// Unique attribute and its value identifiying a scene stored in SAP Mobile Services
 public enum SceneIdentifyingAttribute {
+    /// identifier
     case id(Int)
+    /// alias
     case alias(String)
 }
     
@@ -23,7 +25,7 @@ public enum SceneIdentifyingAttribute {
 /// Loading the data into the ARAnnotationViewModel should be done in the onAppear method.
 ///
 /// - Parameters:
-///  - serviceURL: serviceURL
+///  - serviceURL: Server URL for your application in SAP Mobile Services
 ///  - sapURLSession: SAPURLSession to provide credentials to Mobile Services
 ///  - sceneIdentifier: `SceneIdentifyingAttribute` for which scene to fetch either by id `Int` or alias `String`
 ///
@@ -43,17 +45,28 @@ public enum SceneIdentifyingAttribute {
 /// ```
 public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAnnotationLoadingStrategy where CardItem: Codable {
     private var networkingAPI: ARCardsNetworkingService
+
+    /// Unique attribute and its value identifiying a scene stored in SAP Mobile Services
     public var sceneIdentifier: SceneIdentifyingAttribute
     
     var arscene: ARScene?
 
     private var cancellables = Set<AnyCancellable>()
-    
+
+    /// Initializer
+    /// - Parameters:
+    ///   - serviceURL: Server URL for your application in SAP Mobile Services
+    ///   - sapURLSession: networking API from SAPFoundation framework
+    ///   - sceneIdentifier: unique value identifiying a scene stored in SAP Mobile Services
     public init(serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute) {
         self.networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
         self.sceneIdentifier = sceneIdentifier
     }
-    
+
+    /// Performs network requests to load scene information from SAP Mobile Services
+    /// - Parameters:
+    ///   - manager: handling the ARView
+    ///   - completionHandler: providing the cards and image anchor of the requested scene once loaded
     public func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CodableCardItem>], UIImage?) -> Void) throws {
         var annotations = [ScreenAnnotation<CodableCardItem>]()
 

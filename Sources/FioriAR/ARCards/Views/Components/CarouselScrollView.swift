@@ -91,17 +91,17 @@ struct CarouselScrollView<Data: RandomAccessCollection, Content: View>: View whe
 
 /**
  Options to modify the behavior of the Carousel
-
- - Parameters:
-    - itemSpacing: Spacing between the Carousel child views
-    - carouselHeight: Height of the carousel
-    - alignment: Vertical Alignment of the Carousel child views
  */
 public struct CarouselOptions {
     var itemSpacing: CGFloat
     var carouselHeight: CGFloat?
     var alignment: VerticalAlignment
-    
+
+    /// Initializer
+    /// - Parameters:
+    ///   - itemSpacing: Spacing between the Carousel child views
+    ///   - carouselHeight: Height of the carousel
+    ///   - alignment: Vertical Alignment of the Carousel child views
     public init(itemSpacing: CGFloat, carouselHeight: CGFloat? = nil, alignment: VerticalAlignment) {
         self.itemSpacing = itemSpacing
         self.carouselHeight = carouselHeight

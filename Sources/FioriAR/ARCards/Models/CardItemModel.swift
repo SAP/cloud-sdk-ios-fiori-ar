@@ -7,33 +7,48 @@
 
 import SwiftUI
 
+/// Protocol to be implemented by a model to represent an AR annotation card
 public protocol CardItemModel: Identifiable, Equatable, TitleComponent, SubtitleComponent, DetailImageComponent, ActionTextComponent, ActionContentComponent, IconComponent, PositionComponent {}
 
+/// Protocol representing a component with a title
 public protocol TitleComponent {
+    /// Title
     var title_: String { get }
 }
 
+/// Protocol representing a component with a subtitle
 public protocol SubtitleComponent {
+    /// Subtitle
     var subtitle_: String? { get }
 }
 
+/// Protocol representing a component with a detail/cover image
 public protocol DetailImageComponent {
+    ///Detail / Cover image
     var detailImage_: Data? { get }
 }
 
+/// Protocol representing a component with an action text
 public protocol ActionTextComponent {
+    /// Action text to be displayed for a card
     var actionText_: String? { get }
 }
 
+/// Protocol representing a component with a triggerable action
 public protocol ActionContentComponent {
+    /// URL to be invoked when action gets triggered
     var actionContentURL_: URL? { get }
 }
 
+/// Protocol representing a component with an icon
 public protocol IconComponent {
+    /// Icon used for the marker/card
     var icon_: String? { get }
 }
 
+/// Protocol representing a component with a position on the x, y and z position
 public protocol PositionComponent {
+    /// Position of the annotation anchor on the x, y and z axis
     var position_: SIMD3<Float>? { get set }
 }
 

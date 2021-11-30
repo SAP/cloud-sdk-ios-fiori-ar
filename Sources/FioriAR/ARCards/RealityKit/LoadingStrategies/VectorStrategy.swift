@@ -14,11 +14,6 @@ import SwiftUI
 /// This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
 /// Loading the data into the ARAnnotationViewModel should be done in the onAppear method.
 ///
-/// - Parameters:
-///  - cardContents: An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
-///  - anchorImage: Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
-///  - physicalWidth: The width of the image in meters
-///
 /// ## Usage
 /// ```
 /// let cardItems = [ExampleCardItem(id: 0, title_: "Hello"), ExampleCardItem(id: 1, title_: "World")]
@@ -27,10 +22,18 @@ import SwiftUI
 /// arModel.load(loadingStrategy: strategy)
 /// ```
 public struct VectorStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy {
+    /// An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
     public var cardContents: [CardItem]
+    /// Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
     public var anchorImage: UIImage
+    /// The width of the image in meters
     public var physicalWidth: CGFloat
-    
+
+    /// Constructor for loading annotations using an Image as an anchor with a Reality Composer scene
+    /// - Parameters:
+    ///   - cardContents: An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
+    ///   - anchorImage: Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
+    ///   - physicalWidth: The width of the image in meters
     public init(cardContents: [CardItem], anchorImage: UIImage, physicalWidth: CGFloat) {
         self.cardContents = cardContents
         self.anchorImage = anchorImage

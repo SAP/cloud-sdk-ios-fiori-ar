@@ -14,12 +14,6 @@ import SwiftUI
 /// This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
 /// Loading the data into the ARAnnotationViewModel should be done in the onAppear method.
 ///
-/// - Parameters:
-///  - cardContents: An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
-///  - anchorImage: Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
-///  - physicalWidth: The width of the image in meters
-///  - usdzFileURL: URL path to a .usdz file that contains the scene, exported from Reality Composer
-///
 /// ## Usage
 /// ```
 /// let cardItems = [ExampleCardItem(id: 0, title_: "Hello"), ExampleCardItem(id: 1, title_: "World")]
@@ -29,13 +23,22 @@ import SwiftUI
 /// arModel.load(loadingStrategy: strategy)
 /// ```
 public struct UsdzFileStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy, SceneLoadable where CardItem.ID: LosslessStringConvertible {
+    /// An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
     public var cardContents: [CardItem]
+    /// Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
     public var anchorImage: UIImage?
+    /// The width of the image in meters
     public var physicalWidth: CGFloat?
+    /// URL path to a .usdz file that contains the scene, exported from Reality Composer
     public var usdzFilePath: URL
     
     /// Constructor for loading annotations using an Image as an anchor with a Reality Composer scene
     /// If Object Anchor is used anchorImage and PhysicalWidth are ignored and can be set to nil
+    /// - Parameters:
+    ///   - cardContents: An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
+    ///   - anchorImage: Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
+    ///   - physicalWidth: The width of the image in meters
+    ///   - usdzFilePath: URL path to a .usdz file that contains the scene, exported from Reality Composer
     public init(cardContents: [CardItem], anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, usdzFilePath: URL) {
         self.cardContents = cardContents
         self.anchorImage = anchorImage
