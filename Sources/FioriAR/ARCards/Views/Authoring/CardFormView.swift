@@ -9,10 +9,15 @@ import Combine
 import FioriCharts
 import SwiftUI
 
+/// Callbacks during scene authoring
 public enum SceneEditing {
+    /// a card was locally created
     case created(card: CodableCardItem)
+    /// a card was locally updated
     case updated(card: CodableCardItem)
+    /// a card was locally deleted
     case deleted(card: CodableCardItem)
+    /// the scene was either created or updated remotely
     case published(sceneID: Int)
 }
 

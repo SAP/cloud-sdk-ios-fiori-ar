@@ -68,7 +68,7 @@ extension Fiori {
 /**
  A CardView to display data which maps to an annotation represent in the real world.
  
-  ## Code usage:
+ ## Usage:
   ```
   CardView(model: cardItem, isSelected: isSelected, action: cardAction)
   ```
@@ -95,7 +95,8 @@ public struct CardView<Title: View, Subtitle: View, DetailImage: View, ActionTex
     private var isSelected: Bool = false
     private var action: ((CardItem.ID) -> Void)?
     private var actionContentURL: URL?
-    
+
+    /// Initializer
     public init(
         @ViewBuilder title: @escaping () -> Title,
         @ViewBuilder subtitle: @escaping () -> Subtitle,
@@ -164,6 +165,7 @@ public struct CardView<Title: View, Subtitle: View, DetailImage: View, ActionTex
 }
 
 public extension CardView {
+    /// SwiftUI’s view body
     var body: some View {
         VStack(spacing: 10) {
             VStack {
@@ -205,6 +207,7 @@ public extension CardView where
     DetailImage == _ConditionalContent<ImagePreview, DefaultIcon>,
     ActionText == _ConditionalContent<Text, EmptyView>
 {
+    /// Initializer (Model based)
     init(model: CardItem,
          isSelected: Bool,
          action: ((CardItem.ID) -> Void)? = nil)
@@ -219,7 +222,8 @@ public extension CardView where
                   action: action,
                   isSelected: isSelected)
     }
-    
+
+    /// Initializer (Primitive Data Type based)
     init(id: CardItem.ID,
          title: String,
          subtitle: String? = nil,
@@ -252,13 +256,17 @@ public extension CardView where
     }
 }
 
+/// SwiftUI view representing an icon
 public struct DefaultIcon: View {
     private var icon: Image
-    
+
+    /// Initializer
+    /// - Parameter iconString: The name of the system symbol image. Use the SF Symbols app to look up the names of system symbol images.
     public init(iconString: String?) {
         self.icon = iconString == nil ? Image(systemName: "info") : Image(systemName: iconString!)
     }
-    
+
+    /// SwiftUI’s view body
     public var body: some View {
         icon
             .font(.system(size: 37))
@@ -266,14 +274,18 @@ public struct DefaultIcon: View {
     }
 }
 
+/// SwiftUI view to preview an image
 public struct ImagePreview: View {
     private var image: Image
     @State private var size: CGSize = .zero
-    
+
+    /// Initializer
+    /// - Parameter preview: image to be displayed
     public init(preview: Image) {
         self.image = preview
     }
-    
+
+    /// SwiftUI’s view body
     public var body: some View {
         GeometryReader { geo in
             ZStack {

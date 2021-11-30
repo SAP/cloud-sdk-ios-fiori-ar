@@ -14,13 +14,6 @@ import SwiftUI
 /// This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
 /// Loading the data into the ARAnnotationViewModel should be done in the onAppear method.
 ///
-/// - Parameters:
-///  - cardContents: An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
-///  - anchorImage: Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
-///  - physicalWidth: The width of the image in meters
-///  - realityFileURL: URL path to a .reality file that makes contains the scene, exported from Reality Composer
-///  - sceneName: Name given to the scene in the Reality Composer app.
-///
 /// ## Usage
 /// ```
 /// let cardItems = [ExampleCardItem(id: 0, title_: "Hello"), ExampleCardItem(id: 1, title_: "World")]
@@ -30,14 +23,25 @@ import SwiftUI
 /// arModel.load(loadingStrategy: strategy)
 /// ```
 public struct RealityFileStrategy<CardItem: CardItemModel>: AnnotationLoadingStrategy, SceneLoadable where CardItem.ID: LosslessStringConvertible {
+    /// An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
     public var cardContents: [CardItem]
+    /// Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
     public var anchorImage: UIImage?
+    /// The width of the image in meters
     public var physicalWidth: CGFloat?
+    /// URL path to a .reality file that makes contains the scene, exported from Reality Composer
     public var realityFilePath: URL
+    /// Name given to the scene in the Reality Composer app.
     public var rcScene: String
     
     /// Constructor for loading annotations using an Image as an anchor with a Reality Composer scene
     /// If Object Anchor is used anchorImage and PhysicalWidth are ignored and can be set to nil
+    /// - Parameters:
+    ///   - cardContents: An array of **CardItem : `CardItemModel`** which represent what will be displayed in the default CardView
+    ///   - anchorImage: Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor
+    ///   - physicalWidth: The width of the image in meters
+    ///   - realityFilePath: URL path to a .reality file that makes contains the scene, exported from Reality Composer
+    ///   - rcScene: Name given to the scene in the Reality Composer app.
     public init(cardContents: [CardItem], anchorImage: UIImage? = nil, physicalWidth: CGFloat? = nil, realityFilePath: URL, rcScene: String) {
         self.cardContents = cardContents
         self.anchorImage = anchorImage

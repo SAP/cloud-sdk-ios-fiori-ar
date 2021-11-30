@@ -9,13 +9,15 @@ import RealityKit
 import SwiftUI
 
 /// Wrapper struct for the CardItem : `CardItemModel`, MarkerState, and the entity which backs real world position of the marker.
-
 public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable {
+    /// card identifier
     public var id: CardItem.ID {
         self.card.id
     }
 
+    /// card
     public var card: CardItem
+    /// marker state
     public internal(set) var markerState: MarkerControl.State
     
     internal var entity: Entity?
@@ -23,7 +25,9 @@ public struct ScreenAnnotation<CardItem: CardItemModel>: Identifiable, Equatable
     internal var isCardVisible: Bool {
         self.entity != nil
     }
-    
+
+    /// Initializer
+    /// - Parameter card: content to be displayed
     public init(card: CardItem) {
         self.card = card
         self.markerState = .notVisible

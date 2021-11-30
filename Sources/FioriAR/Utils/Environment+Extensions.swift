@@ -10,31 +10,37 @@ import Foundation
 import SwiftUI
 
 public extension EnvironmentValues {
+    /// view modifier influencing `CardView` and its title
     var titleModifier: AnyViewModifier {
         get { self[TitleModifierKey.self] }
         set { self[TitleModifierKey.self] = newValue }
     }
-    
+
+    /// view modifier influencing `CardView` and its subtitle
     var subtitleModifier: AnyViewModifier {
         get { self[SubtitleModifierKey.self] }
         set { self[SubtitleModifierKey.self] = newValue }
     }
-    
+
+    /// view modifier influencing `CardView` and its detail / cover image
     var detailImageModifier: AnyViewModifier {
         get { self[DetailImageModifierKey.self] }
         set { self[DetailImageModifierKey.self] = newValue }
     }
-    
+
+    /// view modifier influencing `CardView` and its action text
     var actionTextModifier: AnyViewModifier {
         get { self[ActionTextModifierKey.self] }
         set { self[ActionTextModifierKey.self] = newValue }
     }
-    
+
+    /// view modifier influencing `CarouselScrollView` and its carousel options
     var carouselOptions: CarouselOptions {
         get { self[CarouselOptionsKey.self] }
         set { self[CarouselOptionsKey.self] = newValue }
     }
-    
+
+    /// view modifier providing a callback on editing events
     var onSceneEdit: (SceneEditing) -> Void {
         get { self[SceneEditKey.self] }
         set { self[SceneEditKey.self] = newValue }
