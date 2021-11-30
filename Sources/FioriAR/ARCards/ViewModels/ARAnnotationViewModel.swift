@@ -23,7 +23,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     @Published public internal(set) var currentAnnotation: ScreenAnnotation<CardItem>?
     
     /// The guideImage for the scanLabel retrieved from the AnnotationLoadingStrategy
-    @Published internal var guideImage: UIImage?
+    @Published internal var guideImage: GuideImageState = .notStarted
     
     /// The position of the ARAnchor thats discovered
     @Published internal var anchorPosition: CGPoint?
@@ -88,7 +88,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     public func load<Strategy: AnnotationLoadingStrategy>(loadingStrategy: Strategy) throws where CardItem == Strategy.CardItem {
         let sceneData = try loadingStrategy.load(with: self.arManager)
         self.annotations = sceneData.annotations
-        self.guideImage = sceneData.guideImage ?? UIImage(systemName: "xmark.icloud")
+        self.guideImage = .finished(sceneData.guideImage ?? UIImage(systemName: "xmark.icloud")!)
         self.setSelectedAnnotation(for: self.annotations.first)
     }
     
@@ -97,7 +97,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
         try loadingStrategy.load(with: self.arManager, completionHandler: { annotations, guideImage in
             DispatchQueue.main.async {
                 self.annotations = annotations
-                self.guideImage = guideImage ?? UIImage(systemName: "xmark.icloud")
+                self.guideImage = guideImage
                 self.setSelectedAnnotation(for: self.annotations.first)
             }
         })

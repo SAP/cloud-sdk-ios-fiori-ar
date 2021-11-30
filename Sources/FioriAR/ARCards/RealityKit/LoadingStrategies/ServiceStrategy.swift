@@ -67,7 +67,7 @@ public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAn
     /// - Parameters:
     ///   - manager: handling the ARView
     ///   - completionHandler: providing the cards and image anchor of the requested scene once loaded
-    public func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CodableCardItem>], UIImage?) -> Void) throws {
+    public func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CodableCardItem>], GuideImageState) -> Void) throws {
         var annotations = [ScreenAnnotation<CodableCardItem>]()
 
         self.networkingAPI.getScene(self.sceneIdentifier)
@@ -77,11 +77,12 @@ public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAn
                 case .finished:
                     print(completion)
                 case .failure(let error):
+                    completionHandler([], .failure)
                     print("Fetching scene failed! \(error.localizedDescription)")
                 }
             } receiveValue: { scene in
                 manager.sceneRoot = Entity()
-                manager.addReferenceImage(for: scene.referenceAnchorImage, with: CGFloat(scene.referenceAnchorImagePhysicalWidth / 100.0))
+                manager.addReferenceImage(for: scene.referenceAnchorImage, with: scene.referenceAnchorImagePhysicalWidth)
 
                 for cardItem in scene.cards {
                     var annotation = ScreenAnnotation(card: cardItem)
@@ -95,7 +96,7 @@ public class ServiceStrategy<CardItem: CardItemModel>: ObservableObject, AsyncAn
                     annotations.append(annotation)
                 }
 
-                completionHandler(annotations, scene.referenceAnchorImage)
+                completionHandler(annotations, .finished(scene.referenceAnchorImage))
             }
             .store(in: &self.cancellables)
     }

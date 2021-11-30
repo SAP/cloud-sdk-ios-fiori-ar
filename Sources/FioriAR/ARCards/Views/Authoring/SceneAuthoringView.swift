@@ -143,7 +143,7 @@ public struct SceneAuthoringView: View {
                                       cardItems: $authoringViewModel.cardItems,
                                       attachmentsMetadata: $authoringViewModel.attachmentsMetadata,
                                       onDismiss: { authoringViewModel.validateSync() },
-                                      image: authoringViewModel.anchorImage,
+                                      guideImage: authoringViewModel.anchorImage ?? UIImage(systemName: "xmark.icloud")!,
                                       cardAction: { _ in })
         }
         .alert(isPresented: $isAlertPresented) {
@@ -188,8 +188,7 @@ public struct SceneAuthoringView: View {
 
         let vectorStrategy = VectorStrategy(cardContents: authoringViewModel.cardItems,
                                             anchorImage: anchorImage,
-                                            physicalWidth: CGFloat(physicalWidth / 100.0))
-
+                                            physicalWidth: physicalWidth)
         do {
             try self.arViewModel.load(loadingStrategy: vectorStrategy)
             self.isARExperiencePresented.toggle()
@@ -200,7 +199,7 @@ public struct SceneAuthoringView: View {
 
     func syncWithService() {
         if let _ = authoringViewModel.sceneIdentifier {
-            self.authoringViewModel.updateExistingSceneOnServer{ sceneId in
+            self.authoringViewModel.updateExistingSceneOnServer { sceneId in
                 self.onSceneEdit(.published(sceneID: sceneId))
             }
         } else {
