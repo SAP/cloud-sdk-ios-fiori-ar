@@ -18,7 +18,7 @@ struct ARCardsUSDZFileLoadingContentView: View {
                               // set the card action for id corresponding to the CardItemModel
                               print(id)
                           })
-                          .onAppear(perform: loadInitialDataFromUSDZFile)
+            .onAppear(perform: loadInitialDataFromUSDZFile)
     }
 
     func loadInitialDataFromUSDZFile() {
