@@ -146,7 +146,7 @@ class SceneAuthoringModel: ObservableObject {
             .store(in: &self.cancellables)
     }
     
-    func updateExistingSceneOnServer() {
+    func updateExistingSceneOnServer(completionHandler: @escaping (Int) -> Void) {
         guard case .id(let sceneID) = self.sceneIdentifier,
               let anchorImage = anchorImage,
               let imageData = anchorImage.pngData(),
@@ -173,6 +173,7 @@ class SceneAuthoringModel: ObservableObject {
                 self.originalAnchorImage = self.anchorImage
                 self.originalAnchorImagePhysicalWidth = self.physicalWidth
                 self.bannerMessage = .sceneUpdated
+                completionHandler(sceneID)
             case .failure(let error):
                 self.logger.error("Not possible to update scene: \(error.localizedDescription)")
                 self.bannerMessage = .failure
