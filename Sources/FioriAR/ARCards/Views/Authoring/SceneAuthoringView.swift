@@ -11,14 +11,8 @@ import SwiftUI
 
 /**
  Provides the flow for authoring an AR Annotation Scene. Used to create the content for the cards, select an anchor Image, and position the entities in their real world locations. Publishing the scene using Mobile Services with an SAPURLSession.
- The onSceneEdit modifier provides a callback on editing events. When a new scene is published the .published(sceneID) returns the id of the newly created scene.
- 
-  - Parameters:
-    - title: Title of the Scene
-    - serviceURL: Service URL
-    - sapURLSession: SAPURLSession to provide credentials to Mobile Services
-    - sceneIdentifier: If nil then a new scene is created. Otherwise a `SceneIdentifyingAttribute` for which scene to fetch either by id `Int` or alias `String` to edit.
- 
+ The onSceneEdit modifier provides a callback on editing events. When a scene was published, i.e. created or updated in SAP Mobile Services, then `.published(sceneID)` is called and returns the technical id of the scene.
+
  ## Usage
  ```
  SceneAuthoringView(title: "Car Engine",
@@ -42,7 +36,7 @@ import SwiftUI
 public struct SceneAuthoringView: View {
     @StateObject private var authoringViewModel: SceneAuthoringModel
     @StateObject private var arViewModel: ARAnnotationViewModel<CodableCardItem>
-    
+
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onSceneEdit) var onSceneEdit
@@ -51,16 +45,23 @@ public struct SceneAuthoringView: View {
     @State private var isCardCreationPresented = false
     @State private var isARExperiencePresented = false
     @State private var isAlertPresented = false
-    
+
     let title: String
-   
+
+    /// Initializer
+    /// - Parameters:
+    ///   - title: Title of the Scene
+    ///   - serviceURL: SAPURLSession to provide credentials to Mobile Services
+    ///   - sapURLSession: If nil then a new scene is created.
+    ///   - sceneIdentifier: Pass nil to create a new scene. To update a a scene you have to supply the identifier used in SAP Mobile Servcies to identify the scene.
     public init(title: String, serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
         self.title = title
         let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
         _authoringViewModel = StateObject(wrappedValue: SceneAuthoringModel(networkingAPI: networkingAPI, sceneIdentifier: sceneIdentifier))
         _arViewModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
     }
-    
+
+    /// SwiftUI's view body
     public var body: some View {
         VStack(spacing: 0) {
             TitleBarView(title: title,
@@ -87,7 +88,7 @@ public struct SceneAuthoringView: View {
                          })
                 .background(Color.white)
                 .padding(.bottom, 6)
-            
+
             VStack(spacing: 0) {
                 TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: "Cards", rightTabTitle: "Anchor Image")
                     .padding(.bottom, 16)
@@ -100,7 +101,7 @@ public struct SceneAuthoringView: View {
                             }
                         }
                     )
-                
+
                 switch authoringViewModel.currentTab {
                 case .left:
                     AttachmentsView(title: "Cards",
@@ -154,7 +155,7 @@ public struct SceneAuthoringView: View {
                   secondaryButton: .cancel())
         }
     }
-    
+
     var startARButton: some View {
         Button(action: {
             startAR()
@@ -180,15 +181,15 @@ public struct SceneAuthoringView: View {
             .disabled(!authoringViewModel.validatedAR())
             .padding(.bottom, verticalSizeClass == .compact ? 29 : 50)
     }
-    
+
     func startAR() {
         guard let anchorImage = self.authoringViewModel.anchorImage,
               let physicalWidth = Double(self.authoringViewModel.physicalWidth) else { return }
-        
+
         let vectorStrategy = VectorStrategy(cardContents: authoringViewModel.cardItems,
                                             anchorImage: anchorImage,
                                             physicalWidth: CGFloat(physicalWidth / 100.0))
-        
+
         do {
             try self.arViewModel.load(loadingStrategy: vectorStrategy)
             self.isARExperiencePresented.toggle()
@@ -196,10 +197,12 @@ public struct SceneAuthoringView: View {
             print(error)
         }
     }
-    
+
     func syncWithService() {
         if let _ = authoringViewModel.sceneIdentifier {
-            self.authoringViewModel.updateExistingSceneOnServer()
+            self.authoringViewModel.updateExistingSceneOnServer{ sceneId in
+                self.onSceneEdit(.published(sceneID: sceneId))
+            }
         } else {
             self.authoringViewModel.createSceneOnServer { sceneId in
                 self.onSceneEdit(.published(sceneID: sceneId))
@@ -215,10 +218,10 @@ public struct SceneAuthoringView: View {
 
 private struct TabbedView: View {
     @Binding var currentTab: TabSelection
-    
+
     var leftTabTitle: String
     var rightTabTitle: String
-    
+
     var body: some View {
         HStack(spacing: 0) {
             tab(title: leftTabTitle, isSelected: currentTab == .left)
@@ -233,7 +236,7 @@ private struct TabbedView: View {
         .font(.system(size: 14, weight: .bold))
         .padding(.horizontal, 16)
     }
-    
+
     func tab(title: String, isSelected: Bool) -> some View {
         VStack(spacing: 6) {
             Text(title)
