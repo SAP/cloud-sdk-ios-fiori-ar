@@ -48,7 +48,7 @@ Currently supported:
 # Requirements
 
 - iOS 14 or higher
-- Xcode 12 or higher
+- Xcode 13
 - Reality Composer 1.1 or higher
 - Swift Package Manager
 
