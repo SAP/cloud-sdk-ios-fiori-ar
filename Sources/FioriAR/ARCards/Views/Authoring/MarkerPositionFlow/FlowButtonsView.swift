@@ -31,7 +31,7 @@ struct FlowButtonsView<CardItem>: View where CardItem: CardItemModel {
                                 .fill(Color.preferredColor(.tintColor, background: .lightConstant))
                         )
                 })
-                .padding(.bottom, 100)
+                    .padding(.bottom, 100)
             }
             
             if flowState == .preview {

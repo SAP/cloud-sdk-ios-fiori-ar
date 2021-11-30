@@ -54,7 +54,7 @@ struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View,
                 Button(action: { onRightAction?() }, label: {
                     rightBarLabel()
                 })
-                .disabled(rightDisabled)
+                    .disabled(rightDisabled)
             }
         }
         .padding(.horizontal, 16)

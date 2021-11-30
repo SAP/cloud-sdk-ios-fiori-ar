@@ -24,7 +24,7 @@ public protocol SubtitleComponent {
 
 /// Protocol representing a component with a detail/cover image
 public protocol DetailImageComponent {
-    ///Detail / Cover image
+    /// Detail / Cover image
     var detailImage_: Data? { get }
 }
 

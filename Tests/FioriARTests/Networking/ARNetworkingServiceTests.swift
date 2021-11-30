@@ -35,7 +35,7 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
             }
         }
 
-        sut.getScene(.id(20110991))
+        self.sut.getScene(.id(20110991))
             .sink { completion in
                 switch completion {
                 case .finished:
@@ -70,7 +70,7 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
             }
         }
 
-        sut.getScene(.alias("myOwnAlias"))
+        self.sut.getScene(.alias("myOwnAlias"))
             .sink { completion in
                 switch completion {
                 case .finished:
@@ -100,7 +100,7 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
             return (HTTPURLResponse(url: url, statusCode: 201), try XCTUnwrap(Bundle.module.getTextContent(forResource: "GET_scene")))
         }
 
-        sut.createScene(identifiedBy: imageData, anchorImagePhysicalWidth: 3.0, anchorImageFileName: "myImageAnchor", cards: cardsToBeCreated, sceneAlias: "customAlias")
+        self.sut.createScene(identifiedBy: imageData, anchorImagePhysicalWidth: 3.0, anchorImageFileName: "myImageAnchor", cards: cardsToBeCreated, sceneAlias: "customAlias")
             .sink { completion in
                 guard case .finished = completion else { return }
                 self.testExpectation.fulfill()
@@ -116,13 +116,13 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
     }
 
     func testUpdateScene() throws {
-        var receivedValue: String? = nil
+        var receivedValue: String?
 
         NetworkingServiceURLProtocolMock.requestHandler = { request in
-            return (HTTPURLResponse(url: request.url!, statusCode: 200), "Update success.".data(using: .utf8)!)
+            (HTTPURLResponse(url: request.url!, statusCode: 200), "Update success.".data(using: .utf8)!)
         }
 
-        sut.updateScene(123, identifiedBy: nil, anchorImagePhysicalWidth: 2.0, updateCards: [], deleteCards: [])
+        self.sut.updateScene(123, identifiedBy: nil, anchorImagePhysicalWidth: 2.0, updateCards: [], deleteCards: [])
             .sink { completion in
                 guard case .finished = completion else { return }
                 self.testExpectation.fulfill()
@@ -138,13 +138,13 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
     }
 
     func testUpdateScene404Error() throws {
-        var receivedError: Error? = nil
+        var receivedError: Error?
 
         NetworkingServiceURLProtocolMock.requestHandler = { request in
-            return (HTTPURLResponse(url: request.url!, statusCode: 404), "Not found".data(using: .utf8)!)
+            (HTTPURLResponse(url: request.url!, statusCode: 404), "Not found".data(using: .utf8)!)
         }
 
-        sut.updateScene(123, identifiedBy: nil, anchorImagePhysicalWidth: 2.0, updateCards: [], deleteCards: [])
+        self.sut.updateScene(123, identifiedBy: nil, anchorImagePhysicalWidth: 2.0, updateCards: [], deleteCards: [])
             .sink { completion in
                 guard case .failure(let error) = completion else { return }
                 receivedError = error
@@ -158,7 +158,7 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
 
         let error = try XCTUnwrap(receivedError)
         XCTAssertEqual(error.localizedDescription, "Not found")
-        guard case let .failure(httpError) = error as? ARCardsNetworkingServiceError else {
+        guard case .failure(let httpError) = error as? ARCardsNetworkingServiceError else {
             XCTFail("Expected failure, but was \(error)")
             return
         }
@@ -166,12 +166,11 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
         XCTAssertEqual(httpError.description, "Not found")
     }
 
-
     func testUpdateSceneDeleteCard() throws {
-        var receivedValue: String? = nil
+        var receivedValue: String?
 
         NetworkingServiceURLProtocolMock.requestHandler = { request in
-            guard let url = request.url else { return nil}
+            guard let url = request.url else { return nil }
             if url.absoluteString.hasSuffix("/augmentedreality/v1/runtime/scene/123/annotationAnchor/cardIdToDelete") {
                 return (HTTPURLResponse(url: url, statusCode: 204), "".data(using: .utf8)!)
             } else {
@@ -179,7 +178,7 @@ final class ARCardsNetworkingServiceTests: XCTestCase {
             }
         }
 
-        sut.updateScene(123, identifiedBy: nil, anchorImagePhysicalWidth: nil, updateCards: [], deleteCards: ["cardIdToDelete"])
+        self.sut.updateScene(123, identifiedBy: nil, anchorImagePhysicalWidth: nil, updateCards: [], deleteCards: ["cardIdToDelete"])
             .sink { completion in
                 guard case .finished = completion else { return }
                 self.testExpectation.fulfill()
