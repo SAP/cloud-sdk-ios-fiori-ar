@@ -23,7 +23,7 @@ public protocol AsyncAnnotationLoadingStrategy {
     ///  associated type of this protocol needs to conform to `CardItemModel` and `Codable`
     associatedtype CardItem: CardItemModel, Codable
     /// load screen annotations and guideImage asynchronously
-    func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CardItem>], UIImage?) -> Void) throws
+    func load(with manager: ARManager, completionHandler: @escaping ([ScreenAnnotation<CardItem>], GuideImageState) -> Void) throws
 }
 
 internal protocol SceneLoadable where CardItem.ID: LosslessStringConvertible {

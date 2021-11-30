@@ -351,14 +351,14 @@ extension MarkerPositioningFlowView where Scan == ARScanView,
          cardItems: Binding<[CardItem]>,
          attachmentsMetadata: Binding<[AttachmentUIMetadata]>,
          onDismiss: (() -> Void)?,
-         image: UIImage?,
+         guideImage: UIImage,
          cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
                   cardItems: cardItems,
                   attachmentsMetadata: attachmentsMetadata,
                   onDismiss: onDismiss,
-                  scanLabel: { anchorPosition in ARScanView(guideImage: image, anchorPosition: anchorPosition) },
+                  scanLabel: { anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
     }

@@ -58,7 +58,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
     @ObservedObject public var arModel: ARAnnotationViewModel<CardItem>
     
     /// View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
-    public let scanLabel: (UIImage?, CGPoint?) -> Scan
+    public let scanLabel: (GuideImageState, CGPoint?) -> Scan
     
     /// View Builder for a custom CardView
     public let cardLabel: (CardItem, Bool) -> Card
@@ -77,7 +77,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
     ///   - markerLabel: View Builder for a custom MarkerView
     public init(arModel: ARAnnotationViewModel<CardItem>,
                 guideImage: UIImage? = nil,
-                @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
+                @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
                 @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
                 @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
     {
@@ -96,7 +96,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
             if arModel.discoveryFlowHasFinished {
                 ARAnnotationContentView(arModel, cardLabel: cardLabel, markerLabel: markerLabel)
             } else {
-                scanLabel(guideImage == nil ? arModel.guideImage : guideImage, arModel.anchorPosition)
+                scanLabel(guideImage == nil ? arModel.guideImage : .finished(guideImage!), arModel.anchorPosition)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -125,7 +125,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
                     .background(VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)))
                     .cornerRadius(10)
             })
-            .padding([.leading, .top], 16)
+                .padding([.leading, .top], 16)
         }
     }
 }
@@ -148,7 +148,7 @@ public extension ARAnnotationsView where Scan == ARScanView,
     {
         self.init(arModel: arModel,
                   guideImage: guideImage,
-                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
+                  scanLabel: { guideImageState, anchorPosition in ARScanView(guideImageState: guideImageState, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
     }
@@ -173,7 +173,7 @@ public extension ARAnnotationsView where Scan == ARScanView,
     {
         self.init(arModel: arModel,
                   guideImage: guideImage,
-                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
+                  scanLabel: { guideImageState, anchorPosition in ARScanView(guideImageState: guideImageState, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: markerLabel)
     }
@@ -193,7 +193,7 @@ public extension ARAnnotationsView where Scan == ARScanView,
     {
         self.init(arModel: arModel,
                   guideImage: guideImage,
-                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
+                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImageState: guideImage, anchorPosition: anchorPosition) },
                   cardLabel: cardLabel,
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
     }
@@ -214,7 +214,7 @@ public extension ARAnnotationsView where Card == CardView<Text,
     ///   - cardAction: Closure to handle a card action when tapped by the user
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
-         @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
+         @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
          cardAction: ((CardItem.ID) -> Void)?)
     {
         self.init(arModel: arModel,
@@ -239,7 +239,7 @@ public extension ARAnnotationsView where Scan == ARScanView {
     {
         self.init(arModel: arModel,
                   guideImage: guideImage,
-                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
+                  scanLabel: { guideImageState, anchorPosition in ARScanView(guideImageState: guideImageState, anchorPosition: anchorPosition) },
                   cardLabel: cardLabel,
                   markerLabel: markerLabel)
     }
@@ -252,7 +252,7 @@ public extension ARAnnotationsView where Marker == MarkerView {
     ///   - scanLabel: View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
     ///   - cardLabel: View Builder for a custom CardView
     init(arModel: ARAnnotationViewModel<CardItem>,
-         @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
+         @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
          @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
     {
         self.init(arModel: arModel,
@@ -275,7 +275,7 @@ public extension ARAnnotationsView where Card == CardView<Text,
     ///   - markerLabel: View Builder for a custom MarkerView
     ///   - cardAction: Closure to handle a card action when tapped by the user
     init(arModel: ARAnnotationViewModel<CardItem>,
-         @ViewBuilder scanLabel: @escaping (UIImage?, CGPoint?) -> Scan,
+         @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
          @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
          cardAction: ((CardItem.ID) -> Void)?)
     {
