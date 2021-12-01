@@ -53,12 +53,16 @@ import SwiftUI
  ```
  */
 
-public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>: View where CardItem: CardItemModel {
+public protocol GuideItemModel {}
+extension UIImage: GuideItemModel {}
+extension GuideImageState: GuideItemModel {}
+
+public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem, GuideItem: GuideItemModel>: View where CardItem: CardItemModel {
     /// arModel
     @ObservedObject public var arModel: ARAnnotationViewModel<CardItem>
     
     /// View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
-    public let scanLabel: (GuideImageState, CGPoint?) -> Scan
+    public let scanLabel: (GuideItem, CGPoint?) -> Scan
     
     /// View Builder for a custom CardView
     public let cardLabel: (CardItem, Bool) -> Card
@@ -77,9 +81,9 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
     ///   - markerLabel: View Builder for a custom MarkerView
     public init(arModel: ARAnnotationViewModel<CardItem>,
                 guideImage: UIImage? = nil,
-                @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
+                @ViewBuilder scanLabel: @escaping (UIImage, CGPoint?) -> Scan,
                 @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
-                @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
+                @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker) where GuideItem == UIImage
     {
         self.arModel = arModel
         self.guideImage = guideImage
@@ -87,7 +91,19 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
         self.cardLabel = cardLabel
         self.markerLabel = markerLabel
     }
-
+    
+    public init(arModel: ARAnnotationViewModel<CardItem>,
+                @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
+                @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
+                @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker) where GuideItem == GuideImageState
+    {
+        self.arModel = arModel
+        self.guideImage = nil
+        self.scanLabel = scanLabel
+        self.cardLabel = cardLabel
+        self.markerLabel = markerLabel
+    }
+    
     /// SwiftUI’s view body
     public var body: some View {
         ZStack {
@@ -96,7 +112,10 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
             if arModel.discoveryFlowHasFinished {
                 ARAnnotationContentView(arModel, cardLabel: cardLabel, markerLabel: markerLabel)
             } else {
-                scanLabel(guideImage == nil ? arModel.guideImage : .finished(guideImage!), arModel.anchorPosition)
+                // Creative and perhaps confusing albeit it works
+                if let erasedGuideItem = ((guideImage as? GuideItem) ?? (arModel.guideImageType as? GuideItem)) {
+                    scanLabel(erasedGuideItem, arModel.anchorPosition)
+                }
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -144,10 +163,19 @@ public extension ARAnnotationsView where Scan == ARScanView,
     ///   - cardAction: Closure to handle a card action when tapped by the user
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
-         cardAction: ((CardItem.ID) -> Void)?)
+         cardAction: ((CardItem.ID) -> Void)?) where GuideItem == UIImage
     {
         self.init(arModel: arModel,
                   guideImage: guideImage,
+                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
+                  cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
+                  markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
+    }
+    
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         cardAction: ((CardItem.ID) -> Void)?) where GuideItem == GuideImageState
+    {
+        self.init(arModel: arModel,
                   scanLabel: { guideImageState, anchorPosition in ARScanView(guideImageState: guideImageState, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
@@ -169,10 +197,20 @@ public extension ARAnnotationsView where Scan == ARScanView,
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
          @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
-         cardAction: ((CardItem.ID) -> Void)?)
+         cardAction: ((CardItem.ID) -> Void)?) where GuideItem == UIImage
     {
         self.init(arModel: arModel,
                   guideImage: guideImage,
+                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
+                  cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
+                  markerLabel: markerLabel)
+    }
+    
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
+         cardAction: ((CardItem.ID) -> Void)?) where GuideItem == GuideImageState
+    {
+        self.init(arModel: arModel,
                   scanLabel: { guideImageState, anchorPosition in ARScanView(guideImageState: guideImageState, anchorPosition: anchorPosition) },
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: markerLabel)
@@ -189,11 +227,21 @@ public extension ARAnnotationsView where Scan == ARScanView,
     ///   - cardLabel: View Builder for a custom CardView
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
-         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
+         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card) where GuideItem == UIImage
     {
         self.init(arModel: arModel,
                   guideImage: guideImage,
-                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImageState: guideImage, anchorPosition: anchorPosition) },
+                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
+                  cardLabel: cardLabel,
+                  markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
+    }
+    
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         guideImage: UIImage? = nil,
+         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card) where GuideItem == GuideImageState
+    {
+        self.init(arModel: arModel,
+                  scanLabel: { guideImageState, anchorPosition in ARScanView(guideImageState: guideImageState, anchorPosition: anchorPosition) },
                   cardLabel: cardLabel,
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
     }
@@ -214,11 +262,21 @@ public extension ARAnnotationsView where Card == CardView<Text,
     ///   - cardAction: Closure to handle a card action when tapped by the user
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
-         @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
-         cardAction: ((CardItem.ID) -> Void)?)
+         @ViewBuilder scanLabel: @escaping (UIImage, CGPoint?) -> Scan,
+         cardAction: ((CardItem.ID) -> Void)?) where GuideItem == UIImage
     {
         self.init(arModel: arModel,
                   guideImage: guideImage,
+                  scanLabel: scanLabel,
+                  cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
+                  markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
+    }
+    
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
+         cardAction: ((CardItem.ID) -> Void)?) where GuideItem == GuideImageState
+    {
+        self.init(arModel: arModel,
                   scanLabel: scanLabel,
                   cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
                   markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
@@ -235,10 +293,20 @@ public extension ARAnnotationsView where Scan == ARScanView {
     init(arModel: ARAnnotationViewModel<CardItem>,
          guideImage: UIImage? = nil,
          @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
-         @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker)
+         @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker) where GuideItem == UIImage
     {
         self.init(arModel: arModel,
                   guideImage: guideImage,
+                  scanLabel: { guideImage, anchorPosition in ARScanView(guideImage: guideImage, anchorPosition: anchorPosition) },
+                  cardLabel: cardLabel,
+                  markerLabel: markerLabel)
+    }
+    
+    init(arModel: ARAnnotationViewModel<CardItem>,
+         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card,
+         @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker) where GuideItem == GuideImageState
+    {
+        self.init(arModel: arModel,
                   scanLabel: { guideImageState, anchorPosition in ARScanView(guideImageState: guideImageState, anchorPosition: anchorPosition) },
                   cardLabel: cardLabel,
                   markerLabel: markerLabel)
@@ -252,8 +320,18 @@ public extension ARAnnotationsView where Marker == MarkerView {
     ///   - scanLabel: View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
     ///   - cardLabel: View Builder for a custom CardView
     init(arModel: ARAnnotationViewModel<CardItem>,
+         @ViewBuilder scanLabel: @escaping (UIImage, CGPoint?) -> Scan,
+         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card) where GuideItem == UIImage
+    {
+        self.init(arModel: arModel,
+                  scanLabel: scanLabel,
+                  cardLabel: cardLabel,
+                  markerLabel: { state, icon in MarkerView(state: state, icon: icon) })
+    }
+    
+    init(arModel: ARAnnotationViewModel<CardItem>,
          @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
-         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card)
+         @ViewBuilder cardLabel: @escaping (CardItem, Bool) -> Card) where GuideItem == GuideImageState
     {
         self.init(arModel: arModel,
                   scanLabel: scanLabel,
@@ -275,9 +353,20 @@ public extension ARAnnotationsView where Card == CardView<Text,
     ///   - markerLabel: View Builder for a custom MarkerView
     ///   - cardAction: Closure to handle a card action when tapped by the user
     init(arModel: ARAnnotationViewModel<CardItem>,
+         @ViewBuilder scanLabel: @escaping (UIImage, CGPoint?) -> Scan,
+         @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
+         cardAction: ((CardItem.ID) -> Void)?) where GuideItem == UIImage
+    {
+        self.init(arModel: arModel,
+                  scanLabel: scanLabel,
+                  cardLabel: { cardItem, isSelected in CardView(model: cardItem, isSelected: isSelected, action: cardAction) },
+                  markerLabel: markerLabel)
+    }
+    
+    init(arModel: ARAnnotationViewModel<CardItem>,
          @ViewBuilder scanLabel: @escaping (GuideImageState, CGPoint?) -> Scan,
          @ViewBuilder markerLabel: @escaping (MarkerControl.State, Image?) -> Marker,
-         cardAction: ((CardItem.ID) -> Void)?)
+         cardAction: ((CardItem.ID) -> Void)?) where GuideItem == GuideImageState
     {
         self.init(arModel: arModel,
                   scanLabel: scanLabel,

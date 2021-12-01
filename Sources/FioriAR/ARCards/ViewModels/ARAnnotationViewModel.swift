@@ -23,7 +23,7 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     @Published public internal(set) var currentAnnotation: ScreenAnnotation<CardItem>?
     
     /// The guideImage for the scanLabel retrieved from the AnnotationLoadingStrategy
-    @Published internal var guideImage: GuideImageState = .notStarted
+    @Published internal var guideImageType: GuideItemModel?
     
     /// The position of the ARAnchor thats discovered
     @Published internal var anchorPosition: CGPoint?
@@ -88,16 +88,16 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
     public func load<Strategy: AnnotationLoadingStrategy>(loadingStrategy: Strategy) throws where CardItem == Strategy.CardItem {
         let sceneData = try loadingStrategy.load(with: self.arManager)
         self.annotations = sceneData.annotations
-        self.guideImage = .finished(sceneData.guideImage ?? UIImage(systemName: "xmark.icloud")!)
+        self.guideImageType = sceneData.guideImage ?? UIImage(systemName: "xmark.icloud")!
         self.setSelectedAnnotation(for: self.annotations.first)
     }
     
     /// Loads an asynchronous strategy into the arModel and sets **annotations** member from the returned [ScreenAnnotation]
     public func loadAsync<Strategy: AsyncAnnotationLoadingStrategy>(loadingStrategy: Strategy) throws where CardItem == Strategy.CardItem {
-        try loadingStrategy.load(with: self.arManager, completionHandler: { annotations, guideImage in
+        try loadingStrategy.load(with: self.arManager, completionHandler: { annotations, guideImageState in
             DispatchQueue.main.async {
                 self.annotations = annotations
-                self.guideImage = guideImage
+                self.guideImageType = guideImageState
                 self.setSelectedAnnotation(for: self.annotations.first)
             }
         })

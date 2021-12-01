@@ -8,8 +8,10 @@
 import ARKit
 import RealityKit
 
+public protocol LoadingStrategy {}
+
 /// Protocol which defines the data a strategy needs to provide a `[ScreenAnnotation]`
-public protocol AnnotationLoadingStrategy {
+public protocol AnnotationLoadingStrategy: LoadingStrategy {
     ///  associated type of this protocol needs to conform to `CardItemModel`
     associatedtype CardItem: CardItemModel
     /// cards content to be populated
@@ -19,7 +21,7 @@ public protocol AnnotationLoadingStrategy {
 }
 
 /// Protocol which defines the data an asynchronous strategy needs to provide a `[ScreenAnnotation]`
-public protocol AsyncAnnotationLoadingStrategy {
+public protocol AsyncAnnotationLoadingStrategy: LoadingStrategy {
     ///  associated type of this protocol needs to conform to `CardItemModel` and `Codable`
     associatedtype CardItem: CardItemModel, Codable
     /// load screen annotations and guideImage asynchronously

@@ -24,9 +24,14 @@ struct ARCardsServiceView: View {
 
     var body: some View {
         ARAnnotationsView(arModel: arModel,
-                          cardAction: { id in
-                              // set the card action for id corresponding to the CardItemModel
-                              print(id)
+                          scanLabel: { guideImageState, anchorPosition in
+                              CustomScanView(guideImageState: guideImageState, position: anchorPosition)
+                          },
+                          cardLabel: { cardmodel, isSelected in
+                              CustomCardView(model: cardmodel, isSelected: isSelected)
+                          },
+                          markerLabel: { state, _ in
+                              CustomMarkerView(state: state)
                           })
             .onAppear(perform: loadInitialData)
     }

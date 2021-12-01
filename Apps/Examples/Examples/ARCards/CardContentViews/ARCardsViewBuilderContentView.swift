@@ -13,8 +13,9 @@ struct ARCardsViewBuilderContentView: View {
     
     var body: some View {
         ARAnnotationsView(arModel: arModel,
-                          scanLabel: { guideImageState, anchorPosition in
-                              CustomScanView(guideImageState: guideImageState, position: anchorPosition)
+                          guideImage: UIImage(named: "qrImage"),
+                          scanLabel: { guideImage, anchorPosition in
+                              CustomScanWithDefaultImageView(guideImage: guideImage, position: anchorPosition)
                           },
                           cardLabel: { cardmodel, isSelected in
                               CustomCardView(model: cardmodel, isSelected: isSelected)
@@ -63,6 +64,43 @@ struct CustomScanView: View {
                         .scaledToFit()
                         .frame(width: 150)
                 }
+                
+                Text("Discover this Image!")
+                    .font(.system(size: 19))
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .background(Color.black.opacity(0.7))
+                    .cornerRadius(8)
+                    .padding(.bottom, 50)
+            }
+        }
+    }
+}
+
+struct CustomScanWithDefaultImageView: View {
+    var guideImage: UIImage
+    var position: CGPoint?
+    
+    var body: some View {
+        ZStack {
+            if let position = position {
+                Text("Discovered!")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundColor(.black)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.green.opacity(0.7))
+                            .frame(width: 150, height: 150)
+                    )
+                    .position(position)
+            }
+            VStack(spacing: 15) {
+                Spacer()
+                Image(uiImage: guideImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150)
                 
                 Text("Discover this Image!")
                     .font(.system(size: 19))
