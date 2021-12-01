@@ -68,7 +68,9 @@ struct CarouselScrollView<Data: RandomAccessCollection, Content: View>: View whe
                 }
         )
         .onChange(of: currentIndex, perform: { newIndex in
-            scrollTo(index: newIndex)
+            withAnimation(Animation.interpolatingSpring(mass: 1, stiffness: 800, damping: 60)) {
+                scrollTo(index: newIndex)
+            }
         })
         .onAppear {
             scrollTo(index: 0)
