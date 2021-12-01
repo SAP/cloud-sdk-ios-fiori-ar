@@ -188,7 +188,6 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
     }
     
     func onlargeEditAction() {
-        print("large")
         switch self.flowState {
         case .arscene:
             self.flowState = .editMode

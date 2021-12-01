@@ -67,7 +67,6 @@ internal struct ARAnnotationContentView<Card: View, Marker: View, CardItem>: Vie
                 }
                 .padding(.bottom, 50)
                 .transition(.move(edge: .bottom))
-                .animation(Animation.interpolatingSpring(mass: 1, stiffness: 800, damping: 60), value: currentIndex)
                 .onChange(of: currentIndex) { newValue in
                     let annotation = visibleAnnotations[newValue]
                     arModel.setSelectedAnnotation(for: annotation)
