@@ -143,7 +143,7 @@ struct AnchorImageFormView: View {
                             }
                             Spacer()
                             if internalAnchorImage != nil {
-                                Button("Delete") {
+                                Button("Remove") {
                                     withAnimation {
                                         internalAnchorImage = nil
                                     }
@@ -173,7 +173,7 @@ struct AnchorImageFormView: View {
                         })
                     }
                 }, label: {
-                    Text("Save")
+                    Text("Done")
                         .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                         .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                         .frame(width: 343, height: 40)
