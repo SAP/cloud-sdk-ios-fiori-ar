@@ -199,7 +199,7 @@ private struct CardDetailsView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("Card Details")
+                Text("Card Details", bundle: .fioriAR)
                     .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                     .foregroundColor(Color.preferredColor(.secondaryLabel, background: .lightConstant))
                     .padding(16)
@@ -252,12 +252,12 @@ private struct CardDetailsView: View {
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
         .actionSheet(isPresented: $actionSheetPresented) {
-            ActionSheet(title: Text("Choose an Option"),
+            ActionSheet(title: Text("Choose an Option", bundle: .fioriAR),
                         message: nil,
-                        buttons: [.default(Text("Camera"), action: {
+                        buttons: [.default(Text("Camera", bundle: .fioriAR), action: {
                             pickerSource = .camera
                             pickerPresented.toggle()
-                        }), .default(Text("Photos"), action: {
+                        }), .default(Text("Photos", bundle: .fioriAR), action: {
                             pickerSource = .photoLibrary
                             pickerPresented.toggle()
                         }), .cancel()])

@@ -45,7 +45,7 @@ struct AnchorImageFormView: View {
                 SheetHandle()
                 
                 HStack {
-                    Text("Upload Image Anchor")
+                    Text("Upload Image Anchor", bundle: .fioriAR)
                         .font(.fiori(forTextStyle: .headline).weight(.bold))
                         .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                     
@@ -61,7 +61,7 @@ struct AnchorImageFormView: View {
                 
                 VStack(spacing: 8) {
                     HStack {
-                        Text("Dimension")
+                        Text("Dimension", bundle: .fioriAR)
                             .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                             .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                         
@@ -71,7 +71,7 @@ struct AnchorImageFormView: View {
                     
                     VStack(spacing: 0) {
                         HStack {
-                            Text("Enter the width of the real-world image.")
+                            Text("Enter the width of the real-world image.", bundle: .fioriAR)
                                 .font(.fiori(forTextStyle: .subheadline))
                                 .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                             Spacer()
@@ -105,7 +105,7 @@ struct AnchorImageFormView: View {
                 
                 VStack(spacing: 8) {
                     HStack {
-                        Text("Anchor Image")
+                        Text("Anchor Image", bundle: .fioriAR)
                             .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                             .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                         
@@ -115,7 +115,7 @@ struct AnchorImageFormView: View {
                     
                     VStack(spacing: 0) {
                         HStack {
-                            Text("Tap the area below to upload the anchor image.")
+                            Text("Tap the area below to upload the anchor image.", bundle: .fioriAR)
                                 .font(.fiori(forTextStyle: .subheadline))
                                 .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                             Spacer()
@@ -173,7 +173,7 @@ struct AnchorImageFormView: View {
                         })
                     }
                 }, label: {
-                    Text("Done")
+                    Text("Done", bundle: .fioriAR)
                         .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                         .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                         .frame(width: 343, height: 40)
@@ -193,12 +193,12 @@ struct AnchorImageFormView: View {
         .edgesIgnoringSafeArea(.all)
         .ignoresSafeArea(.keyboard)
         .actionSheet(isPresented: $actionSheetPresented) {
-            ActionSheet(title: Text("Choose an Option"),
+            ActionSheet(title: Text("Choose an Option", bundle: .fioriAR),
                         message: nil,
-                        buttons: [.default(Text("Camera"), action: {
+                        buttons: [.default(Text("Camera", bundle: .fioriAR), action: {
                             pickerSource = .camera
                             pickerPresented.toggle()
-                        }), .default(Text("Photos"), action: {
+                        }), .default(Text("Photos", bundle: .fioriAR), action: {
                             pickerSource = .photoLibrary
                             pickerPresented.toggle()
                         }), .cancel()])

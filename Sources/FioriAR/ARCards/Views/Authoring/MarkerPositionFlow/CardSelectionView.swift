@@ -19,7 +19,7 @@ struct CardSelectionView<CardItem: CardItemModel>: View {
             }
             Spacer()
             Button(action: { onSelect?() }, label: {
-                Text("Next")
+                Text("Next", bundle: .fioriAR)
                     .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                     .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                     .frame(width: 343, height: 40)
