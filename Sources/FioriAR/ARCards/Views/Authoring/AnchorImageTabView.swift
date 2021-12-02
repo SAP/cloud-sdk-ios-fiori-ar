@@ -27,12 +27,12 @@ struct AnchorImageTabView: View {
                     }
             } else {
                 VStack(spacing: 46) {
-                    Text("The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software.")
+                    Text("The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software.", bundle: .fioriAR)
                         .multilineTextAlignment(.center)
                         .font(.fiori(forTextStyle: .body))
                         .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                     Button(action: { anchorImageFormPresented.toggle() }, label: {
-                        Text("Upload Anchor Image")
+                        Text("Upload Anchor Image", bundle: .fioriAR)
                             .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                             .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                             .frame(width: 187, height: 40)
@@ -73,7 +73,7 @@ struct ImageAnchorView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("Anchor Image")
+                Text("Anchor Image", bundle: .fioriAR)
                     .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                     .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                 Spacer()
@@ -88,7 +88,7 @@ struct ImageAnchorView: View {
                     .padding(.bottom, 8)
             }
             HStack {
-                Text("Tap the image to edit it.")
+                Text("Tap the image to edit it.", bundle: .fioriAR)
                     .font(.fiori(forTextStyle: .footnote).weight(.bold))
                     .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                 Spacer()

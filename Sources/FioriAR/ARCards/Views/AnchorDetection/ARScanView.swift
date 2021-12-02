@@ -91,7 +91,7 @@ private struct CollapsingView: View {
                         .onTapGesture(perform: buttonAction)
                         .allowsHitTesting(isScanning)
                     
-                    Text("Point your camera at this image to start the AR experience")
+                    Text("Point your camera at this image to start the AR experience", bundle: .fioriAR)
                         .font(.fiori(forTextStyle: .body))
                         .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                         .multilineTextAlignment(.center)
@@ -101,7 +101,7 @@ private struct CollapsingView: View {
                         .opacity(isScanning ? 0 : 1)
                     
                     Button(action: { buttonAction() }, label: {
-                        Text("Scan")
+                        Text("Scan", bundle: .fioriAR)
                             .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                             .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                             .frame(width: 343, height: 40)
@@ -120,7 +120,7 @@ private struct CollapsingView: View {
                     ProgressView()
                         .progressViewStyle(ScanningViewProgressStyle())
                         .frame(width: 144, height: 144)
-                    Text("Loading...")
+                    Text("Loading...", bundle: .fioriAR)
                         .font(.fiori(forTextStyle: .callout))
                         .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant))
                 }
