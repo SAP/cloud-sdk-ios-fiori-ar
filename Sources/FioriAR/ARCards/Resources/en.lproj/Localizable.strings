@@ -23,7 +23,7 @@
 "Go to AR Scene" = "Go to AR Scene";
 
 /* XTIT: title of form in which a user can edit AR card (https://experience.sap.com/fiori-design-ios/article/ar-cards/) information */
-"Card Details" = "Card Details"
+"Card Details" = "Card Details";
 /* XTIT: title of form in which user can create a new AR annotation */
 "New Annotation" = "New Annotation";
 /* XFLD: mandatory field to specify card's title of given AR annotation */
@@ -47,18 +47,18 @@
 /* XMSG: title of alert presented to user if user attempts to leave page/view with unpublished changes  */
 "Leave Page" = "Leave Page";
 /* XBUT: button in alert presented to user if user attempts to leave page/view with unpublished changes  */
-"Confirm" = "Confirm"
+"Confirm" = "Confirm";
 
 /* XMSG: instruction for user on how to edit an image anchor  */
 "Tap the image to edit it." = "Tap the image to edit it.";
 
 /* XMSG: explanation text for user what an image anchor is  */
 "The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software.";
-
+"MyKey" = "MyValue";
 /* XBUT: instruction for user on how to edit an image anchor  */
 "Upload Image Anchor" = "Upload Image Anchor";
 /* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
-"Dimension" = "Dimension"
+"Dimension" = "Dimension";
 /* XFLD: explanation text what kind of width is needed  */
 "Enter the width of the real-world image." = "Enter the width of the real-world image.";
 /* XFLD: label of input field for image anchors physical width  */
@@ -66,7 +66,7 @@
 /* XMSG: instruction text on how to choose an image anchor  */
 "Tap the area below to upload the anchor image." = "Tap the area below to upload the anchor image.";
 /* XBUT: to remove an image anchor   */
-"Remove" = "Remove"
+"Remove" = "Remove";
 
 /* XMSG: shown in case image quality was too bad  */
 "Upload higher-quality image." = "Upload higher-quality image.";
