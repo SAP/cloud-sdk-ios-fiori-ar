@@ -82,7 +82,7 @@ public struct SceneAuthoringView: View {
                                  .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                          },
                          rightBarLabel: {
-                             Text("Publish")
+                             Text("Publish", bundle: .fioriAR)
                                  .font(.fiori(forTextStyle: .body).weight(.bold))
                                  .foregroundColor(Color.preferredColor(authoringViewModel.isSyncValidated ? .tintColor : .separator, background: .lightConstant))
                          })
@@ -90,7 +90,7 @@ public struct SceneAuthoringView: View {
                 .padding(.bottom, 6)
 
             VStack(spacing: 0) {
-                TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: "Cards", rightTabTitle: "Anchor Image")
+                TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: Bundle.fioriAR.localizedString(forKey: "Cards"), rightTabTitle: Bundle.fioriAR.localizedString(forKey: "Anchor Image"))
                     .padding(.bottom, 16)
                     .overlay(
                         Group {
@@ -104,7 +104,7 @@ public struct SceneAuthoringView: View {
 
                 switch authoringViewModel.currentTab {
                 case .left:
-                    AttachmentsView(title: "Cards",
+                    AttachmentsView(title: Bundle.fioriAR.localizedString(forKey: "Cards"),
                                     attachmentsUIMetadata: authoringViewModel.attachmentsMetadata,
                                     onAddAttachment: { isCardCreationPresented.toggle() },
                                     onSelectAttachment: { attachmentsUIMetadata in
@@ -147,9 +147,9 @@ public struct SceneAuthoringView: View {
                                       cardAction: { _ in })
         }
         .alert(isPresented: $isAlertPresented) {
-            Alert(title: Text("Leave Page"),
+            Alert(title: Text("Leave Page", bundle: .fioriAR),
                   message: Text(authoringViewModel.exitMessage.rawValue),
-                  primaryButton: .destructive(Text("Confirm"), action: {
+                  primaryButton: .destructive(Text("Confirm", bundle: .fioriAR), action: {
                       dismiss()
                   }),
                   secondaryButton: .cancel())
@@ -160,7 +160,7 @@ public struct SceneAuthoringView: View {
         Button(action: {
             startAR()
         }, label: {
-            Text("Go to AR Scene")
+            Text("Go to AR Scene", bundle: .fioriAR)
                 .font(.fiori(forTextStyle: .body).weight(.bold))
                 .foregroundColor(Color.preferredColor(authoringViewModel.validatedAR() ? .secondaryGroupedBackground : .separator, background: .lightConstant))
                 .frame(width: verticalSizeClass == .compact ? 702 : 351, height: 54)
