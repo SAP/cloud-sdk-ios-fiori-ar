@@ -105,7 +105,7 @@ struct AnchorImageFormView: View {
                 
                 VStack(spacing: 8) {
                     HStack {
-                        Text("Anchor Image", bundle: .fioriAR)
+                        Text("Image Anchor", bundle: .fioriAR)
                             .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                             .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                         
@@ -115,7 +115,7 @@ struct AnchorImageFormView: View {
                     
                     VStack(spacing: 0) {
                         HStack {
-                            Text("Tap the area below to upload the anchor image.", bundle: .fioriAR)
+                            Text("Tap the area below to upload the image anchor.", bundle: .fioriAR)
                                 .font(.fiori(forTextStyle: .subheadline))
                                 .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
                             Spacer()
