@@ -18,7 +18,7 @@ struct BannerView: View {
                         .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant, interface: .elevatedConstant))
                         .lineLimit(2)
                     Spacer()
-                    Button(Bundle.fioriAR.localizedString(forKey: "Close")) {
+                    Button("Close".localizedString) {
                         withAnimation { self.message = nil }
                     }
                     .foregroundColor(Color.preferredColor(.tintColor, background: .darkConstant))
@@ -43,6 +43,6 @@ enum BannerMessage: String {
     case failure = "Something went wrong."
 
     var localizedString: String {
-        Bundle.fioriAR.localizedString(forKey: self.rawValue)
+        self.rawValue.localizedString
     }
 }
