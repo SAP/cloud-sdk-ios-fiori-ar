@@ -14,7 +14,7 @@
 "Cards" = "Cards";
 
 /* XMIT: tab item to view and edit an anchor for a known image that ARKit detects in the physical environment */
-"Anchor Image" = "Anchor Image";
+"Image Anchor" = "Image Anchor";
 /* XFLD: informing the user that an AR annotation is positioned in the world view (aka attached to the scene) */
 "Attached" = "Attached";
 /* XFLD: informing the user that a AR annotation is not yet positioned in the world view (aka attached to the scene) */
@@ -64,7 +64,7 @@
 /* XFLD: label of input field for image anchors physical width  */
 "Width" = "Width";
 /* XMSG: instruction text on how to choose an image anchor  */
-"Tap the area below to upload the anchor image." = "Tap the area below to upload the anchor image.";
+"Tap the area below to upload the image anchor." = "Tap the area below to upload the image anchor.";
 /* XBUT: to remove an image anchor   */
 "Remove" = "Remove";
 
