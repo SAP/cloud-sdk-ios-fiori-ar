@@ -9,10 +9,15 @@ import FioriThemeManager
 import RealityKit
 import SwiftUI
 
+/// State of the guide image for the scanLabel to display for anchor detection
 public enum GuideImageState {
+    /// Retrieving the image has not yet started
     case notStarted
+    /// Retrieving the image is in progress
     case loading
+    /// Retrieving has finished with the returned associated value
     case finished(UIImage)
+    /// Retrieving the guide Image has failed
     case failure
 }
 
@@ -25,13 +30,17 @@ public struct ARScanView: View {
     
     /// Initializer
     /// - Parameters:
-    ///   - guideImage: The image that is displayed in the View which represents a detectable anchor, if the guideImage is nil a progressview will display
+    ///   - guideImage: The image that is displayed in the View which represents a detectable anchor
     ///   - anchorPosition: The position of the anchor on screen after detection
     public init(guideImage: UIImage, anchorPosition: CGPoint?) {
         self.guideImageState = .finished(guideImage)
         self.anchorPosition = anchorPosition
     }
     
+    /// Initializer
+    /// - Parameters:
+    ///   - guideImageState: The state of the image that will be displayed in the View which represents a detectable anchor, if the guideImageState is not finished a progressview will display
+    ///   - anchorPosition: The position of the anchor on screen after detection
     public init(guideImageState: GuideImageState, anchorPosition: CGPoint?) {
         self.guideImageState = guideImageState
         self.anchorPosition = anchorPosition
