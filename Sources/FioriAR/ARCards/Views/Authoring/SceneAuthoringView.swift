@@ -90,7 +90,7 @@ public struct SceneAuthoringView: View {
                 .padding(.bottom, 6)
 
             VStack(spacing: 0) {
-                TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: Bundle.fioriAR.localizedString(forKey: "Cards"), rightTabTitle: Bundle.fioriAR.localizedString(forKey: "Anchor Image"))
+                TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: Bundle.fioriAR.localizedString(forKey: "Cards"), rightTabTitle: Bundle.fioriAR.localizedString(forKey: "Image Anchor"))
                     .padding(.bottom, 16)
                     .overlay(
                         Group {

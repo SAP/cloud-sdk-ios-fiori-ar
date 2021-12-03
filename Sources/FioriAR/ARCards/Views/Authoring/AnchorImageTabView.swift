@@ -32,7 +32,7 @@ struct AnchorImageTabView: View {
                         .font(.fiori(forTextStyle: .body))
                         .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                     Button(action: { anchorImageFormPresented.toggle() }, label: {
-                        Text("Upload Anchor Image", bundle: .fioriAR)
+                        Text("Upload Image Anchor", bundle: .fioriAR)
                             .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                             .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                             .frame(width: 187, height: 40)
@@ -73,7 +73,7 @@ struct ImageAnchorView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("Anchor Image", bundle: .fioriAR)
+                Text("Image Anchor", bundle: .fioriAR)
                     .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                     .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                 Spacer()
