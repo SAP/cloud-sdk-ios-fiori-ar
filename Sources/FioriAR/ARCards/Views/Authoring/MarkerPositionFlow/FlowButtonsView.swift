@@ -22,7 +22,7 @@ struct FlowButtonsView<CardItem>: View where CardItem: CardItemModel {
                         flowState = .preview
                     }
                 }, label: {
-                    Text(flowState == .beforeDrop ? "Drop Marker" : "Preview")
+                    Text(flowState == .beforeDrop ? Bundle.fioriAR.localizedString(forKey: "Drop Marker") : Bundle.fioriAR.localizedString(forKey: "Preview"))
                         .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                         .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                         .frame(width: 343, height: 40)

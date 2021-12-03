@@ -148,7 +148,7 @@ public struct SceneAuthoringView: View {
         }
         .alert(isPresented: $isAlertPresented) {
             Alert(title: Text("Leave Page", bundle: .fioriAR),
-                  message: Text(authoringViewModel.exitMessage.rawValue),
+                  message: Text(authoringViewModel.exitMessage.localizedString),
                   primaryButton: .destructive(Text("Confirm", bundle: .fioriAR), action: {
                       dismiss()
                   }),
@@ -259,10 +259,18 @@ enum TabSelection {
 enum AttachValue: String {
     case attached = "Attached"
     case notAttached = "Not Attached"
+
+    var localizedString: String {
+        Bundle.fioriAR.localizedString(forKey: self.rawValue)
+    }
 }
 
 enum ExitMessage: String {
     case beforeCreation = "Are you sure you want to leave the page? Your changes will be lost."
     case hasRemainingAnnotations = "There are annotations that haven’t been attached yet. Are you sure you want to leave the app?"
     case lostChanges = "There are changes that haven’t been published yet. Are you sure you want to leave the app?"
+
+    var localizedString: String {
+        Bundle.fioriAR.localizedString(forKey: self.rawValue)
+    }
 }

@@ -18,7 +18,7 @@ struct BannerView: View {
                         .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant, interface: .elevatedConstant))
                         .lineLimit(2)
                     Spacer()
-                    Button("Close") {
+                    Button(Bundle.fioriAR.localizedString(forKey: "Close")) {
                         withAnimation { self.message = nil }
                     }
                     .foregroundColor(Color.preferredColor(.tintColor, background: .darkConstant))

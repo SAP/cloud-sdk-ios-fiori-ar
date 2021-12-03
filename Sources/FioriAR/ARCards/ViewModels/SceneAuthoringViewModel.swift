@@ -49,7 +49,7 @@ class SceneAuthoringModel: ObservableObject {
             }
             let newAttachmentModel = AttachmentUIMetadata(id: UUID(uuidString: card.id) ?? UUID(),
                                                           title: card.title_,
-                                                          subtitle: card.position_ == nil ? AttachValue.notAttached.rawValue : AttachValue.attached.rawValue,
+                                                          subtitle: card.position_ == nil ? AttachValue.notAttached.localizedString : AttachValue.attached.localizedString,
                                                           info: nil,
                                                           image: detailImage,
                                                           icon: card.icon_ == nil ? nil : Image(systemName: card.icon_!))

@@ -127,19 +127,19 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 sheetState = .notVisible
                 withAnimation { carouselVisible = true }
             case .editMode:
-                sheetTitle = "View Annotation"
+                sheetTitle = Bundle.fioriAR.localizedString(forKey: "View Annotation")
                 arModel.setAllMarkerState(to: .ghost)
                 sheetState = .notVisible
                 withAnimation { carouselVisible = false }
             case .selectMarker:
                 sheetState = .closed
             case .selectCard:
-                sheetTitle = "Select Annotation"
+                sheetTitle = Bundle.fioriAR.localizedString(forKey: "Select Annotation")
                 displayPagingView = true
                 arModel.setAllMarkerState(to: .notVisible)
                 sheetState = .open
             case .confirmCard:
-                sheetTitle = "Preview Annotation"
+                sheetTitle = Bundle.fioriAR.localizedString(forKey: "Preview Annotation")
                 sheetState = .open
             case .beforeDrop:
                 displayPagingView = false
@@ -147,7 +147,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 setAttachValue(cardItem: cardItem, attachValue: .attached)
                 arModel.addNewEntity(to: cardItem)
                 arModel.setMarkerState(for: cardItem, to: .world)
-                sheetTitle = "View Annotation"
+                sheetTitle = Bundle.fioriAR.localizedString(forKey: "View Annotation")
                 sheetState = .closed
             case .dropped:
                 arModel.dropEntity(for: cardItem)
@@ -319,9 +319,9 @@ private struct EditRow: View {
     func text() -> String {
         switch self.flowState {
         case .arscene:
-            return "Edit Mode"
+            return Bundle.fioriAR.localizedString(forKey: "Edit Mode")
         case .editMode, .preview:
-            return "Done"
+            return Bundle.fioriAR.localizedString(forKey: "Done")
         default:
             return ""
         }
