@@ -143,7 +143,7 @@ struct AnchorImageFormView: View {
                             }
                             Spacer()
                             if internalAnchorImage != nil {
-                                Button(Bundle.fioriAR.localizedString(forKey: "Remove")) {
+                                Button("Remove".localizedString) {
                                     withAnimation {
                                         internalAnchorImage = nil
                                     }
@@ -210,8 +210,8 @@ struct AnchorImageFormView: View {
     }
     
     func validateInput() -> Bool {
-        self.imageValidationText = self.internalAnchorImage == nil ? Bundle.fioriAR.localizedString(forKey: "Please select image.") : ""
-        self.physicalWidthValidationText = self.internalPhysicalWidth.isEmpty ? Bundle.fioriAR.localizedString(forKey: "Please input a physical width.") : Double(self.internalPhysicalWidth) == nil ? Bundle.fioriAR.localizedString(forKey: "Please input a numeric value.") : ""
+        self.imageValidationText = self.internalAnchorImage == nil ? "Please select image.".localizedString : ""
+        self.physicalWidthValidationText = self.internalPhysicalWidth.isEmpty ? "Please input a physical width.".localizedString : Double(self.internalPhysicalWidth) == nil ? "Please input a numeric value.".localizedString : ""
         return self.imageValidationText.isEmpty && self.physicalWidthValidationText.isEmpty
     }
 
@@ -230,7 +230,7 @@ struct AnchorImageFormView: View {
                         completionHandler()
                     }
                 } else {
-                    self.imageValidationText = Bundle.fioriAR.localizedString(forKey: "Upload higher-quality image.")
+                    self.imageValidationText = "Upload higher-quality image.".localizedString
                 }
             }
         }

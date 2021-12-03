@@ -127,19 +127,19 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 sheetState = .notVisible
                 withAnimation { carouselVisible = true }
             case .editMode:
-                sheetTitle = Bundle.fioriAR.localizedString(forKey: "View Annotation")
+                sheetTitle = "View Annotation".localizedString
                 arModel.setAllMarkerState(to: .ghost)
                 sheetState = .notVisible
                 withAnimation { carouselVisible = false }
             case .selectMarker:
                 sheetState = .closed
             case .selectCard:
-                sheetTitle = Bundle.fioriAR.localizedString(forKey: "Select Annotation")
+                sheetTitle = "Select Annotation".localizedString
                 displayPagingView = true
                 arModel.setAllMarkerState(to: .notVisible)
                 sheetState = .open
             case .confirmCard:
-                sheetTitle = Bundle.fioriAR.localizedString(forKey: "Preview Annotation")
+                sheetTitle = "Preview Annotation".localizedString
                 sheetState = .open
             case .beforeDrop:
                 displayPagingView = false
@@ -147,7 +147,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
                 setAttachValue(cardItem: cardItem, attachValue: .attached)
                 arModel.addNewEntity(to: cardItem)
                 arModel.setMarkerState(for: cardItem, to: .world)
-                sheetTitle = Bundle.fioriAR.localizedString(forKey: "View Annotation")
+                sheetTitle = "View Annotation".localizedString
                 sheetState = .closed
             case .dropped:
                 arModel.dropEntity(for: cardItem)
@@ -319,9 +319,9 @@ private struct EditRow: View {
     func text() -> String {
         switch self.flowState {
         case .arscene:
-            return Bundle.fioriAR.localizedString(forKey: "Edit Mode")
+            return "Edit Mode".localizedString
         case .editMode, .preview:
-            return Bundle.fioriAR.localizedString(forKey: "Done")
+            return "Done".localizedString
         default:
             return ""
         }

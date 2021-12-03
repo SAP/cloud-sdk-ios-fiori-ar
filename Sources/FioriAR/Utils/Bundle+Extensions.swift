@@ -16,3 +16,9 @@ extension Bundle {
         self.localizedString(forKey: key, value: nil, table: nil)
     }
 }
+
+extension String {
+    var localizedString: String {
+        Bundle.fioriAR.localizedString(forKey: self)
+    }
+}
