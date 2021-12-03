@@ -72,7 +72,7 @@ struct CardFormView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            TitleBarView(title: isUpdate ? title : Bundle.fioriAR.localizedString(forKey: "New Annotation"),
+            TitleBarView(title: isUpdate ? title : "New Annotation".localizedString,
                          onLeftAction: {
                              presentationMode.wrappedValue.dismiss()
                          },
@@ -211,16 +211,16 @@ private struct CardDetailsView: View {
             ScrollView {
                 ZStack {
                     VStack(spacing: 14) {
-                        TextDetail(textField: $title, titleText: Bundle.fioriAR.localizedString(forKey: "Title *"))
+                        TextDetail(textField: $title, titleText: "Title *".localizedString)
 
-                        TextDetail(textField: $subtitle, titleText: Bundle.fioriAR.localizedString(forKey: "Subtitle"))
+                        TextDetail(textField: $subtitle, titleText: "Subtitle".localizedString)
 
-                        TextDetail(textField: $actionContentText, toggle: $actionButtonToggle, titleText: Bundle.fioriAR.localizedString(forKey: "Content"), placeholder: Bundle.fioriAR.localizedString(forKey: "URL"))
+                        TextDetail(textField: $actionContentText, toggle: $actionButtonToggle, titleText: "Content".localizedString, placeholder: "URL".localizedString)
                         
-                        ToggleDetail(titleText: Bundle.fioriAR.localizedString(forKey: "Action Button"), placeholder: Bundle.fioriAR.localizedString(forKey: "Label"), textField: $actionText, isOn: $actionButtonToggle)
+                        ToggleDetail(titleText: "Action Button".localizedString, placeholder: "Label".localizedString, textField: $actionText, isOn: $actionButtonToggle)
                             .zIndex(1)
 
-                        CoverImageDetail(titleText: Bundle.fioriAR.localizedString(forKey: "Custom Cover Image"),
+                        CoverImageDetail(titleText: "Custom Cover Image".localizedString,
                                          isOn: $coverImageToggle,
                                          presentActionSheet: $actionSheetPresented,
                                          detailImage: $detailImage)
@@ -228,7 +228,7 @@ private struct CardDetailsView: View {
                         Button(action: {
                             editCardAction?()
                         }, label: {
-                            Text(isUpdate ? Bundle.fioriAR.localizedString(forKey: "Update") : Bundle.fioriAR.localizedString(forKey: "Create"))
+                            Text(isUpdate ? "Update".localizedString : "Create".localizedString)
                                 .font(.fiori(forTextStyle: .subheadline).weight(.bold))
                                 .foregroundColor(Color.preferredColor(.secondaryGroupedBackground, background: .lightConstant))
                                 .frame(width: 343, height: 40)

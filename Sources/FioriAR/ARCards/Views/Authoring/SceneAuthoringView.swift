@@ -90,7 +90,7 @@ public struct SceneAuthoringView: View {
                 .padding(.bottom, 6)
 
             VStack(spacing: 0) {
-                TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: Bundle.fioriAR.localizedString(forKey: "Cards"), rightTabTitle: Bundle.fioriAR.localizedString(forKey: "Image Anchor"))
+                TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: "Cards".localizedString, rightTabTitle: "Image Anchor".localizedString)
                     .padding(.bottom, 16)
                     .overlay(
                         Group {
@@ -104,7 +104,7 @@ public struct SceneAuthoringView: View {
 
                 switch authoringViewModel.currentTab {
                 case .left:
-                    AttachmentsView(title: Bundle.fioriAR.localizedString(forKey: "Cards"),
+                    AttachmentsView(title: "Cards".localizedString,
                                     attachmentsUIMetadata: authoringViewModel.attachmentsMetadata,
                                     onAddAttachment: { isCardCreationPresented.toggle() },
                                     onSelectAttachment: { attachmentsUIMetadata in
@@ -261,7 +261,7 @@ enum AttachValue: String {
     case notAttached = "Not Attached"
 
     var localizedString: String {
-        Bundle.fioriAR.localizedString(forKey: self.rawValue)
+        self.rawValue.localizedString
     }
 }
 
@@ -271,6 +271,6 @@ enum ExitMessage: String {
     case lostChanges = "There are changes that haven’t been published yet. Are you sure you want to leave the app?"
 
     var localizedString: String {
-        Bundle.fioriAR.localizedString(forKey: self.rawValue)
+        self.rawValue.localizedString
     }
 }
