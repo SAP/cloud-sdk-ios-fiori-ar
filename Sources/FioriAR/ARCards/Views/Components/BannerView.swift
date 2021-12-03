@@ -14,7 +14,7 @@ struct BannerView: View {
         VStack {
             if let message = message {
                 HStack {
-                    Text(message.rawValue)
+                    Text(message.localizedString)
                         .foregroundColor(Color.preferredColor(.primaryLabel, background: .darkConstant, interface: .elevatedConstant))
                         .lineLimit(2)
                     Spacer()
@@ -41,4 +41,8 @@ enum BannerMessage: String {
     case loading = "Loading..."
     case syncFinished = "Sync finished."
     case failure = "Something went wrong."
+
+    var localizedString: String {
+        Bundle.fioriAR.localizedString(forKey: self.rawValue)
+    }
 }
