@@ -230,10 +230,10 @@ struct FioriARKCardsExample: View {
 
      - Parameters:
         - arModel: The View Model which handles the logic for the AR Experience
-        - image: The image which will be displayed in the Scanning View
+        - guideImage:  image to display for anchor detection in the Scanning View, if nil then the image anchor will be used by default
         - cardAction: Card Action
     */
-        SingleImageARCardView(arModel: arModel, image: Image("qrImage"), cardAction: { id in
+        ARAnnotationsView(arModel: arModel, guideImage: Image("qrImage"), cardAction: { id in
             // action to pass to corresponding card from the CardItemModel id
         })
         .onAppear(perform: loadInitialData)

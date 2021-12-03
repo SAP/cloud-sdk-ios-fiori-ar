@@ -58,6 +58,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
     @ObservedObject public var arModel: ARAnnotationViewModel<CardItem>
     
     /// View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
+    /// Note: GuideStateImage will only return as .finished(UIImage) when using a synchronous AnnotationLoadingStrategy with a custom scanLabel ViewBuilder
     public let scanLabel: (GuideImageState, CGPoint?) -> Scan
     
     /// View Builder for a custom CardView
@@ -96,7 +97,7 @@ public struct ARAnnotationsView<Scan: View, Card: View, Marker: View, CardItem>:
             if arModel.discoveryFlowHasFinished {
                 ARAnnotationContentView(arModel, cardLabel: cardLabel, markerLabel: markerLabel)
             } else {
-                scanLabel(guideImage == nil ? arModel.guideImage : .finished(guideImage!), arModel.anchorPosition)
+                scanLabel(guideImage == nil ? arModel.guideImageState : .finished(guideImage!), arModel.anchorPosition)
             }
         }
         .edgesIgnoringSafeArea(.all)
