@@ -54,7 +54,7 @@
 
 /* XMSG: explanation text for user what an image anchor is  */
 "The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software.";
-"MyKey" = "MyValue";
+
 /* XBUT: instruction for user on how to edit an image anchor  */
 "Upload Image Anchor" = "Upload Image Anchor";
 /* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
