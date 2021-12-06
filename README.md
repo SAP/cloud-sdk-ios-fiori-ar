@@ -69,6 +69,10 @@ You can choose one of the following package products to be added to your applica
 |FioriAR|You did not already embed binary frameworks from SAP BTP SDK for iOS|
 |FioriAR-requiresToEmbedXCFrameworks|You already embedded `SAPCommon` and `SAPFoundation` binary frameworks to your target|
 
+# Migration
+
+FioriAR 2.0 is NOT fully compatible with the previous version. However, the migration is not difficult. Please follow the [migration guide](https://github.com/SAP/cloud-sdk-ios-fioriarkit/wiki/FioriAR-2.0-Migration-Guide) when you prepare to upgrade FioriAR in your project.
+
 # AR Annotations
 
 https://user-images.githubusercontent.com/77754056/121744202-2ea88c80-cac8-11eb-811d-9c9edb6423fa.mp4
