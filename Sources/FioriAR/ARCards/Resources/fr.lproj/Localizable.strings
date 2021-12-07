@@ -1,4 +1,162 @@
-"Begin Scan" = "Commencer l'analyse";
+/* XBUT: to start AR scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Scan" = "Scanner";
 
-"Point your camera at this image to start augmented reality experience" = "Dirigez votre appareil photo vers cette image pour lancer l'expérience de réalité augmentée.";
+/* XMSG: text in coaching view (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#a-coaching-view) to inform the user what to do in AR Scanner */
+"Point your camera at this image to start the AR experience" = "Dirigez votre appareil photo vers cette image pour lancer l'expérience de réalité augmentée.";
+
+/* XMSG: text shown to user while data is loading */
+"Loading..." = "Chargement en cours...";
+
+/* XBUT: send AR annotation (https://experience.sap.com/fiori-design-ios/article/ar-annotations/) related changes to remote service (SAP Mobile Services) for publication so that changes will be available for other users */
+"Publish" = "Publier";
+
+/* XMIT: tab item related to AR cards (https://experience.sap.com/fiori-design-ios/article/ar-cards/) */
+"Cards" = "Fiches";
+
+/* XMIT: tab item to view and edit an anchor for a known image that ARKit detects in the physical environment */
+"Image Anchor" = "Ancre de l'image";
+
+/* XFLD: informing the user that an AR annotation is positioned in the world view (aka attached to the scene) */
+"Attached" = "Joint";
+
+/* XFLD: informing the user that a AR annotation is not yet positioned in the world view (aka attached to the scene) */
+"Not Attached" = "Non joint";
+
+/* XBUT: to view annotations in the world view through AR Scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Go to AR Scene" = "Passer à la scène de réalité augmentée";
+
+/* XTIT: title of form in which a user can edit AR card (https://experience.sap.com/fiori-design-ios/article/ar-cards/) information */
+"Card Details" = "Détails de la fiche";
+
+/* XTIT: title of form in which user can create a new AR annotation */
+"New Annotation" = "Nouvelle annotation";
+
+/* XFLD: mandatory field to specify card's title of given AR annotation */
+"Title *" = "Titre *";
+
+/* XFLD: field to specify card's subtitle of given AR annotation */
+"Subtitle" = "Sous-titre";
+
+/* XFLD: field to specify card's content URL of given AR annotation */
+"Content" = "Contenu";
+
+/* XFLD: field to specify card's action button text of given AR annotation */
+"Action Button" = "Bouton d'action";
+
+/* XRBL: label of switch UI control to enable/disable the use of a cover image in a card */
+"Custom Cover Image" = "Image de couverture personnalisée";
+
+/* XFLD: placeholder text used in \"Content\" input field */
+"URL" = "URL";
+
+/* XFLD: placeholder text used in \"Action Button\" input field */
+"Label" = "Étiquette";
+
+/* XBUT: button text used in form in which user edits card details of given AR annotation */
+"Update" = "Mettre à jour";
+
+/* XBUT: button text used in form in which user creates new card (details) of new AR annotation */
+"Create" = "Créer";
+
+/* XMSG: title of alert presented to user if user attempts to leave page/view with unpublished changes */
+"Leave Page" = "Quitter la page";
+
+/* XBUT: button in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Confirm" = "Confirmer";
+
+/* XMSG: instruction for user on how to edit an image anchor */
+"Tap the image to edit it." = "Touchez l'image pour la modifier.";
+
+/* XMSG: explanation text for user what an image anchor is */
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "L'ancre fonctionne avec une image réelle que le logiciel utilise pour positionner des marqueurs par rapport à l'ancre. Sélectionnez une image que le logiciel peut reconnaître.";
+
+/* XBUT: instruction for user on how to edit an image anchor */
+"Upload Image Anchor" = "Charger une ancre d'image";
+
+/* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
+"Dimension" = "Dimension";
+
+/* XFLD: explanation text what kind of width is needed */
+"Enter the width of the real-world image." = "Indiquez la largeur de l'image réelle.";
+
+/* XFLD: label of input field for image anchors physical width */
+"Width" = "Largeur";
+
+/* XMSG: instruction text on how to choose an image anchor */
+"Tap the area below to upload the image anchor." = "Touchez la zone ci-dessous pour charger l'ancre de l'image.";
+
+/* XBUT: to remove an image anchor */
+"Remove" = "Supprimer";
+
+/* XMSG: shown in case image quality was too bad */
+"Upload higher-quality image." = "Chargez une image de meilleure qualité.";
+
+/* XMSG: shown in case image is needed */
+"Please select image." = "Veuillez sélectionner une image.";
+
+/* XMSG: shown in case width is needed */
+"Please input a physical width." = "Veuillez saisir une largeur physique.";
+
+/* XMSG: shown in case input value needs to be numeric */
+"Please input a numeric value." = "Veuillez saisir une valeur numérique.";
+
+/* XBUT: to switch into edit mode of current view */
+"Edit Mode" = "Mode de modification";
+
+/* XBUT: to indicate changes are done and to finish/exit the edit mode of current view (data are not yet saved) */
+"Done" = "Terminé";
+
+/* XBUT: to go to next step */
+"Next" = "Suivant";
+
+/* XBUT: to drop AR marker (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-marker) in world view in order to lock-in the position of AR annotation relative to the image anchor */
+"Drop Marker" = "Déposer le marqueur";
+
+/* XBUT: to preview AR annotations in world view */
+"Preview" = "Prévisualiser";
+
+/* XTIT: title in form listing AR annotations to position in world view */
+"Select Annotation" = "Sélectionner une annotation";
+
+/* XTIT: title in form previewing a specific AR annotation and its card */
+"Preview Annotation" = "Prévisualiser l'annotation";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"View Annotation" = "Afficher l'annotation";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"Attach Annotation" = "Joindre l'annotation";
+
+/* MSG: to choose an option from action menu */
+"Choose an Option" = "Choisir une option";
+
+/* XBUT: to invoke camera of device (phone/ipad) */
+"Camera" = "Appareil photo";
+
+/* XBUT: to invoke photo library of device (phone/ipad) */
+"Photos" = "Photos";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Are you sure you want to leave the page? Your changes will be lost." = "Voulez-vous vraiment quitter la page ? Vos modifications seront perdues.";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "Des annotations n'ont pas encore été jointes. Voulez-vous vraiment quitter l'application ?";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "Des modifications n'ont pas encore été publiées. Voulez-vous vraiment quitter l'application ?";
+
+/* XMSG: success message once all information for a given AR scene were loaded */
+"Sync finished." = "Synchronisation terminée.";
+
+/* XMSG: error message in case changes were not published due to an unknown error */
+"Something went wrong." = "Une erreur s'est produite.";
+
+/* XMSG: success message once changes for existing AR scene were published */
+"Scene update is successfully published." = "La mise à jour de la scène a été correctement publiée.";
+
+/* XMSG: success message when new AR annotation ((https://experience.sap.com/fiori-design-ios/article/ar-annotations/)) was created */
+"A new annotation card is created." = "Une nouvelle fiche d'annotation a été créée.";
+
+/* XBUT: to close a dialog / form */
+"Close" = "Fermer";
 

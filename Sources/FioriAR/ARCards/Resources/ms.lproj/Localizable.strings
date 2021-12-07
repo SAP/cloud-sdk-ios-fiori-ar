@@ -1,4 +1,162 @@
-"Begin Scan" = "Mulakan Imbasan";
+/* XBUT: to start AR scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Scan" = "Imbas";
 
-"Point your camera at this image to start augmented reality experience" = "Arahkan kamera anda pada gambar ini untuk memulakan pengalaman realiti terimbuh";
+/* XMSG: text in coaching view (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#a-coaching-view) to inform the user what to do in AR Scanner */
+"Point your camera at this image to start the AR experience" = "Arahkan kamera anda pada gambar ini untuk memulakan pengalaman AR";
+
+/* XMSG: text shown to user while data is loading */
+"Loading..." = "Memuat...";
+
+/* XBUT: send AR annotation (https://experience.sap.com/fiori-design-ios/article/ar-annotations/) related changes to remote service (SAP Mobile Services) for publication so that changes will be available for other users */
+"Publish" = "Menerbitkan";
+
+/* XMIT: tab item related to AR cards (https://experience.sap.com/fiori-design-ios/article/ar-cards/) */
+"Cards" = "Kad";
+
+/* XMIT: tab item to view and edit an anchor for a known image that ARKit detects in the physical environment */
+"Image Anchor" = "Penambat Imej";
+
+/* XFLD: informing the user that an AR annotation is positioned in the world view (aka attached to the scene) */
+"Attached" = "Dilampirkan";
+
+/* XFLD: informing the user that a AR annotation is not yet positioned in the world view (aka attached to the scene) */
+"Not Attached" = "Tidak Dilampirkan";
+
+/* XBUT: to view annotations in the world view through AR Scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Go to AR Scene" = "Pergi ke Adegan AR";
+
+/* XTIT: title of form in which a user can edit AR card (https://experience.sap.com/fiori-design-ios/article/ar-cards/) information */
+"Card Details" = "Butiran Kad";
+
+/* XTIT: title of form in which user can create a new AR annotation */
+"New Annotation" = "Anotasi Baharu";
+
+/* XFLD: mandatory field to specify card's title of given AR annotation */
+"Title *" = "Tajuk *";
+
+/* XFLD: field to specify card's subtitle of given AR annotation */
+"Subtitle" = "Subtajuk";
+
+/* XFLD: field to specify card's content URL of given AR annotation */
+"Content" = "Kandungan";
+
+/* XFLD: field to specify card's action button text of given AR annotation */
+"Action Button" = "Butang Tindakan";
+
+/* XRBL: label of switch UI control to enable/disable the use of a cover image in a card */
+"Custom Cover Image" = "Imej Hadapan Tersuai";
+
+/* XFLD: placeholder text used in \"Content\" input field */
+"URL" = "URL";
+
+/* XFLD: placeholder text used in \"Action Button\" input field */
+"Label" = "Label";
+
+/* XBUT: button text used in form in which user edits card details of given AR annotation */
+"Update" = "Kemas kini";
+
+/* XBUT: button text used in form in which user creates new card (details) of new AR annotation */
+"Create" = "Cipta";
+
+/* XMSG: title of alert presented to user if user attempts to leave page/view with unpublished changes */
+"Leave Page" = "Tinggalkan Halaman";
+
+/* XBUT: button in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Confirm" = "Sahkan";
+
+/* XMSG: instruction for user on how to edit an image anchor */
+"Tap the image to edit it." = "Ketik imej untuk mengeditnya.";
+
+/* XMSG: explanation text for user what an image anchor is */
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "Penambat ialah imej dalam dunia nyata yang perisian gunakan untuk meletakkan penanda berkaitan penambat. Pilih imej yang boleh dikenal pasti perisian.";
+
+/* XBUT: instruction for user on how to edit an image anchor */
+"Upload Image Anchor" = "Muat Naik Penambat Imej";
+
+/* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
+"Dimension" = "Dimensi";
+
+/* XFLD: explanation text what kind of width is needed */
+"Enter the width of the real-world image." = "Masukkan lebar imej dunia nyata.";
+
+/* XFLD: label of input field for image anchors physical width */
+"Width" = "Lebar";
+
+/* XMSG: instruction text on how to choose an image anchor */
+"Tap the area below to upload the image anchor." = "Ketik kawasan di bawah untuk memuat naik penambat imej.";
+
+/* XBUT: to remove an image anchor */
+"Remove" = "Keluarkan";
+
+/* XMSG: shown in case image quality was too bad */
+"Upload higher-quality image." = "Muat naik imej berkualiti lebih tinggi.";
+
+/* XMSG: shown in case image is needed */
+"Please select image." = "Sila pilih imej.";
+
+/* XMSG: shown in case width is needed */
+"Please input a physical width." = "Sila masukkan lebar fizikal.";
+
+/* XMSG: shown in case input value needs to be numeric */
+"Please input a numeric value." = "Sila masukkan nilai berangka.";
+
+/* XBUT: to switch into edit mode of current view */
+"Edit Mode" = "Mod Edit";
+
+/* XBUT: to indicate changes are done and to finish/exit the edit mode of current view (data are not yet saved) */
+"Done" = "Selesai";
+
+/* XBUT: to go to next step */
+"Next" = "Seterusnya";
+
+/* XBUT: to drop AR marker (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-marker) in world view in order to lock-in the position of AR annotation relative to the image anchor */
+"Drop Marker" = "Lepaskan Penanda";
+
+/* XBUT: to preview AR annotations in world view */
+"Preview" = "Pratonton";
+
+/* XTIT: title in form listing AR annotations to position in world view */
+"Select Annotation" = "Pilih Anotasi";
+
+/* XTIT: title in form previewing a specific AR annotation and its card */
+"Preview Annotation" = "Pratonton Anotasi";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"View Annotation" = "Paparkan Anotasi";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"Attach Annotation" = "Lampirkan Anotasi";
+
+/* MSG: to choose an option from action menu */
+"Choose an Option" = "Pilih Pilihan";
+
+/* XBUT: to invoke camera of device (phone/ipad) */
+"Camera" = "Kamera";
+
+/* XBUT: to invoke photo library of device (phone/ipad) */
+"Photos" = "Foto";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Are you sure you want to leave the page? Your changes will be lost." = "Adakah anda pasti ingin tinggalkan halaman? Perubahan anda akan hilang.";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "Terdapat anotasi yang belum dilampirkan. Adakah anda pasti ingin tinggalkan aplikasi?";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "Terdapat perubahan yang belum diterbitkan. Adakah anda pasti ingin tinggalkan aplikasi?";
+
+/* XMSG: success message once all information for a given AR scene were loaded */
+"Sync finished." = "Penyegerakan selesai.";
+
+/* XMSG: error message in case changes were not published due to an unknown error */
+"Something went wrong." = "Sesuatu yang tidak kena berlaku.";
+
+/* XMSG: success message once changes for existing AR scene were published */
+"Scene update is successfully published." = "Kemas kini adegan berjaya diterbitkan.";
+
+/* XMSG: success message when new AR annotation ((https://experience.sap.com/fiori-design-ios/article/ar-annotations/)) was created */
+"A new annotation card is created." = "Kad anotasi baharu dicipta.";
+
+/* XBUT: to close a dialog / form */
+"Close" = "Tutup";
 
