@@ -1,4 +1,162 @@
-"Begin Scan" = "เริ่มสแกน";
+/* XBUT: to start AR scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Scan" = "สแกน";
 
-"Point your camera at this image to start augmented reality experience" = "เล็งกล้องไปที่รูปภาพนี้เพื่อเริ่มต้นประสบการณ์ใช้งานความเป็นจริงเสริม";
+/* XMSG: text in coaching view (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#a-coaching-view) to inform the user what to do in AR Scanner */
+"Point your camera at this image to start the AR experience" = "เล็งกล้องไปที่รูปภาพนี้เพื่อเริ่มต้นประสบการณ์ใช้งาน AR";
+
+/* XMSG: text shown to user while data is loading */
+"Loading..." = "กำลังโหลด...";
+
+/* XBUT: send AR annotation (https://experience.sap.com/fiori-design-ios/article/ar-annotations/) related changes to remote service (SAP Mobile Services) for publication so that changes will be available for other users */
+"Publish" = "เผยแพร่";
+
+/* XMIT: tab item related to AR cards (https://experience.sap.com/fiori-design-ios/article/ar-cards/) */
+"Cards" = "บัตร";
+
+/* XMIT: tab item to view and edit an anchor for a known image that ARKit detects in the physical environment */
+"Image Anchor" = "จุดยึดรูปภาพ";
+
+/* XFLD: informing the user that an AR annotation is positioned in the world view (aka attached to the scene) */
+"Attached" = "แนบมา";
+
+/* XFLD: informing the user that a AR annotation is not yet positioned in the world view (aka attached to the scene) */
+"Not Attached" = "ไม่ได้แนบมา";
+
+/* XBUT: to view annotations in the world view through AR Scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Go to AR Scene" = "ไปที่ฉาก AR";
+
+/* XTIT: title of form in which a user can edit AR card (https://experience.sap.com/fiori-design-ios/article/ar-cards/) information */
+"Card Details" = "รายละเอียดของบัตร";
+
+/* XTIT: title of form in which user can create a new AR annotation */
+"New Annotation" = "คำอธิบายประกอบใหม่";
+
+/* XFLD: mandatory field to specify card's title of given AR annotation */
+"Title *" = "ชื่อ *";
+
+/* XFLD: field to specify card's subtitle of given AR annotation */
+"Subtitle" = "ชื่อรอง";
+
+/* XFLD: field to specify card's content URL of given AR annotation */
+"Content" = "เนื้อหา";
+
+/* XFLD: field to specify card's action button text of given AR annotation */
+"Action Button" = "ปุ่มการดำเนินการ";
+
+/* XRBL: label of switch UI control to enable/disable the use of a cover image in a card */
+"Custom Cover Image" = "รูปภาพหน้าปกที่ปรับแต่งได้";
+
+/* XFLD: placeholder text used in \"Content\" input field */
+"URL" = "URL";
+
+/* XFLD: placeholder text used in \"Action Button\" input field */
+"Label" = "ป้ายชื่อ";
+
+/* XBUT: button text used in form in which user edits card details of given AR annotation */
+"Update" = "อัพเดท";
+
+/* XBUT: button text used in form in which user creates new card (details) of new AR annotation */
+"Create" = "สร้าง";
+
+/* XMSG: title of alert presented to user if user attempts to leave page/view with unpublished changes */
+"Leave Page" = "ออกจากหน้า";
+
+/* XBUT: button in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Confirm" = "ยืนยัน";
+
+/* XMSG: instruction for user on how to edit an image anchor */
+"Tap the image to edit it." = "แตะรูปภาพเพื่อแก้ไข";
+
+/* XMSG: explanation text for user what an image anchor is */
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "จุดยึดเป็นรูปภาพตามความเป็นจริงที่ซอฟต์แวร์ใช้เพื่อวางเครื่องหมายที่สัมพันธ์กับจุดยึด เลือกรูปภาพที่ซอฟต์แวร์สามารถจดจำได้ ";
+
+/* XBUT: instruction for user on how to edit an image anchor */
+"Upload Image Anchor" = "อัพโหลดจุดยึดรูปภาพ";
+
+/* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
+"Dimension" = "ขนาด";
+
+/* XFLD: explanation text what kind of width is needed */
+"Enter the width of the real-world image." = "ป้อนความกว้างของรูปภาพตามความเป็นจริง";
+
+/* XFLD: label of input field for image anchors physical width */
+"Width" = "ความกว้าง";
+
+/* XMSG: instruction text on how to choose an image anchor */
+"Tap the area below to upload the image anchor." = "แตะพื้นที่ด้านล่างเพื่ออัพโหลดจุดยึดรูปภาพ";
+
+/* XBUT: to remove an image anchor */
+"Remove" = "ย้ายออก";
+
+/* XMSG: shown in case image quality was too bad */
+"Upload higher-quality image." = "อัพโหลดรูปภาพที่มีคุณภาพสูง";
+
+/* XMSG: shown in case image is needed */
+"Please select image." = "กรุณาเลือกรูปภาพ";
+
+/* XMSG: shown in case width is needed */
+"Please input a physical width." = "กรุณาป้อนความกว้างตามจริง";
+
+/* XMSG: shown in case input value needs to be numeric */
+"Please input a numeric value." = "กรุณาป้อนค่าตัวเลข";
+
+/* XBUT: to switch into edit mode of current view */
+"Edit Mode" = "โหมดแก้ไข";
+
+/* XBUT: to indicate changes are done and to finish/exit the edit mode of current view (data are not yet saved) */
+"Done" = "เสร็จสิ้น";
+
+/* XBUT: to go to next step */
+"Next" = "ถัดไป";
+
+/* XBUT: to drop AR marker (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-marker) in world view in order to lock-in the position of AR annotation relative to the image anchor */
+"Drop Marker" = "วางเครื่องหมาย";
+
+/* XBUT: to preview AR annotations in world view */
+"Preview" = "แสดงตัวอย่าง";
+
+/* XTIT: title in form listing AR annotations to position in world view */
+"Select Annotation" = "เลือกคำอธิบายประกอบ";
+
+/* XTIT: title in form previewing a specific AR annotation and its card */
+"Preview Annotation" = "แสดงตัวอย่างคำอธิบายประกอบ";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"View Annotation" = "ดูคำอธิบายประกอบ";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"Attach Annotation" = "แนบคำอธิบายประกอบ";
+
+/* MSG: to choose an option from action menu */
+"Choose an Option" = "เลือกตัวเลือก";
+
+/* XBUT: to invoke camera of device (phone/ipad) */
+"Camera" = "กล้อง";
+
+/* XBUT: to invoke photo library of device (phone/ipad) */
+"Photos" = "รูปถ่าย";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Are you sure you want to leave the page? Your changes will be lost." = "คุณแน่ใจหรือไม่ว่าต้องการออกจากหน้านี้? การเปลี่ยนแปลงของคุณจะสูญหาย ";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "มีคำอธิบายประกอบที่ยังไม่ได้แนบ คุณแน่ใจหรือไม่ว่าต้องการออกจากแอพ? ";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "มีคำอธิบายประกอบที่ยังไม่ได้เผยแพร่ คุณแน่ใจหรือไม่ว่าต้องการออกจากแอพ?";
+
+/* XMSG: success message once all information for a given AR scene were loaded */
+"Sync finished." = "การซิงค์เสร็จสิ้นแล้ว";
+
+/* XMSG: error message in case changes were not published due to an unknown error */
+"Something went wrong." = "มีบางอย่างผิดปกติ";
+
+/* XMSG: success message once changes for existing AR scene were published */
+"Scene update is successfully published." = "เผยแพร่การอัพเดทฉากสำเร็จแล้ว";
+
+/* XMSG: success message when new AR annotation ((https://experience.sap.com/fiori-design-ios/article/ar-annotations/)) was created */
+"A new annotation card is created." = "บัตรคำอธิบายประกอบใหม่ถูกสร้างขึ้น";
+
+/* XBUT: to close a dialog / form */
+"Close" = "ปิด";
 

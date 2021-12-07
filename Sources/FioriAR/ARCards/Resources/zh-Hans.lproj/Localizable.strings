@@ -1,4 +1,162 @@
-"Begin Scan" = "开始扫描";
+/* XBUT: to start AR scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Scan" = "扫描";
 
-"Point your camera at this image to start augmented reality experience" = "将您的照相机指向此图像以开始增强现实体验";
+/* XMSG: text in coaching view (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#a-coaching-view) to inform the user what to do in AR Scanner */
+"Point your camera at this image to start the AR experience" = "将您的照相机指向此图像以开始 AR 体验";
+
+/* XMSG: text shown to user while data is loading */
+"Loading..." = "正在加载...";
+
+/* XBUT: send AR annotation (https://experience.sap.com/fiori-design-ios/article/ar-annotations/) related changes to remote service (SAP Mobile Services) for publication so that changes will be available for other users */
+"Publish" = "发布";
+
+/* XMIT: tab item related to AR cards (https://experience.sap.com/fiori-design-ios/article/ar-cards/) */
+"Cards" = "卡";
+
+/* XMIT: tab item to view and edit an anchor for a known image that ARKit detects in the physical environment */
+"Image Anchor" = "图像固定点";
+
+/* XFLD: informing the user that an AR annotation is positioned in the world view (aka attached to the scene) */
+"Attached" = "已附加";
+
+/* XFLD: informing the user that a AR annotation is not yet positioned in the world view (aka attached to the scene) */
+"Not Attached" = "未附加";
+
+/* XBUT: to view annotations in the world view through AR Scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Go to AR Scene" = "转到 AR 场景";
+
+/* XTIT: title of form in which a user can edit AR card (https://experience.sap.com/fiori-design-ios/article/ar-cards/) information */
+"Card Details" = "卡详细信息";
+
+/* XTIT: title of form in which user can create a new AR annotation */
+"New Annotation" = "新注释";
+
+/* XFLD: mandatory field to specify card's title of given AR annotation */
+"Title *" = "标题*";
+
+/* XFLD: field to specify card's subtitle of given AR annotation */
+"Subtitle" = "副标题";
+
+/* XFLD: field to specify card's content URL of given AR annotation */
+"Content" = "内容";
+
+/* XFLD: field to specify card's action button text of given AR annotation */
+"Action Button" = "操作按钮";
+
+/* XRBL: label of switch UI control to enable/disable the use of a cover image in a card */
+"Custom Cover Image" = "自定义封面图像";
+
+/* XFLD: placeholder text used in \"Content\" input field */
+"URL" = "URL";
+
+/* XFLD: placeholder text used in \"Action Button\" input field */
+"Label" = "标签";
+
+/* XBUT: button text used in form in which user edits card details of given AR annotation */
+"Update" = "更新";
+
+/* XBUT: button text used in form in which user creates new card (details) of new AR annotation */
+"Create" = "创建";
+
+/* XMSG: title of alert presented to user if user attempts to leave page/view with unpublished changes */
+"Leave Page" = "离开页面";
+
+/* XBUT: button in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Confirm" = "确认";
+
+/* XMSG: instruction for user on how to edit an image anchor */
+"Tap the image to edit it." = "轻按图像以编辑。";
+
+/* XMSG: explanation text for user what an image anchor is */
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "固定点是现实世界中的图像，软件使用它来放置与固定点相关的标记。选择软件可以识别的图像。";
+
+/* XBUT: instruction for user on how to edit an image anchor */
+"Upload Image Anchor" = "上载图像固定点";
+
+/* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
+"Dimension" = "维度";
+
+/* XFLD: explanation text what kind of width is needed */
+"Enter the width of the real-world image." = "输入现实世界图像的宽度。";
+
+/* XFLD: label of input field for image anchors physical width */
+"Width" = "宽度";
+
+/* XMSG: instruction text on how to choose an image anchor */
+"Tap the area below to upload the image anchor." = "轻按以下区域以上载图像固定点。";
+
+/* XBUT: to remove an image anchor */
+"Remove" = "移除";
+
+/* XMSG: shown in case image quality was too bad */
+"Upload higher-quality image." = "上载更高质量的图像。";
+
+/* XMSG: shown in case image is needed */
+"Please select image." = "请选择图像。";
+
+/* XMSG: shown in case width is needed */
+"Please input a physical width." = "请输入实际宽度。";
+
+/* XMSG: shown in case input value needs to be numeric */
+"Please input a numeric value." = "请输入数字值。";
+
+/* XBUT: to switch into edit mode of current view */
+"Edit Mode" = "编辑模式";
+
+/* XBUT: to indicate changes are done and to finish/exit the edit mode of current view (data are not yet saved) */
+"Done" = "完成";
+
+/* XBUT: to go to next step */
+"Next" = "下一步";
+
+/* XBUT: to drop AR marker (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-marker) in world view in order to lock-in the position of AR annotation relative to the image anchor */
+"Drop Marker" = "放置标记";
+
+/* XBUT: to preview AR annotations in world view */
+"Preview" = "预览";
+
+/* XTIT: title in form listing AR annotations to position in world view */
+"Select Annotation" = "选择注释";
+
+/* XTIT: title in form previewing a specific AR annotation and its card */
+"Preview Annotation" = "预览注释";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"View Annotation" = "查看注释";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"Attach Annotation" = "附加注释";
+
+/* MSG: to choose an option from action menu */
+"Choose an Option" = "选择选项";
+
+/* XBUT: to invoke camera of device (phone/ipad) */
+"Camera" = "照相机";
+
+/* XBUT: to invoke photo library of device (phone/ipad) */
+"Photos" = "照片";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Are you sure you want to leave the page? Your changes will be lost." = "是否确定要离开页面？您的更改将丢失。";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "存在尚未附加的注释。是否确定要离开应用？";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "存在尚未发布的更改。是否确定要离开应用？";
+
+/* XMSG: success message once all information for a given AR scene were loaded */
+"Sync finished." = "同步已完成。";
+
+/* XMSG: error message in case changes were not published due to an unknown error */
+"Something went wrong." = "出现一些错误。";
+
+/* XMSG: success message once changes for existing AR scene were published */
+"Scene update is successfully published." = "场景更新已成功发布。";
+
+/* XMSG: success message when new AR annotation ((https://experience.sap.com/fiori-design-ios/article/ar-annotations/)) was created */
+"A new annotation card is created." = "已创建新注释卡。";
+
+/* XBUT: to close a dialog / form */
+"Close" = "关闭";
 
