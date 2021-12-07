@@ -1,4 +1,162 @@
-"Begin Scan" = "스캔 시작";
+/* XBUT: to start AR scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Scan" = "스캔";
 
-"Point your camera at this image to start augmented reality experience" = "이 이미지를 카메라로 가리켜서 증강 현실 체험을 시작합니다.";
+/* XMSG: text in coaching view (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#a-coaching-view) to inform the user what to do in AR Scanner */
+"Point your camera at this image to start the AR experience" = "AR 체험을 시작하려면 이 이미지를 카메라로 가리키십시오.";
+
+/* XMSG: text shown to user while data is loading */
+"Loading..." = "로드하는 중...";
+
+/* XBUT: send AR annotation (https://experience.sap.com/fiori-design-ios/article/ar-annotations/) related changes to remote service (SAP Mobile Services) for publication so that changes will be available for other users */
+"Publish" = "게시";
+
+/* XMIT: tab item related to AR cards (https://experience.sap.com/fiori-design-ios/article/ar-cards/) */
+"Cards" = "카드";
+
+/* XMIT: tab item to view and edit an anchor for a known image that ARKit detects in the physical environment */
+"Image Anchor" = "이미지 앵커";
+
+/* XFLD: informing the user that an AR annotation is positioned in the world view (aka attached to the scene) */
+"Attached" = "첨부됨";
+
+/* XFLD: informing the user that a AR annotation is not yet positioned in the world view (aka attached to the scene) */
+"Not Attached" = "첨부되지 않음";
+
+/* XBUT: to view annotations in the world view through AR Scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Go to AR Scene" = "AR 장면으로 이동";
+
+/* XTIT: title of form in which a user can edit AR card (https://experience.sap.com/fiori-design-ios/article/ar-cards/) information */
+"Card Details" = "카드 세부사항";
+
+/* XTIT: title of form in which user can create a new AR annotation */
+"New Annotation" = "신규 주석";
+
+/* XFLD: mandatory field to specify card's title of given AR annotation */
+"Title *" = "제목 *";
+
+/* XFLD: field to specify card's subtitle of given AR annotation */
+"Subtitle" = "부제목";
+
+/* XFLD: field to specify card's content URL of given AR annotation */
+"Content" = "컨텐트";
+
+/* XFLD: field to specify card's action button text of given AR annotation */
+"Action Button" = "액션 버튼";
+
+/* XRBL: label of switch UI control to enable/disable the use of a cover image in a card */
+"Custom Cover Image" = "사용자 정의 커버 이미지";
+
+/* XFLD: placeholder text used in \"Content\" input field */
+"URL" = "URL";
+
+/* XFLD: placeholder text used in \"Action Button\" input field */
+"Label" = "레이블";
+
+/* XBUT: button text used in form in which user edits card details of given AR annotation */
+"Update" = "업데이트";
+
+/* XBUT: button text used in form in which user creates new card (details) of new AR annotation */
+"Create" = "생성";
+
+/* XMSG: title of alert presented to user if user attempts to leave page/view with unpublished changes */
+"Leave Page" = "페이지 닫기";
+
+/* XBUT: button in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Confirm" = "확인";
+
+/* XMSG: instruction for user on how to edit an image anchor */
+"Tap the image to edit it." = "이미지를 편집하려면 해당 이미지를 누르십시오.";
+
+/* XMSG: explanation text for user what an image anchor is */
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "앵커는 실제 환경에서의 이미지로서, 소프트웨어가 앵커와 관련하여 마커를 배치할 때 사용됩니다. 소프트웨어가 인식할 수 있는 이미지를 선택하십시오.";
+
+/* XBUT: instruction for user on how to edit an image anchor */
+"Upload Image Anchor" = "이미지 앵커 업로드";
+
+/* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
+"Dimension" = "차원";
+
+/* XFLD: explanation text what kind of width is needed */
+"Enter the width of the real-world image." = "실제 환경 이미지 너비를 입력하십시오.";
+
+/* XFLD: label of input field for image anchors physical width */
+"Width" = "너비";
+
+/* XMSG: instruction text on how to choose an image anchor */
+"Tap the area below to upload the image anchor." = "이미지 앵커를 업로드하려면 아래 영역을 누르십시오.";
+
+/* XBUT: to remove an image anchor */
+"Remove" = "제거";
+
+/* XMSG: shown in case image quality was too bad */
+"Upload higher-quality image." = "더 고품질인 이미지를 업로드하십시오.";
+
+/* XMSG: shown in case image is needed */
+"Please select image." = "이미지를 선택하십시오.";
+
+/* XMSG: shown in case width is needed */
+"Please input a physical width." = "실제 너비를 입력하십시오.";
+
+/* XMSG: shown in case input value needs to be numeric */
+"Please input a numeric value." = "숫자 값을 입력하십시오.";
+
+/* XBUT: to switch into edit mode of current view */
+"Edit Mode" = "편집 모드";
+
+/* XBUT: to indicate changes are done and to finish/exit the edit mode of current view (data are not yet saved) */
+"Done" = "완료";
+
+/* XBUT: to go to next step */
+"Next" = "다음";
+
+/* XBUT: to drop AR marker (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-marker) in world view in order to lock-in the position of AR annotation relative to the image anchor */
+"Drop Marker" = "마커 드롭";
+
+/* XBUT: to preview AR annotations in world view */
+"Preview" = "미리보기";
+
+/* XTIT: title in form listing AR annotations to position in world view */
+"Select Annotation" = "주석 선택";
+
+/* XTIT: title in form previewing a specific AR annotation and its card */
+"Preview Annotation" = "주석 미리보기";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"View Annotation" = "주석 보기";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"Attach Annotation" = "주석 첨부";
+
+/* MSG: to choose an option from action menu */
+"Choose an Option" = "옵션 선택";
+
+/* XBUT: to invoke camera of device (phone/ipad) */
+"Camera" = "카메라";
+
+/* XBUT: to invoke photo library of device (phone/ipad) */
+"Photos" = "사진";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Are you sure you want to leave the page? Your changes will be lost." = "페이지를 종료하시겠습니까? 변경 내용을 잃게 됩니다.";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "아직 첨부되지 않은 주석이 있습니다. 앱을 종료하시겠습니까?";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "아직 게시되지 않은 변경 내용이 있습니다. 앱을 종료하시겠습니까?";
+
+/* XMSG: success message once all information for a given AR scene were loaded */
+"Sync finished." = "동기화가 완료되었습니다.";
+
+/* XMSG: error message in case changes were not published due to an unknown error */
+"Something went wrong." = "문제가 발생했습니다.";
+
+/* XMSG: success message once changes for existing AR scene were published */
+"Scene update is successfully published." = "장면 업데이트가 게시되었습니다.";
+
+/* XMSG: success message when new AR annotation ((https://experience.sap.com/fiori-design-ios/article/ar-annotations/)) was created */
+"A new annotation card is created." = "신규 주석 카드가 생성되었습니다.";
+
+/* XBUT: to close a dialog / form */
+"Close" = "닫기";
 
