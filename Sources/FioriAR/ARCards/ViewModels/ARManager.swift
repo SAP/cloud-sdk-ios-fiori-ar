@@ -13,16 +13,16 @@ import SwiftUI
 /// Stores and manages common functional for the ARView
 public class ARManager {
     internal var arView: ARView?
-    
+
     /// The Root Entity with the entities that back the real world positions of the Annotations as children
     public var sceneRoot: Entity?
-    
+
     var worldMap: ARWorldMap?
     var referenceImages: Set<ARReferenceImage> = []
     var detectionObjects: Set<ARReferenceObject> = []
     var onSceneUpate: ((SceneEvents.Update) -> Void)?
     var subscription: Cancellable!
-    
+
     private var draggedEntityLatestPosition: CGPoint?
     private var draggedEntity: Entity?
 
@@ -34,7 +34,7 @@ public class ARManager {
     internal init(canBeFatal: Bool) {
         self.setup(canBeFatal: canBeFatal)
     }
-    
+
     internal func setup(canBeFatal: Bool = true) {
         self.arView = ARView(frame: .zero)
 
@@ -52,28 +52,28 @@ public class ARManager {
         }
         self.addDepthDragGesture()
     }
-    
+
     /// Cleans up the arView which is necessary for SwiftUI navigation
     internal func tearDown() {
         self.arView = nil
         self.subscription = nil
         self.onSceneUpate = nil
     }
-    
+
     internal func removeRoot() {
         self.sceneRoot?.removeFromParent()
         self.sceneRoot = nil
     }
-    
+
     /// Set the configuration for the ARView's session with run options
     public func configureSession(with configuration: ARConfiguration = ARWorldTrackingConfiguration(), options: ARSession.RunOptions = []) throws {
         #if !targetEnvironment(simulator)
             self.arView?.session.run(configuration, options: options)
         #else
-            throw ARManagerError.fioriARKitDoesNotSupportSimulatorError
+            throw ARManagerError.fioriARDoesNotSupportSimulatorError
         #endif
     }
-    
+
     /// Set the session for automatic configuration
     public func setAutomaticConfiguration() {
         #if !targetEnvironment(simulator)
@@ -94,7 +94,7 @@ public class ARManager {
             self.addAnchor(anchor: anchorEntity)
         #endif
     }
-    
+
     // An image should use world tracking so we set the configuration to prevent automatic switching to Image Tracking
     // Object Detection inherently uses world tracking so an automatic configuration can be used
     internal func setupScene(anchorImage: UIImage?, physicalWidth: CGFloat?, scene: HasAnchoring) throws {
@@ -112,7 +112,7 @@ public class ARManager {
             }
         #endif
     }
-    
+
     internal func resetAnchorImages() {
         #if !targetEnvironment(simulator)
             if let worldConfig = arView?.session.configuration as? ARWorldTrackingConfiguration {
@@ -122,7 +122,7 @@ public class ARManager {
             }
         #endif
     }
-    
+
     /// Adds the given entity which conforms to `HasCollision` as a child of the sceneRoot
     /// HasCollision is internally required for entities to have a touch gesture applied for interaction
     public func addChild(for entity: HasCollision, preservingWorldTransform: Bool = false) {
@@ -134,17 +134,17 @@ public class ARManager {
     public func addAnchor(anchor: HasAnchoring) {
         self.arView?.scene.addAnchor(anchor)
     }
-    
+
     /// Removes the specified HasAnchoring from the scene
     public func removeAnchor(anchor: HasAnchoring) {
         self.arView?.scene.removeAnchor(anchor)
     }
-    
+
     /// Finds Entity in the scene from the given name, returns nil if the entity does not exist in the scene
     public func findEntity(named: String) -> Entity? {
         self.arView?.scene.findEntity(named: named)
     }
-    
+
     internal func removeEntityGestures() {
         self.arView?
             .gestureRecognizers?
@@ -170,14 +170,14 @@ public class ARManager {
             do { try self.configureSession(with: imageConfig) } catch { print(error.localizedDescription) }
         }
     }
-    
+
     private func createReferenceImage(_ uiImage: UIImage, _ name: String? = nil, _ physicalWidth: CGFloat) -> ARReferenceImage? {
         guard let cgImage = createCGImage(uiImage: uiImage) else { return nil }
         let image = ARReferenceImage(cgImage, orientation: .up, physicalWidth: physicalWidth)
         image.name = name
         return image
     }
-    
+
     private func createCGImage(uiImage: UIImage) -> CGImage? {
         guard let ciImage = CIImage(image: uiImage) else { return nil }
         let context = CIContext(options: nil)
@@ -210,7 +210,7 @@ private extension ARManager {
             }
         }
     }
-    
+
     func addDepthDragGesture() {
         let pr = UIPanGestureRecognizer(target: self, action: #selector(self.calculateEntityDepthOnDrag))
         pr.minimumNumberOfTouches = 2
@@ -219,12 +219,12 @@ private extension ARManager {
 }
 
 private enum ARManagerError: Error, LocalizedError {
-    case fioriARKitDoesNotSupportSimulatorError
-    
+    case fioriARDoesNotSupportSimulatorError
+
     public var errorDescription: String? {
         switch self {
-        case .fioriARKitDoesNotSupportSimulatorError:
-            return NSLocalizedString("FioriARKit does not support the Simulator", comment: "")
+        case .fioriARDoesNotSupportSimulatorError:
+            return NSLocalizedString("FioriAR does not support the Simulator", comment: "")
         }
     }
 }

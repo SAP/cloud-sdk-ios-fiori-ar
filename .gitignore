@@ -68,9 +68,9 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
-# Do NOT CHECK FioriARKit.xcodeproj in.
+# Do NOT CHECK FioriAR.xcodeproj in.
 # Instead, regenerate using `swift package generate-xcodeproj`
-FioriARKit.xcodeproj
+FioriAR.xcodeproj
 **/project.xcworkspace/**
 
 **/.DS_Store
