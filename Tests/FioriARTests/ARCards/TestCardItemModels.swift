@@ -1,6 +1,6 @@
 //
 //  TestCardItemModels.swift
-//  FioriARKit
+//  FioriAR
 //
 //  Created by O'Brien, Patrick on 7/16/21.
 //

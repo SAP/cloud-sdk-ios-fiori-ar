@@ -49,7 +49,7 @@
 		2C4C71A82643698000B462A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C4C71B026436A5C00B462A9 /* ARCardsContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsContentView.swift; sourceTree = "<group>"; };
 		2C4C71B426436ADC00B462A9 /* ARCardsViewBuilderContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsViewBuilderContentView.swift; sourceTree = "<group>"; };
-		2C4C71C026436E2400B462A9 /* cloud-sdk-ios-fioriarkit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "cloud-sdk-ios-fioriarkit"; path = ../..; sourceTree = "<group>"; };
+		2C4C71C026436E2400B462A9 /* cloud-sdk-ios-fiori-ar */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "cloud-sdk-ios-fiori-ar"; path = ../..; sourceTree = "<group>"; };
 		2C5225B0267BF28A0089A062 /* ARCardsJSONLoadingContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsJSONLoadingContentView.swift; sourceTree = "<group>"; };
 		2C5225B6267CF7980089A062 /* Tests.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Tests.json; sourceTree = "<group>"; };
 		2C554AE12681189B007784D6 /* ARCardsRealityFileLoadingContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsRealityFileLoadingContentView.swift; sourceTree = "<group>"; };
@@ -182,7 +182,7 @@
 		2C4C71BF26436E2400B462A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2C4C71C026436E2400B462A9 /* cloud-sdk-ios-fioriarkit */,
+				2C4C71C026436E2400B462A9 /* cloud-sdk-ios-fiori-ar */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -430,7 +430,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.cloud-sdk-ios-fioriarkit.Examples";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.cloud-sdk-ios-fiori-ar.Examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -454,7 +454,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.cloud-sdk-ios-fioriarkit.Examples";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.cloud-sdk-ios-fiori-ar.Examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
