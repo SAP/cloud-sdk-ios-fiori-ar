@@ -6,22 +6,22 @@
   </p>
   <hr>
   <div align="center">
-    <a href="https://github.com/SAP/cloud-sdk-ios-fioriarkit#installation">Installation
+    <a href="https://github.com/SAP/cloud-sdk-ios-fiori-ar#installation">Installation
     </a>
     |
-    <a href="https://github.com/SAP/cloud-sdk-ios-fioriarkit#examples"> Examples
+    <a href="https://github.com/SAP/cloud-sdk-ios-fiori-ar#examples"> Examples
     </a>
     |
-    <a href="https://sap.github.io/cloud-sdk-ios-fioriarkit"> API Documentation
+    <a href="https://sap.github.io/cloud-sdk-ios-fiori-ar"> API Documentation
     </a>
     |
-    <a href="https://github.com/SAP/cloud-sdk-ios-fioriarkit/blob/main/CHANGELOG.md"> Changelog
+    <a href="https://github.com/SAP/cloud-sdk-ios-fiori-ar/blob/main/CHANGELOG.md"> Changelog
     </a>
   </div>
   <hr>
   <div align="center">
     <a href="https://github.com/SAP/cloud-sdk-ios-arkit/actions?query=workflow%3A%22CI%22">
-        <img src="https://github.com/SAP/cloud-sdk-ios-fioriarkit/workflows/CI/badge.svg"
+        <img src="https://github.com/SAP/cloud-sdk-ios-fiori-ar/workflows/CI/badge.svg"
              alt="Build Status">
     </a>
     <a href="https://conventionalcommits.org">
@@ -32,8 +32,8 @@
         <img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg"
              alt="Commitizen friendly">
     </a>
-    <a href="https://api.reuse.software/info/github.com/SAP/cloud-sdk-ios-fioriarkit">
-        <img src="https://api.reuse.software/badge/github.com/SAP/cloud-sdk-ios-fioriarkit"
+    <a href="https://api.reuse.software/info/github.com/SAP/cloud-sdk-ios-fiori-ar">
+        <img src="https://api.reuse.software/badge/github.com/SAP/cloud-sdk-ios-fiori-ar"
              alt="REUSE status">
     </a>
     <hr>
@@ -71,7 +71,7 @@ You can choose one of the following package products to be added to your applica
 
 # Migration
 
-FioriAR 2.0 is NOT fully compatible with the previous version. However, the migration is not difficult. Please follow the [migration guide](https://github.com/SAP/cloud-sdk-ios-fioriarkit/wiki/FioriAR-2.0-Migration-Guide) when you prepare to upgrade FioriAR in your project.
+FioriAR 2.0 is NOT fully compatible with the previous version. However, the migration is not difficult. Please follow the [migration guide](https://github.com/SAP/cloud-sdk-ios-fiori-ar/wiki/FioriAR-2.0-Migration-Guide) when you prepare to upgrade FioriAR in your project.
 
 # AR Annotations
 
@@ -261,7 +261,7 @@ struct FioriARKCardsExample: View {
 
 # How to obtain support
 
-[Create a GitHub issue](https://github.com/SAP/cloud-sdk-ios-fioriarkit/issues/new/choose) to create bug report, file a feature request or ask a question.
+[Create a GitHub issue](https://github.com/SAP/cloud-sdk-ios-fiori-ar/issues/new/choose) to create bug report, file a feature request or ask a question.
 
 # Contributing
 

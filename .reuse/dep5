@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: cloud-sdk-ios-fioriarkit
+Upstream-Name: cloud-sdk-ios-fiori-ar
 Upstream-Contact: cloud-sdk-ios-fiori@sap.com
-Source: https://github.com/SAP/cloud-sdk-ios-fioriarkit
+Source: https://github.com/SAP/cloud-sdk-ios-fiori-ar
 Disclaimer: The code in this project may include calls to APIs (“API Calls”) of
  SAP or third-party products or services developed outside of this project
  (“External Products”).
@@ -51,5 +51,5 @@ Files:
   Mintfile
   .swift-version
   .swiftformat
-Copyright:  2020 SAP SE or an SAP affiliate company and cloud-sdk-ios-fioriarkit contributors
+Copyright:  2020 SAP SE or an SAP affiliate company and cloud-sdk-ios-fiori-ar contributors
 License: Apache-2.0
