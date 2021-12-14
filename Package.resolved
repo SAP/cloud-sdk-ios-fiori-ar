@@ -23,9 +23,9 @@
         "package": "FioriSwiftUI",
         "repositoryURL": "https://github.com/SAP/cloud-sdk-ios-fiori.git",
         "state": {
-          "branch": "main",
-          "revision": "ddc76ad8f963fdf21556295b26acfd2509badbd9",
-          "version": null
+          "branch": null,
+          "revision": "6f3ad8491dbacbad22b6ea8bd51b99f0e778e0d9",
+          "version": "2.0.1"
         }
       },
       {
@@ -39,11 +39,11 @@
       },
       {
         "package": "Zip",
-        "repositoryURL": "https://github.com/maparoni/Zip.git",
+        "repositoryURL": "https://github.com/MarcoEidinger/Zip.git",
         "state": {
           "branch": null,
           "revision": "059e7346082d02de16220cd79df7db18ddeba8c3",
-          "version": null
+          "version": "2.1.2"
         }
       }
     ]
