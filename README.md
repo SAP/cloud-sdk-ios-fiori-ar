@@ -82,7 +82,7 @@ https://user-images.githubusercontent.com/77754056/121744202-2ea88c80-cac8-11eb-
 3D modeling is not required to represent AR annotations as the respective controls (`ARScanView`, `MarkerView` and `CardView`) are implemented with SwiftUI in this package.
 
 An app developer needs to provide a scene of markers relative to an `Image` or `Object` anchor. Such scene creation is possible
-- within your application  by leveraging this package and [SAP Mobile Service](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/index.html)
+- within your application by leveraging this package and [SAP Mobile Service](https://help.sap.com/doc/f53c64b93e5140918d676b927a3cd65b/Cloud/en-US/docs-en/guides/index.html)
 - with Apple's [Reality Composer](https://developer.apple.com/augmented-reality/tools/) tool
 
 Depending on where and how the scene is stored (`.rcproject`, `.reality`, `.usdz` files or in SAP Mobile Services) the app developer has to specify an appropriate loading strategy to populate the scene and the associated card data.
@@ -93,7 +93,9 @@ Cards and Markers support SwiftUI [ViewBuilder](https://developer.apple.com/docu
 
 FioriAR provides reusable views and utilities to create/update/delete scenes with AR annotations directly from your app. This is the recommended approach considering how easy it is to create and handle AR annotations.
 
-Scene information will be stored remotely within SAP Mobile Services. As a prerequisite the feature "Mobile Augmented Reality" needs to be assigned to your application in SAP Mobile Services cockpit.
+Scene information will be stored remotely within SAP Mobile Services. As a prerequisite the feature [Mobile Augmented Reality](https://help.sap.com/viewer/468990a67780424a9e66eb096d4345bb/Cloud/en-US/81d0455bab6c4d4f99905993e1676268.html) needs to be assigned to your application in SAP Mobile Services cockpit.
+
+SAP Mobile Services allows administrators [Editing an Augmented Reality Scene](https://help.sap.com/viewer/468990a67780424a9e66eb096d4345bb/Cloud/en-US/c10dcab94dbe4fe0aa79078a718a9af7.html) which is helpful to maintain AR annotation texts in multiple languages.
 
 ### Composing the scene
 
