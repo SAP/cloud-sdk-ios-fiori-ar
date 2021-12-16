@@ -34,13 +34,18 @@ struct ARCardListView: View {
                 Text("JSON Decoding Example")
             }
             
+            NavigationLink(destination: ARCardsServiceView()) {
+                Text("Service Strategy - View Only")
+            }
+            
             NavigationLink(destination: ARCardAuthoringContentView()) {
                 Text("Card Authoring")
             }
             
-            NavigationLink(destination: ARCardsServiceView()) {
-                Text("Service Strategy - View Only")
+            NavigationLink(destination: SceneAuthoringWithUIKitView()) {
+                Text("Card Authoring - UIKit")
             }
+            
         }.navigationBarTitle("ARCards")
     }
 }

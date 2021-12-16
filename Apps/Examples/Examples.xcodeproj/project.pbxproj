@@ -23,6 +23,7 @@
 		2C5225B7267CF7980089A062 /* Tests.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C5225B6267CF7980089A062 /* Tests.json */; };
 		2C554AE22681189B007784D6 /* ARCardsRealityFileLoadingContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C554AE12681189B007784D6 /* ARCardsRealityFileLoadingContentView.swift */; };
 		2C554AE4268118E0007784D6 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C554AE3268118E0007784D6 /* FileManager+Extensions.swift */; };
+		2C5CA835276B91BB000E0351 /* ARCardsAuthoringControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5CA834276B91BB000E0351 /* ARCardsAuthoringControllerView.swift */; };
 		2C9371282644D3C3001932D1 /* DownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9371272644D3C3001932D1 /* DownloadsView.swift */; };
 		2CC2A028268BFB8F0091C42B /* ARCardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC2A027268BFB8F0091C42B /* ARCardListView.swift */; };
 		2CCF965926824D9D00566523 /* ExampleRC.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 2CCF965826824D9D00566523 /* ExampleRC.usdz */; };
@@ -54,6 +55,7 @@
 		2C5225B6267CF7980089A062 /* Tests.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Tests.json; sourceTree = "<group>"; };
 		2C554AE12681189B007784D6 /* ARCardsRealityFileLoadingContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsRealityFileLoadingContentView.swift; sourceTree = "<group>"; };
 		2C554AE3268118E0007784D6 /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
+		2C5CA834276B91BB000E0351 /* ARCardsAuthoringControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardsAuthoringControllerView.swift; sourceTree = "<group>"; };
 		2C9371272644D3C3001932D1 /* DownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsView.swift; sourceTree = "<group>"; };
 		2CC2A027268BFB8F0091C42B /* ARCardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARCardListView.swift; sourceTree = "<group>"; };
 		2CCF965826824D9D00566523 /* ExampleRC.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = ExampleRC.usdz; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				2CC2A027268BFB8F0091C42B /* ARCardListView.swift */,
 				2C4A404526FEA11000D11A8F /* ARCardAuthoringContentView.swift */,
 				2C2C8860272C85F300E68413 /* ARCardsServiceView.swift */,
+				2C5CA834276B91BB000E0351 /* ARCardsAuthoringControllerView.swift */,
 			);
 			path = CardContentViews;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				2CDD909826437D630076150D /* ExampleCardItem.swift in Sources */,
 				2CDD909B26437E7A0076150D /* Tests.swift in Sources */,
 				2C2C8861272C85F300E68413 /* ARCardsServiceView.swift in Sources */,
+				2C5CA835276B91BB000E0351 /* ARCardsAuthoringControllerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

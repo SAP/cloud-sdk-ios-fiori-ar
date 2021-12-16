@@ -257,4 +257,12 @@ open class ARAnnotationViewModel<CardItem: CardItemModel>: NSObject, ObservableO
             self.anchorPosition = self.getAnchorPosition(for: arkitAnchor)
         }
     }
+    
+    // Work around for iOS 15 rendering issue
+    /// Updates the  anchorEntities when the underlying ARAnchors update
+    public func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
+        if let arAnchor = anchors.first, let anchorEntity = arManager.sceneAnchors[arAnchor.identifier] {
+            anchorEntity.setTransformMatrix(arAnchor.transform, relativeTo: nil)
+        }
+    }
 }

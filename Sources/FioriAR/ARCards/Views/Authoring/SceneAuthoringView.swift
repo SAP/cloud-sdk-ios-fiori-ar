@@ -58,7 +58,7 @@ public struct SceneAuthoringView: View {
         self.title = title
         let networkingAPI = ARCardsNetworkingService(sapURLSession: sapURLSession, baseURL: serviceURL.absoluteString)
         _authoringViewModel = StateObject(wrappedValue: SceneAuthoringModel(networkingAPI: networkingAPI, sceneIdentifier: sceneIdentifier))
-        _arViewModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>(arManager: ARManager(canBeFatal: false))) // TODO: Back to Fatal
+        _arViewModel = StateObject(wrappedValue: ARAnnotationViewModel<CodableCardItem>())
     }
 
     /// SwiftUI's view body
@@ -133,8 +133,8 @@ public struct SceneAuthoringView: View {
                 label: { EmptyView() })
         )
         .navigationBarHidden(hideNavBar)
-        .preferredColorScheme(.light)
         .navigationBarTitle("")
+        .preferredColorScheme(.light)
         .overlay(startARButton, alignment: .bottom)
         .edgesIgnoringSafeArea(.all)
         .onAppear(perform: authoringViewModel.populateAttachmentView)

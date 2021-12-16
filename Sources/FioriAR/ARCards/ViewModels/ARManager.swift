@@ -16,6 +16,10 @@ public class ARManager {
 
     /// The Root Entity with the entities that back the real world positions of the Annotations as children
     public var sceneRoot: Entity?
+    
+    // Work around for iOS 15 rendering issue
+    /// Retain AnchorIDs to update AnchorEntity transforms
+    var sceneAnchors: [AnchorID: AnchorEntity] = [:]
 
     var worldMap: ARWorldMap?
     var referenceImages: Set<ARReferenceImage> = []
@@ -89,9 +93,10 @@ public class ARManager {
 
     internal func addARKitAnchor(for anchor: ARAnchor, children: [Entity] = []) {
         #if !targetEnvironment(simulator)
-            let anchorEntity = AnchorEntity(anchor: anchor)
+            let anchorEntity = AnchorEntity(world: anchor.transform) // Work around for iOS 15 rendering issue, ideally use ARAnchor(anchor:)
             children.forEach { anchorEntity.addChild($0) }
             self.addAnchor(anchor: anchorEntity)
+            self.sceneAnchors[anchor.identifier] = anchorEntity
         #endif
     }
 
