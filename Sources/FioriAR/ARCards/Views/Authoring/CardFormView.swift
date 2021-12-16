@@ -85,13 +85,13 @@ struct CardFormView: View {
                          leftBarLabel: {
                              Image(systemName: "xmark")
                                  .font(.system(size: 22))
-                                 .foregroundColor(Color.preferredColor(.primaryLabel))
+                                 .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                          },
                          rightBarLabel: {
                              if let _ = currentCardID {
                                  Image(systemName: "trash")
                                      .font(.system(size: 22))
-                                     .foregroundColor(Color.preferredColor(.primaryLabel))
+                                     .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                              }
                          })
                 .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
