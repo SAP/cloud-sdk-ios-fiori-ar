@@ -284,7 +284,7 @@ public struct ImagePreview: View {
     /// Initializer
     /// - Parameter preview: image to be displayed
     /// - Parameter contentMode: contentMode of the image
-    public init(preview: Image, contentMode: SwiftUI.ContentMode) {
+    public init(preview: Image, contentMode: SwiftUI.ContentMode = .fill) {
         self.image = preview
         self.contentMode = contentMode
     }
