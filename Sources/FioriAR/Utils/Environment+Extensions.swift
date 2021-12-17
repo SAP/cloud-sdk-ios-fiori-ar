@@ -45,6 +45,10 @@ public extension EnvironmentValues {
         get { self[SceneEditKey.self] }
         set { self[SceneEditKey.self] = newValue }
     }
+    
+    var safeAreaInsets: EdgeInsets {
+        self[SafeAreaInsetsKey.self]
+    }
 }
 
 struct TitleModifierKey: EnvironmentKey {
@@ -69,4 +73,8 @@ struct CarouselOptionsKey: EnvironmentKey {
 
 struct SceneEditKey: EnvironmentKey {
     public static let defaultValue: (SceneEditing) -> Void = { _ in }
+}
+
+struct SafeAreaInsetsKey: EnvironmentKey {
+    public static var defaultValue: EdgeInsets { (UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.safeAreaInsets ?? .zero).insets }
 }

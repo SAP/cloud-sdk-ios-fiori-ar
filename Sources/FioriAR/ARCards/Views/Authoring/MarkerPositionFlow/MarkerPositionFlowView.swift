@@ -108,6 +108,7 @@ struct MarkerPositioningFlowView<Scan: View, Card: View, Marker: View, CardItem>
             }
         }
         .edgesIgnoringSafeArea(.all)
+        .preferredColorScheme(.dark)
         .navigationBarTitle("")
         .navigationBarHidden(true)
         .overlay(BackButton(flowState: flowState, onAction: dismiss), alignment: .topLeading)

@@ -15,26 +15,43 @@ import SwiftUI
 
  ## Usage
  ```
- @objc func launchSceneAuthoring(sender: UIButton) {
+ // Use navigationController?.pushViewController()
+ // Modal presenting not supported
+ @objc func presentSceneAuthoringAction(sender: UIButton) {
      let sceneAuthoringController = SceneAuthoringController(title: "Annotations",
-                                                             serviceURL:  URL(string: IntegrationTest.System.redirectURL)!,
-                                                             sapURLSession: sapURLSession,
-                                                             sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId))
+                                                             serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
+                                                             sapURLSession: self.sapURLSession,
+                                                             sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId),
+                                                             onSceneEdit: onSceneEdit)
      self.navigationController?.pushViewController(sceneAuthoringController, animated: true)
+ }
+ 
+ func onSceneEdit(sceneEdit: SceneEditing) {
+     switch sceneEdit {
+     case .created(card: let card):
+         print("Created: \(card.title_)")
+     case .updated(card: let card):
+         print("Updated: \(card.title_)")
+     case .deleted(card: let card):
+         print("Deleted: \(card.title_)")
+     case .published(sceneID: let sceneID):
+         print("From SceneEdit:", sceneID)
+     }
  }
  ```
  */
-public class SceneAuthoringController: UIHostingController<SceneAuthoringView> {
+public class SceneAuthoringController: UIHostingController<AnyView> {
     /// Initializer
     /// - Parameters:
     ///   - title: Title of the Scene
-    ///   - serviceURL: SAPURLSession to provide credentials to Mobile Services
-    ///   - sapURLSession: If nil then a new scene is created.
+    ///   - serviceURL: Mobile Services Server URL for your application
+    ///   - sapURLSession: SAPURLSession to provide credentials to Mobile Services
     ///   - sceneIdentifier: Pass nil to create a new scene. To update a a scene you have to supply the identifier used in SAP Mobile Servcies to identify the scene.
-    public init(title: String, serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
-        super.init(rootView: SceneAuthoringView(title: title, serviceURL: serviceURL, sapURLSession: sapURLSession, sceneIdentifier: sceneIdentifier))
+    ///   - onSceneEdit: called when scene was published or a card has locally been created, updated, or deleted
+    public init(title: String, serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil, onSceneEdit: ((SceneEditing) -> Void)?) {
+        super.init(rootView: AnyView(SceneAuthoringView(title: title, serviceURL: serviceURL, sapURLSession: sapURLSession, sceneIdentifier: sceneIdentifier).onSceneEdit(perform: onSceneEdit ?? { _ in })))
     }
-    
+
     @available(*, unavailable)
     @objc dynamic required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
