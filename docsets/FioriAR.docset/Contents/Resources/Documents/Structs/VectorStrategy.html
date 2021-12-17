@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>VectorStrategy Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+	<meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0" />
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/VectorStrategy" class="dashAnchor"></a>
+    <a title="VectorStrategy Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p>
+          <a href="../index.html">FioriAR Docs</a>
+          <span class="no-mobile"></span>
+        </p>
+    
+    
+      </div>
+    </header>
+    <div id="breadcrumbs-container">
+      <div class="content-wrapper">
+        <p id="breadcrumbs">
+          <span class="no-mobile">
+            <a href="../index.html">FioriAR Reference</a>
+            <img id="carat" src="../img/carat.png" alt=""/>
+          </span>
+          VectorStrategy Structure Reference
+        </p>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div class="article-wrapper">
+        <article class="main-content">
+          <section>
+            <section class="section">
+              <h1>VectorStrategy</h1>
+                <div class="declaration">
+                  <div class="language">
+                    
+                    <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">VectorStrategy</span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a></span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="../Models.html#/s:7FioriAR13CardItemModelP">CardItemModel</a></span></code></pre>
+
+                  </div>
+                </div>
+              <p>A loading strategy that uses the Vectors provided by the <code><a href="../Models.html#/s:7FioriAR13CardItemModelP">CardItemModel</a></code>s  <code><a href="../Protocols/PositionComponent.html">PositionComponent</a></code> to position the Entities relative to the anchor Image.
+This strategy wraps the anchors that represents these locations with the CardItemModels that they correspond to in a ScreenAnnotation struct for a single source of truth.
+Loading the data into the ARAnnotationViewModel should be done in the onAppear method.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">cardItems</span> <span class="o">=</span> <span class="p">[</span><span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"Hello"</span><span class="p">),</span> <span class="kt">ExampleCardItem</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">title_</span><span class="p">:</span> <span class="s">"World"</span><span class="p">)]</span>
+<span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+<span class="k">let</span> <span class="nv">strategy</span> <span class="o">=</span> <span class="kt">VectorStrategy</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="n">cardItems</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="n">anchorImage</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="nv">realityFilePath</span><span class="p">:</span> <span class="n">realityFilePath</span><span class="p">)</span>
+<span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">strategy</span><span class="p">)</span>
+</code></pre>
+
+            </section>
+            <section class="section task-group-section">
+              <div class="task-group">
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR14VectorStrategyV12cardContentsSayxGvp"></a>
+                      <a name="//apple_ref/swift/Property/cardContents" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR14VectorStrategyV12cardContentsSayxGvp">cardContents</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>An array of <strong>CardItem : <code><a href="../Models.html#/s:7FioriAR13CardItemModelP">CardItemModel</a></code></strong> which represent what will be displayed in the default CardView</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">cardContents</span><span class="p">:</span> <span class="p">[</span><span class="kt">CardItem</span><span class="p">]</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR14VectorStrategyV11anchorImageSo7UIImageCvp"></a>
+                      <a name="//apple_ref/swift/Property/anchorImage" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR14VectorStrategyV11anchorImageSo7UIImageCvp">anchorImage</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="kt">UIImage</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR14VectorStrategyV13physicalWidth12CoreGraphics7CGFloatVvp"></a>
+                      <a name="//apple_ref/swift/Property/physicalWidth" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR14VectorStrategyV13physicalWidth12CoreGraphics7CGFloatVvp">physicalWidth</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>The width of the image in meters</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="kt">CGFloat</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR14VectorStrategyV12cardContents11anchorImage13physicalWidthACyxGSayxG_So7UIImageC12CoreGraphics7CGFloatVtcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(cardContents:anchorImage:physicalWidth:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR14VectorStrategyV12cardContents11anchorImage13physicalWidthACyxGSayxG_So7UIImageC12CoreGraphics7CGFloatVtcfc">init(cardContents:<wbr>anchorImage:<wbr>physicalWidth:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Constructor for loading annotations using an Image as an anchor with a Reality Composer scene</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="p">[</span><span class="kt">CardItem</span><span class="p">],</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardContents</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>An array of <strong>CardItem : <code><a href="../Models.html#/s:7FioriAR13CardItemModelP">CardItemModel</a></code></strong> which represent what will be displayed in the default CardView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>anchorImage</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>Image to be converted to ARReferenceImage and added to ARConfiguration for discovery, can be nil if detecting an object Anchor</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>physicalWidth</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The width of the image in meters</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR14VectorStrategyV8jsonData11anchorImage13physicalWidthACyAA15CodableCardItemVG10Foundation0F0V_So7UIImageC12CoreGraphics7CGFloatVtKcAHRszrlufc"></a>
+                      <a name="//apple_ref/swift/Method/init(jsonData:anchorImage:physicalWidth:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR14VectorStrategyV8jsonData11anchorImage13physicalWidthACyAA15CodableCardItemVG10Foundation0F0V_So7UIImageC12CoreGraphics7CGFloatVtKcAHRszrlufc">init(jsonData:<wbr>anchorImage:<wbr>physicalWidth:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Constructor for loading annotations using Data from a JSON Array
+   JSON key/value:
+    &ldquo;id&rdquo;: String,
+    &ldquo;title_&rdquo;: String,
+    &ldquo;subtitle_&rdquo;: String?,
+    &ldquo;detailImage_&rdquo;: Data?, // base64 encoding of Image
+    &ldquo;actionText_&rdquo;: String?,
+    &ldquo;icon_&rdquo;: String? // systemName of SFSymbol</p>
+
+<p>Example:
+   [
+    {
+        &ldquo;id&rdquo;: &ldquo;WasherFluid&rdquo;,
+        &ldquo;title_&rdquo;: &ldquo;Recommended Washer Fluid&rdquo;,
+        &ldquo;subtitle_&rdquo;: &ldquo;Rain X&rdquo;,
+        &ldquo;detailImage_&rdquo;: null,
+        &ldquo;actionText_&rdquo;: null,
+        &ldquo;icon_&rdquo;: null
+    },
+    {
+        &ldquo;id&rdquo;: &ldquo;Coolant&rdquo;,
+        &ldquo;title_&rdquo;: &ldquo;Genuine Coolant&rdquo;,
+        &ldquo;subtitle_&rdquo;: &ldquo;Price: 20.99&rdquo;,
+        &ldquo;detailImage_&rdquo;: &ldquo;iVBORw0KGgoAAAANSUhE&hellip;&rdquo;,
+        &ldquo;actionText_&rdquo;: &ldquo;Order&rdquo;,
+        &ldquo;icon_&rdquo;: &ldquo;cart.fill&rdquo;
+    }
+   ]</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">jsonData</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">,</span> <span class="nv">physicalWidth</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="k">throws</span> <span class="k">where</span> <span class="kt">CardItem</span> <span class="o">==</span> <span class="kt"><a href="../Structs/CodableCardItem.html">CodableCardItem</a></span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR14VectorStrategyV4load4withSayAA16ScreenAnnotationVyxGG11annotations_So7UIImageCSg10guideImagetAA9ARManagerC_tKF"></a>
+                      <a name="//apple_ref/swift/Method/load(with:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR14VectorStrategyV4load4withSayAA16ScreenAnnotationVyxGG11annotations_So7UIImageCSg10guideImagetAA9ARManagerC_tKF">load(with:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Loads <code>[ScreenAnnotation]</code> for cardContents and creates an ModelEntity for the cards with a position available</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">load</span><span class="p">(</span><span class="n">with</span> <span class="nv">manager</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARManager.html">ARManager</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nv">annotations</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/ScreenAnnotation.html">ScreenAnnotation</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">],</span> <span class="nv">guideImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?)</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </section>
+          </section>
+        </article>
+      </div>
+      <div class="nav-wrapper">
+        <nav class="nav-bottom">
+          <ul class="nav-groups">
+            <li class="nav-group-name">
+              <a href="../Annotation%20Viewing.html">Annotation Viewing</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Structs/ARAnnotationsView.html">ARAnnotationsView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/ARScanView.html">ARScanView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/MarkerView.html">MarkerView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/CardView.html">CardView</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Scene%20Authoring.html">Scene Authoring</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Structs/SceneAuthoringView.html">SceneAuthoringView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Enums/SceneEditing.html">SceneEditing</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Enums/SceneIdentifyingAttribute.html">SceneIdentifyingAttribute</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Annotation%20Management.html">Annotation Management</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Classes/ARManager.html">ARManager</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Annotation%20Data%20Loading.html">Annotation Data Loading</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/AsyncAnnotationLoadingStrategy.html">AsyncAnnotationLoadingStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/RCProjectStrategy.html">RCProjectStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/RealityFileStrategy.html">RealityFileStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Classes/ServiceStrategy.html">ServiceStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/UsdzFileStrategy.html">UsdzFileStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/VectorStrategy.html">VectorStrategy</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Models.html">Models</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Models.html#/s:7FioriAR13CardItemModelP">CardItemModel</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/CodableCardItem.html">CodableCardItem</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/ScreenAnnotation.html">ScreenAnnotation</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/MarkerControl.html">MarkerControl</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/MarkerControl/State.html">– State</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/CardImage.html">CardImage</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Classes.html">Other Classes</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Classes/SceneAuthoringController.html">SceneAuthoringController</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Enums.html">Other Enumerations</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Enums/GuideImageState.html">GuideImageState</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Extensions.html">Other Extensions</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Extensions/EnvironmentValues.html">EnvironmentValues</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Extensions/View.html">View</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Protocols.html">Other Protocols</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Protocols/ActionContentComponent.html">ActionContentComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/ActionTextComponent.html">ActionTextComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/DetailImageComponent.html">DetailImageComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/IconComponent.html">IconComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/PositionComponent.html">PositionComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/SubtitleComponent.html">SubtitleComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/TitleComponent.html">TitleComponent</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Structs.html">Other Structures</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Structs/AnyCodable.html">AnyCodable</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/CarouselOptions.html">CarouselOptions</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/DefaultIcon.html">DefaultIcon</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/ImagePreview.html">ImagePreview</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-wrapper">
+        <section id="footer">
+          <p>© 2020 <a class="link" href="https://github.com/SAP/cloud-sdk-ios-fiori-ar" target="_blank" rel="external noopener">https://github.com/SAP/cloud-sdk-ios-fiori-ar</a> under Apache-2.0.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

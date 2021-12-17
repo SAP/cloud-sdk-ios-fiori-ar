@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ARAnnotationsView Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+	<meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0" />
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/ARAnnotationsView" class="dashAnchor"></a>
+    <a title="ARAnnotationsView Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p>
+          <a href="../index.html">FioriAR Docs</a>
+          <span class="no-mobile"></span>
+        </p>
+    
+    
+      </div>
+    </header>
+    <div id="breadcrumbs-container">
+      <div class="content-wrapper">
+        <p id="breadcrumbs">
+          <span class="no-mobile">
+            <a href="../index.html">FioriAR Reference</a>
+            <img id="carat" src="../img/carat.png" alt=""/>
+          </span>
+          ARAnnotationsView Structure Reference
+        </p>
+      </div>
+    </div>
+    <div class="wrapper">
+      <div class="article-wrapper">
+        <article class="main-content">
+          <section>
+            <section class="section">
+              <h1>ARAnnotationsView</h1>
+                <div class="declaration">
+                  <div class="language">
+                    
+                    <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ARAnnotationsView</span><span class="o">&lt;</span><span class="kt">Scan</span><span class="p">,</span> <span class="kt">Card</span><span class="p">,</span> <span class="kt">Marker</span><span class="p">,</span> <span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Scan</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">Card</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">Marker</span> <span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">CardItem</span> <span class="p">:</span> <span class="kt"><a href="../Models.html#/s:7FioriAR13CardItemModelP">CardItemModel</a></span></code></pre>
+
+                  </div>
+                </div>
+              <p>Content View which displays the card and marker views after a discovery flow for a single Image in the scene after the discoveryFlowHasFinished has been set to True. Only displays the views which are set to isVisible. Cards and Markers are initially set to isVisible.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+<pre class="highlight swift"><code><span class="c1">// Constructor for Default ScanningView, CardView, and MarkerView</span>
+<span class="kt">ARAnnotationsView</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="n">arModel</span><span class="p">,</span>
+                      <span class="nv">image</span><span class="p">:</span> <span class="kt">Image</span><span class="p">(</span><span class="s">"qrImage"</span><span class="p">),</span>
+                      <span class="nv">cardAction</span><span class="p">:</span> <span class="p">{</span> <span class="n">id</span> <span class="k">in</span>
+                            <span class="c1">// set the card action for id corresponding to the CardItemModel</span>
+                            <span class="nf">print</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+                      <span class="p">})</span>
+        <span class="o">.</span><span class="nf">onAppear</span><span class="p">(</span><span class="nv">perform</span><span class="p">:</span> <span class="n">loadData</span><span class="p">)</span>
+
+<span class="c1">// Constructors with viewbuilders for each combination of Views</span>
+<span class="c1">// Use the CarouselOptions View Modifier to adjust the behavior of the Carousel</span>
+<span class="kt">ARAnnotationsView</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="n">arModel</span><span class="p">,</span>
+                      <span class="nv">scanLabel</span><span class="p">:</span> <span class="p">{</span> <span class="n">anchorPosition</span> <span class="k">in</span>
+                          <span class="kt">CustomScanView</span><span class="p">(</span><span class="nv">image</span><span class="p">:</span> <span class="kt">Image</span><span class="p">(</span><span class="s">"qrImage"</span><span class="p">),</span> <span class="nv">position</span><span class="p">:</span> <span class="n">anchorPosition</span><span class="p">)</span>
+                      <span class="p">},</span>
+                      <span class="nv">cardLabel</span><span class="p">:</span> <span class="p">{</span> <span class="n">cardmodel</span><span class="p">,</span> <span class="n">isSelected</span> <span class="k">in</span>
+                          <span class="kt">CustomCardView</span><span class="p">(</span><span class="nv">networkModel</span><span class="p">:</span> <span class="n">cardmodel</span><span class="p">,</span> <span class="nv">isSelected</span><span class="p">:</span> <span class="n">isSelected</span><span class="p">)</span>
+                      <span class="p">},</span>
+                      <span class="nv">markerLabel</span><span class="p">:</span> <span class="p">{</span> <span class="n">state</span><span class="p">,</span> <span class="n">icon</span>  <span class="k">in</span>
+                          <span class="kt">CustomMarkerView</span><span class="p">(</span><span class="nv">state</span><span class="p">:</span> <span class="n">state</span><span class="p">)</span>
+                      <span class="p">})</span>
+        <span class="o">.</span><span class="nf">carouselOptions</span><span class="p">(</span><span class="kt">CarouselOptions</span><span class="p">(</span><span class="nv">itemSpacing</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nv">carouselHeight</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="nv">alignment</span><span class="p">:</span> <span class="o">.</span><span class="n">center</span><span class="p">))</span>
+        <span class="o">.</span><span class="nf">onAppear</span><span class="p">(</span><span class="nv">perform</span><span class="p">:</span> <span class="n">loadData</span><span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">loadData</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">cardItems</span> <span class="o">=</span> <span class="kt">Tests</span><span class="o">.</span><span class="n">cardItems</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">anchorImage</span> <span class="o">=</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">named</span><span class="p">:</span> <span class="s">"qrImage"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+    <span class="k">let</span> <span class="nv">strategy</span> <span class="o">=</span> <span class="kt">RealityComposerStrategy</span><span class="p">(</span><span class="nv">cardContents</span><span class="p">:</span> <span class="n">cardItems</span><span class="p">,</span> <span class="nv">anchorImage</span><span class="p">:</span> <span class="n">anchorImage</span><span class="p">,</span> <span class="nv">rcFile</span><span class="p">:</span> <span class="s">"ExampleRC"</span><span class="p">,</span> <span class="nv">rcScene</span><span class="p">:</span> <span class="s">"ExampleScene"</span><span class="p">)</span>
+    <span class="n">arModel</span><span class="o">.</span><span class="nf">load</span><span class="p">(</span><span class="nv">loadingStrategy</span><span class="p">:</span> <span class="n">strategy</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+                <div>
+                  <h4>Parameters</h4>
+                  <table class="graybox">
+                    <tbody>
+                        <tr>
+                          <td>
+                            <code>
+                            <em>arModel</em>
+                            </code>
+                          </td>
+                          <td>
+                            <div>
+                              <p>The ViewModel which managers the AR Experience</p>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <code>
+                            <em>guideImage</em>
+                            </code>
+                          </td>
+                          <td>
+                            <div>
+                              <p>The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user</p>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <code>
+                            <em>scanLabel</em>
+                            </code>
+                          </td>
+                          <td>
+                            <div>
+                              <p>View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards</p>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <code>
+                            <em>cardLabel</em>
+                            </code>
+                          </td>
+                          <td>
+                            <div>
+                              <p>View Builder for a custom CardView</p>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <code>
+                            <em>markerLabel</em>
+                            </code>
+                          </td>
+                          <td>
+                            <div>
+                              <p>View Builder for a custom MarkerView</p>
+                            </div>
+                          </td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </section>
+            <section class="section task-group-section">
+              <div class="task-group">
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewV7arModelAA012ARAnnotationdF0Cyq1_Gvp"></a>
+                      <a name="//apple_ref/swift/Property/arModel" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewV7arModelAA012ARAnnotationdF0Cyq1_Gvp">arModel</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>arModel</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">@ObservedObject</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">arModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewV9scanLabelyxAA15GuideImageStateO_So7CGPointVSgtcvp"></a>
+                      <a name="//apple_ref/swift/Property/scanLabel" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewV9scanLabelyxAA15GuideImageStateO_So7CGPointVSgtcvp">scanLabel</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards
+Note: GuideStateImage will only return as .finished(UIImage) when using a synchronous AnnotationLoadingStrategy with a custom scanLabel ViewBuilder</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">scanLabel</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Enums/GuideImageState.html">GuideImageState</a></span><span class="p">,</span> <span class="kt">CGPoint</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Scan</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewV9cardLabelyq_q1__Sbtcvp"></a>
+                      <a name="//apple_ref/swift/Property/cardLabel" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewV9cardLabelyq_q1__Sbtcvp">cardLabel</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>View Builder for a custom CardView</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">cardLabel</span><span class="p">:</span> <span class="p">(</span><span class="kt">CardItem</span><span class="p">,</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Card</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewV11markerLabelyq0_AA13MarkerControlV5StateO_7SwiftUI5ImageVSgtcvp"></a>
+                      <a name="//apple_ref/swift/Property/markerLabel" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewV11markerLabelyq0_AA13MarkerControlV5StateO_7SwiftUI5ImageVSgtcvp">markerLabel</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>ViewBuilder for a custom MarkerView</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">markerLabel</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Structs/MarkerControl.html">MarkerControl</a></span><span class="o">.</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Image</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Marker</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewV7arModel10guideImage9scanLabel04cardJ006markerJ0ACyxq_q0_q1_GAA012ARAnnotationdF0Cyq1_G_So7UIImageCSgxAA05GuideH5StateO_So7CGPointVSgtcq_q1__Sbtcq0_AA13MarkerControlV0P0O_7SwiftUI0H0VSgtctcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(arModel:guideImage:scanLabel:cardLabel:markerLabel:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewV7arModel10guideImage9scanLabel04cardJ006markerJ0ACyxq_q0_q1_GAA012ARAnnotationdF0Cyq1_G_So7UIImageCSgxAA05GuideH5StateO_So7CGPointVSgtcq_q1__Sbtcq0_AA13MarkerControlV0P0O_7SwiftUI0H0VSgtctcfc">init(arModel:<wbr>guideImage:<wbr>scanLabel:<wbr>cardLabel:<wbr>markerLabel:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Initializer (View Builder based)</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">,</span>
+            <span class="nv">guideImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+            <span class="kd">@ViewBuilder</span> <span class="nv">scanLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Enums/GuideImageState.html">GuideImageState</a></span><span class="p">,</span> <span class="kt">CGPoint</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Scan</span><span class="p">,</span>
+            <span class="kd">@ViewBuilder</span> <span class="nv">cardLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">CardItem</span><span class="p">,</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Card</span><span class="p">,</span>
+            <span class="kd">@ViewBuilder</span> <span class="nv">markerLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/MarkerControl.html">MarkerControl</a></span><span class="o">.</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Image</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Marker</span><span class="p">)</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>arModel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The ViewModel which managers the AR Experience</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>guideImage</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>scanLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom CardView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>markerLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom MarkerView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewV4bodyQrvp"></a>
+                      <a name="//apple_ref/swift/Property/body" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewV4bodyQrvp">body</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>SwiftUI’s view body</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Available%20where%20%60Scan%60%20%3D%3D%20%60ARScanView%60%2C%20%60Card%60%20%3D%3D%20%60CardView%3CText%60%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60_ConditionalContent%3CImagePreview%60%2C%20%60DefaultIcon%60%3E%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60CardItem%60%3E%2C%20%60Marker%60%20%3D%3D%20%60MarkerView%60"></a>
+                  <a name="//apple_ref/swift/Section/Available where `Scan` == `ARScanView`, `Card` == `CardView&lt;Text`, `_ConditionalContent&lt;Text`, `EmptyView`&gt;, `_ConditionalContent&lt;ImagePreview`, `DefaultIcon`&gt;, `_ConditionalContent&lt;Text`, `EmptyView`&gt;, `CardItem`&gt;, `Marker` == `MarkerView`" class="dashAnchor"></a>
+                  <div class="section-name-container">
+                    <a class="section-name-link" href="#/Available%20where%20%60Scan%60%20%3D%3D%20%60ARScanView%60%2C%20%60Card%60%20%3D%3D%20%60CardView%3CText%60%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60_ConditionalContent%3CImagePreview%60%2C%20%60DefaultIcon%60%3E%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60CardItem%60%3E%2C%20%60Marker%60%20%3D%3D%20%60MarkerView%60"></a>
+                    <h3 class="section-name"><span>Available where <code>Scan</code> == <code><a href="../Structs/ARScanView.html">ARScanView</a></code>, <code>Card</code> == <code>CardView&lt;Text</code>, <code>_ConditionalContent&lt;Text</code>, <code>EmptyView</code>&gt;, <code>_ConditionalContent&lt;ImagePreview</code>, <code><a href="../Structs/DefaultIcon.html">DefaultIcon</a></code>&gt;, <code>_ConditionalContent&lt;Text</code>, <code>EmptyView</code>&gt;, <code>CardItem</code>&gt;, <code>Marker</code> == <code><a href="../Structs/MarkerView.html">MarkerView</a></code></span>
+</h3>
+                  </div>
+                </div>
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewVA2A06ARScanD0VRszAA04CardD0Vy7SwiftUI4TextVAH19_ConditionalContentVyAjH05EmptyD0VGALyAA12ImagePreviewVAA11DefaultIconVGAOq1_GRs_AA06MarkerD0VRs0_rlE7arModel05guideM010cardActionACyAeuWq1_GAA012ARAnnotationdS0Cyq1_G_So7UIImageCSgy2IDQy1_cSgtcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(arModel:guideImage:cardAction:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewVA2A06ARScanD0VRszAA04CardD0Vy7SwiftUI4TextVAH19_ConditionalContentVyAjH05EmptyD0VGALyAA12ImagePreviewVAA11DefaultIconVGAOq1_GRs_AA06MarkerD0VRs0_rlE7arModel05guideM010cardActionACyAeuWq1_GAA012ARAnnotationdS0Cyq1_G_So7UIImageCSgy2IDQy1_cSgtcfc">init(arModel:<wbr>guideImage:<wbr>cardAction:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Initializer</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="nv">guideImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+     <span class="nv">cardAction</span><span class="p">:</span> <span class="p">((</span><span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>arModel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The ViewModel which managers the AR Experience</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>guideImage</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardAction</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>Closure to handle a card action when tapped by the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Available%20where%20%60Scan%60%20%3D%3D%20%60ARScanView%60%2C%20%60Card%60%20%3D%3D%20%60CardView%3CText%60%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60_ConditionalContent%3CImagePreview%60%2C%20%60DefaultIcon%60%3E%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60CardItem%60%3E"></a>
+                  <a name="//apple_ref/swift/Section/Available where `Scan` == `ARScanView`, `Card` == `CardView&lt;Text`, `_ConditionalContent&lt;Text`, `EmptyView`&gt;, `_ConditionalContent&lt;ImagePreview`, `DefaultIcon`&gt;, `_ConditionalContent&lt;Text`, `EmptyView`&gt;, `CardItem`&gt;" class="dashAnchor"></a>
+                  <div class="section-name-container">
+                    <a class="section-name-link" href="#/Available%20where%20%60Scan%60%20%3D%3D%20%60ARScanView%60%2C%20%60Card%60%20%3D%3D%20%60CardView%3CText%60%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60_ConditionalContent%3CImagePreview%60%2C%20%60DefaultIcon%60%3E%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60CardItem%60%3E"></a>
+                    <h3 class="section-name"><span>Available where <code>Scan</code> == <code><a href="../Structs/ARScanView.html">ARScanView</a></code>, <code>Card</code> == <code>CardView&lt;Text</code>, <code>_ConditionalContent&lt;Text</code>, <code>EmptyView</code>&gt;, <code>_ConditionalContent&lt;ImagePreview</code>, <code><a href="../Structs/DefaultIcon.html">DefaultIcon</a></code>&gt;, <code>_ConditionalContent&lt;Text</code>, <code>EmptyView</code>&gt;, <code>CardItem</code>&gt;</span>
+</h3>
+                  </div>
+                </div>
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewVA2A06ARScanD0VRszAA04CardD0Vy7SwiftUI4TextVAH19_ConditionalContentVyAjH05EmptyD0VGALyAA12ImagePreviewVAA11DefaultIconVGAOq1_GRs_rlE7arModel05guideM011markerLabel10cardActionACyAeUq0_q1_GAA012ARAnnotationdR0Cyq1_G_So7UIImageCSgq0_AA13MarkerControlV5StateO_AH0M0VSgtcy2IDQy1_cSgtcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(arModel:guideImage:markerLabel:cardAction:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewVA2A06ARScanD0VRszAA04CardD0Vy7SwiftUI4TextVAH19_ConditionalContentVyAjH05EmptyD0VGALyAA12ImagePreviewVAA11DefaultIconVGAOq1_GRs_rlE7arModel05guideM011markerLabel10cardActionACyAeUq0_q1_GAA012ARAnnotationdR0Cyq1_G_So7UIImageCSgq0_AA13MarkerControlV5StateO_AH0M0VSgtcy2IDQy1_cSgtcfc">init(arModel:<wbr>guideImage:<wbr>markerLabel:<wbr>cardAction:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Initializer</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="nv">guideImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+     <span class="kd">@ViewBuilder</span> <span class="nv">markerLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/MarkerControl.html">MarkerControl</a></span><span class="o">.</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Image</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Marker</span><span class="p">,</span>
+     <span class="nv">cardAction</span><span class="p">:</span> <span class="p">((</span><span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>arModel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The ViewModel which managers the AR Experience</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>guideImage</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>markerLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom MarkerView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardAction</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>Closure to handle a card action when tapped by the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Available%20where%20%60Scan%60%20%3D%3D%20%60ARScanView%60%2C%20%60Marker%60%20%3D%3D%20%60MarkerView%60"></a>
+                  <a name="//apple_ref/swift/Section/Available where `Scan` == `ARScanView`, `Marker` == `MarkerView`" class="dashAnchor"></a>
+                  <div class="section-name-container">
+                    <a class="section-name-link" href="#/Available%20where%20%60Scan%60%20%3D%3D%20%60ARScanView%60%2C%20%60Marker%60%20%3D%3D%20%60MarkerView%60"></a>
+                    <h3 class="section-name"><span>Available where <code>Scan</code> == <code><a href="../Structs/ARScanView.html">ARScanView</a></code>, <code>Marker</code> == <code><a href="../Structs/MarkerView.html">MarkerView</a></code></span>
+</h3>
+                  </div>
+                </div>
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewVA2A06ARScanD0VRszAA06MarkerD0VRs0_rlE7arModel10guideImage9cardLabelACyAEq_AGq1_GAA012ARAnnotationdH0Cyq1_G_So7UIImageCSgq_q1__Sbtctcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(arModel:guideImage:cardLabel:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewVA2A06ARScanD0VRszAA06MarkerD0VRs0_rlE7arModel10guideImage9cardLabelACyAEq_AGq1_GAA012ARAnnotationdH0Cyq1_G_So7UIImageCSgq_q1__Sbtctcfc">init(arModel:<wbr>guideImage:<wbr>cardLabel:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Initializer</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="nv">guideImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+     <span class="kd">@ViewBuilder</span> <span class="nv">cardLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">CardItem</span><span class="p">,</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Card</span><span class="p">)</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>arModel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The ViewModel which managers the AR Experience</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>guideImage</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom CardView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Available%20where%20%60Card%60%20%3D%3D%20%60CardView%3CText%60%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60_ConditionalContent%3CImagePreview%60%2C%20%60DefaultIcon%60%3E%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60CardItem%60%3E%2C%20%60Marker%60%20%3D%3D%20%60MarkerView%60"></a>
+                  <a name="//apple_ref/swift/Section/Available where `Card` == `CardView&lt;Text`, `_ConditionalContent&lt;Text`, `EmptyView`&gt;, `_ConditionalContent&lt;ImagePreview`, `DefaultIcon`&gt;, `_ConditionalContent&lt;Text`, `EmptyView`&gt;, `CardItem`&gt;, `Marker` == `MarkerView`" class="dashAnchor"></a>
+                  <div class="section-name-container">
+                    <a class="section-name-link" href="#/Available%20where%20%60Card%60%20%3D%3D%20%60CardView%3CText%60%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60_ConditionalContent%3CImagePreview%60%2C%20%60DefaultIcon%60%3E%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60CardItem%60%3E%2C%20%60Marker%60%20%3D%3D%20%60MarkerView%60"></a>
+                    <h3 class="section-name"><span>Available where <code>Card</code> == <code>CardView&lt;Text</code>, <code>_ConditionalContent&lt;Text</code>, <code>EmptyView</code>&gt;, <code>_ConditionalContent&lt;ImagePreview</code>, <code><a href="../Structs/DefaultIcon.html">DefaultIcon</a></code>&gt;, <code>_ConditionalContent&lt;Text</code>, <code>EmptyView</code>&gt;, <code>CardItem</code>&gt;, <code>Marker</code> == <code><a href="../Structs/MarkerView.html">MarkerView</a></code></span>
+</h3>
+                  </div>
+                </div>
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewVA2A04CardD0Vy7SwiftUI4TextVAF19_ConditionalContentVyAhF05EmptyD0VGAJyAA12ImagePreviewVAA11DefaultIconVGAMq1_GRs_AA06MarkerD0VRs0_rlE7arModel05guideL09scanLabel10cardActionACyxAsUq1_GAA012ARAnnotationdR0Cyq1_G_So7UIImageCSgxAA05GuideL5StateO_So7CGPointVSgtcy2IDQy1_cSgtcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(arModel:guideImage:scanLabel:cardAction:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewVA2A04CardD0Vy7SwiftUI4TextVAF19_ConditionalContentVyAhF05EmptyD0VGAJyAA12ImagePreviewVAA11DefaultIconVGAMq1_GRs_AA06MarkerD0VRs0_rlE7arModel05guideL09scanLabel10cardActionACyxAsUq1_GAA012ARAnnotationdR0Cyq1_G_So7UIImageCSgxAA05GuideL5StateO_So7CGPointVSgtcy2IDQy1_cSgtcfc">init(arModel:<wbr>guideImage:<wbr>scanLabel:<wbr>cardAction:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Initializer</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="nv">guideImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+     <span class="kd">@ViewBuilder</span> <span class="nv">scanLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Enums/GuideImageState.html">GuideImageState</a></span><span class="p">,</span> <span class="kt">CGPoint</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Scan</span><span class="p">,</span>
+     <span class="nv">cardAction</span><span class="p">:</span> <span class="p">((</span><span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>arModel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The ViewModel which managers the AR Experience</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>guideImage</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>scanLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardAction</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>Closure to handle a card action when tapped by the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Available%20where%20%60Scan%60%20%3D%3D%20%60ARScanView%60"></a>
+                  <a name="//apple_ref/swift/Section/Available where `Scan` == `ARScanView`" class="dashAnchor"></a>
+                  <div class="section-name-container">
+                    <a class="section-name-link" href="#/Available%20where%20%60Scan%60%20%3D%3D%20%60ARScanView%60"></a>
+                    <h3 class="section-name"><span>Available where <code>Scan</code> == <code><a href="../Structs/ARScanView.html">ARScanView</a></code></span>
+</h3>
+                  </div>
+                </div>
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewVA2A06ARScanD0VRszrlE7arModel10guideImage9cardLabel06markerK0ACyAEq_q0_q1_GAA012ARAnnotationdG0Cyq1_G_So7UIImageCSgq_q1__Sbtcq0_AA13MarkerControlV5StateO_7SwiftUI0I0VSgtctcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(arModel:guideImage:cardLabel:markerLabel:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewVA2A06ARScanD0VRszrlE7arModel10guideImage9cardLabel06markerK0ACyAEq_q0_q1_GAA012ARAnnotationdG0Cyq1_G_So7UIImageCSgq_q1__Sbtcq0_AA13MarkerControlV5StateO_7SwiftUI0I0VSgtctcfc">init(arModel:<wbr>guideImage:<wbr>cardLabel:<wbr>markerLabel:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Initializer</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="nv">guideImage</span><span class="p">:</span> <span class="kt">UIImage</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+     <span class="kd">@ViewBuilder</span> <span class="nv">cardLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">CardItem</span><span class="p">,</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Card</span><span class="p">,</span>
+     <span class="kd">@ViewBuilder</span> <span class="nv">markerLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/MarkerControl.html">MarkerControl</a></span><span class="o">.</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Image</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Marker</span><span class="p">)</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>arModel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The ViewModel which managers the AR Experience</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>guideImage</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The image that is provided to the ScanView which displays what should be discovered for in the physical scene for the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom CardView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>markerLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom MarkerView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Available%20where%20%60Marker%60%20%3D%3D%20%60MarkerView%60"></a>
+                  <a name="//apple_ref/swift/Section/Available where `Marker` == `MarkerView`" class="dashAnchor"></a>
+                  <div class="section-name-container">
+                    <a class="section-name-link" href="#/Available%20where%20%60Marker%60%20%3D%3D%20%60MarkerView%60"></a>
+                    <h3 class="section-name"><span>Available where <code>Marker</code> == <code><a href="../Structs/MarkerView.html">MarkerView</a></code></span>
+</h3>
+                  </div>
+                </div>
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewVA2A06MarkerD0VRs0_rlE7arModel9scanLabel04cardI0ACyxq_AEq1_GAA012ARAnnotationdG0Cyq1_G_xAA15GuideImageStateO_So7CGPointVSgtcq_q1__Sbtctcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(arModel:scanLabel:cardLabel:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewVA2A06MarkerD0VRs0_rlE7arModel9scanLabel04cardI0ACyxq_AEq1_GAA012ARAnnotationdG0Cyq1_G_xAA15GuideImageStateO_So7CGPointVSgtcq_q1__Sbtctcfc">init(arModel:<wbr>scanLabel:<wbr>cardLabel:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Initializer</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="kd">@ViewBuilder</span> <span class="nv">scanLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Enums/GuideImageState.html">GuideImageState</a></span><span class="p">,</span> <span class="kt">CGPoint</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Scan</span><span class="p">,</span>
+     <span class="kd">@ViewBuilder</span> <span class="nv">cardLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">CardItem</span><span class="p">,</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Card</span><span class="p">)</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>arModel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The ViewModel which managers the AR Experience</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>scanLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom CardView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="task-group">
+                <div class="task-name-container">
+                  <a name="/Available%20where%20%60Card%60%20%3D%3D%20%60CardView%3CText%60%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60_ConditionalContent%3CImagePreview%60%2C%20%60DefaultIcon%60%3E%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60CardItem%60%3E"></a>
+                  <a name="//apple_ref/swift/Section/Available where `Card` == `CardView&lt;Text`, `_ConditionalContent&lt;Text`, `EmptyView`&gt;, `_ConditionalContent&lt;ImagePreview`, `DefaultIcon`&gt;, `_ConditionalContent&lt;Text`, `EmptyView`&gt;, `CardItem`&gt;" class="dashAnchor"></a>
+                  <div class="section-name-container">
+                    <a class="section-name-link" href="#/Available%20where%20%60Card%60%20%3D%3D%20%60CardView%3CText%60%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60_ConditionalContent%3CImagePreview%60%2C%20%60DefaultIcon%60%3E%2C%20%60_ConditionalContent%3CText%60%2C%20%60EmptyView%60%3E%2C%20%60CardItem%60%3E"></a>
+                    <h3 class="section-name"><span>Available where <code>Card</code> == <code>CardView&lt;Text</code>, <code>_ConditionalContent&lt;Text</code>, <code>EmptyView</code>&gt;, <code>_ConditionalContent&lt;ImagePreview</code>, <code><a href="../Structs/DefaultIcon.html">DefaultIcon</a></code>&gt;, <code>_ConditionalContent&lt;Text</code>, <code>EmptyView</code>&gt;, <code>CardItem</code>&gt;</span>
+</h3>
+                  </div>
+                </div>
+                <ul>
+                  <li class="item">
+                    <div>
+                      <code>
+                      <a name="/s:7FioriAR17ARAnnotationsViewVA2A04CardD0Vy7SwiftUI4TextVAF19_ConditionalContentVyAhF05EmptyD0VGAJyAA12ImagePreviewVAA11DefaultIconVGAMq1_GRs_rlE7arModel9scanLabel06markerS010cardActionACyxASq0_q1_GAA012ARAnnotationdQ0Cyq1_G_xAA05GuideL5StateO_So7CGPointVSgtcq0_AA13MarkerControlV0Y0O_AF0L0VSgtcy2IDQy1_cSgtcfc"></a>
+                      <a name="//apple_ref/swift/Method/init(arModel:scanLabel:markerLabel:cardAction:)" class="dashAnchor"></a>
+                      <a class="token" href="#/s:7FioriAR17ARAnnotationsViewVA2A04CardD0Vy7SwiftUI4TextVAF19_ConditionalContentVyAhF05EmptyD0VGAJyAA12ImagePreviewVAA11DefaultIconVGAMq1_GRs_rlE7arModel9scanLabel06markerS010cardActionACyxASq0_q1_GAA012ARAnnotationdQ0Cyq1_G_xAA05GuideL5StateO_So7CGPointVSgtcq0_AA13MarkerControlV0Y0O_AF0L0VSgtcy2IDQy1_cSgtcfc">init(arModel:<wbr>scanLabel:<wbr>markerLabel:<wbr>cardAction:<wbr>)</a>
+                      </code>
+                    </div>
+                    <div class="height-container">
+                      <div class="pointer-container"></div>
+                      <section class="section">
+                        <div class="pointer"></div>
+                        <div class="abstract">
+                          <p>Initializer</p>
+
+                        </div>
+                        <div class="declaration">
+                          <h4>Declaration</h4>
+                          <div class="language">
+                            <p class="aside-title">Swift</p>
+                            <pre class="highlight swift"><code><span class="nf">init</span><span class="p">(</span><span class="nv">arModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a></span><span class="o">&lt;</span><span class="kt">CardItem</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="kd">@ViewBuilder</span> <span class="nv">scanLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Enums/GuideImageState.html">GuideImageState</a></span><span class="p">,</span> <span class="kt">CGPoint</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Scan</span><span class="p">,</span>
+     <span class="kd">@ViewBuilder</span> <span class="nv">markerLabel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/MarkerControl.html">MarkerControl</a></span><span class="o">.</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Image</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Marker</span><span class="p">,</span>
+     <span class="nv">cardAction</span><span class="p">:</span> <span class="p">((</span><span class="kt">CardItem</span><span class="o">.</span><span class="kt">ID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                          </div>
+                        </div>
+                        <div>
+                          <h4>Parameters</h4>
+                          <table class="graybox">
+                            <tbody>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>arModel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>The ViewModel which managers the AR Experience</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>scanLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom Scanning View. After the Image/Object has been discovered there is a 3 second delay until the ContentView displays Markers and Cards</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>markerLabel</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>View Builder for a custom MarkerView</p>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <code>
+                                  <em>cardAction</em>
+                                  </code>
+                                </td>
+                                <td>
+                                  <div>
+                                    <p>Closure to handle a card action when tapped by the user</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </section>
+          </section>
+        </article>
+      </div>
+      <div class="nav-wrapper">
+        <nav class="nav-bottom">
+          <ul class="nav-groups">
+            <li class="nav-group-name">
+              <a href="../Annotation%20Viewing.html">Annotation Viewing</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Structs/ARAnnotationsView.html">ARAnnotationsView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/ARScanView.html">ARScanView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/MarkerView.html">MarkerView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/CardView.html">CardView</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Scene%20Authoring.html">Scene Authoring</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Structs/SceneAuthoringView.html">SceneAuthoringView</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Enums/SceneEditing.html">SceneEditing</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Enums/SceneIdentifyingAttribute.html">SceneIdentifyingAttribute</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Annotation%20Management.html">Annotation Management</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Classes/ARAnnotationViewModel.html">ARAnnotationViewModel</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Classes/ARManager.html">ARManager</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Annotation%20Data%20Loading.html">Annotation Data Loading</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Protocols/AnnotationLoadingStrategy.html">AnnotationLoadingStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/AsyncAnnotationLoadingStrategy.html">AsyncAnnotationLoadingStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/RCProjectStrategy.html">RCProjectStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/RealityFileStrategy.html">RealityFileStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Classes/ServiceStrategy.html">ServiceStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/UsdzFileStrategy.html">UsdzFileStrategy</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/VectorStrategy.html">VectorStrategy</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Models.html">Models</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Models.html#/s:7FioriAR13CardItemModelP">CardItemModel</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/CodableCardItem.html">CodableCardItem</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/ScreenAnnotation.html">ScreenAnnotation</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/MarkerControl.html">MarkerControl</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/MarkerControl/State.html">– State</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/CardImage.html">CardImage</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Classes.html">Other Classes</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Classes/SceneAuthoringController.html">SceneAuthoringController</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Enums.html">Other Enumerations</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Enums/GuideImageState.html">GuideImageState</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Extensions.html">Other Extensions</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Extensions/EnvironmentValues.html">EnvironmentValues</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Extensions/View.html">View</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Protocols.html">Other Protocols</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Protocols/ActionContentComponent.html">ActionContentComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/ActionTextComponent.html">ActionTextComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/DetailImageComponent.html">DetailImageComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/IconComponent.html">IconComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/PositionComponent.html">PositionComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/SubtitleComponent.html">SubtitleComponent</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Protocols/TitleComponent.html">TitleComponent</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-group-name">
+              <a href="../Other%20Structs.html">Other Structures</a>
+              <ul class="nav-group-tasks">
+                <li class="nav-group-task">
+                  <a href="../Structs/AnyCodable.html">AnyCodable</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/CarouselOptions.html">CarouselOptions</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/DefaultIcon.html">DefaultIcon</a>
+                </li>
+                <li class="nav-group-task">
+                  <a href="../Structs/ImagePreview.html">ImagePreview</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer-wrapper">
+        <section id="footer">
+          <p>© 2020 <a class="link" href="https://github.com/SAP/cloud-sdk-ios-fiori-ar" target="_blank" rel="external noopener">https://github.com/SAP/cloud-sdk-ios-fiori-ar</a> under Apache-2.0.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
