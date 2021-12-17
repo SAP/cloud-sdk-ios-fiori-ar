@@ -269,4 +269,4 @@ If you want to contribute, please check the [Contribution Guidelines](./CONTRIBU
 
 # Examples
 
-Functionality can be further explored with a demo app which is already part of this package (`Apps/Examples/Examples.xcodeproj`).
+Functionality can be further explored with a demo app which is already part of this package (`Apps/Examples/Examples.xcodeproj`). See its [README](./Apps/Examples/README.md) for further information.
