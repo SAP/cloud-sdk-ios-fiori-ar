@@ -9,7 +9,7 @@ import ARKit
 import SwiftUI
 
 struct AnchorImageFormView: View {
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.safeAreaInsets) var safeAreaInsets
     
     @Binding var anchorImage: UIImage?
     @Binding var physicalWidth: String
@@ -186,7 +186,8 @@ struct AnchorImageFormView: View {
                 })
                     .padding(.bottom, 32)
             }
-            .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
+            .padding(.leading, safeAreaInsets.leading)
+            .padding(.trailing, safeAreaInsets.trailing)
         }
         .onTapGesture(perform: hideKeyboard)
         .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))

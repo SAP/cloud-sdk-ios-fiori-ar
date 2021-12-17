@@ -51,8 +51,8 @@ public struct SceneAuthoringView: View {
     /// Initializer
     /// - Parameters:
     ///   - title: Title of the Scene
-    ///   - serviceURL: SAPURLSession to provide credentials to Mobile Services
-    ///   - sapURLSession: If nil then a new scene is created.
+    ///   - serviceURL: Server URL for your application in SAP Mobile Services
+    ///   - sapURLSession: SAPURLSession to provide credentials to Mobile Services
     ///   - sceneIdentifier: Pass nil to create a new scene. To update a a scene you have to supply the identifier used in SAP Mobile Servcies to identify the scene.
     public init(title: String, serviceURL: URL, sapURLSession: SAPURLSession, sceneIdentifier: SceneIdentifyingAttribute? = nil) {
         self.title = title
@@ -86,8 +86,8 @@ public struct SceneAuthoringView: View {
                                  .font(.fiori(forTextStyle: .body).weight(.bold))
                                  .foregroundColor(Color.preferredColor(authoringViewModel.isSyncValidated ? .tintColor : .separator, background: .lightConstant))
                          })
-                .background(Color.white)
                 .padding(.bottom, 6)
+                .background(Color.white)
 
             VStack(spacing: 0) {
                 TabbedView(currentTab: $authoringViewModel.currentTab, leftTabTitle: "Cards".localizedString, rightTabTitle: "Image Anchor".localizedString)
@@ -115,7 +115,6 @@ public struct SceneAuthoringView: View {
                     AnchorImageTabView(anchorImage: $authoringViewModel.anchorImage, physicalWidth: $authoringViewModel.physicalWidth, onDismiss: { authoringViewModel.validateSync() })
                 }
             }
-            .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
             .background(Color.white)
         }
         .background(
@@ -136,7 +135,7 @@ public struct SceneAuthoringView: View {
         .navigationBarTitle("")
         .preferredColorScheme(.light)
         .overlay(startARButton, alignment: .bottom)
-        .edgesIgnoringSafeArea(.all)
+        .edgesIgnoringSafeArea(.top)
         .onAppear(perform: authoringViewModel.populateAttachmentView)
         .fullScreenCover(isPresented: $isARExperiencePresented) {
             MarkerPositioningFlowView(arModel: arViewModel,
@@ -163,7 +162,7 @@ public struct SceneAuthoringView: View {
             Text("Go to AR Scene", bundle: .fioriAR)
                 .font(.fiori(forTextStyle: .body).weight(.bold))
                 .foregroundColor(Color.preferredColor(authoringViewModel.validatedAR() ? .secondaryGroupedBackground : .separator, background: .lightConstant))
-                .frame(width: verticalSizeClass == .compact ? 702 : 351, height: 54)
+                .frame(maxWidth: .infinity, maxHeight: 54)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
                         .fill(Color.white)
@@ -179,7 +178,8 @@ public struct SceneAuthoringView: View {
                 )
         })
             .disabled(!authoringViewModel.validatedAR())
-            .padding(.bottom, verticalSizeClass == .compact ? 29 : 50)
+            .padding(.horizontal, 12)
+            .padding(.bottom, 29)
     }
 
     func startAR() {
