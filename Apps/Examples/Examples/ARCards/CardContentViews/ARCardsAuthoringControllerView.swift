@@ -60,7 +60,21 @@ class ARCardsAuthoringControllerVC: UIViewController {
         let sceneAuthoringController = SceneAuthoringController(title: "Annotations",
                                                                 serviceURL: URL(string: IntegrationTest.System.redirectURL)!,
                                                                 sapURLSession: self.sapURLSession,
-                                                                sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId))
+                                                                sceneIdentifier: SceneIdentifyingAttribute.id(IntegrationTest.TestData.sceneId),
+                                                                onSceneEdit: self.onSceneEdit)
         self.navigationController?.pushViewController(sceneAuthoringController, animated: true)
+    }
+    
+    func onSceneEdit(sceneEdit: SceneEditing) {
+        switch sceneEdit {
+        case .created(card: let card):
+            print("Created: \(card.title_)")
+        case .updated(card: let card):
+            print("Updated: \(card.title_)")
+        case .deleted(card: let card):
+            print("Deleted: \(card.title_)")
+        case .published(sceneID: let sceneID):
+            print("From SceneEdit:", sceneID)
+        }
     }
 }

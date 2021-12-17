@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View, RightBarLabel: View {
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+    @Environment(\.safeAreaInsets) var safeAreaInsets
     
     var title: String
     
@@ -57,9 +57,8 @@ struct TitleBarView<LeftBarLabel, RightBarLabel>: View where LeftBarLabel: View,
                     .disabled(rightDisabled)
             }
         }
+        .frame(height: 52)
+        .padding(.top, safeAreaInsets.top)
         .padding(.horizontal, 16)
-        .frame(minHeight: 52)
-        .padding(.top, verticalSizeClass == .compact ? 0 : 44)
-        .padding(.horizontal, verticalSizeClass == .compact ? 40 : 0)
     }
 }

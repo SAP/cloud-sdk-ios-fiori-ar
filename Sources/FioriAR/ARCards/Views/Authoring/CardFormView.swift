@@ -22,6 +22,7 @@ public enum SceneEditing {
 }
 
 struct CardFormView: View {
+    @Environment(\.safeAreaInsets) var safeAreaInsets
     @Environment(\.verticalSizeClass) var verticalSizeClass
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.onSceneEdit) var onSceneEdit
@@ -94,6 +95,8 @@ struct CardFormView: View {
                                      .foregroundColor(Color.preferredColor(.primaryLabel, background: .lightConstant))
                              }
                          })
+                .padding(.leading, safeAreaInsets.leading)
+                .padding(.trailing, safeAreaInsets.trailing)
                 .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
 
             AdaptiveStack {
@@ -127,6 +130,8 @@ struct CardFormView: View {
                                     presentationMode.wrappedValue.dismiss()
                                 })
             }
+            .padding(.leading, safeAreaInsets.leading)
+            .padding(.trailing, safeAreaInsets.trailing)
         }
         .onChange(of: actionContentText) { newValue in
             icon = newValue.isEmpty ? nil : "link"
@@ -520,7 +525,6 @@ private struct AdaptiveStack<Content>: View where Content: View {
             HStack {
                 content
             }
-            .padding(.horizontal, 40)
         } else {
             VStack {
                 content
