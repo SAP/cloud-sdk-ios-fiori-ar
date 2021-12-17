@@ -235,14 +235,16 @@ public extension CardView where
          isSelected: Bool)
     {
         var image: Image?
+        var contentMode: SwiftUI.ContentMode?
         if let data = detailImage, let uiImage = UIImage(data: data) {
             image = Image(uiImage: uiImage)
+            contentMode = uiImage.size.width < 214 || uiImage.size.height < 93 ? .fit : .fill
         }
         
         self.id = id
         self._title = Text(title)
         self._subtitle = subtitle != nil ? ViewBuilder.buildEither(first: Text(subtitle!)) : ViewBuilder.buildEither(second: EmptyView())
-        self._detailImage = image != nil ? ViewBuilder.buildEither(first: ImagePreview(preview: image!)) : ViewBuilder.buildEither(second: DefaultIcon(iconString: icon))
+        self._detailImage = (image != nil && contentMode != nil) ? ViewBuilder.buildEither(first: ImagePreview(preview: image!, contentMode: contentMode!)) : ViewBuilder.buildEither(second: DefaultIcon(iconString: icon))
         self._actionText = actionText != nil ? ViewBuilder.buildEither(first: Text(actionText!)) : ViewBuilder.buildEither(second: EmptyView())
         self.actionContentURL = actionContentURL
         self.action = action
@@ -277,41 +279,26 @@ public struct DefaultIcon: View {
 /// SwiftUI view to preview an image
 public struct ImagePreview: View {
     private var image: Image
-    @State private var size: CGSize = .zero
+    private var contentMode: SwiftUI.ContentMode
 
     /// Initializer
     /// - Parameter preview: image to be displayed
-    public init(preview: Image) {
+    /// - Parameter contentMode: contentMode of the image
+    public init(preview: Image, contentMode: SwiftUI.ContentMode) {
         self.image = preview
+        self.contentMode = contentMode
     }
-
+    
     /// SwiftUI’s view body
     public var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                image
-                    .readSize { size in
-                        self.size = size
-                    }
-                    .frame(width: geo.size.width, height: geo.size.height)
-                
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .blur(radius: 10)
-                    .frame(width: geo.size.width, height: geo.size.height)
-
-                if size.width < geo.size.width, size.height < geo.size.height {
-                    image
-                        .resizable()
-                        .scaledToFit()
-                } else {
-                    image
-                        .resizable()
-                        .scaledToFill()
-                }
-            }
-            .frame(width: geo.size.width, height: geo.size.height)
+        ZStack {
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .blur(radius: 10)
+            image
+                .resizable()
+                .aspectRatio(contentMode: contentMode)
         }
     }
 }
