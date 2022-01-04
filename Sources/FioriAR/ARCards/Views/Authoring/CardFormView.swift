@@ -192,11 +192,11 @@ private struct CardDetailsView: View {
     @Binding var actionButtonToggle: Bool
     @Binding var coverImageToggle: Bool
 
-    @State var actionSheetPresented = false
-    @State var pickerPresented = false
-    @State var pickerSource: UIImagePickerController.SourceType = .photoLibrary
+    @State private var actionSheetPresented = false
+    @State private var pickerPresented = false
+    @State private var pickerSource: ImagePickerSource = .photoLibrary
 
-    @State var imagePickerData: Data? = nil
+    @State private var pickedUIImage: UIImage? = nil
 
     var isUpdate: Bool
     var editCardAction: (() -> Void)?
@@ -268,11 +268,11 @@ private struct CardDetailsView: View {
                         }), .cancel()])
         }
         .fullScreenCover(isPresented: $pickerPresented) {
-            ImagePickerView(imageData: $imagePickerData, sourceType: pickerSource)
+            PickerSelectionView(uiImage: $pickedUIImage, imageSource: pickerSource)
                 .edgesIgnoringSafeArea(.all)
         }
-        .onChange(of: imagePickerData) { newValue in
-            guard let imageData = newValue else { return }
+        .onChange(of: pickedUIImage) { newValue in
+            guard let uiImage = newValue, let imageData = uiImage.pngData() else { return }
             if self.detailImage == nil {
                 self.detailImage = CardImage(data: imageData)
             } else {

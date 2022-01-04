@@ -22,12 +22,10 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Save Image Anchors to Photo Library</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Use Camera for AR Examples</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>To save image anchor to library</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To show the file name of the picture for anchor image</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
