@@ -21,7 +21,7 @@ struct AnchorImageFormView: View {
     
     @State private var actionSheetPresented = false
     @State private var pickerPresented = false
-    @State private var pickerSource: UIImagePickerController.SourceType = .photoLibrary
+    @State private var pickerSource: ImagePickerSource = .photoLibrary
     
     @State private var physicalWidthValidationText = ""
     @State private var imageValidationText = ""
@@ -205,7 +205,7 @@ struct AnchorImageFormView: View {
                         }), .cancel()])
         }
         .fullScreenCover(isPresented: $pickerPresented) {
-            ImagePickerView(uiImage: $internalAnchorImage, fileName: $internalImageName, sourceType: pickerSource)
+            PickerSelectionView(uiImage: $internalAnchorImage, imageSource: pickerSource)
                 .edgesIgnoringSafeArea(.all)
         }
     }
