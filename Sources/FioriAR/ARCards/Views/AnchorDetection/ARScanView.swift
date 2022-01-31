@@ -197,7 +197,7 @@ private struct ImageMatchedView: View {
             .foregroundColor(.white)
             .background(
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(red: 0 / 255, green: 90 / 255, blue: 38 / 255, opacity: 0.6))
+                    .fill(Color(red: 37 / 255, green: 111 / 255, blue: 58 / 255, opacity: 0.6))
                     .frame(width: 120, height: 120)
                     .padding(.all, 3)
                     .background(
