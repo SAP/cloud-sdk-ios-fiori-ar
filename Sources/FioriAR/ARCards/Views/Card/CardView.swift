@@ -44,7 +44,7 @@ extension Fiori {
             
             func body(content: Content) -> some View {
                 content
-                    .font(.body)
+                    .font(.fiori(forTextStyle: .body))
                     .foregroundColor(self.isSelected ? Color.preferredColor(.tintColor, background: .lightConstant) : .clear)
                     .lineLimit(1)
             }
@@ -194,7 +194,7 @@ public extension CardView {
                 .frame(width: 198, height: isSelected && !isActionTextNil ? 44 : 0)
         }
         .frame(width: 230)
-        .background(Color.preferredColor(.primaryGroupedBackground, background: .lightConstant))
+        .background(Color.preferredColor(.primaryBackground, background: .lightConstant))
         .cornerRadius(10)
         .shadow(color: Color.black.opacity(0.15), radius: 4, y: 2)
         .opacity(isSelected ? 1 : 0.8)
@@ -272,7 +272,7 @@ public struct DefaultIcon: View {
     public var body: some View {
         icon
             .font(.system(size: 37))
-            .foregroundColor(Color.preferredColor(.tertiaryLabel, background: .lightConstant))
+            .foregroundColor(Color.preferredColor(.quarternaryLabel, background: .lightConstant))
     }
 }
 
