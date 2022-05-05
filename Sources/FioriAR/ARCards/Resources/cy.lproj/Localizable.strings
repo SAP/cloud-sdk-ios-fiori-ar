@@ -1,0 +1,162 @@
+/* XBUT: to start AR scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Scan" = "Sganio";
+
+/* XMSG: text in coaching view (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#a-coaching-view) to inform the user what to do in AR Scanner */
+"Point your camera at this image to start the AR experience" = "Pwyntiwch eich camera at y ddelwedd hon i ddechrau profiad realaeth estynedig (AR)";
+
+/* XMSG: text shown to user while data is loading */
+"Loading..." = "Wrthi'n llwytho...";
+
+/* XBUT: send AR annotation (https://experience.sap.com/fiori-design-ios/article/ar-annotations/) related changes to remote service (SAP Mobile Services) for publication so that changes will be available for other users */
+"Publish" = "Cyhoeddi";
+
+/* XMIT: tab item related to AR cards (https://experience.sap.com/fiori-design-ios/article/ar-cards/) */
+"Cards" = "Cardiau";
+
+/* XMIT: tab item to view and edit an anchor for a known image that ARKit detects in the physical environment */
+"Image Anchor" = "Angor Delwedd";
+
+/* XFLD: informing the user that an AR annotation is positioned in the world view (aka attached to the scene) */
+"Attached" = "Wedi atodi";
+
+/* XFLD: informing the user that a AR annotation is not yet positioned in the world view (aka attached to the scene) */
+"Not Attached" = "Heb ei atodi";
+
+/* XBUT: to view annotations in the world view through AR Scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Go to AR Scene" = "Mynd i'r olygfa AR";
+
+/* XTIT: title of form in which a user can edit AR card (https://experience.sap.com/fiori-design-ios/article/ar-cards/) information */
+"Card Details" = "Manylion Cerdyn";
+
+/* XTIT: title of form in which user can create a new AR annotation */
+"New Annotation" = "Anodiad Newydd";
+
+/* XFLD: mandatory field to specify card's title of given AR annotation */
+"Title *" = "Teitl *";
+
+/* XFLD: field to specify card's subtitle of given AR annotation */
+"Subtitle" = "Is-deitl";
+
+/* XFLD: field to specify card's content URL of given AR annotation */
+"Content" = "Cynnwys";
+
+/* XFLD: field to specify card's action button text of given AR annotation */
+"Action Button" = "Botwm Gweithredu";
+
+/* XRBL: label of switch UI control to enable/disable the use of a cover image in a card */
+"Custom Cover Image" = "Delwedd Clawr Personol";
+
+/* XFLD: placeholder text used in \"Content\" input field */
+"URL" = "URL";
+
+/* XFLD: placeholder text used in \"Action Button\" input field */
+"Label" = "Label";
+
+/* XBUT: button text used in form in which user edits card details of given AR annotation */
+"Update" = "Diweddaru";
+
+/* XBUT: button text used in form in which user creates new card (details) of new AR annotation */
+"Create" = "Creu";
+
+/* XMSG: title of alert presented to user if user attempts to leave page/view with unpublished changes */
+"Leave Page" = "Gadael Tudalen";
+
+/* XBUT: button in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Confirm" = "Cadarnhau";
+
+/* XMSG: instruction for user on how to edit an image anchor */
+"Tap the image to edit it." = "Tapiwch y ddelwedd i'w golygu.";
+
+/* XMSG: explanation text for user what an image anchor is */
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "Mae'r angor yn ddelwedd yn y byd go iawn y mae'r feddalwedd yn ei defnyddio i osod marcwyr mewn perthynas â'r angor. Dewiswch ddelwedd y mae'r feddalwedd yn gallu ei hadnabod.";
+
+/* XBUT: instruction for user on how to edit an image anchor */
+"Upload Image Anchor" = "Llwytho Angor Delwedd i Fyny";
+
+/* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
+"Dimension" = "Dimensiwn";
+
+/* XFLD: explanation text what kind of width is needed */
+"Enter the width of the real-world image." = "Rhowch led y ddelwedd byd go iawn.";
+
+/* XFLD: label of input field for image anchors physical width */
+"Width" = "Lled";
+
+/* XMSG: instruction text on how to choose an image anchor */
+"Tap the area below to upload the image anchor." = "Tapiwch y rhan islaw i lwytho angor y ddelwedd i fyny.";
+
+/* XBUT: to remove an image anchor */
+"Remove" = "Tynnu";
+
+/* XMSG: shown in case image quality was too bad */
+"Upload higher-quality image." = "Llwythwch ddelwedd o ansawdd uwch i fyny.";
+
+/* XMSG: shown in case image is needed */
+"Please select image." = "Dewiswch ddelwedd.";
+
+/* XMSG: shown in case width is needed */
+"Please input a physical width." = "Rhowch led ffisegol.";
+
+/* XMSG: shown in case input value needs to be numeric */
+"Please input a numeric value." = "Rhowch werth rhifol.";
+
+/* XBUT: to switch into edit mode of current view */
+"Edit Mode" = "Modd Golygu";
+
+/* XBUT: to indicate changes are done and to finish/exit the edit mode of current view (data are not yet saved) */
+"Done" = "Wedi gwneud";
+
+/* XBUT: to go to next step */
+"Next" = "Nesaf";
+
+/* XBUT: to drop AR marker (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-marker) in world view in order to lock-in the position of AR annotation relative to the image anchor */
+"Drop Marker" = "Gollwng Marciwr";
+
+/* XBUT: to preview AR annotations in world view */
+"Preview" = "Gweld Rhagolwg";
+
+/* XTIT: title in form listing AR annotations to position in world view */
+"Select Annotation" = "Dewis Anodiad";
+
+/* XTIT: title in form previewing a specific AR annotation and its card */
+"Preview Annotation" = "Gweld Rhagolwg o Anodiad";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"View Annotation" = "Gweld Anodiad";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"Attach Annotation" = "Atodi Anodiad";
+
+/* MSG: to choose an option from action menu */
+"Choose an Option" = "Dewis Opsiwn";
+
+/* XBUT: to invoke camera of device (phone/ipad) */
+"Camera" = "Camera";
+
+/* XBUT: to invoke photo library of device (phone/ipad) */
+"Photos" = "Lluniau";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Are you sure you want to leave the page? Your changes will be lost." = "Ydych chi'n siŵr eich bod am adael y dudalen? Byddwch chi'n colli eich newidiadau.";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "Mae anodiadau sydd heb eu hatodi eto. Ydych chi'n siŵr eich bod am adael yr ap?";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "Mae newidiadau sydd heb eu cyhoeddi eto. Ydych chi'n siŵr eich bod am adael yr ap?";
+
+/* XMSG: success message once all information for a given AR scene were loaded */
+"Sync finished." = "Proses cysoni wedi gorffen.";
+
+/* XMSG: error message in case changes were not published due to an unknown error */
+"Something went wrong." = "Aeth rhywbeth o'i le.";
+
+/* XMSG: success message once changes for existing AR scene were published */
+"Scene update is successfully published." = "Wedi llwyddo i gyhoeddi diweddariad o olygfa.";
+
+/* XMSG: success message when new AR annotation ((https://experience.sap.com/fiori-design-ios/article/ar-annotations/)) was created */
+"A new annotation card is created." = "Mae cerdyn anodiad newydd yn cael ei greu.";
+
+/* XBUT: to close a dialog / form */
+"Close" = "Cau";
+

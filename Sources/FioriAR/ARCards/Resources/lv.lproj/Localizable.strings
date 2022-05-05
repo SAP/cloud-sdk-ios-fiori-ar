@@ -1,0 +1,162 @@
+/* XBUT: to start AR scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Scan" = "Skenēt";
+
+/* XMSG: text in coaching view (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#a-coaching-view) to inform the user what to do in AR Scanner */
+"Point your camera at this image to start the AR experience" = "Norādiet kameru uz šo attēlu, lai sāktu papildinātās realitātes pieredzi";
+
+/* XMSG: text shown to user while data is loading */
+"Loading..." = "Ielāde...";
+
+/* XBUT: send AR annotation (https://experience.sap.com/fiori-design-ios/article/ar-annotations/) related changes to remote service (SAP Mobile Services) for publication so that changes will be available for other users */
+"Publish" = "Publicēt";
+
+/* XMIT: tab item related to AR cards (https://experience.sap.com/fiori-design-ios/article/ar-cards/) */
+"Cards" = "Kartes";
+
+/* XMIT: tab item to view and edit an anchor for a known image that ARKit detects in the physical environment */
+"Image Anchor" = "Attēla enkurs";
+
+/* XFLD: informing the user that an AR annotation is positioned in the world view (aka attached to the scene) */
+"Attached" = "Pievienots";
+
+/* XFLD: informing the user that a AR annotation is not yet positioned in the world view (aka attached to the scene) */
+"Not Attached" = "Nav pievienots";
+
+/* XBUT: to view annotations in the world view through AR Scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
+"Go to AR Scene" = "Pāriet uz papildinātās realitātes scēnu";
+
+/* XTIT: title of form in which a user can edit AR card (https://experience.sap.com/fiori-design-ios/article/ar-cards/) information */
+"Card Details" = "Kartes detalizētā informācija";
+
+/* XTIT: title of form in which user can create a new AR annotation */
+"New Annotation" = "Jauna anotācija";
+
+/* XFLD: mandatory field to specify card's title of given AR annotation */
+"Title *" = "Virsraksts*";
+
+/* XFLD: field to specify card's subtitle of given AR annotation */
+"Subtitle" = "Apakšvirsraksts";
+
+/* XFLD: field to specify card's content URL of given AR annotation */
+"Content" = "Saturs";
+
+/* XFLD: field to specify card's action button text of given AR annotation */
+"Action Button" = "Darbības poga";
+
+/* XRBL: label of switch UI control to enable/disable the use of a cover image in a card */
+"Custom Cover Image" = "Pielāgotais vāka attēls";
+
+/* XFLD: placeholder text used in \"Content\" input field */
+"URL" = "URL";
+
+/* XFLD: placeholder text used in \"Action Button\" input field */
+"Label" = "Etiķete";
+
+/* XBUT: button text used in form in which user edits card details of given AR annotation */
+"Update" = "Atjaunināt";
+
+/* XBUT: button text used in form in which user creates new card (details) of new AR annotation */
+"Create" = "Izveidot";
+
+/* XMSG: title of alert presented to user if user attempts to leave page/view with unpublished changes */
+"Leave Page" = "Iziet no lapas";
+
+/* XBUT: button in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Confirm" = "Apstiprināt";
+
+/* XMSG: instruction for user on how to edit an image anchor */
+"Tap the image to edit it." = "Pieskarieties pie attēla, lai to rediģētu.";
+
+/* XMSG: explanation text for user what an image anchor is */
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "Enkurs ir attēls reālajā pasaulē, ko programmatūra izmanto, lai izvietotu marķierus attiecībā pret enkuru. Izvēlieties attēlu, ko programmatūra var atpazīt.";
+
+/* XBUT: instruction for user on how to edit an image anchor */
+"Upload Image Anchor" = "Augšupielādēt attēla enkuru";
+
+/* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
+"Dimension" = "Dimensija";
+
+/* XFLD: explanation text what kind of width is needed */
+"Enter the width of the real-world image." = "Ievadiet reālās pasaules attēla platumu.";
+
+/* XFLD: label of input field for image anchors physical width */
+"Width" = "Platums";
+
+/* XMSG: instruction text on how to choose an image anchor */
+"Tap the area below to upload the image anchor." = "Pieskarieties tālāk esošajam apgabalam, lai augšupielādētu attēla enkuru.";
+
+/* XBUT: to remove an image anchor */
+"Remove" = "Noņemt";
+
+/* XMSG: shown in case image quality was too bad */
+"Upload higher-quality image." = "Augšupielādējiet augstākas kvalitātes attēlu.";
+
+/* XMSG: shown in case image is needed */
+"Please select image." = "Lūdzu, atlasiet attēlu.";
+
+/* XMSG: shown in case width is needed */
+"Please input a physical width." = "Lūdzu, ievadiet fizisku platumu.";
+
+/* XMSG: shown in case input value needs to be numeric */
+"Please input a numeric value." = "Lūdzu, ievadiet skaitlisku vērtību.";
+
+/* XBUT: to switch into edit mode of current view */
+"Edit Mode" = "Rediģēšanas režīms";
+
+/* XBUT: to indicate changes are done and to finish/exit the edit mode of current view (data are not yet saved) */
+"Done" = "Pabeigts";
+
+/* XBUT: to go to next step */
+"Next" = "Nākamais";
+
+/* XBUT: to drop AR marker (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-marker) in world view in order to lock-in the position of AR annotation relative to the image anchor */
+"Drop Marker" = "Nomest marķieri";
+
+/* XBUT: to preview AR annotations in world view */
+"Preview" = "Priekšskatījums";
+
+/* XTIT: title in form listing AR annotations to position in world view */
+"Select Annotation" = "Atlasīt anotāciju";
+
+/* XTIT: title in form previewing a specific AR annotation and its card */
+"Preview Annotation" = "Priekšskatīt anotāciju";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"View Annotation" = "Skatīt anotāciju";
+
+/* XTIT: title in bottom sheet (context-depending) */
+"Attach Annotation" = "Pievienot anotāciju";
+
+/* MSG: to choose an option from action menu */
+"Choose an Option" = "Izvēlēties iespēju";
+
+/* XBUT: to invoke camera of device (phone/ipad) */
+"Camera" = "Kamera";
+
+/* XBUT: to invoke photo library of device (phone/ipad) */
+"Photos" = "Fotoattēli";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"Are you sure you want to leave the page? Your changes will be lost." = "Vai tiešām vēlaties iziet no lapas? Jūsu izmaiņas tiks zaudētas.";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "Ir anotācijas, ka vēl nav pievienotas. Vai tiešām vēlaties iziet no lietojumprogrammas?";
+
+/* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
+"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "Ir izmaiņas, ka vēl nav publicētas. Vai tiešām vēlaties iziet no lietojumprogrammas?";
+
+/* XMSG: success message once all information for a given AR scene were loaded */
+"Sync finished." = "Sinhronizācija pabeigta.";
+
+/* XMSG: error message in case changes were not published due to an unknown error */
+"Something went wrong." = "Radās kāda kļūda.";
+
+/* XMSG: success message once changes for existing AR scene were published */
+"Scene update is successfully published." = "Scēnas atjauninājums ir sekmīgi publicēts.";
+
+/* XMSG: success message when new AR annotation ((https://experience.sap.com/fiori-design-ios/article/ar-annotations/)) was created */
+"A new annotation card is created." = "Ir izveidota jauna anotācijas karte.";
+
+/* XBUT: to close a dialog / form */
+"Close" = "Aizvērt";
+
