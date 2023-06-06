@@ -131,7 +131,7 @@
 "Choose an Option" = "विकल्प चुनें";
 
 /* XBUT: to invoke camera of device (phone/ipad) */
-"Camera" = "कैमरा ";
+"Camera" = "कैमरा";
 
 /* XBUT: to invoke photo library of device (phone/ipad) */
 "Photos" = "फ़ोटो";

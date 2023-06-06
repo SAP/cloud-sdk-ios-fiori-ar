@@ -68,7 +68,7 @@
 "Tap the image to edit it." = "แตะรูปภาพเพื่อแก้ไข";
 
 /* XMSG: explanation text for user what an image anchor is */
-"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "จุดยึดเป็นรูปภาพตามความเป็นจริงที่ซอฟต์แวร์ใช้เพื่อวางเครื่องหมายที่สัมพันธ์กับจุดยึด เลือกรูปภาพที่ซอฟต์แวร์สามารถจดจำได้ ";
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "จุดยึดเป็นรูปภาพตามความเป็นจริงที่ซอฟต์แวร์ใช้เพื่อวางเครื่องหมายที่สัมพันธ์กับจุดยึด เลือกรูปภาพที่ซอฟต์แวร์สามารถจดจำได้";
 
 /* XBUT: instruction for user on how to edit an image anchor */
 "Upload Image Anchor" = "อัพโหลดจุดยึดรูปภาพ";
@@ -137,10 +137,10 @@
 "Photos" = "รูปถ่าย";
 
 /* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
-"Are you sure you want to leave the page? Your changes will be lost." = "คุณแน่ใจหรือไม่ว่าต้องการออกจากหน้านี้? การเปลี่ยนแปลงของคุณจะสูญหาย ";
+"Are you sure you want to leave the page? Your changes will be lost." = "คุณแน่ใจหรือไม่ว่าต้องการออกจากหน้านี้? การเปลี่ยนแปลงของคุณจะสูญหาย";
 
 /* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
-"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "มีคำอธิบายประกอบที่ยังไม่ได้แนบ คุณแน่ใจหรือไม่ว่าต้องการออกจากแอพ? ";
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "มีคำอธิบายประกอบที่ยังไม่ได้แนบ คุณแน่ใจหรือไม่ว่าต้องการออกจากแอพ?";
 
 /* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
 "There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "มีคำอธิบายประกอบที่ยังไม่ได้เผยแพร่ คุณแน่ใจหรือไม่ว่าต้องการออกจากแอพ?";
