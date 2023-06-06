@@ -137,7 +137,7 @@
 "Photos" = "Fotografie";
 
 /* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
-"Are you sure you want to leave the page? Your changes will be lost." = "Opravdu chcete tuto stránku opustit? Vaše změny budou ztraceny. ";
+"Are you sure you want to leave the page? Your changes will be lost." = "Opravdu chcete tuto stránku opustit? Vaše změny budou ztraceny.";
 
 /* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
 "There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "Existují anotace, které ještě nebyly připojeny. Opravdu chcete aplikaci opustit?";
