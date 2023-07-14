@@ -47,8 +47,8 @@ Currently supported:
 
 # Requirements
 
-- iOS 14 or higher
-- Xcode 13
+- iOS 15 or higher
+- Xcode 14
 - Reality Composer 1.1 or higher
 - Swift Package Manager
 
@@ -69,7 +69,7 @@ You can choose one of the following package products to be added to your applica
 |FioriAR|You did not already embed binary frameworks from SAP BTP SDK for iOS|
 |FioriAR-requiresToEmbedXCFrameworks|You already embedded `SAPCommon` and `SAPFoundation` binary frameworks to your target|
 
-# Migration
+# Migration FioriAR 1.0 to FioriAR 2.0
 
 FioriAR 2.0 is NOT fully compatible with the previous version. However, the migration is not difficult. Please follow the [migration guide](https://github.com/SAP/cloud-sdk-ios-fiori-ar/wiki/FioriAR-2.0-Migration-Guide) when you prepare to upgrade FioriAR in your project.
 

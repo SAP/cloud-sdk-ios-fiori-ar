@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "FioriAR",
     defaultLocalization: "en",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS(.v15)],
     products: [
         .library(
             name: "FioriAR",
@@ -18,8 +18,8 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(name: "FioriSwiftUI", url: "https://github.com/SAP/cloud-sdk-ios-fiori.git", .upToNextMajor(from: "2.0.0")),
-        .package(name: "cloud-sdk-ios", url: "https://github.com/SAP/cloud-sdk-ios", .exact("6.1.2-xcfrwk"))
+        .package(name: "FioriSwiftUI", url: "https://github.com/SAP/cloud-sdk-ios-fiori.git", .upToNextMajor(from: "3.0.0")),
+        .package(name: "cloud-sdk-ios", url: "https://github.com/SAP/cloud-sdk-ios", .upToNextMajor(from: "9.0.0"))
     ],
     targets: [
         .target(

@@ -10,11 +10,11 @@ on:
 
 jobs:
   build:
-    runs-on: macos-11
+    runs-on: macos-12
     strategy:
       fail-fast: false
       matrix:
-        xcode: ['Xcode_13.0']
+        xcode: ['Xcode_14.2']
     env:
       DEVELOPER_DIR: /Applications/${{ matrix.xcode }}.app/Contents/Developer
 
