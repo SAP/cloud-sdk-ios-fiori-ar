@@ -19,6 +19,12 @@ jobs:
       DEVELOPER_DIR: /Applications/${{ matrix.xcode }}.app/Contents/Developer
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Create .netrc file with credentials to download binaries from SAP RSBC
+        uses: little-core-labs/netrc-creds@master
+        with:
+          machine: rbsc.repositories.cloud.sap
+          login: sap-sdkiospecs
+          password: ${{ secrets.RSBC_USER_BASICAUTH_PWD }}
       - name: Verify Build
         run: set -o pipefail && make build
