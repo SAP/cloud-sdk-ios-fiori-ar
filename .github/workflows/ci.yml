@@ -26,5 +26,9 @@ jobs:
           machine: rbsc.repositories.cloud.sap
           login: sap-sdkiospecs
           password: ${{ secrets.RSBC_USER_BASICAUTH_PWD }}
+      - name: avoid PIF cache issue when running GitHub workflow # https://github.com/apple/swift-package-manager/issues/5767
+        run: |
+          swift package dump-pif > /dev/null || true
+          xcodebuild clean -scheme FioriAR-Package -destination 'platform=iOS' > /dev/null || true
       - name: Verify Build
         run: set -o pipefail && make build
