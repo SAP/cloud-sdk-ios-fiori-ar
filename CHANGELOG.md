@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/SAP/cloud-sdk-ios-fiori-ar/compare/2.0.0...3.0.0) (2023-07-14)
+
+Bump up minimum deployment target to iOS 15 by leveraging FioriSwiftUI 3.x and SAP BTP SDK for iOS 9.x
+
 ## [2.0.0](https://github.com/SAP/cloud-sdk-ios-fiori-ar/compare/1.1.0...2.0.0) (2021-12-17)
 
 ### ⚠ BREAKING CHANGES
