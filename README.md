@@ -52,6 +52,8 @@ Currently supported:
 - Reality Composer 1.1 or higher
 - Swift Package Manager
 
+You must [configure technical user & password](https://github.com/SAP/cloud-sdk-ios#configuration) for package resolution!
+
 # Dependencies
 
 - [SAPCommon](https://help.sap.com/doc/978e4f6c968c4cc5a30f9d324aa4b1d7/Latest/en-US/Documents/Frameworks/SAPCommon/index.html) for Logging
