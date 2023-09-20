@@ -87,7 +87,8 @@ struct CarouselScrollView<Data: RandomAccessCollection, Content: View>: View whe
     }
     
     func calculateNewOffset(index: CGFloat) -> CGFloat {
-        -(self.itemWidth + self.options.itemSpacing) * index + (self.containerSize.width - self.itemWidth) / 2
+        let newOffset = -(self.itemWidth + self.options.itemSpacing) * index + (self.containerSize.width - self.itemWidth) / 2
+        return newOffset.isNaN ? 0 : newOffset // possible that itemWidth or containerSize are .infinite and calculation produces NaN which then requires a fallback
     }
 }
 
