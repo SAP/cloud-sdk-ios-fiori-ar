@@ -1,162 +1,162 @@
 /* XBUT: to start AR scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
-"Scan" = "Scansiona";
+"Scan" = "Skeniraj";
 
 /* XMSG: text in coaching view (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#a-coaching-view) to inform the user what to do in AR Scanner */
-"Point your camera at this image to start the AR experience" = "Punta la telecamera su questa immagine per iniziare l’esperienza di realtà aumentata";
+"Point your camera at this image to start the AR experience" = "Usmjerite kameru na ovu sliku da biste pokrenuli rad u proširenoj realnosti";
 
 /* XMSG: text shown to user while data is loading */
-"Loading..." = "Caricamento in corso...";
+"Loading..." = "Učitavanje...";
 
 /* XBUT: send AR annotation (https://experience.sap.com/fiori-design-ios/article/ar-annotations/) related changes to remote service (SAP Mobile Services) for publication so that changes will be available for other users */
-"Publish" = "Pubblica";
+"Publish" = "Objavi";
 
 /* XMIT: tab item related to AR cards (https://experience.sap.com/fiori-design-ios/article/ar-cards/) */
-"Cards" = "Carte";
+"Cards" = "Kartice";
 
 /* XMIT: tab item to view and edit an anchor for a known image that ARKit detects in the physical environment */
-"Image Anchor" = "Ancora immagine";
+"Image Anchor" = "Sidro slike";
 
 /* XFLD: informing the user that an AR annotation is positioned in the world view (aka attached to the scene) */
-"Attached" = "Allegata";
+"Attached" = "Dodato";
 
 /* XFLD: informing the user that a AR annotation is not yet positioned in the world view (aka attached to the scene) */
-"Not Attached" = "Non allegata";
+"Not Attached" = "Nije dodato";
 
 /* XBUT: to view annotations in the world view through AR Scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
-"Go to AR Scene" = "Vai alla scena di realtà aumentata";
+"Go to AR Scene" = "Idi u scenu proširene realnosti";
 
 /* XTIT: title of form in which a user can edit AR card (https://experience.sap.com/fiori-design-ios/article/ar-cards/) information */
-"Card Details" = "Dettagli carta";
+"Card Details" = "Detalji kartice";
 
 /* XTIT: title of form in which user can create a new AR annotation */
-"New Annotation" = "Nuova annotazione";
+"New Annotation" = "Nova anotacija";
 
 /* XFLD: mandatory field to specify card's title of given AR annotation */
-"Title *" = "Titolo *";
+"Title *" = "Naslov *";
 
 /* XFLD: field to specify card's subtitle of given AR annotation */
-"Subtitle" = "Sottotitolo";
+"Subtitle" = "Podnaslov";
 
 /* XFLD: field to specify card's content URL of given AR annotation */
-"Content" = "Contenuto";
+"Content" = "Sadržaj";
 
 /* XFLD: field to specify card's action button text of given AR annotation */
-"Action Button" = "Pulsante azione";
+"Action Button" = "Dugme radnje";
 
 /* XRBL: label of switch UI control to enable/disable the use of a cover image in a card */
-"Custom Cover Image" = "Immagine di copertura personalizzata";
+"Custom Cover Image" = "Korisnički definisana naslovna slika";
 
 /* XFLD: placeholder text used in \"Content\" input field */
 "URL" = "URL";
 
 /* XFLD: placeholder text used in \"Action Button\" input field */
-"Label" = "Etichetta";
+"Label" = "Etiketa";
 
 /* XBUT: button text used in form in which user edits card details of given AR annotation */
-"Update" = "Aggiorna";
+"Update" = "Ažuriraj";
 
 /* XBUT: button text used in form in which user creates new card (details) of new AR annotation */
-"Create" = "Crea";
+"Create" = "Kreiraj";
 
 /* XMSG: title of alert presented to user if user attempts to leave page/view with unpublished changes */
-"Leave Page" = "Esci dalla pagina";
+"Leave Page" = "Napustite stranicu";
 
 /* XBUT: button in alert presented to user if user attempts to leave page/view with unpublished changes */
-"Confirm" = "Conferma";
+"Confirm" = "Potvrdi";
 
 /* XMSG: instruction for user on how to edit an image anchor */
-"Tap the image to edit it." = "Tocca l’immagine per elaborarla";
+"Tap the image to edit it." = "Dodirnite sliku da biste je uredili.";
 
 /* XMSG: explanation text for user what an image anchor is */
-"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "L’ancora è un’immagine nel mondo reale che il software utilizza per impostare marcatori in relazione all’ancora. Seleziona un’immagine che il software possa riconoscere.";
+"The anchor is an image in the real world that the software uses to place markers in relation to the anchor. Choose an image that can be recognized by the software." = "Sidro je slika u stvarnom svetu koju softver koristi za postavljanje oznaka u odnosu na sidro. Izaberite sliku koju softver može da prepozna.";
 
 /* XBUT: instruction for user on how to edit an image anchor */
-"Upload Image Anchor" = "Carica ancora immagine";
+"Upload Image Anchor" = "Prenesi sidro slike na server";
 
 /* XFLD: title of section in which user specifies physical dimensions (width) of image anchor */
-"Dimension" = "Dimensione";
+"Dimension" = "Dimenzija";
 
 /* XFLD: explanation text what kind of width is needed */
-"Enter the width of the real-world image." = "Inserisci l’ampiezza dell’immagine del mondo reale.";
+"Enter the width of the real-world image." = "Unesite širinu slike stvarnog sveta.";
 
 /* XFLD: label of input field for image anchors physical width */
-"Width" = "Ampiezza";
+"Width" = "Širina";
 
 /* XMSG: instruction text on how to choose an image anchor */
-"Tap the area below to upload the image anchor." = "Tocca l’area sottostante per caricare l’ancora immagine.";
+"Tap the area below to upload the image anchor." = "Dodirnite oblast ispod da biste prenijeli sidro slike na server.";
 
 /* XBUT: to remove an image anchor */
-"Remove" = "Rimuovi";
+"Remove" = "Ukloni";
 
 /* XMSG: shown in case image quality was too bad */
-"Upload higher-quality image." = "Carica immagine di qualità superiore.";
+"Upload higher-quality image." = "Prenesite sliku većeg kvaliteta na server.";
 
 /* XMSG: shown in case image is needed */
-"Please select image." = "Seleziona immagine.";
+"Please select image." = "Odaberite sliku.";
 
 /* XMSG: shown in case width is needed */
-"Please input a physical width." = "Inserisci un’ampiezza fisica.";
+"Please input a physical width." = "Unesite fizičku širinu.";
 
 /* XMSG: shown in case input value needs to be numeric */
-"Please input a numeric value." = "Inserisci un valore numerico.";
+"Please input a numeric value." = "Unesite numeričku vrijednost.";
 
 /* XBUT: to switch into edit mode of current view */
-"Edit Mode" = "Modalità di elaborazione";
+"Edit Mode" = "Način uređivanja";
 
 /* XBUT: to indicate changes are done and to finish/exit the edit mode of current view (data are not yet saved) */
-"Done" = "Fatto";
+"Done" = "Izvršeno";
 
 /* XBUT: to go to next step */
-"Next" = "Avanti";
+"Next" = "Sljedeće";
 
 /* XBUT: to drop AR marker (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-marker) in world view in order to lock-in the position of AR annotation relative to the image anchor */
-"Drop Marker" = "Elimina marcatore";
+"Drop Marker" = "Pusti oznaku";
 
 /* XBUT: to preview AR annotations in world view */
-"Preview" = "Anteprima";
+"Preview" = "Prethodno prikaži";
 
 /* XTIT: title in form listing AR annotations to position in world view */
-"Select Annotation" = "Seleziona annotazione";
+"Select Annotation" = "Odaberi anotaciju";
 
 /* XTIT: title in form previewing a specific AR annotation and its card */
-"Preview Annotation" = "Anteprima annotazione";
+"Preview Annotation" = "Prethodno prikaži anotaciju";
 
 /* XTIT: title in bottom sheet (context-depending) */
-"View Annotation" = "Visualizza annotazione";
+"View Annotation" = "Prikaži anotaciju";
 
 /* XTIT: title in bottom sheet (context-depending) */
-"Attach Annotation" = "Allega annotazione";
+"Attach Annotation" = "Dodaj anotaciju";
 
 /* MSG: to choose an option from action menu */
-"Choose an Option" = "Seleziona un’opzione";
+"Choose an Option" = "Izaberite opciju";
 
 /* XBUT: to invoke camera of device (phone/ipad) */
-"Camera" = "Fotocamera";
+"Camera" = "Kamera";
 
 /* XBUT: to invoke photo library of device (phone/ipad) */
-"Photos" = "Foto";
+"Photos" = "Fotografije";
 
 /* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
-"Are you sure you want to leave the page? Your changes will be lost." = "Confermi di voler uscire dalla pagina? Le modifiche andranno perse.";
+"Are you sure you want to leave the page? Your changes will be lost." = "Da li sigurno želite da napustite stranicu? Vaše promjene će biti izgubljene.";
 
 /* XBUT: text in alert presented to user if user attempts to leave page/view with those specific, unpublished changes */
-"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "Esistono annotazioni non ancora allegate. Confermi di voler uscire dall’app?";
+"There are annotations that haven’t been attached yet. Are you sure you want to leave the app?" = "Postoje anotacije koje još nijesu dodate. Da li sigurno želite da napustite aplikaciju?";
 
 /* XBUT: text in alert presented to user if user attempts to leave page/view with unpublished changes */
-"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "Esistono modifiche non ancora pubblicate. Confermi di voler uscire dall’app?";
+"There are changes that haven’t been published yet. Are you sure you want to leave the app?" = "Postoje promjene koje još nijesu objavljene. Da li sigurno želite da napustite aplikaciju?";
 
 /* XMSG: success message once all information for a given AR scene were loaded */
-"Sync finished." = "Sincr. completata";
+"Sync finished." = "Sinhronizacija završena.";
 
 /* XMSG: error message in case changes were not published due to an unknown error */
-"Something went wrong." = "Si è verificato un errore.";
+"Something went wrong." = "Došlo je do greške.";
 
 /* XMSG: success message once changes for existing AR scene were published */
-"Scene update is successfully published." = "Aggiornamento scena pubblicato correttamente.";
+"Scene update is successfully published." = "Ažuriranje scene je uspješno objavljeno.";
 
 /* XMSG: success message when new AR annotation ((https://experience.sap.com/fiori-design-ios/article/ar-annotations/)) was created */
-"A new annotation card is created." = "Nuova carta annotazione creata.";
+"A new annotation card is created." = "Nova kartica anotacije je kreirana.";
 
 /* XBUT: to close a dialog / form */
-"Close" = "Chiudi";
+"Close" = "Zatvori";
 

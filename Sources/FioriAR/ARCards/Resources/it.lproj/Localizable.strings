@@ -1,5 +1,5 @@
 /* XBUT: to start AR scanner (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#ar-scanner) */
-"Scan" = "Scansione";
+"Scan" = "Scansiona";
 
 /* XMSG: text in coaching view (https://experience.sap.com/fiori-design-ios/article/ar-annotations/#a-coaching-view) to inform the user what to do in AR Scanner */
 "Point your camera at this image to start the AR experience" = "Punta la telecamera su questa immagine per iniziare l’esperienza di realtà aumentata";
