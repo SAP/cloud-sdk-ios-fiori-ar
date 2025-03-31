@@ -50,7 +50,7 @@
 "URL" = "URL";
 
 /* XFLD: placeholder text used in \"Action Button\" input field */
-"Label" = "Etiketa";
+"Label" = "Oznaka";
 
 /* XBUT: button text used in form in which user edits card details of given AR annotation */
 "Update" = "Ažuriraj";
