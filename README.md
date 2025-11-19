@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> **Discontinuation of AR Components in SAP BTP SDK:** The deprecation of Augmented Reality components in SAP BTP SDK for iOS is due to the reliance on outdated third-party frameworks. This change ensures long-term compatibility and reduces maintenance risks, prompting users to plan transitions for future-proof enterprise applications.
+> **Discontinuation of AR Components in SAP BTP SDK:** SAP Fiori for iOS AR will be marked as deprecated in 2025, and scheduled for removal in 2026. The deprecation of Augmented Reality components in SAP BTP SDK for iOS is due to the reliance on outdated third-party frameworks. 
 > 
 > For more information, see [SAP Note 3682322](https://help.sap.com/docs/link-disclaimer?site=https://me.sap.com/notes/3682322).
 <div>
